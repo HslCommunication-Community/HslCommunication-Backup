@@ -20,7 +20,7 @@ namespace HslCommunication.ModBus
         public ModbusAddress( )
         {
             Station = -1;
-            Function = ModbusInfo.ReadRegister;
+            Function = -1;
             Address = 0;
         }
 
@@ -30,7 +30,7 @@ namespace HslCommunication.ModBus
         public ModbusAddress( string address )
         {
             Station = -1;
-            Function = ModbusInfo.ReadRegister;
+            Function = -1;
             Address = 0;
             AnalysisAddress( address );
         }
@@ -40,8 +40,7 @@ namespace HslCommunication.ModBus
         #endregion
 
         #region Public Properties
-
-
+        
         /// <summary>
         /// 站号信息
         /// </summary>
@@ -50,7 +49,7 @@ namespace HslCommunication.ModBus
         /// <summary>
         /// 功能码
         /// </summary>
-        public byte Function { get; set; }
+        public int Function { get; set; }
 
         #endregion
 
@@ -93,8 +92,7 @@ namespace HslCommunication.ModBus
         #endregion
 
         #region Create Command
-
-
+        
         /// <summary>
         /// 创建一个读取线圈的字节对象
         /// </summary>
@@ -105,7 +103,7 @@ namespace HslCommunication.ModBus
         {
             byte[] buffer = new byte[6];
             buffer[0] = this.Station < 0 ? station : (byte)this.Station;
-            buffer[1] = ModbusInfo.ReadCoil;
+            buffer[1] = this.Function < 1 ? ModbusInfo.ReadCoil : (byte)this.Function;
             buffer[2] = BitConverter.GetBytes( this.Address )[1];
             buffer[3] = BitConverter.GetBytes( this.Address )[0];
             buffer[4] = BitConverter.GetBytes( length )[1];
@@ -123,7 +121,7 @@ namespace HslCommunication.ModBus
         {
             byte[] buffer = new byte[6];
             buffer[0] = this.Station < 0 ? station : (byte)this.Station;
-            buffer[1] = ModbusInfo.ReadDiscrete;
+            buffer[1] = this.Function < 1 ? ModbusInfo.ReadDiscrete : (byte)this.Function;
             buffer[2] = BitConverter.GetBytes( this.Address )[1];
             buffer[3] = BitConverter.GetBytes( this.Address )[0];
             buffer[4] = BitConverter.GetBytes( length )[1];
@@ -142,7 +140,7 @@ namespace HslCommunication.ModBus
         {
             byte[] buffer = new byte[6];
             buffer[0] = this.Station < 0 ? station : (byte)this.Station;
-            buffer[1] = Function;
+            buffer[1] = this.Function < 1 ? ModbusInfo.ReadRegister : (byte)this.Function;
             buffer[2] = BitConverter.GetBytes( this.Address )[1];
             buffer[3] = BitConverter.GetBytes( this.Address )[0];
             buffer[4] = BitConverter.GetBytes( length )[1];
@@ -161,7 +159,7 @@ namespace HslCommunication.ModBus
         {
             byte[] buffer = new byte[6];
             buffer[0] = this.Station < 0 ? station : (byte)this.Station;
-            buffer[1] = ModbusInfo.WriteOneCoil;
+            buffer[1] = this.Function < 1 ? ModbusInfo.WriteOneCoil : (byte)this.Function;
             buffer[2] = BitConverter.GetBytes( this.Address )[1];
             buffer[3] = BitConverter.GetBytes( this.Address )[0];
             buffer[4] = (byte)(value ? 0xFF : 0x00);
@@ -180,7 +178,7 @@ namespace HslCommunication.ModBus
         {
             byte[] buffer = new byte[6];
             buffer[0] = this.Station < 0 ? station : (byte)this.Station;
-            buffer[1] = ModbusInfo.WriteOneRegister;
+            buffer[1] = this.Function < 1 ? ModbusInfo.WriteOneRegister : (byte)this.Function;
             buffer[2] = BitConverter.GetBytes( this.Address )[1];
             buffer[3] = BitConverter.GetBytes( this.Address )[0];
             buffer[4] = values[0];
@@ -200,7 +198,7 @@ namespace HslCommunication.ModBus
             byte[] data = SoftBasic.BoolArrayToByte( values );
             byte[] buffer = new byte[7 + data.Length];
             buffer[0] = this.Station < 0 ? station : (byte)this.Station;
-            buffer[1] = ModbusInfo.WriteCoil;
+            buffer[1] = this.Function < 1 ? ModbusInfo.WriteCoil : (byte)this.Function;
             buffer[2] = BitConverter.GetBytes( this.Address )[1];
             buffer[3] = BitConverter.GetBytes( this.Address )[0];
             buffer[4] = (byte)(values.Length / 256);
@@ -221,7 +219,7 @@ namespace HslCommunication.ModBus
         {
             byte[] buffer = new byte[7 + values.Length];
             buffer[0] = this.Station < 0 ? station : (byte)this.Station;
-            buffer[1] = ModbusInfo.WriteRegister;
+            buffer[1] = this.Function < 1 ? ModbusInfo.WriteRegister : (byte)this.Function;
             buffer[2] = BitConverter.GetBytes( this.Address )[1];
             buffer[3] = BitConverter.GetBytes( this.Address )[0];
             buffer[4] = (byte)(values.Length / 2 / 256);
@@ -235,8 +233,7 @@ namespace HslCommunication.ModBus
         #endregion
 
         #region Address Add
-
-
+        
         /// <summary>
         /// 地址新增指定的数
         /// </summary>
@@ -266,8 +263,7 @@ namespace HslCommunication.ModBus
         #endregion
 
         #region Object Override
-
-
+        
         /// <summary>
         /// 获取本对象的字符串表示形式
         /// </summary>

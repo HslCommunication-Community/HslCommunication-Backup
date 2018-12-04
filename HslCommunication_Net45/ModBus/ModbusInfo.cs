@@ -218,11 +218,11 @@ namespace HslCommunication.ModBus
         {
             switch (code)
             {
-                case ModbusInfo.FunctionCodeNotSupport: return StringResources.Language.ModbusTcpFunctionCodeNotSupport;
-                case ModbusInfo.FunctionCodeOverBound: return StringResources.Language.ModbusTcpFunctionCodeOverBound;
-                case ModbusInfo.FunctionCodeQuantityOver: return StringResources.Language.ModbusTcpFunctionCodeQuantityOver;
-                case ModbusInfo.FunctionCodeReadWriteException: return StringResources.Language.ModbusTcpFunctionCodeReadWriteException;
-                default: return StringResources.Language.UnknownError;
+                case ModbusInfo.FunctionCodeNotSupport:               return StringResources.Language.ModbusTcpFunctionCodeNotSupport;
+                case ModbusInfo.FunctionCodeOverBound:                return StringResources.Language.ModbusTcpFunctionCodeOverBound;
+                case ModbusInfo.FunctionCodeQuantityOver:             return StringResources.Language.ModbusTcpFunctionCodeQuantityOver;
+                case ModbusInfo.FunctionCodeReadWriteException:       return StringResources.Language.ModbusTcpFunctionCodeReadWriteException;
+                default:                                              return StringResources.Language.UnknownError;
             }
         }
 
