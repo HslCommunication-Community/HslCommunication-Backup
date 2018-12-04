@@ -69,7 +69,7 @@ namespace DemoUpdateServer
             {
                 simplifyServer.SendMessage( arg1, handle, version.ToString( ) );
                 string address = GetAddressByIp( arg1.IpAddress );
-                lognet.WriteInfo( $"{arg1.IpAddress.PadRight( 15 )} [{address}] [{msg}] Run Application" );
+                lognet.WriteInfo( $"{arg1.IpAddress.PadRight( 15 )} [{msg.PadRight( 8 )}] [{address}] Run Application" );
             }
             else if(handle == 2)
             {
@@ -92,7 +92,7 @@ namespace DemoUpdateServer
         {
             softUpdateServer = new HslCommunication.Enthernet.NetSoftUpdateServer( );
             softUpdateServer.FileUpdatePath = Application.StartupPath + @"\Demo";
-            softUpdateServer.LogNet = lognet;
+            //softUpdateServer.LogNet = lognet;
             softUpdateServer.ServerStart( 18468 );
         }
 

@@ -461,6 +461,7 @@ namespace HslCommunication.Controls
             {
                 data_list.Remove( key );
             }
+            if (data_list.Count == 0) data_text = new string[0];
             // 重绘图形
             Invalidate( );
         }
@@ -473,6 +474,7 @@ namespace HslCommunication.Controls
         {
             int count = data_list.Count;
             data_list.Clear( );
+            if (data_list.Count == 0) data_text = new string[0];
             // 重绘图形
             if (count > 0) Invalidate( );
         }
@@ -951,6 +953,8 @@ namespace HslCommunication.Controls
                 // 横坐标充满图形
                 foreach (var line in data_list.Values)
                 {
+                    if (!line.Visible) continue;
+                    
                     if (line.Data?.Length > 1)
                     {
                         float offect = (width_totle - leftRight * 2) * 1.0f / (value_StrechDataCountMax - 1);
