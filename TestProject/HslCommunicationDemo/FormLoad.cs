@@ -704,7 +704,7 @@ namespace HslCommunicationDemo
                          {
                              try
                              {
-                                 System.Diagnostics.Process.Start( "软件自动更新.exe" );
+                                 System.Diagnostics.Process.Start( Application.StartupPath + "\\软件自动更新.exe" );
                                  System.Threading.Thread.Sleep( 50 );
                                  Close( );
                              }

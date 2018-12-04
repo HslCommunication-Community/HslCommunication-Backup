@@ -69,7 +69,7 @@ namespace DemoUpdateServer
             {
                 simplifyServer.SendMessage( arg1, handle, version.ToString( ) );
                 string address = GetAddressByIp( arg1.IpAddress );
-                lognet.WriteInfo( $"{arg1.IpAddress.PadRight( 15 )} [{address}] Run Application" );
+                lognet.WriteInfo( $"{arg1.IpAddress.PadRight( 15 )} [{address}] [{msg}] Run Application" );
             }
             else if(handle == 2)
             {
