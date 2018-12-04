@@ -157,7 +157,7 @@ namespace HslCommunication.Algorithms.ConnectPool
             }
 
             usedConnector = connectors.Count;
-            if (usedConnector < connectors.Count) canGetConnector = true;
+            if (usedConnector < MaxConnector) canGetConnector = true;
 
             hybirdLock.Leave( );
         }
