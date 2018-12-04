@@ -522,6 +522,13 @@ namespace HslCommunication
     ///             <item>新增了一个SharpList类，用于超高性能的管理固定长度的数组。博客：https://www.cnblogs.com/dathlin/p/10042801.html </item>
     ///         </list>
     ///     </revision>
+    ///     <revision date="2018-12-3" version="5.6.4" author="Richard.Hu">
+    ///         <list type="bullet">
+    ///             <item>Networkbase: 接收方法的一个多余对象删除。</item>
+    ///             <item>修复UserDrum控件的默认的text生成，及复制问题。</item>
+    ///             <item>UserDrum修复属性在设计界面没有注释的bug。</item>
+    ///         </list>
+    ///     </revision>
     /// </revisionHistory>
     [System.Runtime.CompilerServices.CompilerGeneratedAttribute( )]
     public class NamespaceDoc

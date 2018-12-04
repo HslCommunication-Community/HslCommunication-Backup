@@ -45,6 +45,7 @@
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.panel2 = new System.Windows.Forms.Panel();
+            this.button12 = new System.Windows.Forms.Button();
             this.button11 = new System.Windows.Forms.Button();
             this.button10 = new System.Windows.Forms.Button();
             this.button9 = new System.Windows.Forms.Button();
@@ -235,6 +236,7 @@
             // panel2
             // 
             this.panel2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel2.Controls.Add(this.button12);
             this.panel2.Controls.Add(this.button11);
             this.panel2.Controls.Add(this.button10);
             this.panel2.Controls.Add(this.button9);
@@ -263,9 +265,19 @@
             this.panel2.Size = new System.Drawing.Size(977, 518);
             this.panel2.TabIndex = 13;
             // 
+            // button12
+            // 
+            this.button12.Location = new System.Drawing.Point(328, 180);
+            this.button12.Name = "button12";
+            this.button12.Size = new System.Drawing.Size(91, 28);
+            this.button12.TabIndex = 31;
+            this.button12.Text = "publish key";
+            this.button12.UseVisualStyleBackColor = true;
+            this.button12.Click += new System.EventHandler(this.button12_Click);
+            // 
             // button11
             // 
-            this.button11.Location = new System.Drawing.Point(648, 180);
+            this.button11.Location = new System.Drawing.Point(825, 180);
             this.button11.Name = "button11";
             this.button11.Size = new System.Drawing.Size(91, 28);
             this.button11.TabIndex = 30;
@@ -275,7 +287,7 @@
             // 
             // button10
             // 
-            this.button10.Location = new System.Drawing.Point(551, 180);
+            this.button10.Location = new System.Drawing.Point(728, 180);
             this.button10.Name = "button10";
             this.button10.Size = new System.Drawing.Size(91, 28);
             this.button10.TabIndex = 29;
@@ -285,7 +297,7 @@
             // 
             // button9
             // 
-            this.button9.Location = new System.Drawing.Point(454, 180);
+            this.button9.Location = new System.Drawing.Point(631, 180);
             this.button9.Name = "button9";
             this.button9.Size = new System.Drawing.Size(91, 28);
             this.button9.TabIndex = 28;
@@ -394,7 +406,7 @@
             // 
             // textBox7
             // 
-            this.textBox7.Location = new System.Drawing.Point(367, 183);
+            this.textBox7.Location = new System.Drawing.Point(544, 183);
             this.textBox7.Name = "textBox7";
             this.textBox7.ReadOnly = true;
             this.textBox7.Size = new System.Drawing.Size(66, 23);
@@ -404,7 +416,7 @@
             // label11
             // 
             this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(317, 186);
+            this.label11.Location = new System.Drawing.Point(494, 186);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(44, 17);
             this.label11.TabIndex = 15;
@@ -433,7 +445,7 @@
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(91, 28);
             this.button3.TabIndex = 12;
-            this.button3.Text = "写入";
+            this.button3.Text = "写key";
             this.button3.UseVisualStyleBackColor = true;
             this.button3.Click += new System.EventHandler(this.button3_Click);
             // 
@@ -541,5 +553,6 @@
         private System.Windows.Forms.Button button10;
         private System.Windows.Forms.Button button9;
         private System.Windows.Forms.Button button11;
+        private System.Windows.Forms.Button button12;
     }
 }

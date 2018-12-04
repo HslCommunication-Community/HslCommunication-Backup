@@ -35,7 +35,7 @@ namespace HslCommunicationDemo
         {
             Hide( );
             System.Threading.Thread.Sleep( 200 );
-            using (FormModbus form = new FormModbus())
+            using (FormModbus form = new FormModbus( ))
             {
                 form.ShowDialog( );
             }
@@ -102,7 +102,7 @@ namespace HslCommunicationDemo
             System.Threading.Thread.Sleep( 200 );
             Show( );
         }
-        
+
 
         private void linkLabel8_LinkClicked( object sender, LinkLabelLinkClickedEventArgs e )
         {
@@ -281,7 +281,7 @@ namespace HslCommunicationDemo
         private void FormLoad_Load( object sender, EventArgs e )
         {
             verisonToolStripMenuItem.Text = "Version: " + HslCommunication.BasicFramework.SoftBasic.FrameworkVersion.ToString( );
-            
+
 
             if (System.Globalization.CultureInfo.CurrentCulture.ToString( ).StartsWith( "zh" ))
             {
@@ -295,9 +295,9 @@ namespace HslCommunicationDemo
             }
         }
 
-        private void Language(int language )
+        private void Language( int language )
         {
-            if(language == 1)
+            if (language == 1)
             {
                 button19.Text = "异形 Modbus Tcp";
                 button24.Text = "串口调试助手";
@@ -573,7 +573,7 @@ namespace HslCommunicationDemo
             Show( );
         }
 
-        private void OpenWebside(string url )
+        private void OpenWebside( string url )
         {
             try
             {
@@ -687,20 +687,20 @@ namespace HslCommunicationDemo
             System.Threading.ThreadPool.QueueUserWorkItem( new System.Threading.WaitCallback( ThreadPoolCheckVersion ), null );
         }
 
-        private void ThreadPoolCheckVersion(object obj )
+        private void ThreadPoolCheckVersion( object obj )
         {
             System.Threading.Thread.Sleep( 100 );
             HslCommunication.Enthernet.NetSimplifyClient simplifyClient = new HslCommunication.Enthernet.NetSimplifyClient( "118.24.36.220", 18467 );
-            HslCommunication.OperateResult<string> read = simplifyClient.ReadFromServer( 1, "" );
+            HslCommunication.OperateResult<HslCommunication.NetHandle, string> read = simplifyClient.ReadCustomerFromServer( 1, HslCommunication.BasicFramework.SoftBasic.FrameworkVersion.ToString( ) );
             if (read.IsSuccess)
             {
-                HslCommunication.BasicFramework.SystemVersion version = new HslCommunication.BasicFramework.SystemVersion( read.Content );
+                HslCommunication.BasicFramework.SystemVersion version = new HslCommunication.BasicFramework.SystemVersion( read.Content2 );
                 if (version > HslCommunication.BasicFramework.SoftBasic.FrameworkVersion)
                 {
                     // 有更新
                     Invoke( new Action( ( ) =>
                      {
-                         if(MessageBox.Show("服务器有新版本："+ read.Content + Environment.NewLine + "是否启动更新？", "检测到更新", MessageBoxButtons.YesNo ) == DialogResult.Yes)
+                         if (MessageBox.Show( "服务器有新版本：" + read.Content2 + Environment.NewLine + "是否启动更新？", "检测到更新", MessageBoxButtons.YesNo ) == DialogResult.Yes)
                          {
                              try
                              {

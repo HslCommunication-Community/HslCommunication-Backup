@@ -272,6 +272,19 @@ namespace HslCommunicationDemo
                 MessageBox.Show( result.Message );
             }
         }
+
+        private void button12_Click( object sender, EventArgs e )
+        {
+            OperateResult write = redisClient.Publish( textBox5.Text, textBox4.Text );
+            if (write.IsSuccess)
+            {
+                MessageBox.Show( "success" );
+            }
+            else
+            {
+                MessageBox.Show( Program.Language == 1 ? "写入失败：" : "Write Failed:" + write.ToMessageShowString( ) );
+            }
+        }
     }
 
 
