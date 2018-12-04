@@ -41,97 +41,110 @@ namespace HslCommunicationCoreDemo
             //    Console.WriteLine( n );
             //} );
 
-            //RedisClient redisClient = new RedisClient( "47.92.5.140", 6379, "" );
-            //redisClient.SetPersistentConnection( );
+            RedisClient redisClient = new RedisClient( "127.0.0.1", 6379, "" );
+            redisClient.SetPersistentConnection( );
 
-            //MelsecMcNet melsecMc = new MelsecMcNet( "192.168.8.12", 6001 );
-            //melsecMc.SetPersistentConnection( );
+            MelsecMcNet melsecMc = new MelsecMcNet( "192.168.8.12", 6001 );
+            melsecMc.SetPersistentConnection( );
 
-            //while (true)
+            long countPlcSuccess = 0;
+            long countRedisSuccess = 0;
+            long countPlcFailed = 0;
+            long countRedisFailed = 0;
+
+            while (true)
+            {
+                System.Threading.Thread.Sleep( 300 );
+                OperateResult<int> read = melsecMc.ReadInt32( "D100" );
+                if (!read.IsSuccess)
+                {
+                    countPlcFailed++;
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine( $"{DateTime.Now.ToString( )} PLC Read Failed: {read.Message}  PLC成功:{countPlcSuccess}  PLC失败:{countPlcFailed}  Redis成功:{countRedisSuccess}  Redis失败:{countRedisFailed}" );
+                    continue;
+                };
+                countPlcSuccess++;
+
+                OperateResult write = redisClient.WriteKey( "Test", read.Content.ToString( ) );
+                if (write.IsSuccess)
+                {
+                    Console.ForegroundColor = ConsoleColor.Green;
+                    countRedisSuccess++;
+                    Console.WriteLine( $"{DateTime.Now.ToString( )} 存储redis成功!  PLC成功:{countPlcSuccess}  PLC失败:{countPlcFailed}  Redis成功:{countRedisSuccess}  Redis失败:{countRedisFailed}" );
+                }
+                else
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    countRedisFailed++;
+                    Console.WriteLine( $"{DateTime.Now.ToString( )} 存储redis失败!{write.Message}  PLC成功:{countPlcSuccess}  PLC失败:{countPlcFailed}  Redis成功:{countRedisSuccess}  Redis失败:{countRedisFailed}" );
+                }
+            }
+
+
+            //SimpleHybirdLock hybirdLock = new SimpleHybirdLock( );
+
+            //int[] buffer = new int[1000];
+            //DateTime start = DateTime.Now;
+            //for (int i = 0; i < 1000000; i++)
             //{
-            //    System.Threading.Thread.Sleep( 300 );
-            //    OperateResult<int> read = melsecMc.ReadInt32( "D100" );
-            //    if (!read.IsSuccess) {
-            //        Console.WriteLine( DateTime.Now.ToString( ) + "  PLC Read Failed: " + read.Message );
-            //        continue;
-            //    };
+            //    hybirdLock.Enter( );
 
-            //    OperateResult write = redisClient.WriteKey( "Test", read.Content.ToString( ) );
-            //    if (write.IsSuccess)
+            //    for (int j = 0; j < buffer.Length - 1; j++)
             //    {
-            //        Console.WriteLine( DateTime.Now.ToString( ) + "  Write Success!" );
+            //        buffer[j] = buffer[j + 1];
             //    }
-            //    else
-            //    {
-            //        Console.WriteLine( DateTime.Now.ToString( ) + "  Write Failed : " + write.Message );
-            //    }
+
+            //    buffer[999] = i;
+
+            //    hybirdLock.Leave( );
             //}
 
-
-            SimpleHybirdLock hybirdLock = new SimpleHybirdLock( );
-
-            int[] buffer = new int[1000];
-            DateTime start = DateTime.Now;
-            for (int i = 0; i < 1000000; i++)
-            {
-                hybirdLock.Enter( );
-
-                for (int j = 0; j < buffer.Length - 1; j++)
-                {
-                    buffer[j] = buffer[j + 1];
-                }
-
-                buffer[999] = i;
-
-                hybirdLock.Leave( );
-            }
-
-            Console.WriteLine( (DateTime.Now - start).TotalMilliseconds );
+            //Console.WriteLine( (DateTime.Now - start).TotalMilliseconds );
 
 
 
-            start = DateTime.Now;
-            for (int i = 0; i < 1000000; i++)
-            {
-                hybirdLock.Enter( );
+            //start = DateTime.Now;
+            //for (int i = 0; i < 1000000; i++)
+            //{
+            //    hybirdLock.Enter( );
 
-                int[] newbuffer = new int[1000];
-                Array.Copy( buffer, 0, newbuffer, 0, 999 );
-                newbuffer[999] = i;
-                buffer = newbuffer;
+            //    int[] newbuffer = new int[1000];
+            //    Array.Copy( buffer, 0, newbuffer, 0, 999 );
+            //    newbuffer[999] = i;
+            //    buffer = newbuffer;
 
-                hybirdLock.Leave( );
-            }
+            //    hybirdLock.Leave( );
+            //}
 
-            Console.WriteLine( (DateTime.Now - start).TotalMilliseconds );
-
-
-            List<int> list = new List<int>( buffer );
-            start = DateTime.Now;
-            for (int i = 0; i < 1000000; i++)
-            {
-                hybirdLock.Enter( );
-
-                list.Add( i );
-                list.RemoveAt( 0 );
-
-                hybirdLock.Leave( );
-            }
-
-            Console.WriteLine( (DateTime.Now - start).TotalMilliseconds );
+            //Console.WriteLine( (DateTime.Now - start).TotalMilliseconds );
 
 
-            SharpList<int> sharpList = new SharpList<int>( 1000, true );
-            start = DateTime.Now;
-            for (int i = 0; i < 1000000; i++)
-            {
-                sharpList.Add( i );
-            }
-            Console.WriteLine( (DateTime.Now - start).TotalMilliseconds );
+            //List<int> list = new List<int>( buffer );
+            //start = DateTime.Now;
+            //for (int i = 0; i < 1000000; i++)
+            //{
+            //    hybirdLock.Enter( );
 
-            int[] data = sharpList.ToArray( );
+            //    list.Add( i );
+            //    list.RemoveAt( 0 );
 
-            Console.ReadLine( );
+            //    hybirdLock.Leave( );
+            //}
+
+            //Console.WriteLine( (DateTime.Now - start).TotalMilliseconds );
+
+
+            //SharpList<int> sharpList = new SharpList<int>( 1000, true );
+            //start = DateTime.Now;
+            //for (int i = 0; i < 1000000; i++)
+            //{
+            //    sharpList.Add( i );
+            //}
+            //Console.WriteLine( (DateTime.Now - start).TotalMilliseconds );
+
+            //int[] data = sharpList.ToArray( );
+
+            //Console.ReadLine( );
         }
 
 
