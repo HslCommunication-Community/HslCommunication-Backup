@@ -289,7 +289,7 @@ public class ModbusTcpNet extends NetworkDeviceBase<ModbusTcpMessage, ReverseWor
             // 二次数据处理
             if (resultBytes.Content.length >= 9) {
                 byte[] buffer = new byte[resultBytes.Content.length - 9];
-                System.arraycopy(resultBytes, 9, buffer, 0, buffer.length);
+                System.arraycopy(resultBytes.Content, 9, buffer, 0, buffer.length);
                 resultBytes.Content = buffer;
             }
         }

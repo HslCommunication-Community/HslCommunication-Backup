@@ -22,7 +22,7 @@ public class Main {
 
         //NetSimplifyClientTest();
 
-        MelsecA1ETest();
+        //MelsecA1ETest();
         //MelsecTest();
         //PushNetTest();
 
@@ -42,19 +42,27 @@ public class Main {
             //MelsecMcNet melsec_net = new MelsecMcNet("192.168.8.12", 6001);
             //System.out.println(melsec_net.ReadInt16("D100").Content);
 
-            SiemensS7Net siemensS7Net = new SiemensS7Net(SiemensPLCS.S1200,"192.168.8.12");
-            OperateResult write = siemensS7Net.Write("M200",(short)200);
+            //SiemensS7Net siemensS7Net = new SiemensS7Net(SiemensPLCS.S1200,"192.168.8.12");
+            //OperateResult write = siemensS7Net.Write("M200",(short)200);
 
-            if(!write.IsSuccess){
-                System.out.println("Write failed:"+write.Message);
-            }
+            //if(!write.IsSuccess){
+                //System.out.println("Write failed:"+write.Message);
+            //}
 
-            OperateResultExOne<Short> read = siemensS7Net.ReadInt16("M200");
+            //OperateResultExOne<Short> read = siemensS7Net.ReadInt16("M200");
+            //if(read.IsSuccess){
+                //System.out.println("Value:"+read.Content.toString());
+            //}
+            //else {
+                //System.out.println("Read failed:"+read.Message);
+            //}
+            ModbusTcpNet modbus = new ModbusTcpNet("127.0.0.1",503,(byte)1);
+            OperateResultExOne<Boolean> read = modbus.ReadCoil("100");
             if(read.IsSuccess){
                 System.out.println("Value:"+read.Content.toString());
             }
             else {
-                System.out.println("Read failed:"+read.Message);
+                System.out.println("Failed:"+read.Message);
             }
         }
         catch (Exception ex){
