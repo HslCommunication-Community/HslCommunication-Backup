@@ -41,44 +41,44 @@ namespace HslCommunicationCoreDemo
             //    Console.WriteLine( n );
             //} );
 
-            RedisClient redisClient = new RedisClient( "127.0.0.1", 6379, "" );
-            redisClient.SetPersistentConnection( );
+            //RedisClient redisClient = new RedisClient( "127.0.0.1", 6379, "" );
+            //redisClient.SetPersistentConnection( );
 
-            MelsecMcNet melsecMc = new MelsecMcNet( "192.168.8.12", 6001 );
-            melsecMc.SetPersistentConnection( );
+            //MelsecMcNet melsecMc = new MelsecMcNet( "192.168.8.12", 6001 );
+            //melsecMc.SetPersistentConnection( );
 
-            long countPlcSuccess = 0;
-            long countRedisSuccess = 0;
-            long countPlcFailed = 0;
-            long countRedisFailed = 0;
+            //long countPlcSuccess = 0;
+            //long countRedisSuccess = 0;
+            //long countPlcFailed = 0;
+            //long countRedisFailed = 0;
 
-            while (true)
-            {
-                System.Threading.Thread.Sleep( 300 );
-                OperateResult<int> read = melsecMc.ReadInt32( "D100" );
-                if (!read.IsSuccess)
-                {
-                    countPlcFailed++;
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine( $"{DateTime.Now.ToString( )} PLC Read Failed: {read.Message}  PLC成功:{countPlcSuccess}  PLC失败:{countPlcFailed}  Redis成功:{countRedisSuccess}  Redis失败:{countRedisFailed}" );
-                    continue;
-                };
-                countPlcSuccess++;
+            //while (true)
+            //{
+            //    System.Threading.Thread.Sleep( 300 );
+            //    OperateResult<int> read = melsecMc.ReadInt32( "D100" );
+            //    if (!read.IsSuccess)
+            //    {
+            //        countPlcFailed++;
+            //        Console.ForegroundColor = ConsoleColor.Red;
+            //        Console.WriteLine( $"{DateTime.Now.ToString( )} PLC Read Failed: {read.Message}  PLC成功:{countPlcSuccess}  PLC失败:{countPlcFailed}  Redis成功:{countRedisSuccess}  Redis失败:{countRedisFailed}" );
+            //        continue;
+            //    };
+            //    countPlcSuccess++;
 
-                OperateResult write = redisClient.WriteKey( "Test", read.Content.ToString( ) );
-                if (write.IsSuccess)
-                {
-                    Console.ForegroundColor = ConsoleColor.Green;
-                    countRedisSuccess++;
-                    Console.WriteLine( $"{DateTime.Now.ToString( )} 存储redis成功!  PLC成功:{countPlcSuccess}  PLC失败:{countPlcFailed}  Redis成功:{countRedisSuccess}  Redis失败:{countRedisFailed}" );
-                }
-                else
-                {
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    countRedisFailed++;
-                    Console.WriteLine( $"{DateTime.Now.ToString( )} 存储redis失败!{write.Message}  PLC成功:{countPlcSuccess}  PLC失败:{countPlcFailed}  Redis成功:{countRedisSuccess}  Redis失败:{countRedisFailed}" );
-                }
-            }
+            //    OperateResult write = redisClient.WriteKey( "Test", read.Content.ToString( ) );
+            //    if (write.IsSuccess)
+            //    {
+            //        Console.ForegroundColor = ConsoleColor.Green;
+            //        countRedisSuccess++;
+            //        Console.WriteLine( $"{DateTime.Now.ToString( )} 存储redis成功!  PLC成功:{countPlcSuccess}  PLC失败:{countPlcFailed}  Redis成功:{countRedisSuccess}  Redis失败:{countRedisFailed}" );
+            //    }
+            //    else
+            //    {
+            //        Console.ForegroundColor = ConsoleColor.Red;
+            //        countRedisFailed++;
+            //        Console.WriteLine( $"{DateTime.Now.ToString( )} 存储redis失败!{write.Message}  PLC成功:{countPlcSuccess}  PLC失败:{countPlcFailed}  Redis成功:{countRedisSuccess}  Redis失败:{countRedisFailed}" );
+            //    }
+            //}
 
 
             //SimpleHybirdLock hybirdLock = new SimpleHybirdLock( );
@@ -145,6 +145,23 @@ namespace HslCommunicationCoreDemo
             //int[] data = sharpList.ToArray( );
 
             //Console.ReadLine( );
+
+            // =====================================================================================================
+            // 并发的订阅测试
+
+            List<NetPushClient> netPushClients = new List<NetPushClient>( );
+            for (int i = 0; i < 100; i++)
+            {
+                netPushClients.Add( new NetPushClient( "127.0.0.1", 12345, "D" ) );
+            }
+            netPushClients.ForEach( m => m.CreatePush( ( j, k ) =>
+            {
+                Console.WriteLine( k );
+            } ) );
+
+
+            Console.ReadLine( );
+            netPushClients.ForEach( m => m.ClosePush( ) );
         }
 
 

@@ -529,6 +529,16 @@ namespace HslCommunication
     ///             <item>UserDrum修复属性在设计界面没有注释的bug。</item>
     ///         </list>
     ///     </revision>
+    ///     <revision date="2018-12-5" version="5.6.5" author="Richard.Hu">
+    ///         <list type="bullet">
+    ///             <item>修复Demo程序在某些特殊情况下无法在线更新的bug。</item>
+    ///             <item>修复曲线控件隐藏曲线时在某些特殊情况的不隐藏的bug。</item>
+    ///             <item>modbus协议无论读写都支持富地址格式。</item>
+    ///             <item>修复连接池清理资源的一个bug，感谢 泉州-邱蕃金</item>
+    ///             <item>修复java的modbus代码读取线圈异常的操作。</item>
+    ///             <item>Demo程序新增免责条款。</item>
+    ///         </list>
+    ///     </revision>
     /// </revisionHistory>
     [System.Runtime.CompilerServices.CompilerGeneratedAttribute( )]
     public class NamespaceDoc

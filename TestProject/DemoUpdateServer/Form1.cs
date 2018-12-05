@@ -187,7 +187,7 @@ namespace DemoUpdateServer
             }
             hybirdLock.Leave( );
 
-
+            countOld++;
         }
 
         private void LoadData( )
@@ -227,12 +227,11 @@ namespace DemoUpdateServer
         }
 
 
-        private long countOld = 0;
+        private long countOld = 1;
         private void Timer_Tick( object sender, EventArgs e )
         {
-            if (countOld == loginData.Count) return;
-
-            countOld = loginData.Count;
+            if (countOld == 0) return;
+            countOld = 0;
             long Count = 0;
 
             List<dataMy> list = new List<dataMy>( );   
