@@ -38,7 +38,13 @@ namespace DemoUpdateServer
 
             lognet = new HslCommunication.LogNet.LogNetSingle( "logs.txt" );
             lognet.BeforeSaveToFile += LogNet_BeforeSaveToFile;
+
+            LoadData( );
+            timer.Interval = 3000;
+            timer.Tick += Timer_Tick;
+            timer.Start( );
         }
+
 
         private void button1_Click( object sender, EventArgs e )
         {
@@ -51,6 +57,7 @@ namespace DemoUpdateServer
         private HslCommunication.BasicFramework.SystemVersion version = new HslCommunication.BasicFramework.SystemVersion( "1.0.1" );
         private HslCommunication.LogNet.ILogNet lognet;
         private Random random = new Random( );
+        private Timer timer = new Timer( );
 
         #region 同步网络中心，用来请求版本号信息
 
@@ -70,6 +77,7 @@ namespace DemoUpdateServer
                 simplifyServer.SendMessage( arg1, handle, version.ToString( ) );
                 string address = GetAddressByIp( arg1.IpAddress );
                 lognet.WriteInfo( $"{arg1.IpAddress.PadRight( 15 )} [{msg.PadRight( 8 )}] [{address}] Run Application" );
+                AddDict( address );
             }
             else if(handle == 2)
             {
@@ -113,6 +121,7 @@ namespace DemoUpdateServer
         {
             NetStart( );
             NetStart2( );
+            Timer_Tick( null, new EventArgs( ) );
         }
 
         private void button2_Click( object sender, EventArgs e )
@@ -153,5 +162,135 @@ namespace DemoUpdateServer
                 return string.Empty;
             }
         }
+
+
+        private Dictionary<string, long> loginData = new Dictionary<string, long>( );
+        private HslCommunication.Core.SimpleHybirdLock hybirdLock = new HslCommunication.Core.SimpleHybirdLock( );
+
+        private void AddDict(string address )
+        {
+            if (string.IsNullOrEmpty( address )) return;
+
+            if(address.IndexOf(' ' ) > 0)
+            {
+                address = address.Substring( 0, address.IndexOf( ' ' ) );
+            }
+
+            hybirdLock.Enter( );
+            if (loginData.ContainsKey( address ))
+            {
+                loginData[address]++;
+            }
+            else
+            {
+                loginData.Add( address, 1 );
+            }
+            hybirdLock.Leave( );
+
+
+        }
+
+        private void LoadData( )
+        {
+            hybirdLock.Enter( );
+            loginData.Clear( );
+            if (File.Exists( "City.txt" ))
+            {
+                StreamReader sr = new StreamReader( "City.txt", Encoding.Default );
+                while (true)
+                {
+                    string city = sr.ReadLine( );
+                    if (city == null) break;
+
+                    string count = sr.ReadLine( );
+                    loginData.Add( city, long.Parse( count ) );
+                }
+                sr.Close( );
+            }
+
+
+            hybirdLock.Leave( );
+        }
+
+        private void SaveData( )
+        {
+            hybirdLock.Enter( );
+
+            StreamWriter sw = new StreamWriter( "City.txt", false, Encoding.Default );
+            foreach(var m in loginData)
+            {
+                sw.WriteLine( m.Key );
+                sw.WriteLine( m.Value );
+            }
+            sw.Close( );
+            hybirdLock.Leave( );
+        }
+
+
+        private long countOld = 0;
+        private void Timer_Tick( object sender, EventArgs e )
+        {
+            if (countOld == loginData.Count) return;
+
+            countOld = loginData.Count;
+            long Count = 0;
+
+            List<dataMy> list = new List<dataMy>( );   
+            hybirdLock.Enter( );
+
+            foreach (var m in loginData)
+            {
+                list.Add( new dataMy( m.Key, m.Value ) );
+            }
+
+            hybirdLock.Leave( );
+
+            list = (from m in list
+                    orderby m.Value descending
+                    select m).ToList( );
+
+            while (dataGridView1.RowCount < list.Count)
+            {
+                dataGridView1.Rows.Add( );
+            }
+
+            while (dataGridView1.RowCount > list.Count)
+            {
+                dataGridView1.Rows.RemoveAt( 0 );
+            }
+
+            // 赋值
+            for (int i = 0; i < list.Count; i++)
+            {
+                dataGridView1.Rows[i].Cells[0].Value = list[i].Key;
+                dataGridView1.Rows[i].Cells[1].Value = list[i].Value.ToString( );
+                Count += list[i].Value;
+            }
+
+            label2.Text = "总计：" + Count.ToString( ); 
+        }
+
+        private void Form1_FormClosing( object sender, FormClosingEventArgs e )
+        {
+            SaveData( );
+        }
+    }
+
+    public class dataMy
+    {
+        public dataMy( )
+        {
+
+        }
+
+        public dataMy(string key,long value )
+        {
+            Key = key;
+            Value = value;
+        }
+
+
+        public string Key { get; set; }
+        public long Value { get; set; }
     }
 }

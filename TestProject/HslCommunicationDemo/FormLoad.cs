@@ -708,14 +708,26 @@ namespace HslCommunicationDemo
                                  System.Threading.Thread.Sleep( 50 );
                                  Close( );
                              }
-                             catch
+                             catch(Exception ex)
                              {
-                                 MessageBox.Show( "更新软件丢失，无法启动更新" );
+                                 MessageBox.Show( "更新软件丢失，无法启动更新： " + ex.Message );
                              }
                          }
                      } ) );
                 }
             }
+        }
+
+        private void 免责条款ToolStripMenuItem_Click( object sender, EventArgs e )
+        {
+            Hide( );
+            System.Threading.Thread.Sleep( 200 );
+            using (FormDisclaimer form = new FormDisclaimer( ))
+            {
+                form.ShowDialog( );
+            }
+            System.Threading.Thread.Sleep( 200 );
+            Show( );
         }
     }
 }

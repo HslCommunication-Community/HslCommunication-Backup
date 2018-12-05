@@ -95,6 +95,7 @@
             this.button43 = new System.Windows.Forms.Button();
             this.button42 = new System.Windows.Forms.Button();
             this.button40 = new System.Windows.Forms.Button();
+            this.免责条款ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -719,7 +720,8 @@
             this.简体中文ToolStripMenuItem,
             this.englishToolStripMenuItem,
             this.日志ToolStripMenuItem,
-            this.verisonToolStripMenuItem});
+            this.verisonToolStripMenuItem,
+            this.免责条款ToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(980, 25);
@@ -854,6 +856,13 @@
             this.button40.UseVisualStyleBackColor = true;
             this.button40.Click += new System.EventHandler(this.button40_Click);
             // 
+            // 免责条款ToolStripMenuItem
+            // 
+            this.免责条款ToolStripMenuItem.Name = "免责条款ToolStripMenuItem";
+            this.免责条款ToolStripMenuItem.Size = new System.Drawing.Size(68, 21);
+            this.免责条款ToolStripMenuItem.Text = "免责条款";
+            this.免责条款ToolStripMenuItem.Click += new System.EventHandler(this.免责条款ToolStripMenuItem_Click);
+            // 
             // FormLoad
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 17F);
@@ -969,6 +978,7 @@
         private System.Windows.Forms.Button button41;
         private System.Windows.Forms.Button button42;
         private System.Windows.Forms.Button button43;
+        private System.Windows.Forms.ToolStripMenuItem 免责条款ToolStripMenuItem;
     }
 }
 

@@ -91,6 +91,12 @@
     <Compile Include="Control\FormCurve.Designer.cs">
       <DependentUpon>FormCurve.cs</DependentUpon>
     </Compile>
+    <Compile Include="FormDisclaimer.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormDisclaimer.Designer.cs">
+      <DependentUpon>FormDisclaimer.cs</DependentUpon>
+    </Compile>
     <Compile Include="FormFileClient.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -323,6 +329,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Control\FormCurve.resx">
       <DependentUpon>FormCurve.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormDisclaimer.resx">
+      <DependentUpon>FormDisclaimer.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FormFileClient.resx">
       <DependentUpon>FormFileClient.cs</DependentUpon>
