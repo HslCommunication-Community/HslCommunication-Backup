@@ -1088,17 +1088,17 @@ namespace HslCommunication.Enthernet.Redis
         /// <param name="field">域</param>
         /// <param name="value">增量值</param>
         /// <returns>返回执行 HINCRBY 命令之后，哈希表 key 中域 field 的值。</returns>
-        public OperateResult<int> IncrementHashKey( string key, string field, long value )
+        public OperateResult<long> IncrementHashKey( string key, string field, long value )
         {
             byte[] command = RedisHelper.PackStringCommand( new string[] { "HINCRBY", key, field, value.ToString( ) } );
 
             OperateResult<byte[]> read = ReadFromCoreServer( command );
-            if (!read.IsSuccess) return OperateResult.CreateFailedResult<int>( read );
+            if (!read.IsSuccess) return OperateResult.CreateFailedResult<long>( read );
 
             string msg = Encoding.UTF8.GetString( read.Content );
-            if (!msg.StartsWith( ":" )) return new OperateResult<int>( msg );
+            if (!msg.StartsWith( ":" )) return new OperateResult<long>( msg );
 
-            return RedisHelper.GetNumberFromCommandLine( read.Content );
+            return RedisHelper.GetLongNumberFromCommandLine( read.Content );
         }
 
         /// <summary>
@@ -1109,17 +1109,14 @@ namespace HslCommunication.Enthernet.Redis
         /// <param name="field">域</param>
         /// <param name="value">增量值</param>
         /// <returns>返回执行 HINCRBY 命令之后，哈希表 key 中域 field 的值。</returns>
-        public OperateResult<int> IncrementHashKey( string key, string field, float value )
+        public OperateResult<string> IncrementHashKey( string key, string field, float value )
         {
             byte[] command = RedisHelper.PackStringCommand( new string[] { "HINCRBYFLOAT", key, field, value.ToString( ) } );
 
             OperateResult<byte[]> read = ReadFromCoreServer( command );
-            if (!read.IsSuccess) return OperateResult.CreateFailedResult<int>( read );
+            if (!read.IsSuccess) return OperateResult.CreateFailedResult<string>( read );
 
-            string msg = Encoding.UTF8.GetString( read.Content );
-            if (!msg.StartsWith( ":" )) return new OperateResult<int>( msg );
-
-            return RedisHelper.GetNumberFromCommandLine( read.Content );
+            return RedisHelper.GetStringFromCommandLine( read.Content );
         }
 
         /// <summary>
