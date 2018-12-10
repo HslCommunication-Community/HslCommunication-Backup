@@ -167,6 +167,24 @@ namespace HslCommunication.Enthernet.Redis
                 return new OperateResult<int>( ex.Message );
             }
         }
+        
+        /// <summary>
+        /// 从原始的结果数据对象中提取出数字数据
+        /// </summary>
+        /// <param name="commandLine">原始的字节数据</param>
+        /// <returns>带有结果对象的数据信息</returns>
+        public static OperateResult<long> GetLongNumberFromCommandLine( byte[] commandLine )
+        {
+            try
+            {
+                string command = Encoding.UTF8.GetString( commandLine ).TrimEnd( '\r', '\n' );
+                return OperateResult.CreateSuccessResult( Convert.ToInt64( command.Substring( 1 ) ) );
+            }
+            catch (Exception ex)
+            {
+                return new OperateResult<long>( ex.Message );
+            }
+        }
 
         /// <summary>
         /// 从结果的数据对象里提取字符串的信息

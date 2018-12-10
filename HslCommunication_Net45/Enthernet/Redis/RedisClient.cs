@@ -345,17 +345,17 @@ namespace HslCommunication.Enthernet.Redis
         /// </summary>
         /// <param name="key">关键字</param>
         /// <returns>执行 DECR 命令之后 key 的值。</returns>
-        public OperateResult<int> DecrementKey( string key )
+        public OperateResult<long> DecrementKey( string key )
         {
             byte[] command = RedisHelper.PackStringCommand( new string[] { "DECR", key } );
 
             OperateResult<byte[]> read = ReadFromCoreServer( command );
-            if (!read.IsSuccess) return OperateResult.CreateFailedResult<int>( read );
+            if (!read.IsSuccess) return OperateResult.CreateFailedResult<long>( read );
 
             string msg = Encoding.UTF8.GetString( read.Content );
-            if (!msg.StartsWith( ":" )) return new OperateResult<int>( msg );
+            if (!msg.StartsWith( ":" )) return new OperateResult<long>( msg );
 
-            return RedisHelper.GetNumberFromCommandLine( read.Content );
+            return RedisHelper.GetLongNumberFromCommandLine( read.Content );
         }
 
         /// <summary>
@@ -367,17 +367,17 @@ namespace HslCommunication.Enthernet.Redis
         /// <param name="key">关键字</param>
         /// <param name="value">操作的值</param>
         /// <returns>返回减去 decrement 之后， key 的值。</returns>
-        public OperateResult<int> DecrementKey( string key, long value )
+        public OperateResult<long> DecrementKey( string key, long value )
         {
             byte[] command = RedisHelper.PackStringCommand( new string[] { "DECR", key, value.ToString( ) } );
 
             OperateResult<byte[]> read = ReadFromCoreServer( command );
-            if (!read.IsSuccess) return OperateResult.CreateFailedResult<int>( read );
+            if (!read.IsSuccess) return OperateResult.CreateFailedResult<long>( read );
 
             string msg = Encoding.UTF8.GetString( read.Content );
-            if (!msg.StartsWith( ":" )) return new OperateResult<int>( msg );
+            if (!msg.StartsWith( ":" )) return new OperateResult<long>( msg );
 
-            return RedisHelper.GetNumberFromCommandLine( read.Content );
+            return RedisHelper.GetLongNumberFromCommandLine( read.Content );
         }
 
         /// <summary>
@@ -438,17 +438,17 @@ namespace HslCommunication.Enthernet.Redis
         /// </summary>
         /// <param name="key">关键字</param>
         /// <returns>返回执行 INCR 命令之后 key 的值。</returns>
-        public OperateResult<int> IncrementKey( string key )
+        public OperateResult<long> IncrementKey( string key )
         {
             byte[] command = RedisHelper.PackStringCommand( new string[] { "INCR", key } );
 
             OperateResult<byte[]> read = ReadFromCoreServer( command );
-            if (!read.IsSuccess) return OperateResult.CreateFailedResult<int>( read );
+            if (!read.IsSuccess) return OperateResult.CreateFailedResult<long>( read );
 
             string msg = Encoding.UTF8.GetString( read.Content );
-            if (!msg.StartsWith( ":" )) return new OperateResult<int>( msg );
+            if (!msg.StartsWith( ":" )) return new OperateResult<long>( msg );
 
-            return RedisHelper.GetNumberFromCommandLine( read.Content );
+            return RedisHelper.GetLongNumberFromCommandLine( read.Content );
         }
 
         /// <summary>
@@ -458,17 +458,17 @@ namespace HslCommunication.Enthernet.Redis
         /// <param name="key">关键字</param>
         /// <param name="value">增量数据</param>
         /// <returns>加上 increment 之后， key 的值。</returns>
-        public OperateResult<int> IncrementKey( string key, long value )
+        public OperateResult<long> IncrementKey( string key, long value )
         {
             byte[] command = RedisHelper.PackStringCommand( new string[] { "INCRBY", key, value.ToString( ) } );
 
             OperateResult<byte[]> read = ReadFromCoreServer( command );
-            if (!read.IsSuccess) return OperateResult.CreateFailedResult<int>( read );
+            if (!read.IsSuccess) return OperateResult.CreateFailedResult<long>( read );
 
             string msg = Encoding.UTF8.GetString( read.Content );
-            if (!msg.StartsWith( ":" )) return new OperateResult<int>( msg );
+            if (!msg.StartsWith( ":" )) return new OperateResult<long>( msg );
 
-            return RedisHelper.GetNumberFromCommandLine( read.Content );
+            return RedisHelper.GetLongNumberFromCommandLine( read.Content );
         }
 
         /// <summary>
