@@ -76,7 +76,7 @@ namespace DemoUpdateServer
             {
                 simplifyServer.SendMessage( arg1, handle, version.ToString( ) );
                 string address = GetAddressByIp( arg1.IpAddress );
-                lognet.WriteInfo( $"{arg1.IpAddress.PadRight( 15 )} [{msg.PadRight( 8 )}] [{address}] Run Application" );
+                lognet.WriteInfo( $"{arg1.IpAddress.PadRight( 15 )} [{msg.PadRight( 8 )}] [{address}]" );
                 AddDict( address );
             }
             else if(handle == 2)
@@ -244,9 +244,8 @@ namespace DemoUpdateServer
 
             hybirdLock.Leave( );
 
-            list = (from m in list
-                    orderby m.Value descending
-                    select m).ToList( );
+            list.Sort( );
+            list.Reverse( );
 
             while (dataGridView1.RowCount < list.Count)
             {
@@ -266,7 +265,70 @@ namespace DemoUpdateServer
                 Count += list[i].Value;
             }
 
-            label2.Text = "总计：" + Count.ToString( ); 
+            label2.Text = "总计：" + Count.ToString( );
+
+            // 统计省份功能
+            List<dataMy> shengfen = new List<dataMy>( );
+            for (int i = 0; i < list.Count; i++)
+            {
+                string tmp = string.Empty;
+                if (list[i].Key.IndexOf( '省' ) > 0)
+                {
+                    tmp = list[i].Key.Substring( 0, list[i].Key.IndexOf( '省' ) + 1 );
+                }
+                else if (list[i].Key.Contains( "北京市" ))
+                {
+                    tmp = "北京市";
+                }
+                else if (list[i].Key.Contains( "上海市" ))
+                {
+                    tmp = "上海市";
+                }
+                else if (list[i].Key.Contains( "天津市" ))
+                {
+                    tmp = "天津市";
+                }
+                else if (list[i].Key.Contains( "重庆市" ))
+                {
+                    tmp = "重庆市";
+                }
+                else if(list[i].Key.IndexOf( '区' ) > 0)
+                {
+                    tmp = list[i].Key.Substring( 0, list[i].Key.IndexOf( '区' ) + 1 );
+                }
+
+                if (string.IsNullOrEmpty( tmp )) continue;
+
+                dataMy dataMy = shengfen.Find( m => m.Key == tmp );
+                if(dataMy == null)
+                {
+                    shengfen.Add( new dataMy( tmp, list[i].Value ) );
+                }
+                else
+                {
+                    dataMy.Value += list[i].Value;
+                }
+            }
+
+            shengfen.Sort( );
+            shengfen.Reverse( );
+            while (dataGridView2.RowCount < shengfen.Count)
+            {
+                dataGridView2.Rows.Add( );
+            }
+
+            while (dataGridView2.RowCount > shengfen.Count)
+            {
+                dataGridView2.Rows.RemoveAt( 0 );
+            }
+
+            // 赋值
+            for (int i = 0; i < shengfen.Count; i++)
+            {
+                dataGridView2.Rows[i].Cells[0].Value = shengfen[i].Key;
+                dataGridView2.Rows[i].Cells[1].Value = shengfen[i].Value.ToString( );
+            }
+
         }
 
         private void Form1_FormClosing( object sender, FormClosingEventArgs e )
@@ -275,7 +337,7 @@ namespace DemoUpdateServer
         }
     }
 
-    public class dataMy
+    public class dataMy : IComparable<dataMy>
     {
         public dataMy( )
         {
@@ -291,5 +353,10 @@ namespace DemoUpdateServer
 
         public string Key { get; set; }
         public long Value { get; set; }
+
+        public int CompareTo( dataMy other )
+        {
+            return Value.CompareTo( other.Value );
+        }
     }
 }

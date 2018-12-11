@@ -152,7 +152,10 @@ namespace HslCommunicationCoreDemo
             List<NetPushClient> netPushClients = new List<NetPushClient>( );
             for (int i = 0; i < 100; i++)
             {
-                netPushClients.Add( new NetPushClient( "127.0.0.1", 12345, "D" ) );
+                if (i > 60)
+                    netPushClients.Add( new NetPushClient( "127.0.0.1", 12345, "E" ) );
+                else
+                    netPushClients.Add( new NetPushClient( "127.0.0.1", 12345, "D" ) );
             }
             netPushClients.ForEach( m => m.CreatePush( ( j, k ) =>
             {
