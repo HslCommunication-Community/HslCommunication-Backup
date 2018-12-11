@@ -49,6 +49,7 @@ namespace HslCommunication.Enthernet
             if(protocol == HslProtocol.ProtocolUserString)
             {
                 action?.Invoke( this, Encoding.Unicode.GetString( content ) );
+                OnReceived?.Invoke( this, Encoding.Unicode.GetString( content ) );
             }
         }
 
@@ -70,10 +71,25 @@ namespace HslCommunication.Enthernet
         }
 
         #endregion
+        
+        #region Public Method 
 
-        #region Private Method
+        /// <summary>
+        /// 创建数据推送服务
+        /// </summary>
+        /// <param name="pushCallBack">触发数据推送的委托</param>
+        /// <returns>是否创建成功</returns>
+        public OperateResult CreatePush( Action<NetPushClient, string> pushCallBack )
+        {
+            action = pushCallBack;
+            return CreatePush( );
+        }
 
-        private OperateResult CreatePush( )
+        /// <summary>
+        /// 创建数据推送服务，使用事件绑定的机制实现
+        /// </summary>
+        /// <returns>是否创建成功</returns>
+        public OperateResult CreatePush( )
         {
             CoreSocket?.Close( );
 
@@ -92,23 +108,8 @@ namespace HslCommunication.Enthernet
             CoreSocket = connect.Content;
             appSession.WorkSocket = connect.Content;
             ReBeginReceiveHead( appSession, false );
-            
+
             return OperateResult.CreateSuccessResult( );
-        }
-
-        #endregion
-
-        #region Public Method 
-
-        /// <summary>
-        /// 创建数据推送服务
-        /// </summary>
-        /// <param name="pushCallBack">触发数据推送的委托</param>
-        /// <returns>是否创建成功</returns>
-        public OperateResult CreatePush( Action<NetPushClient, string> pushCallBack )
-        {
-            action = pushCallBack;
-            return CreatePush( );
         }
         
         /// <summary>
@@ -134,6 +135,15 @@ namespace HslCommunication.Enthernet
         /// 获取或设置重连服务器的间隔时间
         /// </summary>
         public int ReConnectTime { set => reconnectTime = value; get => reconnectTime; }
+
+        #endregion
+
+        #region Public Event
+
+        /// <summary>
+        /// 当接收到数据的事件信息，接收到数据的时候触发。
+        /// </summary>
+        public event Action<NetPushClient, string> OnReceived;
 
         #endregion
 
