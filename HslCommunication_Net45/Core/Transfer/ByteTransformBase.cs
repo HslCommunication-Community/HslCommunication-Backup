@@ -21,6 +21,15 @@ namespace HslCommunication.Core
             DataFormat = DataFormat.DCBA;
         }
 
+        /// <summary>
+        /// 使用指定的数据解析来实例化对象
+        /// </summary>
+        /// <param name="dataFormat">数据规则</param>
+        public ByteTransformBase( DataFormat dataFormat )
+        {
+            this.DataFormat = dataFormat;
+        }
+
         #endregion
 
         #region Get Value From Bytes

@@ -17,8 +17,29 @@ namespace HslCommunication.Core
     /// </summary>
     public class ReverseBytesTransform : ByteTransformBase
     {
+        #region Constructor
+
+        /// <summary>
+        /// 实例化一个默认的对象
+        /// </summary>
+        public ReverseBytesTransform( )
+        {
+
+        }
+
+        /// <summary>
+        /// 使用指定的数据解析来实例化对象
+        /// </summary>
+        /// <param name="dataFormat">数据规则</param>
+        public ReverseBytesTransform( DataFormat dataFormat ) : base( dataFormat )
+        {
+
+        }
+
+        #endregion
+
         #region Get Value From Bytes
-        
+
         /// <summary>
         /// 从缓存中提取short结果
         /// </summary>

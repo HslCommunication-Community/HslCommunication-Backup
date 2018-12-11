@@ -17,7 +17,16 @@ namespace HslCommunication.Core
         /// </summary>
         public ReverseWordTransform( )
         {
-            DataFormat = DataFormat.ABCD;
+            this.DataFormat = DataFormat.ABCD;
+        }
+
+        /// <summary>
+        /// 使用指定的数据解析来实例化对象
+        /// </summary>
+        /// <param name="dataFormat">数据规则</param>
+        public ReverseWordTransform( DataFormat dataFormat ) : base( dataFormat )
+        {
+
         }
 
         #endregion
