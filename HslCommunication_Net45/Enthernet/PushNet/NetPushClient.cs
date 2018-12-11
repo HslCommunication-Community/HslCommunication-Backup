@@ -93,17 +93,26 @@ namespace HslCommunication.Enthernet
         {
             CoreSocket?.Close( );
 
+            // 连接服务器
             OperateResult<Socket> connect = CreateSocketAndConnect( endPoint, 5000 );
             if (!connect.IsSuccess) return connect;
 
+            // 发送订阅的关键字
             OperateResult send = SendStringAndCheckReceive( connect.Content, 0, keyWord );
             if (!send.IsSuccess) return send;
 
+            // 确认服务器的反馈
             OperateResult<int, string> receive = ReceiveStringContentFromSocket( connect.Content );
             if (!receive.IsSuccess) return receive;
 
-            if (receive.Content1 != 0) return new OperateResult( receive.Content2 );
+            // 订阅不存在
+            if (receive.Content1 != 0)
+            {
+                connect.Content?.Close( );
+                return new OperateResult( receive.Content2 );
+            }
 
+            // 异步接收
             AppSession appSession = new AppSession( );
             CoreSocket = connect.Content;
             appSession.WorkSocket = connect.Content;
