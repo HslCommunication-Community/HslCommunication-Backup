@@ -51,6 +51,7 @@
             this.label17 = new System.Windows.Forms.Label();
             this.textBox12 = new System.Windows.Forms.TextBox();
             this.label15 = new System.Windows.Forms.Label();
+            this.userCurve1 = new HslCommunication.Controls.UserCurve();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.textBox11 = new System.Windows.Forms.TextBox();
             this.label14 = new System.Windows.Forms.Label();
@@ -103,7 +104,7 @@
             this.label4 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.label20 = new System.Windows.Forms.Label();
-            this.userCurve1 = new HslCommunication.Controls.UserCurve();
+            this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.groupBox5.SuspendLayout();
@@ -118,6 +119,7 @@
             this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel1.Controls.Add(this.comboBox1);
             this.panel1.Controls.Add(this.textBox17);
             this.panel1.Controls.Add(this.label25);
             this.panel1.Controls.Add(this.textBox16);
@@ -191,16 +193,16 @@
             // 
             // label22
             // 
-            this.label22.Location = new System.Drawing.Point(872, 7);
+            this.label22.Location = new System.Drawing.Point(889, 7);
             this.label22.Name = "label22";
-            this.label22.Size = new System.Drawing.Size(101, 45);
+            this.label22.Size = new System.Drawing.Size(84, 45);
             this.label22.TabIndex = 7;
             this.label22.Text = "D100 C100 W100 H100 A100";
             // 
             // label21
             // 
             this.label21.AutoSize = true;
-            this.label21.Location = new System.Drawing.Point(786, 7);
+            this.label21.Location = new System.Drawing.Point(831, 5);
             this.label21.Name = "label21";
             this.label21.Size = new System.Drawing.Size(68, 17);
             this.label21.TabIndex = 6;
@@ -209,9 +211,9 @@
             // button2
             // 
             this.button2.Enabled = false;
-            this.button2.Location = new System.Drawing.Point(689, 11);
+            this.button2.Location = new System.Drawing.Point(761, 11);
             this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(91, 28);
+            this.button2.Size = new System.Drawing.Size(64, 28);
             this.button2.TabIndex = 5;
             this.button2.Text = "断开连接";
             this.button2.UseVisualStyleBackColor = true;
@@ -219,9 +221,9 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(592, 11);
+            this.button1.Location = new System.Drawing.Point(690, 11);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(91, 28);
+            this.button1.Size = new System.Drawing.Size(64, 28);
             this.button1.TabIndex = 4;
             this.button1.Text = "连接";
             this.button1.UseVisualStyleBackColor = true;
@@ -348,6 +350,17 @@
             this.label15.Size = new System.Drawing.Size(44, 17);
             this.label15.TabIndex = 4;
             this.label15.Text = "地址：";
+            // 
+            // userCurve1
+            // 
+            this.userCurve1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
+            this.userCurve1.Location = new System.Drawing.Point(13, 82);
+            this.userCurve1.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.userCurve1.Name = "userCurve1";
+            this.userCurve1.Size = new System.Drawing.Size(400, 189);
+            this.userCurve1.TabIndex = 0;
+            this.userCurve1.ValueMaxLeft = 200F;
+            this.userCurve1.ValueMaxRight = 200F;
             // 
             // groupBox4
             // 
@@ -879,16 +892,14 @@
             this.label20.TabIndex = 6;
             this.label20.Text = "作者：Richard Hu";
             // 
-            // userCurve1
+            // comboBox1
             // 
-            this.userCurve1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
-            this.userCurve1.Location = new System.Drawing.Point(13, 82);
-            this.userCurve1.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.userCurve1.Name = "userCurve1";
-            this.userCurve1.Size = new System.Drawing.Size(400, 189);
-            this.userCurve1.TabIndex = 0;
-            this.userCurve1.ValueMaxLeft = 200F;
-            this.userCurve1.ValueMaxRight = 200F;
+            this.comboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBox1.FormattingEnabled = true;
+            this.comboBox1.Location = new System.Drawing.Point(589, 14);
+            this.comboBox1.Name = "comboBox1";
+            this.comboBox1.Size = new System.Drawing.Size(95, 25);
+            this.comboBox1.TabIndex = 14;
             // 
             // FormOmron
             // 
@@ -1005,5 +1016,6 @@
         private System.Windows.Forms.Label label25;
         private System.Windows.Forms.TextBox textBox16;
         private System.Windows.Forms.Label label24;
+        private System.Windows.Forms.ComboBox comboBox1;
     }
 }

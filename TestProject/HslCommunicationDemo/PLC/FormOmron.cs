@@ -40,6 +40,8 @@ namespace HslCommunicationDemo
 
         private void FormSiemens_Load( object sender, EventArgs e )
         {
+            comboBox1.DataSource = HslCommunication.BasicFramework.SoftBasic.GetEnumValues<HslCommunication.Core.DataFormat>( );
+            comboBox1.SelectedItem = HslCommunication.Core.DataFormat.CDAB;
             panel2.Enabled = false;
             userCurve1.SetLeftCurve( "A", new float[0], Color.Tomato );
 
@@ -207,7 +209,7 @@ namespace HslCommunicationDemo
             omronFinsNet.SA1 = SA1;
             omronFinsNet.DA1 = DA1;
             omronFinsNet.DA2 = DA2;
-            omronFinsNet.ByteTransform.DataFormat = HslCommunication.Core.DataFormat.ABCD;
+            omronFinsNet.ByteTransform.DataFormat = (HslCommunication.Core.DataFormat)comboBox1.SelectedItem;
 
             try
             {
