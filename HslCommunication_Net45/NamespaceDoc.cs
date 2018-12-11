@@ -539,6 +539,15 @@ namespace HslCommunication
     ///             <item>Demo程序新增免责条款。</item>
     ///         </list>
     ///     </revision>
+    ///     <revision date="2018-12-11" version="5.6.6" author="Richard.Hu">
+    ///         <list type="bullet">
+    ///             <item>修复redis客户端对键值进行自增自减指令操作时的类型错误bug。</item>
+    ///             <item>修复redis客户端对哈希值进行自增自减指令操作时的类型错误bug。</item>
+    ///             <item>推送的客户端可选委托或是事件的方式，方便labview调用。</item>
+    ///             <item>推送的客户端修复当服务器的关键字不存在时连接未关闭的Bug。</item>
+    ///             <item>Demo程序里，欧姆龙测试界面新增数据格式功能。</item>
+    ///         </list>
+    ///     </revision>
     /// </revisionHistory>
     [System.Runtime.CompilerServices.CompilerGeneratedAttribute( )]
     public class NamespaceDoc
