@@ -562,6 +562,20 @@ namespace HslCommunication.Enthernet.Redis
         }
 
         /// <summary>
+        /// 将字符串值 value 关联到 key 。并发布一个订阅的频道数据，都成功时，才返回成功
+        /// </summary>
+        /// <param name="key">关键字</param>
+        /// <param name="value">数据值</param>
+        /// <returns>是否成功的结果对象</returns>
+        public OperateResult WriteAndPublishKey(string key, string value )
+        {
+            OperateResult write = WriteKey( key, value );
+            if (!write.IsSuccess) return write;
+
+            return Publish( key, value );
+        }
+
+        /// <summary>
         /// 将值 value 关联到 key ，并将 key 的生存时间设为 seconds (以秒为单位)。如果 key 已经存在， SETEX 命令将覆写旧值。
         /// </summary>
         /// <param name="key">关键字</param>
