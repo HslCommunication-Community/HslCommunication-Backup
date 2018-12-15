@@ -104,7 +104,7 @@
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(334, 17);
             this.label6.TabIndex = 7;
-            this.label6.Text = "打赏超过100 Rmb的，可以申请VIP技术支持群：838185568";
+            this.label6.Text = "打赏超过200 Rmb的，可以申请VIP技术支持群：838185568";
             // 
             // FormSupport
             // 
