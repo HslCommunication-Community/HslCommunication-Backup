@@ -46,6 +46,7 @@ namespace PushNetServer
                 pushServer = new NetPushServer( );
                 pushServer.Token = new Guid( textBox3.Text );                                    // 支持令牌
                 pushServer.LogNet = new HslCommunication.LogNet.LogNetSingle( "log.txt" );       // 支持日志
+                pushServer.PushCacheAfterConnect = checkBox1.Checked;
                 pushServer.ServerStart( int.Parse( textBox2.Text ) );
                 button1.Enabled = false;
                 panel2.Enabled = true;

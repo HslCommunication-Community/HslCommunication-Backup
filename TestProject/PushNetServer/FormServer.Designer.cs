@@ -87,6 +87,7 @@
             this.label7 = new System.Windows.Forms.Label();
             this.linkLabel1 = new System.Windows.Forms.LinkLabel();
             this.label28 = new System.Windows.Forms.Label();
+            this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.panel6.SuspendLayout();
@@ -100,6 +101,7 @@
             this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel1.Controls.Add(this.checkBox1);
             this.panel1.Controls.Add(this.textBox3);
             this.panel1.Controls.Add(this.label6);
             this.panel1.Controls.Add(this.button1);
@@ -129,7 +131,7 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(676, 11);
+            this.button1.Location = new System.Drawing.Point(865, 11);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(91, 28);
             this.button1.TabIndex = 4;
@@ -673,6 +675,18 @@
             this.label28.TabIndex = 17;
             this.label28.Text = "博客地址：";
             // 
+            // checkBox1
+            // 
+            this.checkBox1.AutoSize = true;
+            this.checkBox1.Checked = true;
+            this.checkBox1.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBox1.Location = new System.Drawing.Point(676, 16);
+            this.checkBox1.Name = "checkBox1";
+            this.checkBox1.Size = new System.Drawing.Size(123, 21);
+            this.checkBox1.TabIndex = 10;
+            this.checkBox1.Text = "是否推送缓存数据";
+            this.checkBox1.UseVisualStyleBackColor = true;
+            // 
             // FormServer
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 17F);
@@ -769,6 +783,7 @@
         private System.Windows.Forms.Label label16;
         private System.Windows.Forms.LinkLabel linkLabel1;
         private System.Windows.Forms.Label label28;
+        private System.Windows.Forms.CheckBox checkBox1;
     }
 }
 

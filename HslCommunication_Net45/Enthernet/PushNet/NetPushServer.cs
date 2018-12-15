@@ -115,11 +115,10 @@ namespace HslCommunication.Enthernet
                     dicSendCacheLock.Enter( );
                     if(dictSendHistory.ContainsKey( receive.Content2 ))
                     {
-                        SendString( session, dictSendHistory[receive.Content2] );
+                        if(isPushCacheAfterConnect) SendString( session, dictSendHistory[receive.Content2] );
                     }
                     dicSendCacheLock.Leave( );
                 }
-
             }
         }
 
@@ -219,6 +218,15 @@ namespace HslCommunication.Enthernet
         public int OnlineCount
         {
             get => onlineCount;
+        }
+
+        /// <summary>
+        /// 在客户端上线之后，是否推送缓存的数据，默认设置为true
+        /// </summary>
+        public bool PushCacheAfterConnect
+        {
+            get { return isPushCacheAfterConnect; }
+            set { isPushCacheAfterConnect = value; }
         }
 
         #endregion
@@ -341,6 +349,7 @@ namespace HslCommunication.Enthernet
         private int onlineCount = 0;                                         // 在线客户端的数量，用于监视显示
         private List<NetPushClient> pushClients;                             // 客户端列表
         private SimpleHybirdLock hybirdLock;                                 // 客户端列表的锁
+        private bool isPushCacheAfterConnect = true;                         // 在客户端上线之后，是否推送缓存的数据
 
         #endregion
 
