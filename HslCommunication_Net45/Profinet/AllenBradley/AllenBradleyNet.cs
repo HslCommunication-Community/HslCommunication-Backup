@@ -57,6 +57,11 @@ namespace HslCommunication.Profinet.AllenBradley
         /// </summary>
         public uint SessionHandle { get; private set; }
 
+        /// <summary>
+        /// 获取或设置当前PLC的槽号信息，应该在连接之间设定
+        /// </summary>
+        public byte Slot { get; set; } = 0;
+
         #endregion
 
         #region Double Mode Override
@@ -116,7 +121,7 @@ namespace HslCommunication.Profinet.AllenBradley
             {
                 cips.Add( AllenBradleyHelper.PackRequsetRead( address[i], length[i] ) );
             }
-            byte[] commandSpecificData = AllenBradleyHelper.PackCommandSpecificData( cips.ToArray( ) );
+            byte[] commandSpecificData = AllenBradleyHelper.PackCommandSpecificData( Slot, cips.ToArray( ) );
             
             return OperateResult.CreateSuccessResult( AllenBradleyHelper.PackRequestHeader( 0x6F, SessionHandle, commandSpecificData ) );
         }
@@ -150,7 +155,7 @@ namespace HslCommunication.Profinet.AllenBradley
         public OperateResult<byte[]> BuildWriteCommand( string address, ushort typeCode, byte[] data, int length = 1 )
         {
             byte[] cip = AllenBradleyHelper.PackRequestWrite( address, typeCode, data, length );
-            byte[] commandSpecificData = AllenBradleyHelper.PackCommandSpecificData(  cip );
+            byte[] commandSpecificData = AllenBradleyHelper.PackCommandSpecificData( Slot, cip );
             
             return OperateResult.CreateSuccessResult( AllenBradleyHelper.PackRequestHeader( 0x6F, SessionHandle, commandSpecificData ) );
         }

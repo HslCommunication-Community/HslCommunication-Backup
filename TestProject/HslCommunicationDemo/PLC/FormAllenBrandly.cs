@@ -180,8 +180,15 @@ namespace HslCommunicationDemo
                 return;
             }
 
+            if(byte.TryParse(textBox15.Text, out byte slot ))
+            {
+                MessageBox.Show( "slot输入不正确！" );
+                return;
+            }
+
             allenBradleyNet.IpAddress = textBox1.Text;
             allenBradleyNet.Port = port;
+            allenBradleyNet.Slot = slot;
 
             try
             {

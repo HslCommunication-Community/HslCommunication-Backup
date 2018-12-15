@@ -45,6 +45,7 @@
             this.label17 = new System.Windows.Forms.Label();
             this.textBox12 = new System.Windows.Forms.TextBox();
             this.label15 = new System.Windows.Forms.Label();
+            this.userCurve1 = new HslCommunication.Controls.UserCurve();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.textBox11 = new System.Windows.Forms.TextBox();
             this.label14 = new System.Windows.Forms.Label();
@@ -52,6 +53,8 @@
             this.textBox13 = new System.Windows.Forms.TextBox();
             this.label16 = new System.Windows.Forms.Label();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.textBox9 = new System.Windows.Forms.TextBox();
+            this.label12 = new System.Windows.Forms.Label();
             this.textBox10 = new System.Windows.Forms.TextBox();
             this.label13 = new System.Windows.Forms.Label();
             this.button25 = new System.Windows.Forms.Button();
@@ -97,9 +100,8 @@
             this.label4 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.label20 = new System.Windows.Forms.Label();
-            this.textBox9 = new System.Windows.Forms.TextBox();
-            this.label12 = new System.Windows.Forms.Label();
-            this.userCurve1 = new HslCommunication.Controls.UserCurve();
+            this.textBox15 = new System.Windows.Forms.TextBox();
+            this.label23 = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.groupBox5.SuspendLayout();
@@ -114,6 +116,8 @@
             this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel1.Controls.Add(this.textBox15);
+            this.panel1.Controls.Add(this.label23);
             this.panel1.Controls.Add(this.label22);
             this.panel1.Controls.Add(this.label21);
             this.panel1.Controls.Add(this.button2);
@@ -130,16 +134,16 @@
             // 
             // label22
             // 
-            this.label22.Location = new System.Drawing.Point(776, 7);
+            this.label22.Location = new System.Drawing.Point(819, 7);
             this.label22.Name = "label22";
-            this.label22.Size = new System.Drawing.Size(197, 45);
+            this.label22.Size = new System.Drawing.Size(154, 45);
             this.label22.TabIndex = 7;
             this.label22.Text = "变量的标签名";
             // 
             // label21
             // 
             this.label21.AutoSize = true;
-            this.label21.Location = new System.Drawing.Point(702, 7);
+            this.label21.Location = new System.Drawing.Point(745, 7);
             this.label21.Name = "label21";
             this.label21.Size = new System.Drawing.Size(68, 17);
             this.label21.TabIndex = 6;
@@ -148,7 +152,7 @@
             // button2
             // 
             this.button2.Enabled = false;
-            this.button2.Location = new System.Drawing.Point(584, 11);
+            this.button2.Location = new System.Drawing.Point(629, 11);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(91, 28);
             this.button2.TabIndex = 5;
@@ -158,7 +162,7 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(477, 11);
+            this.button1.Location = new System.Drawing.Point(522, 11);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(91, 28);
             this.button1.TabIndex = 4;
@@ -168,16 +172,16 @@
             // 
             // textBox2
             // 
-            this.textBox2.Location = new System.Drawing.Point(305, 14);
+            this.textBox2.Location = new System.Drawing.Point(269, 14);
             this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(141, 23);
+            this.textBox2.Size = new System.Drawing.Size(84, 23);
             this.textBox2.TabIndex = 3;
             this.textBox2.Text = "44818";
             // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(251, 17);
+            this.label3.Location = new System.Drawing.Point(215, 17);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(56, 17);
             this.label3.TabIndex = 2;
@@ -288,6 +292,17 @@
             this.label15.TabIndex = 4;
             this.label15.Text = "地址：";
             // 
+            // userCurve1
+            // 
+            this.userCurve1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
+            this.userCurve1.Location = new System.Drawing.Point(13, 82);
+            this.userCurve1.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.userCurve1.Name = "userCurve1";
+            this.userCurve1.Size = new System.Drawing.Size(400, 189);
+            this.userCurve1.TabIndex = 0;
+            this.userCurve1.ValueMaxLeft = 200F;
+            this.userCurve1.ValueMaxRight = 200F;
+            // 
             // groupBox4
             // 
             this.groupBox4.Controls.Add(this.textBox11);
@@ -361,6 +376,23 @@
             this.groupBox3.TabIndex = 2;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "批量读取测试，分号间隔";
+            // 
+            // textBox9
+            // 
+            this.textBox9.Location = new System.Drawing.Point(294, 27);
+            this.textBox9.Name = "textBox9";
+            this.textBox9.Size = new System.Drawing.Size(105, 23);
+            this.textBox9.TabIndex = 12;
+            this.textBox9.Text = "1";
+            // 
+            // label12
+            // 
+            this.label12.AutoSize = true;
+            this.label12.Location = new System.Drawing.Point(240, 30);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(44, 17);
+            this.label12.TabIndex = 11;
+            this.label12.Text = "长度：";
             // 
             // textBox10
             // 
@@ -823,33 +855,22 @@
             this.label20.TabIndex = 6;
             this.label20.Text = "作者：Richard Hu";
             // 
-            // textBox9
+            // textBox15
             // 
-            this.textBox9.Location = new System.Drawing.Point(294, 27);
-            this.textBox9.Name = "textBox9";
-            this.textBox9.Size = new System.Drawing.Size(105, 23);
-            this.textBox9.TabIndex = 12;
-            this.textBox9.Text = "1";
+            this.textBox15.Location = new System.Drawing.Point(410, 14);
+            this.textBox15.Name = "textBox15";
+            this.textBox15.Size = new System.Drawing.Size(49, 23);
+            this.textBox15.TabIndex = 9;
+            this.textBox15.Text = "0";
             // 
-            // label12
+            // label23
             // 
-            this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(240, 30);
-            this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(44, 17);
-            this.label12.TabIndex = 11;
-            this.label12.Text = "长度：";
-            // 
-            // userCurve1
-            // 
-            this.userCurve1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
-            this.userCurve1.Location = new System.Drawing.Point(13, 82);
-            this.userCurve1.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.userCurve1.Name = "userCurve1";
-            this.userCurve1.Size = new System.Drawing.Size(400, 189);
-            this.userCurve1.TabIndex = 0;
-            this.userCurve1.ValueMaxLeft = 200F;
-            this.userCurve1.ValueMaxRight = 200F;
+            this.label23.AutoSize = true;
+            this.label23.Location = new System.Drawing.Point(366, 17);
+            this.label23.Name = "label23";
+            this.label23.Size = new System.Drawing.Size(41, 17);
+            this.label23.TabIndex = 8;
+            this.label23.Text = "slot：";
             // 
             // FormAllenBrandly
             // 
@@ -962,5 +983,7 @@
         private System.Windows.Forms.Button button_read_byte;
         private System.Windows.Forms.TextBox textBox9;
         private System.Windows.Forms.Label label12;
+        private System.Windows.Forms.TextBox textBox15;
+        private System.Windows.Forms.Label label23;
     }
 }

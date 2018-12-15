@@ -161,14 +161,15 @@ namespace HslCommunication.Profinet.AllenBradley
             Array.Copy( buffer, 0, data, 0, offect );
             return data;
         }
-        
+
 
         /// <summary>
         /// 生成读取直接节点数据信息的内容
         /// </summary>
+        /// <param name="slot">PLC所在的槽号</param>
         /// <param name="cips">cip指令内容</param>
         /// <returns>最终的指令值</returns>
-        public static byte[] PackCommandSpecificData( params byte[][] cips )
+        public static byte[] PackCommandSpecificData( byte slot, params byte[][] cips )
         {
             System.IO.MemoryStream ms = new System.IO.MemoryStream( );
             ms.WriteByte( 0x00 );
@@ -234,10 +235,10 @@ namespace HslCommunication.Profinet.AllenBradley
             ms.WriteByte( 0x01 );     // Path Size
             ms.WriteByte( 0x00 );
             ms.WriteByte( 0x01 );     // port
-            ms.WriteByte( 0x00 );
+            ms.WriteByte( slot );
 
             byte[] data = ms.ToArray( );
-
+            ms.Dispose( );
             BitConverter.GetBytes( (short)count ).CopyTo( data, 24 );
             data[14] = BitConverter.GetBytes( (short)(data.Length - 16) )[0];
             data[15] = BitConverter.GetBytes( (short)(data.Length - 16) )[1];
