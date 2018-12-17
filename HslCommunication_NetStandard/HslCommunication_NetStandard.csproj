@@ -12,6 +12,8 @@
     <Copyright>Copyright © By Richard.Hu 2018</Copyright>
     <AssemblyVersion>5.6.6.0</AssemblyVersion>
     <FileVersion>5.6.6.0</FileVersion>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>HslCommunication.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

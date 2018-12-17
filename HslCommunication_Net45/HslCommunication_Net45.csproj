@@ -35,6 +35,12 @@
   <PropertyGroup>
     <AutoGenerateBindingRedirects>false</AutoGenerateBindingRedirects>
   </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>HslCommunication.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
@@ -361,6 +367,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Doc.txt" />
+    <None Include="HslCommunication.snk" />
     <None Include="imgaes\qrcode_for_gh_319218678954_258.jpg" />
     <None Include="imgaes\mm_facetoface_collect_qrcode_1525331158525.png" />
     <None Include="imgaes\WindowsForm_817_16x.png" />
