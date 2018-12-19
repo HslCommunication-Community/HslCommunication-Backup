@@ -76,12 +76,19 @@ namespace DemoUpdateServer
             {
                 simplifyServer.SendMessage( arg1, handle, version.ToString( ) );
                 string address = GetAddressByIp( arg1.IpAddress );
-                lognet.WriteInfo( $"{arg1.IpAddress.PadRight( 15 )} [{msg.PadRight( 8 )}] [{address}]" );
+                lognet.WriteInfo( $"{arg1.IpAddress.PadRight( 15 )} [{msg.PadRight( 8 )}] [{address}] Demo" );
                 AddDict( address );
             }
             else if(handle == 2)
             {
                 simplifyServer.SendMessage( arg1, random.Next( 10000 ), "这是一条测试的数据：" + random.Next( 10000 ).ToString( ) );
+            }
+            else if(handle == 100)
+            {
+                simplifyServer.SendMessage( arg1, handle, "1.0.0" );
+                string address = GetAddressByIp( arg1.IpAddress );
+                lognet.WriteInfo( $"{arg1.IpAddress.PadRight( 15 )} [{msg.PadRight( 8 )}] [{address}] Controls" );
+                AddDict( address );
             }
             else
             {
@@ -227,12 +234,44 @@ namespace DemoUpdateServer
         }
 
 
+
+        private long RenderDataTable(DataGridView dataGridView, List<dataMy> datas)
+        {
+            long count = 0;
+            while (dataGridView.RowCount < datas.Count)
+            {
+                dataGridView.Rows.Add( );
+            }
+
+            while (dataGridView.RowCount > datas.Count)
+            {
+                dataGridView.Rows.RemoveAt( 0 );
+            }
+
+            // 赋值
+            for (int i = 0; i < datas.Count; i++)
+            {
+                dataGridView.Rows[i].Cells[0].Value = datas[i].Key;
+                dataGridView.Rows[i].Cells[1].Value = datas[i].Value.ToString( );
+                count += datas[i].Value;
+            }
+
+            return count;
+        }
+
         private long countOld = 1;
+        private long timeTick = 0;
         private void Timer_Tick( object sender, EventArgs e )
         {
+            timeTick++;
+            if (timeTick >= 3600)
+            {
+                timeTick = 0;
+                SaveData( );
+            }
+
             if (countOld == 0) return;
             countOld = 0;
-            long Count = 0;
 
             List<dataMy> list = new List<dataMy>( );   
             hybirdLock.Enter( );
@@ -247,28 +286,12 @@ namespace DemoUpdateServer
             list.Sort( );
             list.Reverse( );
 
-            while (dataGridView1.RowCount < list.Count)
-            {
-                dataGridView1.Rows.Add( );
-            }
-
-            while (dataGridView1.RowCount > list.Count)
-            {
-                dataGridView1.Rows.RemoveAt( 0 );
-            }
-
-            // 赋值
-            for (int i = 0; i < list.Count; i++)
-            {
-                dataGridView1.Rows[i].Cells[0].Value = list[i].Key;
-                dataGridView1.Rows[i].Cells[1].Value = list[i].Value.ToString( );
-                Count += list[i].Value;
-            }
-
+            long Count = RenderDataTable( dataGridView1, list );
             label2.Text = "总计：" + Count.ToString( );
 
             // 统计省份功能
             List<dataMy> shengfen = new List<dataMy>( );
+            List<dataMy> others = new List<dataMy>( );
             for (int i = 0; i < list.Count; i++)
             {
                 string tmp = string.Empty;
@@ -296,9 +319,14 @@ namespace DemoUpdateServer
                 {
                     tmp = list[i].Key.Substring( 0, list[i].Key.IndexOf( '区' ) + 1 );
                 }
+                else
+                {
+                    tmp = list[i].Key;
+                    others.Add( new dataMy( tmp, list[i].Value ) );
+                    continue;
+                }
 
                 if (string.IsNullOrEmpty( tmp )) continue;
-
                 dataMy dataMy = shengfen.Find( m => m.Key == tmp );
                 if(dataMy == null)
                 {
@@ -312,22 +340,11 @@ namespace DemoUpdateServer
 
             shengfen.Sort( );
             shengfen.Reverse( );
-            while (dataGridView2.RowCount < shengfen.Count)
-            {
-                dataGridView2.Rows.Add( );
-            }
+            RenderDataTable( dataGridView2, shengfen );
 
-            while (dataGridView2.RowCount > shengfen.Count)
-            {
-                dataGridView2.Rows.RemoveAt( 0 );
-            }
-
-            // 赋值
-            for (int i = 0; i < shengfen.Count; i++)
-            {
-                dataGridView2.Rows[i].Cells[0].Value = shengfen[i].Key;
-                dataGridView2.Rows[i].Cells[1].Value = shengfen[i].Value.ToString( );
-            }
+            others.Sort( );
+            others.Reverse( );
+            RenderDataTable( dataGridView3, others );
 
         }
 
