@@ -706,16 +706,7 @@ namespace HslCommunication.ModBus
         public void Write( string address, byte[] value )
         {
             ModbusAddress mAddress = new ModbusAddress( address );
-            if (mAddress.Function == ModbusInfo.ReadRegister)
-            {
-                hybirdLockRegister.Enter( );
-                for (int i = 0; i < value.Length; i++)
-                {
-                    Register[mAddress.Address * 2 + i] = value[i];
-                }
-                hybirdLockRegister.Leave( );
-            }
-            else if (mAddress.Function == ModbusInfo.ReadInputRegister)
+            if (mAddress.Function == ModbusInfo.ReadInputRegister)
             {
                 hybirdLockInputR.Enter( );
                 for (int i = 0; i < value.Length; i++)
@@ -723,6 +714,15 @@ namespace HslCommunication.ModBus
                     InputRegister[mAddress.Address * 2 + i] = value[i];
                 }
                 hybirdLockInputR.Leave( );
+            }
+            else
+            {
+                hybirdLockRegister.Enter( );
+                for (int i = 0; i < value.Length; i++)
+                {
+                    Register[mAddress.Address * 2 + i] = value[i];
+                }
+                hybirdLockRegister.Leave( );
             }
         }
 
