@@ -154,11 +154,21 @@ namespace HslCommunication.Core.Net
             //    return new OperateResult<byte[]>( ex.Message );
             //}
 
-//#if NET35
+            //#if NET35
 
-            var result = new OperateResult<byte[]>( );
-            var receiveDone = new ManualResetEvent( false );
-            var state = new StateObject( length );
+            OperateResult<byte[]> result = new OperateResult<byte[]>( );
+            ManualResetEvent receiveDone = null;
+            StateObject state = null;
+            try
+            {
+                receiveDone = new ManualResetEvent( false );
+                state = new StateObject( length );
+            }
+            catch(Exception ex)
+            {
+                return new OperateResult<byte[]>( ex.Message );
+            }
+
             
             try
             {
@@ -359,9 +369,18 @@ namespace HslCommunication.Core.Net
         {
             if (data == null) return OperateResult.CreateSuccessResult( );
 
-            var result = new OperateResult( );
-            var sendDone = new ManualResetEvent( false );
-            var state = new StateObject( data.Length );
+            OperateResult result = new OperateResult( );
+            ManualResetEvent sendDone = null;
+            StateObject state = null;
+            try
+            {
+                sendDone = new ManualResetEvent( false );
+                state = new StateObject( data.Length );
+            }
+            catch(Exception ex)
+            {
+                return new OperateResult( ex.Message );
+            }
 
             try
             {
@@ -485,9 +504,20 @@ namespace HslCommunication.Core.Net
         /// </example>
         protected OperateResult<Socket> CreateSocketAndConnect( IPEndPoint endPoint, int timeOut )
         {
-            var result = new OperateResult<Socket>( );
-            var connectDone = new ManualResetEvent( false );
-            var state = new StateObject( );
+            OperateResult<Socket> result = new OperateResult<Socket>( );
+            ManualResetEvent connectDone = null;
+            StateObject state = null;
+            try
+            {
+                connectDone = new ManualResetEvent( false );
+                state = new StateObject( );
+            }
+            catch(Exception ex)
+            {
+                return new OperateResult<Socket>( ex.Message );
+            }
+
+
             var socket = new Socket( AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp );
 
             // 超时验证的信息
