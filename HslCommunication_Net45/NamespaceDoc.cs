@@ -548,6 +548,18 @@ namespace HslCommunication
     ///             <item>Demo程序里，欧姆龙测试界面新增数据格式功能。</item>
     ///         </list>
     ///     </revision>
+    ///     <revision date="2018-12-19" version="5.6.7" author="Richard.Hu">
+    ///         <list type="bullet">
+    ///             <item>ByteTransfer数据转换类新增了一个重载的构造方法。</item>
+    ///             <item>Redis客户提供了一个写键值并发布订阅的方法。</item>
+    ///             <item>AB-PLC支持槽号选择，默认为0。</item>
+    ///             <item>PushNet推送服务器新增一个配置，可用于设置是否在客户端刚上线的时候推送缓存数据。</item>
+    ///             <item>PushNet推送服务器对客户端的上下限管理的小bug修复。</item>
+    ///             <item>本版本开始，组件将使用强签名。</item>
+    ///             <item>本版本开始，组件的控件库将不再维护更新，所有的控件在新的控件库重新实现和功能增强，VIP群将免费使用控件库。</item>
+    ///             <item>VIP群的进入资格调整为赞助200Rmb，谢谢支持。</item>
+    ///         </list>
+    ///     </revision>
     /// </revisionHistory>
     [System.Runtime.CompilerServices.CompilerGeneratedAttribute( )]
     public class NamespaceDoc
