@@ -64,6 +64,7 @@ namespace HslCommunication.ModBus
             if (address.IndexOf( ';' ) < 0)
             {
                 // 正常地址，功能码03
+                Function = 0x03;
                 Address = ushort.Parse( address );
             }
             else
