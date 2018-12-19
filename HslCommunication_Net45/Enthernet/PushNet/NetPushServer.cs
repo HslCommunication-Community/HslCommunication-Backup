@@ -249,8 +249,17 @@ namespace HslCommunication.Enthernet
                 }
                 catch (Exception ex)
                 {
-                    LogNet?.WriteException( ToString( ), string.Format( StringResources.Language.ClientOfflineInfo, session.IpEndPoint ), ex );
-                    RemoveGroupOnlien( session.KeyGroup, session.ClientUniqueID );
+                    if (ex.Message.Contains( StringResources.Language.SocketRemoteCloseException ))
+                    {
+                        // 正常下线
+                        LogNet?.WriteDebug( ToString( ), string.Format( StringResources.Language.ClientOfflineInfo, session.IpEndPoint ) );
+                        RemoveGroupOnlien( session.KeyGroup, session.ClientUniqueID );
+                    }
+                    else
+                    {
+                        LogNet?.WriteException( ToString( ), string.Format( StringResources.Language.ClientOfflineInfo, session.IpEndPoint ), ex );
+                        RemoveGroupOnlien( session.KeyGroup, session.ClientUniqueID );
+                    }
                 }
             }
         }

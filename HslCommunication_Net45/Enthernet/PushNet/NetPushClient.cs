@@ -128,6 +128,7 @@ namespace HslCommunication.Enthernet
         {
             action = null;
             if (CoreSocket != null && CoreSocket.Connected) CoreSocket?.Send( BitConverter.GetBytes( 100 ) );
+            System.Threading.Thread.Sleep( 20 );
             CoreSocket?.Close( );
         }
 
