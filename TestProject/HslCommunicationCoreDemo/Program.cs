@@ -19,6 +19,19 @@ namespace HslCommunicationCoreDemo
         {
             Console.WriteLine("Hello World!");
 
+            ModbusTcpNet modbus = new ModbusTcpNet( "127.0.0.1", 503, 1 );
+            bool[] values = modbus.ReadDiscrete( "32", 4 ).Content;
+            if(values == null)
+            {
+                Console.WriteLine( "值为空，读取不正确！" );
+            }
+            else
+            {
+                Console.WriteLine( $"[{values[0]},{values[1]},{values[2]},{values[3]}]" );
+            }
+
+            Console.ReadLine( );
+
             //Console.WriteLine( System.Globalization.CultureInfo.CurrentCulture.ToString() );
 
 
@@ -149,22 +162,22 @@ namespace HslCommunicationCoreDemo
             // =====================================================================================================
             // 并发的订阅测试
 
-            List<NetPushClient> netPushClients = new List<NetPushClient>( );
-            for (int i = 0; i < 100; i++)
-            {
-                if (i > 60)
-                    netPushClients.Add( new NetPushClient( "127.0.0.1", 12345, "E" ) );
-                else
-                    netPushClients.Add( new NetPushClient( "127.0.0.1", 12345, "D" ) );
-            }
-            netPushClients.ForEach( m => m.CreatePush( ( j, k ) =>
-            {
-                Console.WriteLine( k );
-            } ) );
+            //List<NetPushClient> netPushClients = new List<NetPushClient>( );
+            //for (int i = 0; i < 100; i++)
+            //{
+            //    if (i > 60)
+            //        netPushClients.Add( new NetPushClient( "127.0.0.1", 12345, "E" ) );
+            //    else
+            //        netPushClients.Add( new NetPushClient( "127.0.0.1", 12345, "D" ) );
+            //}
+            //netPushClients.ForEach( m => m.CreatePush( ( j, k ) =>
+            //{
+            //    Console.WriteLine( k );
+            //} ) );
 
 
-            Console.ReadLine( );
-            netPushClients.ForEach( m => m.ClosePush( ) );
+            //Console.ReadLine( );
+            //netPushClients.ForEach( m => m.ClosePush( ) );
         }
 
 

@@ -729,5 +729,18 @@ namespace HslCommunicationDemo
             System.Threading.Thread.Sleep( 200 );
             Show( );
         }
+
+        private void linkLabel1_LinkClicked( object sender, LinkLabelLinkClickedEventArgs e )
+        {
+            OpenWebside( "https://github.com/dathlin/HslControlsDemo" );
+        }
+
+        private void rToolStripMenuItem_Click( object sender, EventArgs e )
+        {
+            using (FormAuthor form = new FormAuthor( ))
+            {
+                form.ShowDialog( );
+            }
+        }
     }
 }

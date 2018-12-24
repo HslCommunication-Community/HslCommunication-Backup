@@ -73,6 +73,12 @@
     <Compile Include="Control\FormPipe.Designer.cs">
       <DependentUpon>FormPipe.cs</DependentUpon>
     </Compile>
+    <Compile Include="FormAuthor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormAuthor.Designer.cs">
+      <DependentUpon>FormAuthor.cs</DependentUpon>
+    </Compile>
     <Compile Include="FormByteTransfer.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -320,6 +326,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Control\FormPipe.resx">
       <DependentUpon>FormPipe.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormAuthor.resx">
+      <DependentUpon>FormAuthor.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FormByteTransfer.resx">
       <DependentUpon>FormByteTransfer.cs</DependentUpon>
