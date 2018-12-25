@@ -339,6 +339,10 @@ namespace HslCommunication_Net45.Test.Documentation.Samples.BasicFramework
             // 结果如下
             // result = new bool[] { true, false, false, true, true, true, false, true, false, false, false, true, false, true, false };
 
+            bool[] result2 = SoftBasic.ByteToBoolArray( buffer );
+            // 结果如下
+            // result2 = new bool[] { true, false, false, true, true, true, false, true, false, false, false, true, false, true, false, false };
+
             #endregion
         }
 

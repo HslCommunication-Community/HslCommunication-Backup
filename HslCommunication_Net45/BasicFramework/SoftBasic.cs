@@ -706,6 +706,21 @@ namespace HslCommunication.BasicFramework
             return buffer;
         }
 
+        /// <summary>
+        /// 从Byte数组中提取所有的位数组 ->
+        /// Extracts a bit array from a byte array, length represents the number of digits
+        /// </summary>
+        /// <param name="InBytes">原先的字节数组</param>
+        /// <returns>转换后的bool数组</returns>
+        /// <example>
+        /// <code lang="cs" source="HslCommunication_Net45.Test\Documentation\Samples\BasicFramework\SoftBasicExample.cs" region="ByteToBoolArray" title="ByteToBoolArray示例" />
+        /// </example> 
+        public static bool[] ByteToBoolArray( byte[] InBytes )
+        {
+            if (InBytes == null) return null;
+
+            return ByteToBoolArray( InBytes, InBytes.Length * 8 );
+        }
 
         #endregion
 
