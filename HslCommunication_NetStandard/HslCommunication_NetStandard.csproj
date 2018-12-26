@@ -53,6 +53,7 @@
     <Compile Include="..\HslCommunication_Net45\Core\IMessage\AlienMessage.cs" Link="Core\IMessage\AlienMessage.cs" />
     <Compile Include="..\HslCommunication_Net45\Core\IMessage\AllenBradleyMessage.cs" Link="Core\IMessage\AllenBradleyMessage.cs" />
     <Compile Include="..\HslCommunication_Net45\Core\IMessage\EFORTMessage.cs" Link="Core\IMessage\EFORTMessage.cs" />
+    <Compile Include="..\HslCommunication_Net45\Core\IMessage\EFORTMessagePrevious.cs" Link="Core\IMessage\EFORTMessagePrevious.cs" />
     <Compile Include="..\HslCommunication_Net45\Core\IMessage\FetchWriteMessage.cs" Link="Core\IMessage\FetchWriteMessage.cs" />
     <Compile Include="..\HslCommunication_Net45\Core\IMessage\FinsMessage.cs" Link="Core\IMessage\FinsMessage.cs" />
     <Compile Include="..\HslCommunication_Net45\Core\IMessage\HslMessage.cs" Link="Core\IMessage\HslMessage.cs" />
@@ -148,6 +149,7 @@
     <Compile Include="..\HslCommunication_Net45\Profinet\Siemens\SiemensS7Net.cs" Link="Profinet\Siemens\SiemensS7Net.cs" />
     <Compile Include="..\HslCommunication_Net45\Robot\EFORT\EfortData.cs" Link="Robot\EFORT\EfortData.cs" />
     <Compile Include="..\HslCommunication_Net45\Robot\EFORT\ER7BC10.cs" Link="Robot\EFORT\ER7BC10.cs" />
+    <Compile Include="..\HslCommunication_Net45\Robot\EFORT\ER7BC10Previous.cs" Link="Robot\EFORT\ER7BC10Previous.cs" />
     <Compile Include="..\HslCommunication_Net45\StringResources.cs" Link="StringResources.cs" />
   </ItemGroup>
 

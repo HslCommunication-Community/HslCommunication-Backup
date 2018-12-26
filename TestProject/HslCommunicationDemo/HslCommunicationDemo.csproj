@@ -309,6 +309,12 @@
     <Compile Include="Redis\RedisBrowser.Designer.cs">
       <DependentUpon>RedisBrowser.cs</DependentUpon>
     </Compile>
+    <Compile Include="Robot\FormEfortPrevious.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Robot\FormEfortPrevious.Designer.cs">
+      <DependentUpon>FormEfortPrevious.cs</DependentUpon>
+    </Compile>
     <Compile Include="Robot\FormEfort.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -453,6 +459,9 @@
     </Compile>
     <EmbeddedResource Include="Redis\RedisBrowser.resx">
       <DependentUpon>RedisBrowser.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Robot\FormEfortPrevious.resx">
+      <DependentUpon>FormEfortPrevious.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Robot\FormEfort.resx">
       <DependentUpon>FormEfort.cs</DependentUpon>

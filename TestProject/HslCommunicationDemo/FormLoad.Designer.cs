@@ -98,6 +98,7 @@
             this.button43 = new System.Windows.Forms.Button();
             this.button42 = new System.Windows.Forms.Button();
             this.button40 = new System.Windows.Forms.Button();
+            this.button44 = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -551,6 +552,7 @@
             // 
             // groupBox7
             // 
+            this.groupBox7.Controls.Add(this.button44);
             this.groupBox7.Controls.Add(this.button23);
             this.groupBox7.Location = new System.Drawing.Point(395, 356);
             this.groupBox7.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
@@ -888,6 +890,17 @@
             this.button40.UseVisualStyleBackColor = true;
             this.button40.Click += new System.EventHandler(this.button40_Click);
             // 
+            // button44
+            // 
+            this.button44.Location = new System.Drawing.Point(19, 63);
+            this.button44.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.button44.Name = "button44";
+            this.button44.Size = new System.Drawing.Size(150, 32);
+            this.button44.TabIndex = 1;
+            this.button44.Text = "EFORT-ER7BC10 (旧版)";
+            this.button44.UseVisualStyleBackColor = true;
+            this.button44.Click += new System.EventHandler(this.button44_Click);
+            // 
             // FormLoad
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 17F);
@@ -1007,6 +1020,7 @@
         private System.Windows.Forms.ToolStripMenuItem 免责条款ToolStripMenuItem;
         private System.Windows.Forms.LinkLabel linkLabel1;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Button button44;
     }
 }
 

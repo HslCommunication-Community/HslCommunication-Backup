@@ -742,5 +742,17 @@ namespace HslCommunicationDemo
                 form.ShowDialog( );
             }
         }
+
+        private void button44_Click( object sender, EventArgs e )
+        {
+            Hide( );
+            System.Threading.Thread.Sleep( 200 );
+            using (Robot.FormEfortPrevious form = new Robot.FormEfortPrevious( ))
+            {
+                form.ShowDialog( );
+            }
+            System.Threading.Thread.Sleep( 200 );
+            Show( );
+        }
     }
 }

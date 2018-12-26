@@ -6,14 +6,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-
 namespace HslCommunication.Robot.EFORT
 {
-
     /// <summary>
-    /// 埃夫特机器人对应型号为ER7B-C10，此协议为定制版，使用前请测试
+    /// 埃夫特机器人对应型号为ER7B-C10，此协议为旧版的定制版，使用前请测试
     /// </summary>
-    public class ER7BC10 : NetworkDoubleBase<EFORTMessage, RegularByteTransform>
+    public class ER7BC10Previous : NetworkDoubleBase<EFORTMessagePrevious, RegularByteTransform>
     {
 
         #region Constructor
@@ -23,7 +21,7 @@ namespace HslCommunication.Robot.EFORT
         /// </summary>
         /// <param name="ipAddress">Ip地址</param>
         /// <param name="port">端口号</param>
-        public ER7BC10( string ipAddress, int port )
+        public ER7BC10Previous( string ipAddress, int port )
         {
             IpAddress = ipAddress;
             Port = port;
@@ -39,15 +37,15 @@ namespace HslCommunication.Robot.EFORT
         /// 获取发送的消息的命令
         /// </summary>
         /// <returns>字节数组命令</returns>
-        public byte[] GetReadCommand()
+        public byte[] GetReadCommand( )
         {
-            byte[] command = new byte[38];
+            byte[] command = new byte[36];
 
             Encoding.ASCII.GetBytes( "MessageHead" ).CopyTo( command, 0 );
-            BitConverter.GetBytes( (ushort)command.Length ).CopyTo( command, 16 );
-            BitConverter.GetBytes( (ushort)1001 ).CopyTo( command, 18 );
-            BitConverter.GetBytes( GetHeartBeat( ) ).CopyTo( command, 20 );
-            Encoding.ASCII.GetBytes( "MessageTail" ).CopyTo( command, 22);
+            BitConverter.GetBytes( (ushort)command.Length ).CopyTo( command, 15 );
+            BitConverter.GetBytes( (ushort)1001 ).CopyTo( command, 17 );
+            BitConverter.GetBytes( GetHeartBeat( ) ).CopyTo( command, 19 );
+            Encoding.ASCII.GetBytes( "MessageTail" ).CopyTo( command, 21 );
 
             return command;
         }
@@ -90,7 +88,7 @@ namespace HslCommunication.Robot.EFORT
             OperateResult<byte[]> read = ReadBytes( );
             if (!read.IsSuccess) return OperateResult.CreateFailedResult<EfortData>( read );
 
-            return EfortData.PraseFrom( read.Content );
+            return EfortData.PraseFromPrevious( read.Content );
         }
 
 
@@ -113,7 +111,7 @@ namespace HslCommunication.Robot.EFORT
         /// <returns>字符串</returns>
         public override string ToString( )
         {
-            return $"ER7BC10 Robot[{IpAddress}:{Port}]";
+            return $"ER7BC10 Pre Robot[{IpAddress}:{Port}]";
         }
 
         #endregion

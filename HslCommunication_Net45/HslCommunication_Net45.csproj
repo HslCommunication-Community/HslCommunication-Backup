@@ -178,6 +178,7 @@
     <Compile Include="Core\IMessage\AlienMessage.cs" />
     <Compile Include="Core\IMessage\AllenBradleyMessage.cs" />
     <Compile Include="Core\IMessage\EFORTMessage.cs" />
+    <Compile Include="Core\IMessage\EFORTMessagePrevious.cs" />
     <Compile Include="Core\IMessage\FetchWriteMessage.cs" />
     <Compile Include="Core\IMessage\FinsMessage.cs" />
     <Compile Include="Core\IMessage\HslMessage.cs" />
@@ -298,6 +299,7 @@
     <Compile Include="Enthernet\Redis\RedisClient.cs" />
     <Compile Include="Robot\EFORT\EfortData.cs" />
     <Compile Include="Robot\EFORT\ER7BC10.cs" />
+    <Compile Include="Robot\EFORT\ER7BC10Previous.cs" />
     <Compile Include="Serial\CRCSupport.cs" />
     <Compile Include="Serial\FP1_C72.cs" />
     <Compile Include="Serial\SerialBase.cs" />

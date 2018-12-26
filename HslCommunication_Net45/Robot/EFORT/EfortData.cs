@@ -189,5 +189,198 @@ namespace HslCommunication.Robot.EFORT
         /// 报文结束标记
         /// </summary>
         public string PacketEnd { get; set; }
+
+        #region Static Method
+
+        /// <summary>
+        /// 从之前的版本数据构造一个埃夫特机器人的数据类型
+        /// </summary>
+        /// <param name="data">真实的数据内容</param>
+        /// <returns>转换的结果内容</returns>
+        public static OperateResult<EfortData> PraseFromPrevious(byte[] data )
+        {
+            if (data.Length < 784) return new OperateResult<EfortData>( string.Format( StringResources.Language.DataLengthIsNotEnough, 784, data.Length ) );
+
+            // 开始解析数据
+            EfortData efortData = new EfortData( );
+            efortData.PacketStart = Encoding.ASCII.GetString( data, 0, 15 ).Trim( );
+            efortData.PacketOrders = BitConverter.ToUInt16( data, 17 );
+            efortData.PacketHeartbeat = BitConverter.ToUInt16( data, 19 );
+            efortData.ErrorStatus = data[21];
+            efortData.HstopStatus = data[22];
+            efortData.AuthorityStatus = data[23];
+            efortData.ServoStatus = data[24];
+            efortData.AxisMoveStatus = data[25];
+            efortData.ProgMoveStatus = data[26];
+            efortData.ProgLoadStatus = data[27];
+            efortData.ProgHoldStatus = data[28];
+            efortData.ModeStatus = BitConverter.ToUInt16( data, 29 );
+            efortData.SpeedStatus = BitConverter.ToUInt16( data, 31 );
+
+            for (int i = 0; i < 32; i++)
+            {
+                efortData.IoDOut[i] = data[33 + i];
+            }
+            for (int i = 0; i < 32; i++)
+            {
+                efortData.IoDIn[i] = data[65 + i];
+            }
+            for (int i = 0; i < 32; i++)
+            {
+                efortData.IoIOut[i] = BitConverter.ToInt32( data, 97 + 4 * i );
+            }
+            for (int i = 0; i < 32; i++)
+            {
+                efortData.IoIIn[i] = BitConverter.ToInt32( data, 225 + 4 * i );
+            }
+
+            efortData.ProjectName = Encoding.ASCII.GetString( data, 353, 32 ).Trim( '\u0000' );
+            efortData.ProgramName = Encoding.ASCII.GetString( data, 385, 32 ).Trim( '\u0000' );
+            efortData.ErrorText = Encoding.ASCII.GetString( data, 417, 128 ).Trim( '\u0000' );
+
+            for (int i = 0; i < 7; i++)
+            {
+                efortData.DbAxisPos[i] = BitConverter.ToSingle( data, 545 + 4 * i );
+            }
+
+            for (int i = 0; i < 6; i++)
+            {
+                efortData.DbCartPos[i] = BitConverter.ToSingle( data, 573 + 4 * i );
+            }
+
+            for (int i = 0; i < 7; i++)
+            {
+                efortData.DbAxisSpeed[i] = BitConverter.ToSingle( data, 597 + 4 * i );
+            }
+
+            for (int i = 0; i < 7; i++)
+            {
+                efortData.DbAxisAcc[i] = BitConverter.ToSingle( data, 625 + 4 * i );
+            }
+
+            for (int i = 0; i < 7; i++)
+            {
+                efortData.DbAxisAccAcc[i] = BitConverter.ToSingle( data, 653 + 4 * i );
+            }
+
+            for (int i = 0; i < 7; i++)
+            {
+                efortData.DbAxisTorque[i] = BitConverter.ToSingle( data, 681 + 4 * i );
+            }
+
+            for (int i = 0; i < 7; i++)
+            {
+                efortData.DbAxisDirCnt[i] = BitConverter.ToInt32( data, 709 + 4 * i );
+            }
+
+            for (int i = 0; i < 7; i++)
+            {
+                efortData.DbAxisTime[i] = BitConverter.ToInt32( data, 737 + 4 * i );
+            }
+
+
+            efortData.DbDeviceTime = BitConverter.ToInt32( data, 765 );
+            efortData.PacketEnd = Encoding.ASCII.GetString( data, 769, 15 ).Trim( );
+
+
+            return OperateResult.CreateSuccessResult( efortData );
+        }
+
+
+        /// <summary>
+        /// 从新版本数据构造一个埃夫特机器人的数据类型
+        /// </summary>
+        /// <param name="data">真实的数据内容</param>
+        /// <returns>转换的结果内容</returns>
+        public static OperateResult<EfortData> PraseFrom( byte[] data )
+        {
+            if (data.Length < 788) return new OperateResult<EfortData>( string.Format( StringResources.Language.DataLengthIsNotEnough, 788, data.Length ) );
+
+            // 开始解析数据
+            EfortData efortData = new EfortData( );
+            efortData.PacketStart = Encoding.ASCII.GetString( data, 0, 16 ).Trim( );
+            efortData.PacketOrders = BitConverter.ToUInt16( data, 18 );
+            efortData.PacketHeartbeat = BitConverter.ToUInt16( data, 20 );
+            efortData.ErrorStatus = data[22];
+            efortData.HstopStatus = data[23];
+            efortData.AuthorityStatus = data[24];
+            efortData.ServoStatus = data[25];
+            efortData.AxisMoveStatus = data[26];
+            efortData.ProgMoveStatus = data[27];
+            efortData.ProgLoadStatus = data[28];
+            efortData.ProgHoldStatus = data[29];
+            efortData.ModeStatus = BitConverter.ToUInt16( data, 30 );
+            efortData.SpeedStatus = BitConverter.ToUInt16( data, 32 );
+
+            for (int i = 0; i < 32; i++)
+            {
+                efortData.IoDOut[i] = data[34 + i];
+            }
+            for (int i = 0; i < 32; i++)
+            {
+                efortData.IoDIn[i] = data[66 + i];
+            }
+            for (int i = 0; i < 32; i++)
+            {
+                efortData.IoIOut[i] = BitConverter.ToInt32( data, 100 + 4 * i );
+            }
+            for (int i = 0; i < 32; i++)
+            {
+                efortData.IoIIn[i] = BitConverter.ToInt32( data, 228 + 4 * i );
+            }
+
+            efortData.ProjectName = Encoding.ASCII.GetString( data, 356, 32 ).Trim( '\u0000' );
+            efortData.ProgramName = Encoding.ASCII.GetString( data, 388, 32 ).Trim( '\u0000' );
+            efortData.ErrorText = Encoding.ASCII.GetString( data, 420, 128 ).Trim( '\u0000' );
+
+            for (int i = 0; i < 7; i++)
+            {
+                efortData.DbAxisPos[i] = BitConverter.ToSingle( data, 548 + 4 * i );
+            }
+
+            for (int i = 0; i < 6; i++)
+            {
+                efortData.DbCartPos[i] = BitConverter.ToSingle( data, 576 + 4 * i );
+            }
+
+            for (int i = 0; i < 7; i++)
+            {
+                efortData.DbAxisSpeed[i] = BitConverter.ToSingle( data, 600 + 4 * i );
+            }
+
+            for (int i = 0; i < 7; i++)
+            {
+                efortData.DbAxisAcc[i] = BitConverter.ToSingle( data, 628 + 4 * i );
+            }
+
+            for (int i = 0; i < 7; i++)
+            {
+                efortData.DbAxisAccAcc[i] = BitConverter.ToSingle( data, 656 + 4 * i );
+            }
+
+            for (int i = 0; i < 7; i++)
+            {
+                efortData.DbAxisTorque[i] = BitConverter.ToSingle( data, 684 + 4 * i );
+            }
+
+            for (int i = 0; i < 7; i++)
+            {
+                efortData.DbAxisDirCnt[i] = BitConverter.ToInt32( data, 712 + 4 * i );
+            }
+
+            for (int i = 0; i < 7; i++)
+            {
+                efortData.DbAxisTime[i] = BitConverter.ToInt32( data, 740 + 4 * i );
+            }
+
+
+            efortData.DbDeviceTime = BitConverter.ToInt32( data, 768 );
+            efortData.PacketEnd = Encoding.ASCII.GetString( data, 772, 16 ).Trim( );
+
+
+            return OperateResult.CreateSuccessResult( efortData );
+        }
+
+        #endregion
     }
 }

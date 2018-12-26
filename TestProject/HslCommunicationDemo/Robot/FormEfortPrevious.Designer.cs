@@ -1,6 +1,6 @@
 ﻿namespace HslCommunicationDemo.Robot
 {
-    partial class FormEfort
+    partial class FormEfortPrevious
     {
         /// <summary>
         /// Required designer variable.
@@ -1569,7 +1569,7 @@
             this.label52.TabIndex = 37;
             this.label52.Text = "X：";
             // 
-            // FormEfort
+            // FormEfortPrevious
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 17F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -1583,9 +1583,9 @@
             this.Controls.Add(this.label2);
             this.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.Name = "FormEfort";
+            this.Name = "FormEfortPrevious";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "埃夫特机器人(新版，报文对齐)";
+            this.Text = "埃夫特机器人(旧版)";
             this.Load += new System.EventHandler(this.FormEfort_Load);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
