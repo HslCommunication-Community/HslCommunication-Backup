@@ -54,6 +54,7 @@ namespace HslCommunicationDemo
                 }
                 // 连接
                 redisSubscribe = new RedisSubscribe( textBox1.Text, int.Parse( textBox2.Text ), lists.ToArray( ) );
+                redisSubscribe.Password = textBox3.Text;
             }
             catch(Exception ex)
             {
