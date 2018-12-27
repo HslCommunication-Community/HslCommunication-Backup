@@ -90,6 +90,11 @@ namespace DemoUpdateServer
                 lognet.WriteInfo( $"{arg1.IpAddress.PadRight( 15 )} [{msg.PadRight( 8 )}] [{address}] Controls" );
                 AddDict( address );
             }
+            else if (handle == 1000)
+            {
+                // 返回统计信息
+                simplifyServer.SendMessage( arg1, handle, GetData( ) );
+            }
             else
             {
                 simplifyServer.SendMessage( arg1, handle, msg );
@@ -233,7 +238,21 @@ namespace DemoUpdateServer
             hybirdLock.Leave( );
         }
 
+        private string GetData( )
+        {
 
+            hybirdLock.Enter( );
+
+            StringBuilder stringBuilder = new StringBuilder( );
+            foreach (var m in loginData)
+            {
+                stringBuilder.AppendLine( m.Key );
+                stringBuilder.AppendLine( m.Value.ToString() );
+            }
+            hybirdLock.Leave( );
+
+            return stringBuilder.ToString( );
+        }
 
         private long RenderDataTable(DataGridView dataGridView, List<dataMy> datas)
         {
