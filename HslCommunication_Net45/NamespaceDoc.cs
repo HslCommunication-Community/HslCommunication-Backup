@@ -560,6 +560,18 @@ namespace HslCommunication
     ///             <item>VIP群的进入资格调整为赞助200Rmb，谢谢支持。</item>
     ///         </list>
     ///     </revision>
+    ///     <revision date="2018-12-27" version="5.7.0" author="Richard.Hu">
+    ///         <list type="bullet">
+    ///             <item>修复modbus服务器地址写入的bug，之前写入地址数据后无效，必须带x=3;100才可以。</item>
+    ///             <item>修复极少数情况内核对象申请失败的bug，之前会引发资源耗尽的bug。</item>
+    ///             <item>SoftBasic的ByteToBoolArray新增一个转换所有位的重载方法，不需要再传递位数。</item>
+    ///             <item>埃夫特机器人新增旧版的访问类对象，达到兼容的目的。</item>
+    ///             <item>Demo程序新增作者简介。</item>
+    ///             <item>修复Demo程序的redis订阅界面在设置密码下无效的bug。</item>
+    ///             <item>Demo程序的免责界面新增demo在全球的使用情况。</item>
+    ///             <item>VIP群将免费使用全新的控件库，谢谢支持。地址：https://github.com/dathlin/HslControlsDemo </item>
+    ///         </list>
+    ///     </revision>
     /// </revisionHistory>
     [System.Runtime.CompilerServices.CompilerGeneratedAttribute( )]
     public class NamespaceDoc

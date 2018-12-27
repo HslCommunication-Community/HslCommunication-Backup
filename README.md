@@ -171,6 +171,9 @@ Client, using read/write coils and register, read discrete input , read register
 Server, you can build your own modbus-tcp server easily
 ![Picture](https://raw.githubusercontent.com/dathlin/HslCommunication/master/imgs/Modbus2.png)
 
+## Redis的界面，支持读写，浏览 [ Redis Client Communication ]
+![Picture](https://raw.githubusercontent.com/dathlin/HslCommunication/master/imgs/redis.png)
+
 ## Simplify Net 测试演示 [ Based on Tcp/Ip ]
 Communicaion with multi-computers , client can exchange data with server easily, include server side ,client side
 
