@@ -77,7 +77,7 @@ namespace HslCommunication.Profinet.Melsec
         #region Read Support
 
         /// <summary>
-        /// 从三菱PLC中读取想要的数据，返回读取结果
+        /// 从三菱PLC中读取想要的数据，输入地址，按照字单位读取，返回读取结果
         /// </summary>
         /// <param name="address">读取地址，格式为"M100","D100","W1A0"</param>
         /// <param name="length">读取的数据长度，字最大值960，位最大值7168</param>
@@ -136,7 +136,7 @@ namespace HslCommunication.Profinet.Melsec
         public override OperateResult<byte[]> Read( string address, ushort length )
         {
             // 获取指令
-            var command = BuildReadCommand( address, length, NetworkNumber, NetworkStationNumber );
+            var command = BuildReadCommand( address, length, false, NetworkNumber, NetworkStationNumber );
             if (!command.IsSuccess) return OperateResult.CreateFailedResult<byte[]>( command );
 
             // 核心交互
@@ -148,7 +148,7 @@ namespace HslCommunication.Profinet.Melsec
             if (errorCode != 0) return new OperateResult<byte[]>( errorCode, StringResources.Language.MelsecPleaseReferToManulDocument );
 
             // 数据解析，需要传入是否使用位的参数
-            return ExtractActualData( read.Content, command.Content[13] == 1 );
+            return ExtractActualData( read.Content, false );
         }
 
 
@@ -214,19 +214,24 @@ namespace HslCommunication.Profinet.Melsec
         /// </example>
         public OperateResult<bool[]> ReadBool( string address, ushort length )
         {
-            // 解析地址
-            OperateResult<MelsecMcDataType, int> analysis = MelsecHelper.McAnalysisAddress( address );
-            if (!analysis.IsSuccess) return OperateResult.CreateFailedResult<bool[]>( analysis );
-
-            // 位读取校验
-            if (analysis.Content1.DataType == 0x00) return new OperateResult<bool[]>( 0, StringResources.Language.MelsecReadBitInfo );
+            // 获取指令
+            var command = BuildReadCommand( address, length, true, NetworkNumber, NetworkStationNumber );
+            if (!command.IsSuccess) return OperateResult.CreateFailedResult<bool[]>( command );
 
             // 核心交互
-            var read = Read( address, length );
+            var read = ReadFromCoreServer( command.Content );
             if (!read.IsSuccess) return OperateResult.CreateFailedResult<bool[]>( read );
 
+            // 错误代码验证
+            ushort errorCode = BitConverter.ToUInt16( read.Content, 9 );
+            if (errorCode != 0) return new OperateResult<bool[]>( errorCode, StringResources.Language.MelsecPleaseReferToManulDocument );
+
+            // 数据解析，需要传入是否使用位的参数
+            var extract = ExtractActualData( read.Content, true );
+            if(!extract.IsSuccess) return OperateResult.CreateFailedResult<bool[]>( extract );
+
             // 转化bool数组
-            return OperateResult.CreateSuccessResult( read.Content.Select( m => m == 0x01 ).Take( length ).ToArray( ) );
+            return OperateResult.CreateSuccessResult( extract.Content.Select( m => m == 0x01 ).Take( length ).ToArray( ) );
         }
 
 
@@ -332,43 +337,43 @@ namespace HslCommunication.Profinet.Melsec
         #endregion
 
         #region Static Method Helper
-        
-        
+
+
         /// <summary>
         /// 根据类型地址长度确认需要读取的指令头
         /// </summary>
         /// <param name="address">起始地址</param>
         /// <param name="length">长度</param>
+        /// <param name="isBit">指示是否按照位成批的读出</param>
         /// <param name="networkNumber">网络号</param>
         /// <param name="networkStationNumber">网络站号</param>
         /// <returns>带有成功标志的指令数据</returns>
-        public static OperateResult<byte[]> BuildReadCommand( string address, ushort length, byte networkNumber = 0, byte networkStationNumber = 0 )
+        public static OperateResult<byte[]> BuildReadCommand( string address, ushort length, bool isBit, byte networkNumber = 0, byte networkStationNumber = 0 )
         {
             OperateResult<MelsecMcDataType, int> analysis = MelsecHelper.McAnalysisAddress( address );
             if (!analysis.IsSuccess) return OperateResult.CreateFailedResult<byte[]>( analysis );
-
-
+            
             byte[] _PLCCommand = new byte[21];
-            _PLCCommand[0]  = 0x50;                                   // 副标题
-            _PLCCommand[1]  = 0x00;
-            _PLCCommand[2]  = networkNumber;                          // 网络号
-            _PLCCommand[3]  = 0xFF;                                   // PLC编号
-            _PLCCommand[4]  = 0xFF;                                   // 目标模块IO编号
-            _PLCCommand[5]  = 0x03;
-            _PLCCommand[6]  = networkStationNumber;                   // 目标模块站号
-            _PLCCommand[7]  = 0x0C;                                   // 请求数据长度
-            _PLCCommand[8]  = 0x00;
-            _PLCCommand[9]  = 0x0A;                                   // CPU监视定时器
-            _PLCCommand[10] = 0x00;
-            _PLCCommand[11] = 0x01;                                   // 批量读取数据命令
+            _PLCCommand[0]  = 0x50;                                               // 副标题
+            _PLCCommand[1]  = 0x00;                                            
+            _PLCCommand[2]  = networkNumber;                                      // 网络号
+            _PLCCommand[3]  = 0xFF;                                               // PLC编号
+            _PLCCommand[4]  = 0xFF;                                               // 目标模块IO编号
+            _PLCCommand[5]  = 0x03;                                            
+            _PLCCommand[6]  = networkStationNumber;                               // 目标模块站号
+            _PLCCommand[7]  = 0x0C;                                               // 请求数据长度
+            _PLCCommand[8]  = 0x00;                                            
+            _PLCCommand[9]  = 0x0A;                                               // CPU监视定时器
+            _PLCCommand[10] = 0x00;                                            
+            _PLCCommand[11] = 0x01;                                               // 批量读取数据命令
             _PLCCommand[12] = 0x04;
-            _PLCCommand[13] = analysis.Content1.DataType;             // 以点为单位还是字为单位成批读取
+            _PLCCommand[13] = isBit ? (byte)0x01 : (byte)0x00;                    // 以点为单位还是字为单位成批读取
             _PLCCommand[14] = 0x00;
-            _PLCCommand[15] = BitConverter.GetBytes( analysis.Content2 )[0];        // 起始地址的地位
+            _PLCCommand[15] = BitConverter.GetBytes( analysis.Content2 )[0];      // 起始地址的地位
             _PLCCommand[16] = BitConverter.GetBytes( analysis.Content2 )[1];
             _PLCCommand[17] = BitConverter.GetBytes( analysis.Content2 )[2];
-            _PLCCommand[18] = analysis.Content1.DataCode;             // 指明读取的数据
-            _PLCCommand[19] = (byte)(length % 256);                   // 软元件长度的地位
+            _PLCCommand[18] = analysis.Content1.DataCode;                         // 指明读取的数据
+            _PLCCommand[19] = (byte)(length % 256);                               // 软元件的长度
             _PLCCommand[20] = (byte)(length / 256);
 
             return OperateResult.CreateSuccessResult( _PLCCommand );

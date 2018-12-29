@@ -66,7 +66,7 @@ namespace HslCommunication.Profinet.Melsec
         public override OperateResult<byte[]> Read( string address, ushort length )
         {
             // 获取指令
-            var command = BuildReadCommand(address, length, PLCNumber);
+            var command = BuildReadCommand(address, length, false, PLCNumber);
             if (!command.IsSuccess) return OperateResult.CreateFailedResult<byte[]>(command);
 
             // 核心交互
@@ -77,7 +77,7 @@ namespace HslCommunication.Profinet.Melsec
             if (read.Content[1] != 0) return new OperateResult<byte[]>(read.Content[1], StringResources.Language.MelsecPleaseReferToManulDocument);
 
             // 数据解析，需要传入是否使用位的参数
-            return ExtractActualData(read.Content, command.Content[0] == 0x00);
+            return ExtractActualData(read.Content, false);
         }
 
 
@@ -90,20 +90,23 @@ namespace HslCommunication.Profinet.Melsec
         /// <returns>带成功标志的结果数据对象</returns>
         public OperateResult<bool[]> ReadBool(string address, ushort length)
         {
-            // 地址解析
-            var analysis = MelsecHelper.McA1EAnalysisAddress(address);
-            if (!analysis.IsSuccess) return OperateResult.CreateFailedResult<bool[]>(analysis);
-
-            // 字读取验证
-            if (analysis.Content1.DataType == 0x00)
-                return new OperateResult<bool[]>(StringResources.Language.MelsecReadBitInfo);
+            // 获取指令
+            var command = BuildReadCommand( address, length, true, PLCNumber );
+            if (!command.IsSuccess) return OperateResult.CreateFailedResult<bool[]>( command );
 
             // 核心交互
-            var read = Read(address, length);
-            if (!read.IsSuccess) return OperateResult.CreateFailedResult<bool[]>(read);
+            var read = ReadFromCoreServer( command.Content );
+            if (!read.IsSuccess) return OperateResult.CreateFailedResult<bool[]>( read );
+
+            // 错误代码验证
+            if (read.Content[1] != 0) return new OperateResult<bool[]>( read.Content[1], StringResources.Language.MelsecPleaseReferToManulDocument );
+
+            // 数据解析，需要传入是否使用位的参数
+            var extract = ExtractActualData( read.Content, true );
+            if(!extract.IsSuccess) return OperateResult.CreateFailedResult<bool[]>( extract );
 
             // 转化bool数组
-            return OperateResult.CreateSuccessResult(read.Content.Select(m => m == 0x01).Take(length).ToArray());
+            return OperateResult.CreateSuccessResult( extract.Content.Select( m => m == 0x01 ).Take( length ).ToArray( ) );
         }
 
 
@@ -133,21 +136,21 @@ namespace HslCommunication.Profinet.Melsec
         /// <param name="address">初始地址</param>
         /// <param name="value">原始的字节数据</param>
         /// <returns>返回写入结果</returns>
-        public override OperateResult Write(string address, byte[] value)
+        public override OperateResult Write( string address, byte[] value )
         {
             // 解析指令
-            OperateResult<byte[]> command = BuildWriteCommand(address, value, PLCNumber);
+            OperateResult<byte[]> command = BuildWriteCommand( address, value, PLCNumber );
             if (!command.IsSuccess) return command;
 
             // 核心交互
-            OperateResult<byte[]> read = ReadFromCoreServer(command.Content);
+            OperateResult<byte[]> read = ReadFromCoreServer( command.Content );
             if (!read.IsSuccess) return read;
 
             // 错误码校验 (在A兼容1E协议中，结束代码后面紧跟的是异常信息的代码)
-            if (read.Content[1] != 0) return new OperateResult(read.Content[1], StringResources.Language.MelsecPleaseReferToManulDocument);
+            if (read.Content[1] != 0) return new OperateResult( read.Content[1], StringResources.Language.MelsecPleaseReferToManulDocument );
 
             // 成功
-            return OperateResult.CreateSuccessResult();
+            return OperateResult.CreateSuccessResult( );
         }
 
 
@@ -203,15 +206,17 @@ namespace HslCommunication.Profinet.Melsec
         /// </summary>
         /// <param name="address">起始地址</param>
         /// <param name="length">长度</param>
+        /// <param name="isBit">指示是否按照位成批的读出</param>
         /// <param name="plcNumber">PLC编号</param>
         /// <returns>带有成功标志的指令数据</returns>
-        public static OperateResult<byte[]> BuildReadCommand(string address, ushort length, byte plcNumber)
+        public static OperateResult<byte[]> BuildReadCommand(string address, ushort length, bool isBit, byte plcNumber )
         {
             var analysis = MelsecHelper.McA1EAnalysisAddress(address);
             if (!analysis.IsSuccess) return OperateResult.CreateFailedResult<byte[]>(analysis);
 
             // 默认信息----注意：高低字节交错
-            byte subtitle = analysis.Content1.DataType == 0x01 ? (byte)0x00 : (byte)0x01;
+            // byte subtitle = analysis.Content1.DataType == 0x01 ? (byte)0x00 : (byte)0x01;
+            byte subtitle = isBit ? (byte)0x01 : (byte)0x00;
 
             byte[] _PLCCommand = new byte[12];
             _PLCCommand[0] = subtitle;                              // 副标题

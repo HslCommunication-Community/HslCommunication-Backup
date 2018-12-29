@@ -118,7 +118,7 @@ namespace HslCommunication.Profinet.Melsec
         public override OperateResult<byte[]> Read( string address, ushort length )
         {
             // 获取指令
-            var command = BuildReadCommand( address, length, NetworkNumber, NetworkStationNumber );
+            var command = BuildReadCommand( address, length, false, NetworkNumber, NetworkStationNumber );
             if (!command.IsSuccess) return OperateResult.CreateFailedResult<byte[]>( command );
 
             // 核心交互
@@ -130,7 +130,7 @@ namespace HslCommunication.Profinet.Melsec
             if (errorCode != 0) return new OperateResult<byte[]>( errorCode, StringResources.Language.MelsecPleaseReferToManulDocument );
 
             // 数据解析，需要传入是否使用位的参数
-            return ExtractActualData( read.Content, command.Content[29] == 0x31 );
+            return ExtractActualData( read.Content, false );
         }
 
 
@@ -192,23 +192,28 @@ namespace HslCommunication.Profinet.Melsec
         /// </list>
         /// </remarks>
         /// <example>
-        ///  <code lang="cs" source="HslCommunication_Net45.Test\Documentation\Samples\Profinet\MelsecAscii.cs" region="ReadBool" title="Bool类型示例" />
+        /// <code lang="cs" source="HslCommunication_Net45.Test\Documentation\Samples\Profinet\MelsecAscii.cs" region="ReadBool" title="Bool类型示例" />
         /// </example>
         public OperateResult<bool[]> ReadBool( string address, ushort length )
         {
-            // 解析地址
-            OperateResult<MelsecMcDataType, int> analysis = MelsecHelper.McAnalysisAddress( address );
-            if (!analysis.IsSuccess) return OperateResult.CreateFailedResult<bool[]>( analysis );
+            // 获取指令
+            var command = BuildReadCommand( address, length, true, NetworkNumber, NetworkStationNumber );
+            if (!command.IsSuccess) return OperateResult.CreateFailedResult<bool[]>( command );
 
-            // 位读取校验
-            if (analysis.Content1.DataType == 0x00) return new OperateResult<bool[]>( StringResources.Language.MelsecReadBitInfo );
-            
             // 核心交互
-            var read = Read( address, length );
+            var read = ReadFromCoreServer( command.Content );
             if (!read.IsSuccess) return OperateResult.CreateFailedResult<bool[]>( read );
 
+            // 错误代码验证
+            ushort errorCode = Convert.ToUInt16( Encoding.ASCII.GetString( read.Content, 18, 4 ), 16 );
+            if (errorCode != 0) return new OperateResult<bool[]>( errorCode, StringResources.Language.MelsecPleaseReferToManulDocument );
+
+            // 数据解析，需要传入是否使用位的参数
+            var extract = ExtractActualData( read.Content, true );
+            if(!extract.IsSuccess) return OperateResult.CreateFailedResult<bool[]>( extract );
+            
             // 转化bool数组
-            return OperateResult.CreateSuccessResult( read.Content.Select( m => m == 0x01 ).Take( length ).ToArray( ) );
+            return OperateResult.CreateSuccessResult( extract.Content.Select( m => m == 0x01 ).Take( length ).ToArray( ) );
         }
 
 
@@ -320,15 +325,15 @@ namespace HslCommunication.Profinet.Melsec
         /// </summary>
         /// <param name="address">起始地址</param>
         /// <param name="length">长度</param>
+        /// <param name="isBit">指示是否按照位成批的读出</param>
         /// <param name="networkNumber">网络号信息</param>
         /// <param name="networkStationNumber">网络站号信息</param>
         /// <returns>带有成功标志的指令数据</returns>
-        public static OperateResult<byte[]> BuildReadCommand( string address, ushort length, byte networkNumber = 0, byte networkStationNumber = 0 )
+        public static OperateResult<byte[]> BuildReadCommand( string address, ushort length, bool isBit, byte networkNumber = 0, byte networkStationNumber = 0 )
         {
             OperateResult<MelsecMcDataType, int> analysis = MelsecHelper.McAnalysisAddress( address );
             if (!analysis.IsSuccess) return OperateResult.CreateFailedResult<byte[]>( analysis );
-
-
+            
             // 默认信息----注意：高低字节交错
             byte[] _PLCCommand = new byte[42];
             _PLCCommand[ 0] = 0x35;                                                               // 副标题
@@ -360,7 +365,7 @@ namespace HslCommunication.Profinet.Melsec
             _PLCCommand[26] = 0x30;                                                               // 以点为单位还是字为单位成批读取
             _PLCCommand[27] = 0x30;
             _PLCCommand[28] = 0x30;
-            _PLCCommand[29] = analysis.Content1.DataType == 0 ? (byte)0x30 : (byte)0x31;
+            _PLCCommand[29] = isBit ? (byte)0x31 : ( byte)0x30;
             _PLCCommand[30] = Encoding.ASCII.GetBytes( analysis.Content1.AsciiCode )[0];          // 软元件类型
             _PLCCommand[31] = Encoding.ASCII.GetBytes( analysis.Content1.AsciiCode )[1];
             _PLCCommand[32] = MelsecHelper.BuildBytesFromAddress( analysis.Content2, analysis.Content1 )[0];            // 起始地址的地位
@@ -407,10 +412,8 @@ namespace HslCommunication.Profinet.Melsec
                 }
                 value = buffer;
             }
-
-
+            
             // 默认信息----注意：高低字节交错
-
             byte[] _PLCCommand = new byte[42 + value.Length];
 
             _PLCCommand[ 0] = 0x35;                                                                              // 副标题
