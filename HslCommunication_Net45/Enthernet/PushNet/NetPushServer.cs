@@ -68,15 +68,21 @@ namespace HslCommunication.Enthernet
                 if (!receive.IsSuccess) return;
 
                 // 判断当前的关键字在服务器是否有消息发布
-                if(!IsPushGroupOnline(receive.Content2))
+                //if(!IsPushGroupOnline(receive.Content2))
+                //{
+                //    SendStringAndCheckReceive( socket, 1, StringResources.Language.KeyIsNotExist );
+                //    LogNet?.WriteWarn( ToString( ), StringResources.Language.KeyIsNotExist );
+                //    socket?.Close( );
+                //    return;
+                //}
+
+                // 确认订阅的信息
+                OperateResult check = SendStringAndCheckReceive( socket, 0, "" );
+                if (!check.IsSuccess)
                 {
-                    SendStringAndCheckReceive( socket, 1, StringResources.Language.KeyIsNotExist );
-                    LogNet?.WriteWarn( ToString( ), StringResources.Language.KeyIsNotExist );
                     socket?.Close( );
                     return;
                 }
-
-                SendStringAndCheckReceive( socket, 0, "" );
 
                 // 允许发布订阅信息
                 AppSession session = new AppSession
@@ -301,7 +307,15 @@ namespace HslCommunication.Enthernet
             PushGroupClient result = null;
             dicHybirdLock.Enter( );
 
-            if (dictPushClients.ContainsKey( key )) result = dictPushClients[key];
+            if (dictPushClients.ContainsKey( key ))
+            {
+                result = dictPushClients[key];
+            }
+            else
+            {
+                result = new PushGroupClient( );
+                dictPushClients.Add( key, result );
+            }
 
             dicHybirdLock.Leave( );
 

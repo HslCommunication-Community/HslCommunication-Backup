@@ -69,11 +69,13 @@ namespace HslCommunication.Enthernet
         /// <summary>
         /// 使用固定的发送方法将数据发送出去
         /// </summary>
-        /// <param name="content"></param>
-        /// <param name="send"></param>
+        /// <param name="content">数据内容</param>
+        /// <param name="send">指定的推送方法</param>
         public void PushString( string content, Action<AppSession, string> send )
         {
             simpleHybird.Enter( );
+
+            System.Threading.Interlocked.Increment( ref pushTimesCount );
             for (int i = 0; i < appSessions.Count; i++)
             {
                 send( appSessions[i], content );
@@ -102,12 +104,22 @@ namespace HslCommunication.Enthernet
             return result;
         }
 
+        /// <summary>
+        /// 获取是否推送过数据
+        /// </summary>
+        /// <returns>True代表有，False代表没有</returns>
+        public bool HasPushedContent( )
+        {
+            return pushTimesCount > 0L;
+        }
+
         #endregion
 
         #region Private Member
 
         private List<AppSession> appSessions;               // 所有的客户端信息
         private SimpleHybirdLock simpleHybird;              // 列表的锁
+        private long pushTimesCount = 0L;                   // 推送的次数总和
 
         #endregion
         
@@ -118,7 +130,7 @@ namespace HslCommunication.Enthernet
         /// <summary>
         /// 释放当前的程序所占用的资源
         /// </summary>
-        /// <param name="disposing"></param>
+        /// <param name="disposing">是否释放资源</param>
         protected virtual void Dispose( bool disposing )
         {
             if (!disposedValue)
@@ -175,9 +187,7 @@ namespace HslCommunication.Enthernet
         {
             return "PushGroupClient";
         }
-
-
-
+        
         #endregion
     }
 }
