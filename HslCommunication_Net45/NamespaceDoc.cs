@@ -572,6 +572,14 @@ namespace HslCommunication
     ///             <item>VIP群将免费使用全新的控件库，谢谢支持。地址：https://github.com/dathlin/HslControlsDemo </item>
     ///         </list>
     ///     </revision>
+    ///     <revision date="2018-12-31" version="5.7.1" author="Richard.Hu">
+    ///         <list type="bullet">
+    ///             <item>修复modbus服务器地址读取的bug，之前读取地址数据后无效，必须带x=3;100才可以。</item>
+    ///             <item>NetPush功能里，当客户端订阅关键字时，服务器即使没有该关键字，也成功。</item>
+    ///             <item>三菱的通讯类支持所有的字读取。例如读取M100的short数据表示M100-M115。</item>
+    ///             <item>VIP群将免费使用全新的控件库，谢谢支持。地址：https://github.com/dathlin/HslControlsDemo </item>
+    ///         </list>
+    ///     </revision>
     /// </revisionHistory>
     [System.Runtime.CompilerServices.CompilerGeneratedAttribute( )]
     public class NamespaceDoc
