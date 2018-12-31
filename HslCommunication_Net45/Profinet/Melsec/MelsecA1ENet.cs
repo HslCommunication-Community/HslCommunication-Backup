@@ -20,7 +20,6 @@ namespace HslCommunication.Profinet.Melsec
     /// </remarks>
     public class MelsecA1ENet : NetworkDeviceBase<MelsecA1EBinaryMessage, RegularByteTransform>
     {
-
         #region Constructor
 
         /// <summary>
@@ -51,8 +50,7 @@ namespace HslCommunication.Profinet.Melsec
         /// PLC编号
         /// </summary>
         public byte PLCNumber { get; set; } = 0xFF;
-
-
+    
         #endregion
 
         #region Read Support
@@ -128,8 +126,7 @@ namespace HslCommunication.Profinet.Melsec
         #endregion
 
         #region Write Override
-
-
+        
         /// <summary>
         /// 向PLC写入数据，数据格式为原始的字节类型
         /// </summary>
@@ -159,8 +156,7 @@ namespace HslCommunication.Profinet.Melsec
         #endregion
 
         #region Write bool[]
-
-
+        
         /// <summary>
         /// 向PLC中位软元件写入bool数组，返回值说明，比如你写入M100,values[0]对应M100
         /// </summary>
@@ -188,8 +184,8 @@ namespace HslCommunication.Profinet.Melsec
         
         #region Object Override
 
-        /// <summary>
-        /// 获取当前对象的字符串标识形式
+        /// <summary>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      
+        /// 返回表示当前对象的字符串
         /// </summary>
         /// <returns>字符串信息</returns>
         public override string ToString()
@@ -219,17 +215,17 @@ namespace HslCommunication.Profinet.Melsec
             byte subtitle = isBit ? (byte)0x01 : (byte)0x00;
 
             byte[] _PLCCommand = new byte[12];
-            _PLCCommand[0] = subtitle;                              // 副标题
-            _PLCCommand[1] = plcNumber;                             // PLC号
-            _PLCCommand[2] = 0x0A;                                  // CPU监视定时器（L）这里设置为0x00,0x0A，等待CPU返回的时间为10*250ms=2.5秒
-            _PLCCommand[3] = 0x00;                                  // CPU监视定时器（H）
-            _PLCCommand[4] = (byte)(analysis.Content2 % 256);       // 起始软元件（开始读取的地址）
-            _PLCCommand[5] = (byte)(analysis.Content2 / 256);
-            _PLCCommand[6] = 0x00;
-            _PLCCommand[7] = 0x00;
-            _PLCCommand[8] = analysis.Content1.DataCode[1];         // 软元件代码（L）
-            _PLCCommand[9] = analysis.Content1.DataCode[0];         // 软元件代码（H）
-            _PLCCommand[10] = (byte)(length % 256);                 // 软元件点数
+            _PLCCommand[ 0] = subtitle;                              // 副标题
+            _PLCCommand[ 1] = plcNumber;                             // PLC号
+            _PLCCommand[ 2] = 0x0A;                                  // CPU监视定时器（L）这里设置为0x00,0x0A，等待CPU返回的时间为10*250ms=2.5秒
+            _PLCCommand[ 3] = 0x00;                                  // CPU监视定时器（H）
+            _PLCCommand[ 4] = (byte)(analysis.Content2 % 256);       // 起始软元件（开始读取的地址）
+            _PLCCommand[ 5] = (byte)(analysis.Content2 / 256);
+            _PLCCommand[ 6] = 0x00;
+            _PLCCommand[ 7] = 0x00;
+            _PLCCommand[ 8] = analysis.Content1.DataCode[1];         // 软元件代码（L）
+            _PLCCommand[ 9] = analysis.Content1.DataCode[0];         // 软元件代码（H）
+            _PLCCommand[10] = (byte)(length % 256);                  // 软元件点数
             _PLCCommand[11] = 0x00;
 
             return OperateResult.CreateSuccessResult(_PLCCommand);
@@ -259,17 +255,17 @@ namespace HslCommunication.Profinet.Melsec
             byte subtitle = analysis.Content1.DataType == 0x01 ? (byte)0x02 : (byte)0x03;
 
             byte[] _PLCCommand = new byte[12 + value.Length];
-            _PLCCommand[0] = subtitle;                              // 副标题
-            _PLCCommand[1] = plcNumber;                             // PLC号
-            _PLCCommand[2] = 0x0A;                                  // CPU监视定时器（L）这里设置为0x00,0x0A，等待CPU返回的时间为10*250ms=2.5秒
-            _PLCCommand[3] = 0x00;                                  // CPU监视定时器（H）
-            _PLCCommand[4] = (byte)(analysis.Content2 % 256);       // 起始软元件（开始读取的地址）
-            _PLCCommand[5] = (byte)(analysis.Content2 / 256);
-            _PLCCommand[6] = 0x00;
-            _PLCCommand[7] = 0x00;
-            _PLCCommand[8] = analysis.Content1.DataCode[1];         // 软元件代码（L）
-            _PLCCommand[9] = analysis.Content1.DataCode[0];         // 软元件代码（H）
-            _PLCCommand[10] = (byte)(length % 256);                 // 软元件点数
+            _PLCCommand[ 0] = subtitle;                              // 副标题
+            _PLCCommand[ 1] = plcNumber;                             // PLC号
+            _PLCCommand[ 2] = 0x0A;                                  // CPU监视定时器（L）这里设置为0x00,0x0A，等待CPU返回的时间为10*250ms=2.5秒
+            _PLCCommand[ 3] = 0x00;                                  // CPU监视定时器（H）
+            _PLCCommand[ 4] = (byte)(analysis.Content2 % 256);       // 起始软元件（开始读取的地址）
+            _PLCCommand[ 5] = (byte)(analysis.Content2 / 256);
+            _PLCCommand[ 6] = 0x00;
+            _PLCCommand[ 7] = 0x00;
+            _PLCCommand[ 8] = analysis.Content1.DataCode[1];         // 软元件代码（L）
+            _PLCCommand[ 9] = analysis.Content1.DataCode[0];         // 软元件代码（H）
+            _PLCCommand[10] = (byte)(length % 256);                  // 软元件点数
             _PLCCommand[11] = 0x00;
 
             // 判断是否进行位操作

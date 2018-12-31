@@ -401,17 +401,8 @@ namespace HslCommunication.ModBus
             byte[] buffer = new byte[length * 2];
 
             ModbusAddress mAddress = new ModbusAddress( address );
-
-            if (mAddress.Function == ModbusInfo.ReadRegister)
-            {
-                hybirdLockRegister.Enter( );
-                for (int i = 0; i < buffer.Length; i++)
-                {
-                    buffer[i] = Register[mAddress.Address * 2 + i];
-                }
-                hybirdLockRegister.Leave( );
-            }
-            else if (mAddress.Function == ModbusInfo.ReadInputRegister)
+            
+            if (mAddress.Function == ModbusInfo.ReadInputRegister)
             {
                 hybirdLockInputR.Enter( );
                 for (int i = 0; i < buffer.Length; i++)
@@ -419,6 +410,15 @@ namespace HslCommunication.ModBus
                     buffer[i] = InputRegister[mAddress.Address * 2 + i];
                 }
                 hybirdLockInputR.Leave( );
+            }
+            else
+            {
+                hybirdLockRegister.Enter( );
+                for (int i = 0; i < buffer.Length; i++)
+                {
+                    buffer[i] = Register[mAddress.Address * 2 + i];
+                }
+                hybirdLockRegister.Leave( );
             }
             return buffer;
         }
@@ -673,17 +673,17 @@ namespace HslCommunication.ModBus
         {
             string str = string.Empty;
             ModbusAddress mAddress = new ModbusAddress( address );
-            if (mAddress.Function == ModbusInfo.ReadRegister)
-            {
-                hybirdLockRegister.Enter( );
-                str = byteTransform.TransString( Register, mAddress.Address * 2, length * 2, Encoding.ASCII );
-                hybirdLockRegister.Leave( );
-            }
-            else if (mAddress.Function == ModbusInfo.ReadInputRegister)
+            if (mAddress.Function == ModbusInfo.ReadInputRegister)
             {
                 hybirdLockInputR.Enter( );
                 str = byteTransform.TransString( InputRegister, mAddress.Address * 2, length * 2, Encoding.ASCII );
                 hybirdLockInputR.Leave( );
+            }
+            else
+            {
+                hybirdLockRegister.Enter( );
+                str = byteTransform.TransString( Register, mAddress.Address * 2, length * 2, Encoding.ASCII );
+                hybirdLockRegister.Leave( );
             }
 
             return str;

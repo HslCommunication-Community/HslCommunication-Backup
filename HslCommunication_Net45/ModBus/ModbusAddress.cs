@@ -27,6 +27,7 @@ namespace HslCommunication.ModBus
         /// <summary>
         /// 实例化一个默认的对象，使用默认的地址初始化
         /// </summary>
+        /// <param name="address">传入的地址信息，支持富地址，例如s=2;x=3;100</param>
         public ModbusAddress( string address )
         {
             Station = -1;
@@ -35,12 +36,24 @@ namespace HslCommunication.ModBus
             AnalysisAddress( address );
         }
 
+        /// <summary>
+        /// 实例化一个默认的对象，使用默认的地址初始化
+        /// </summary>
+        /// <param name="address">传入的地址信息，支持富地址，例如s=2;x=3;100</param>
+        /// <param name="function">默认的功能码信息</param>
+        public ModbusAddress( string address, byte function )
+        {
+            Station = -1;
+            Function = function;
+            Address = 0;
+            AnalysisAddress( address );
+        }
 
 
         #endregion
 
         #region Public Properties
-        
+
         /// <summary>
         /// 站号信息
         /// </summary>
