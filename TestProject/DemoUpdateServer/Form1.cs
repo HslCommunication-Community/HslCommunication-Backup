@@ -31,9 +31,22 @@ namespace DemoUpdateServer
                 version = new HslCommunication.BasicFramework.SystemVersion( textBox1.Text );
             }
 
-            if(!Directory.Exists( Application.StartupPath + @"\Demo" ))
+
+            if (File.Exists( "version2.txt" ))
+            {
+                textBox3.Text = Encoding.Default.GetString( File.ReadAllBytes( "version2.txt" ) );
+                version2 = new HslCommunication.BasicFramework.SystemVersion( textBox3.Text );
+            }
+
+            if (!Directory.Exists( Application.StartupPath + @"\Demo" ))
             {
                 Directory.CreateDirectory( Application.StartupPath + @"\Demo" );
+            }
+
+
+            if (!Directory.Exists(Application.StartupPath + @"\Controls"))
+            {
+                Directory.CreateDirectory(Application.StartupPath + @"\Controls");
             }
 
             lognet = new HslCommunication.LogNet.LogNetSingle( "logs.txt" );
@@ -55,6 +68,7 @@ namespace DemoUpdateServer
         }
 
         private HslCommunication.BasicFramework.SystemVersion version = new HslCommunication.BasicFramework.SystemVersion( "1.0.1" );
+        private HslCommunication.BasicFramework.SystemVersion version2 = new HslCommunication.BasicFramework.SystemVersion( "1.0.5" );
         private HslCommunication.LogNet.ILogNet lognet;
         private Random random = new Random( );
         private Timer timer = new Timer( );
@@ -85,7 +99,7 @@ namespace DemoUpdateServer
             }
             else if(handle == 100)
             {
-                simplifyServer.SendMessage( arg1, handle, "1.0.0" );
+                simplifyServer.SendMessage( arg1, handle, version2.ToString( ) );
                 string address = GetAddressByIp( arg1.IpAddress );
                 lognet.WriteInfo( $"{arg1.IpAddress.PadRight( 15 )} [{msg.PadRight( 8 )}] [{address}] Controls" );
                 AddDict( address );
@@ -129,10 +143,25 @@ namespace DemoUpdateServer
 
         #endregion
 
+        #region ControlsServer
+
+        private HslCommunication.Enthernet.NetSoftUpdateServer softControlsServer;
+
+        private void NetStart3()
+        {
+            softControlsServer = new HslCommunication.Enthernet.NetSoftUpdateServer();
+            softControlsServer.FileUpdatePath = Application.StartupPath + @"\Controls";
+            //softUpdateServer.LogNet = lognet;
+            softControlsServer.ServerStart(18469);
+        }
+        
+        #endregion
+
         private void Form1_Shown( object sender, EventArgs e )
         {
             NetStart( );
             NetStart2( );
+            NetStart3( );
             Timer_Tick( null, new EventArgs( ) );
         }
 
@@ -370,6 +399,14 @@ namespace DemoUpdateServer
         private void Form1_FormClosing( object sender, FormClosingEventArgs e )
         {
             SaveData( );
+        }
+
+        private void button3_Click( object sender, EventArgs e )
+        {
+            version2 = new HslCommunication.BasicFramework.SystemVersion( textBox3.Text );
+            File.WriteAllBytes( "version2.txt", Encoding.Default.GetBytes( textBox3.Text ) );
+
+            MessageBox.Show( "更新成功" );
         }
     }
 
