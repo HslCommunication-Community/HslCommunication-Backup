@@ -212,7 +212,7 @@ namespace HslCommunication.Profinet.Melsec
 
             // 默认信息----注意：高低字节交错
             // byte subtitle = analysis.Content1.DataType == 0x01 ? (byte)0x00 : (byte)0x01;
-            byte subtitle = isBit ? (byte)0x01 : (byte)0x00;
+            byte subtitle = isBit ? (byte)0x00 : (byte)0x01;
 
             byte[] _PLCCommand = new byte[12];
             _PLCCommand[ 0] = subtitle;                              // 副标题
