@@ -94,7 +94,7 @@ namespace HslCommunication.Profinet.AllenBradley
         /// <returns>断开操作是否成功</returns>
         protected override OperateResult ExtraOnDisconnect( Socket socket )
         {
-            // 注册会话信息
+            // 取消注册会话信息
             OperateResult<byte[], byte[]> read1 = ReadFromCoreServerBase( socket, UnRegisterSessionHandle( ) );
             if (!read1.IsSuccess) return read1;
 
