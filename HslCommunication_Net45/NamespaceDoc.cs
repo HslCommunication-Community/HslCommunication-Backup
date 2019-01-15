@@ -580,6 +580,12 @@ namespace HslCommunication
     ///             <item>VIP群将免费使用全新的控件库，谢谢支持。地址：https://github.com/dathlin/HslControlsDemo </item>
     ///         </list>
     ///     </revision>
+    ///     <revision date="2019-1-15" version="5.7.2" author="Richard.Hu">
+    ///         <list type="bullet">
+    ///             <item>修复三菱A-1E协议的读取数据的BUG错误，给大家造成的不便，非常抱歉。</item>
+    ///             <item>VIP群将免费使用全新的控件库，谢谢支持。地址：https://github.com/dathlin/HslControlsDemo </item>
+    ///         </list>
+    ///     </revision>
     /// </revisionHistory>
     [System.Runtime.CompilerServices.CompilerGeneratedAttribute( )]
     public class NamespaceDoc
