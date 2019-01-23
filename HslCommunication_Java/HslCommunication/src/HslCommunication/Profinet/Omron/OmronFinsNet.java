@@ -485,18 +485,21 @@ public class OmronFinsNet extends NetworkDeviceBase<FinsMessage,ReverseWordTrans
 
             if (response.length >= 30) {
                 err = response[28] * 256 + response[29];
-                if (err > 0)  return new OperateResultExOne<byte[]>(err,StringResources.Language.OmronReceiveDataError());
-
+                //if (err > 0)  return new OperateResultExOne<byte[]>(err,StringResources.Language.OmronReceiveDataError());
+                OperateResultExOne<byte[]> success = OperateResultExOne.CreateSuccessResult(new byte[0]);
                 if (!isRead) {
                     // 写入操作
-                    return OperateResultExOne.CreateSuccessResult(new byte[0]);
+                    success.ErrorCode = err;
+                    return success;
                 } else {
                     // 读取操作
                     byte[] content = new byte[response.length - 30];
                     if (content.length > 0) {
                         System.arraycopy(response, 30, content, 0, content.length);
                     }
-                    return OperateResultExOne.CreateSuccessResult(content);
+                    success.ErrorCode = err;
+                    success.Content = content;
+                    return success;
                 }
             }
         }
