@@ -41,7 +41,7 @@ def printWriteResult(result):
 
 if __name__ == "__main__":
     print(SoftBasic.GetUniqueStringByGuidAndRandom())
-    melsecNet = MelsecMcNet("192.168.8.12",6002)
+    melsecNet = MelsecMcNet("192.168.8.13",6002)
     if melsecNet.ConnectServer().IsSuccess == False:
         print("connect falied  ")
     else:

@@ -28,6 +28,7 @@ Warning: The following code can only be run in the Test plc, prohibit the use of
 from HslCommunication import SiemensS7Net
 from HslCommunication import SiemensPLCS
 from HslCommunication import SoftBasic
+from HslCommunication import StringResources
 
 def printReadResult(result):
     if result.IsSuccess:

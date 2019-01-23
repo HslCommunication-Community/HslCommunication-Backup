@@ -2,7 +2,7 @@
                    GNU LESSER GENERAL PUBLIC LICENSE
                        Version 3, 29 June 2007
 
- Copyright (C) 2017 - 2018 Richard.Hu <http://fsf.org/>
+ Copyright (C) 2017 - 2019 Richard.Hu <http://www.hslcommunication.cn/>
  Everyone is permitted to copy and distribute verbatim copies
  of this license document, but changing it is not allowed.
 
@@ -177,105 +177,409 @@ import random
 from time import sleep
 from enum import Enum
 
-class StringResources:
-	'''系统的资源类'''
-	@staticmethod
-	def ConnectedFailed():
-		return "连接失败"
-	@staticmethod
-	def UnknownError():
-		return "未知错误"
-	@staticmethod
-	def ErrorCode():
-		return "错误代号"
-	@staticmethod
-	def TextDescription():
-		return "文本描述"
-	@staticmethod
-	def ExceptionMessage():
-		return "错误信息："
-	@staticmethod
-	def ExceptionStackTrace():
-		return "错误堆栈："
-	@staticmethod
-	def ExceptopnTargetSite():
-		return "错误方法："
-	@staticmethod
-	def ExceprionCustomer():
-		return "用户自定义方法出错："
-	@staticmethod
-	def TokenCheckFailed():
-		return "令牌检查错误。"
-	@staticmethod
-	def SuccessText():
-		return "Success"
-	@staticmethod
-	def NotSupportedDataType():
-		return "输入的类型不支持，请重新输入"
+class DefaultLanguage(object):
+	'''系统的语言基类，默认也即是中文版本'''
+	ConnectedFailed = "连接失败："
+	UnknownError = "未知错误"
+	ErrorCode = "错误代号"
+	TextDescription = "文本描述"
+	ExceptionMessage = "错误信息："
+	ExceptionSourse = "错误源："
+	ExceptionType = "错误类型："
+	ExceptionStackTrace = "错误堆栈："
+	ExceptopnTargetSite = "错误方法："
+	ExceprionCustomer = "用户自定义方法出错："
+	SuccessText = "成功"
+	TwoParametersLengthIsNotSame = "两个参数的个数不一致"
+	NotSupportedDataType = "输入的类型不支持，请重新输入"
+	DataLengthIsNotEnough = "接收的数据长度不足，应该值:{0},实际值:{1}"
+	ReceiveDataTimeout = "接收数据超时："
+	ReceiveDataLengthTooShort = "接收的数据长度太短："
+	MessageTip = "消息提示："
+	Close = "关闭"
+	Time = "时间："
+	SoftWare = "软件："
+	BugSubmit = "Bug提交"
+	MailServerCenter = "邮件发送系统"
+	MailSendTail = "邮件服务系统自动发出，请勿回复！"
+	IpAddresError = "Ip地址输入异常，格式不正确"
+	Send = "发送"
+	Receive = "接收"
+	# 系统相关的错误信息
+	SystemInstallOperater = "安装新系统：IP为"
+	SystemUpdateOperater = "更新新系统：IP为"
+	# 套接字相关的信息描述
+	SocketIOException = "套接字传送数据异常："
+	SocketSendException = "同步数据发送异常："
+	SocketHeadReceiveException = "指令头接收异常："
+	SocketContentReceiveException = "内容数据接收异常："
+	SocketContentRemoteReceiveException = "对方内容数据接收异常："
+	SocketAcceptCallbackException = "异步接受传入的连接尝试"
+	SocketReAcceptCallbackException = "重新异步接受传入的连接尝试"
+	SocketSendAsyncException = "异步数据发送出错:"
+	SocketEndSendException = "异步数据结束挂起发送出错"
+	SocketReceiveException = "异步数据发送出错:"
+	SocketEndReceiveException = "异步数据结束接收指令头出错"
+	SocketRemoteCloseException = "远程主机强迫关闭了一个现有的连接"
+	# 文件相关的信息
+	FileDownloadSuccess = "文件下载成功"
+	FileDownloadFailed = "文件下载异常"
+	FileUploadFailed = "文件上传异常"
+	FileUploadSuccess = "文件上传成功"
+	FileDeleteFailed = "文件删除异常"
+	FileDeleteSuccess = "文件删除成功"
+	FileReceiveFailed = "确认文件接收异常"
+	FileNotExist = "文件不存在"
+	FileSaveFailed = "文件存储失败"
+	FileLoadFailed = "文件加载失败"
+	FileSendClientFailed = "文件发送的时候发生了异常"
+	FileWriteToNetFailed = "文件写入网络异常"
+	FileReadFromNetFailed = "从网络读取文件异常"
+	FilePathCreateFailed = "文件夹路径创建失败："
+	FileRemoteNotExist = "对方文件不存在，无法接收！"
+	# 服务器的引擎相关数据
+	TokenCheckFailed = "接收验证令牌不一致"
+	TokenCheckTimeout = "接收验证超时:"
+	CommandHeadCodeCheckFailed = "命令头校验失败"
+	CommandLengthCheckFailed = "命令长度检查失败"
+	NetClientAliasFailed = "客户端的别名接收失败："
+	NetEngineStart = "启动引擎"
+	NetEngineClose = "关闭引擎"
+	NetClientOnline = "上线"
+	NetClientOffline = "下线"
+	NetClientBreak = "异常掉线"
+	NetClientFull = "服务器承载上限，收到超出的请求连接。"
+	NetClientLoginFailed = "客户端登录中错误："
+	NetHeartCheckFailed = "心跳验证异常："
+	NetHeartCheckTimeout = "心跳验证超时，强制下线："
+	DataSourseFormatError = "数据源格式不正确"
+	ServerFileCheckFailed = "服务器确认文件失败，请重新上传"
+	ClientOnlineInfo = "客户端 [ {0} ] 上线"
+	ClientOfflineInfo = "客户端 [ {0} ] 下线"
+	ClientDisableLogin = "客户端 [ {0} ] 不被信任，禁止登录"
+	# Client 相关
+	ReConnectServerSuccess = "重连服务器成功"
+	ReConnectServerAfterTenSeconds = "在10秒后重新连接服务器"
+	KeyIsNotAllowedNull = "关键字不允许为空"
+	KeyIsExistAlready = "当前的关键字已经存在"
+	KeyIsNotExist = "当前订阅的关键字不存在"
+	ConnectingServer = "正在连接服务器..."
+	ConnectFailedAndWait = "连接断开，等待{0}秒后重新连接"
+	AttemptConnectServer = "正在尝试第{0}次连接服务器"
+	ConnectServerSuccess = "连接服务器成功"
+	GetClientIpaddressFailed = "客户端IP地址获取失败"
+	ConnectionIsNotAvailable = "当前的连接不可用"
+	DeviceCurrentIsLoginRepeat = "当前设备的id重复登录"
+	DeviceCurrentIsLoginForbidden = "当前设备的id禁止登录"
+	PasswordCheckFailed = "密码验证失败"
+	DataTransformError = "数据转换失败，源数据："
+	RemoteClosedConnection = "远程关闭了连接"
+	# 日志相关
+	LogNetDebug = "调试"
+	LogNetInfo = "信息"
+	LogNetWarn = "警告"
+	LogNetError = "错误"
+	LogNetFatal = "致命"
+	LogNetAbandon = "放弃"
+	LogNetAll = "全部"
 	# Modbus相关
-	@staticmethod
-	def ModbusTcpFunctionCodeNotSupport():
-		return "不支持的功能码"
-	@staticmethod
-	def ModbusTcpFunctionCodeOverBound():
-		return "读取的数据越界"
-	@staticmethod
-	def ModbusTcpFunctionCodeQuantityOver():
-		return "读取长度超过最大值"
-	@staticmethod
-	def ModbusTcpFunctionCodeReadWriteException():
-		return "读写异常"
-	@staticmethod
-	def ModbusTcpReadCoilException():
-		return "读取线圈异常"
-	@staticmethod
-	def ModbusTcpWriteCoilException():
-		return "写入线圈异常"
-	@staticmethod
-	def ModbusTcpReadRegisterException():
-		return "读取寄存器异常"
-	@staticmethod
-	def ModbusTcpWriteRegisterException():
-		return "写入寄存器异常"
-	@staticmethod
-	def ModbusAddressMustMoreThanOne():
-		return "地址值在起始地址为1的情况下，必须大于1"
-	@staticmethod
-	def MelsecPleaseReferToManulDocument():
-		return "请查看三菱的通讯手册来查看报警的具体信息"
-	@staticmethod
-	def MelsecReadBitInfo():
-		return "读取位变量数组只能针对位软元件，如果读取字软元件，请调用Read方法"
-	@staticmethod
-	def OmronStatus0():
-		return "通讯正常"
-	@staticmethod
-	def OmronStatus1():
-		return "消息头不是FINS"
-	@staticmethod
-	def OmronStatus2():
-		return "数据长度太长"
-	@staticmethod
-	def OmronStatus3():
-		return "该命令不支持"
-	@staticmethod
-	def OmronStatus20():
-		return "超过连接上限"
-	@staticmethod
-	def OmronStatus21():
-		return "指定的节点已经处于连接中"
-	@staticmethod
-	def OmronStatus22():
-		return "尝试去连接一个受保护的网络节点，该节点还未配置到PLC中"
-	@staticmethod
-	def OmronStatus23():
-		return "当前客户端的网络节点超过正常范围"
-	@staticmethod
-	def OmronStatus24():
-		return "当前客户端的网络节点已经被使用"
-	@staticmethod
-	def OmronStatus25():
-		return "所有的网络节点已经被使用"
+	ModbusTcpFunctionCodeNotSupport = "不支持的功能码"
+	ModbusTcpFunctionCodeOverBound = "读取的数据越界"
+	ModbusTcpFunctionCodeQuantityOver = "读取长度超过最大值"
+	ModbusTcpFunctionCodeReadWriteException = "读写异常"
+	ModbusTcpReadCoilException = "读取线圈异常"
+	ModbusTcpWriteCoilException = "写入线圈异常"
+	ModbusTcpReadRegisterException = "读取寄存器异常"
+	ModbusTcpWriteRegisterException = "写入寄存器异常"
+	ModbusAddressMustMoreThanOne = "地址值在起始地址为1的情况下，必须大于1"
+	ModbusAsciiFormatCheckFailed = "Modbus的ascii指令检查失败，不是modbus-ascii报文"
+	ModbusCRCCheckFailed = "Modbus的CRC校验检查失败"
+	ModbusLRCCheckFailed = "Modbus的LRC校验检查失败"
+	ModbusMatchFailed = "不是标准的modbus协议"
+	# Melsec PLC 相关
+	MelsecPleaseReferToManulDocument = "请查看三菱的通讯手册来查看报警的具体信息"
+	MelsecReadBitInfo = "读取位变量数组只能针对位软元件，如果读取字软元件，请调用Read方法"
+	MelsecCurrentTypeNotSupportedWordOperate = "当前的类型不支持字读写"
+	MelsecCurrentTypeNotSupportedBitOperate = "当前的类型不支持位读写"
+	MelsecFxReceiveZore = "接收的数据长度为0"
+	MelsecFxAckNagative = "PLC反馈的数据无效"
+	MelsecFxAckWrong = "PLC反馈信号错误："
+	MelsecFxCrcCheckFailed = "PLC反馈报文的和校验失败！"
+	# Siemens PLC 相关
+	SiemensDBAddressNotAllowedLargerThan255 = "DB块数据无法大于255"
+	SiemensReadLengthMustBeEvenNumber = "读取的数据长度必须为偶数"
+	SiemensWriteError = "写入数据异常，代号为："
+	SiemensReadLengthCannotLargerThan19 = "读取的数组数量不允许大于19"
+	SiemensDataLengthCheckFailed = "数据块长度校验失败，请检查是否开启put/get以及关闭db块优化"
+	SiemensFWError = "发生了异常，具体信息查找Fetch/Write协议文档"
+	# Omron PLC 相关
+	OmronAddressMustBeZeroToFiveteen = "输入的位地址只能在0-15之间"
+	OmronReceiveDataError = "数据接收异常"
+	OmronStatus0 = "通讯正常"
+	OmronStatus1 = "消息头不是FINS"
+	OmronStatus2 = "数据长度太长"
+	OmronStatus3 = "该命令不支持"
+	OmronStatus20 = "超过连接上限"
+	OmronStatus21 = "指定的节点已经处于连接中"
+	OmronStatus22 = "尝试去连接一个受保护的网络节点，该节点还未配置到PLC中"
+	OmronStatus23 = "当前客户端的网络节点超过正常范围"
+	OmronStatus24 = "当前客户端的网络节点已经被使用"
+	OmronStatus25 = "所有的网络节点已经被使用"
+	# AB PLC 相关
+	AllenBradley04 = "它没有正确生成或匹配标记不存在。"
+	AllenBradley05 = "引用的特定项（通常是实例）无法找到。"
+	AllenBradley06 = "请求的数据量不适合响应缓冲区。 发生了部分数据传输。"
+	AllenBradley0A = "尝试处理其中一个属性时发生错误。"
+	AllenBradley13 = "命令中没有提供足够的命令数据/参数来执行所请求的服务。"
+	AllenBradley1C = "与属性计数相比，提供的属性数量不足。"
+	AllenBradley1E = "此服务中的服务请求出错。"
+	AllenBradley26 = "IOI字长与处理的IOI数量不匹配。"
+
+	AllenBradleySessionStatus00 = "成功"
+	AllenBradleySessionStatus01 = "发件人发出无效或不受支持的封装命令。"
+	AllenBradleySessionStatus02 = "接收器中的内存资源不足以处理命令。 这不是一个应用程序错误。 相反，只有在封装层无法获得所需内存资源的情况下才会导致此问题。"
+	AllenBradleySessionStatus03 = "封装消息的数据部分中的数据形成不良或不正确。"
+	AllenBradleySessionStatus64 = "向目标发送封装消息时，始发者使用了无效的会话句柄。"
+	AllenBradleySessionStatus65 = "目标收到一个无效长度的信息。"
+	AllenBradleySessionStatus69 = "不支持的封装协议修订。"
+	# Panasonic PLC 相关
+	PanasonicReceiveLengthMustLargerThan9 = "接收数据长度必须大于9"
+	PanasonicAddressParameterCannotBeNull = "地址参数不允许为空"
+	PanasonicMewStatus20 = "错误未知"
+	PanasonicMewStatus21 = "NACK错误，远程单元无法被正确识别，或者发生了数据错误。"
+	PanasonicMewStatus22 = "WACK 错误:用于远程单元的接收缓冲区已满。"
+	PanasonicMewStatus23 = "多重端口错误:远程单元编号(01 至 16)设置与本地单元重复。"
+	PanasonicMewStatus24 = "传输格式错误:试图发送不符合传输格式的数据，或者某一帧数据溢出或发生了数据错误。"
+	PanasonicMewStatus25 = "硬件错误:传输系统硬件停止操作。"
+	PanasonicMewStatus26 = "单元号错误:远程单元的编号设置超出 01 至 63 的范围。"
+	PanasonicMewStatus27 = "不支持错误:接收方数据帧溢出. 试图在不同的模块之间发送不同帧长度的数据。"
+	PanasonicMewStatus28 = "无应答错误:远程单元不存在. (超时)。"
+	PanasonicMewStatus29 = "缓冲区关闭错误:试图发送或接收处于关闭状态的缓冲区。"
+	PanasonicMewStatus30 = "超时错误:持续处于传输禁止状态。"
+	PanasonicMewStatus40 = "BCC 错误:在指令数据中发生传输错误。"
+	PanasonicMewStatus41 = "格式错误:所发送的指令信息不符合传输格式。"
+	PanasonicMewStatus42 = "不支持错误:发送了一个未被支持的指令。向未被支持的目标站发送了指令。"
+	PanasonicMewStatus43 = "处理步骤错误:在处于传输请求信息挂起时,发送了其他指令。"
+	PanasonicMewStatus50 = "链接设置错误:设置了实际不存在的链接编号。"
+	PanasonicMewStatus51 = "同时操作错误:当向其他单元发出指令时,本地单元的传输缓冲区已满。"
+	PanasonicMewStatus52 = "传输禁止错误:无法向其他单元传输。"
+	PanasonicMewStatus53 = "忙错误:在接收到指令时,正在处理其他指令。"
+	PanasonicMewStatus60 = "参数错误:在指令中包含有无法使用的代码,或者代码没有附带区域指定参数(X, Y, D), 等以外。"
+	PanasonicMewStatus61 = "数据错误:触点编号,区域编号,数据代码格式(BCD,hex,等)上溢出, 下溢出以及区域指定错误。"
+	PanasonicMewStatus62 = "寄存器错误:过多记录数据在未记录状态下的操作（监控记录、跟踪记录等。)。"
+	PanasonicMewStatus63 = "PLC 模式错误:当一条指令发出时，运行模式不能够对指令进行处理。"
+	PanasonicMewStatus65 = "保护错误:在存储保护状态下执行写操作到程序区域或系统寄存器。"
+	PanasonicMewStatus66 = "地址错误:地址（程序地址、绝对地址等）数据编码形式（BCD、hex 等）、上溢、下溢或指定范围错误。"
+	PanasonicMewStatus67 = "丢失数据错误:要读的数据不存在。（读取没有写入注释寄存区的数据。。"
+
+	def __setattr__(self, f, v):
+		'''强制所有的属性为只读的，无法进行更改和设置'''
+		raise AttributeError('{}.{} is READ ONLY'.format(type(self).__name__, f))
+
+class English(DefaultLanguage):
+	'''English Version Text'''
+	ConnectedFailed = "Connected Failed: "
+	UnknownError = "Unknown Error"
+	ErrorCode = "Error Code: "
+	TextDescription = "Description: "
+	ExceptionMessage = "Exception Info: "
+	ExceptionSourse = "Exception Sourse："
+	ExceptionType = "Exception Type："
+	ExceptionStackTrace = "Exception Stack: "
+	ExceptopnTargetSite = "Exception Method: "
+	ExceprionCustomer = "Error in user-defined method: "
+	SuccessText = "Success"
+	TwoParametersLengthIsNotSame = "Two Parameter Length is not same"
+	NotSupportedDataType = "Unsupported DataType, input again"
+	DataLengthIsNotEnough = "Receive length is not enough，Should:{0},Actual:{1}"
+	ReceiveDataTimeout = "Receive timeout: "
+	ReceiveDataLengthTooShort = "Receive length is too short: "
+	MessageTip = "Message prompt:"
+	Close = "Close"
+	Time = "Time:"
+	SoftWare = "Software:"
+	BugSubmit = "Bug submit"
+	MailServerCenter = "Mail Center System"
+	MailSendTail = "Mail Service system issued automatically, do not reply"
+	IpAddresError = "IP address input exception, format is incorrect"
+	Send = "Send"
+	Receive = "Receive"
+	# System about
+	SystemInstallOperater = "Install new software: ip address is"
+	SystemUpdateOperater = "Update software: ip address is"
+	# Socket-related Information description
+	SocketIOException = "Socket transport error: "
+	SocketSendException = "Synchronous Data Send exception: "
+	SocketHeadReceiveException = "Command header receive exception: "
+	SocketContentReceiveException = "Content Data Receive exception: "
+	SocketContentRemoteReceiveException = "Recipient content Data Receive exception: "
+	SocketAcceptCallbackException = "Asynchronously accepts an incoming connection attempt: "
+	SocketReAcceptCallbackException = "To re-accept incoming connection attempts asynchronously"
+	SocketSendAsyncException = "Asynchronous Data send Error: "
+	SocketEndSendException = "Asynchronous data end callback send Error"
+	SocketReceiveException = "Asynchronous Data send Error: "
+	SocketEndReceiveException = "Asynchronous data end receive instruction header error"
+	SocketRemoteCloseException = "An existing connection was forcibly closed by the remote host"
+	# File related information
+	FileDownloadSuccess = "File Download Successful"
+	FileDownloadFailed = "File Download exception"
+	FileUploadFailed = "File Upload exception"
+	FileUploadSuccess = "File Upload Successful"
+	FileDeleteFailed = "File Delete exception"
+	FileDeleteSuccess = "File deletion succeeded"
+	FileReceiveFailed = "Confirm File Receive exception"
+	FileNotExist = "File does not exist"
+	FileSaveFailed = "File Store failed"
+	FileLoadFailed = "File load failed"
+	FileSendClientFailed = "An exception occurred when the file was sent"
+	FileWriteToNetFailed = "File Write Network exception"
+	FileReadFromNetFailed = "Read file exceptions from the network"
+	FilePathCreateFailed = "Folder path creation failed: "
+	FileRemoteNotExist = "The other file does not exist, cannot receive!"
+	# Engine-related data for the server
+	TokenCheckFailed = "Receive authentication token inconsistency"
+	TokenCheckTimeout = "Receive authentication timeout: "
+	CommandHeadCodeCheckFailed = "Command header check failed"
+	CommandLengthCheckFailed = "Command length check failed"
+	NetClientAliasFailed = "Client's alias receive failed: "
+	NetEngineStart = "Start engine"
+	NetEngineClose = "Shutting down the engine"
+	NetClientOnline = "Online"
+	NetClientOffline = "Offline"
+	NetClientBreak = "Abnormal offline"
+	NetClientFull = "The server hosts the upper limit and receives an exceeded request connection."
+	NetClientLoginFailed = "Error in Client logon: "
+	NetHeartCheckFailed = "Heartbeat Validation exception: "
+	NetHeartCheckTimeout = "Heartbeat verification timeout, force offline: "
+	DataSourseFormatError = "Data source format is incorrect"
+	ServerFileCheckFailed = "Server confirmed file failed, please re-upload"
+	ClientOnlineInfo = "Client [ {0} ] Online"
+	ClientOfflineInfo = "Client [ {0} ] Offline"
+	ClientDisableLogin = "Client [ {0} ] is not trusted, login forbidden"
+	# Client related
+	ReConnectServerSuccess = "Re-connect server succeeded"
+	ReConnectServerAfterTenSeconds = "Reconnect the server after 10 seconds"
+	KeyIsNotAllowedNull = "The keyword is not allowed to be empty"
+	KeyIsExistAlready = "The current keyword already exists"
+	KeyIsNotExist = "The keyword for the current subscription does not exist"
+	ConnectingServer = "Connecting to Server..."
+	ConnectFailedAndWait = "Connection disconnected, wait {0} seconds to reconnect"
+	AttemptConnectServer = "Attempting to connect server {0} times"
+	ConnectServerSuccess = "Connection Server succeeded"
+	GetClientIpaddressFailed = "Client IP Address acquisition failed"
+	ConnectionIsNotAvailable = "The current connection is not available"
+	DeviceCurrentIsLoginRepeat = "ID of the current device duplicate login"
+	DeviceCurrentIsLoginForbidden = "The ID of the current device prohibits login"
+	PasswordCheckFailed = "Password validation failed"
+	DataTransformError = "Data conversion failed, source data: "
+	RemoteClosedConnection = "Remote shutdown of connection"
+	# Log related
+	LogNetDebug = "Debug"
+	LogNetInfo = "Info"
+	LogNetWarn = "Warn"
+	LogNetError = "Error"
+	LogNetFatal = "Fatal"
+	LogNetAbandon = "Abandon"
+	LogNetAll = "All"
+	# Modbus related
+	ModbusTcpFunctionCodeNotSupport = "Unsupported function code"
+	ModbusTcpFunctionCodeOverBound = "Data read out of bounds"
+	ModbusTcpFunctionCodeQuantityOver = "Read length exceeds maximum value"
+	ModbusTcpFunctionCodeReadWriteException = "Read and Write exceptions"
+	ModbusTcpReadCoilException = "Read Coil anomalies"
+	ModbusTcpWriteCoilException = "Write Coil exception"
+	ModbusTcpReadRegisterException = "Read Register exception"
+	ModbusTcpWriteRegisterException = "Write Register exception"
+	ModbusAddressMustMoreThanOne = "The address value must be greater than 1 in the case where the start address is 1"
+	ModbusAsciiFormatCheckFailed = "Modbus ASCII command check failed, not MODBUS-ASCII message"
+	ModbusCRCCheckFailed = "The CRC checksum check failed for Modbus"
+	ModbusLRCCheckFailed = "The LRC checksum check failed for Modbus"
+	ModbusMatchFailed = "Not the standard Modbus protocol"
+	# Melsec PLC related
+	MelsecPleaseReferToManulDocument = "Please check Mitsubishi's communication manual for details of the alarm."
+	MelsecReadBitInfo = "The read bit variable array can only be used for bit soft elements, if you read the word soft component, call the Read method"
+	MelsecCurrentTypeNotSupportedWordOperate = "The current type does not support word read and write"
+	MelsecCurrentTypeNotSupportedBitOperate = "The current type does not support bit read and write"
+	MelsecFxReceiveZore = "The received data length is 0"
+	MelsecFxAckNagative = "Invalid data from PLC feedback"
+	MelsecFxAckWrong = "PLC Feedback Signal Error: "
+	MelsecFxCrcCheckFailed = "PLC Feedback message and check failed!"
+	# Siemens PLC related
+	SiemensDBAddressNotAllowedLargerThan255 = "DB block data cannot be greater than 255"
+	SiemensReadLengthMustBeEvenNumber = "The length of the data read must be an even number"
+	SiemensWriteError = "Writes the data exception, the code name is: "
+	SiemensReadLengthCannotLargerThan19 = "The number of arrays read does not allow greater than 19"
+	SiemensDataLengthCheckFailed = "Block length checksum failed, please check if Put/get is turned on and DB block optimization is turned off"
+	SiemensFWError = "An exception occurred, the specific information to find the Fetch/write protocol document"
+	# Omron PLC related
+	OmronAddressMustBeZeroToFiveteen = "The bit address entered can only be between 0-15"
+	OmronReceiveDataError = "Data Receive exception"
+	OmronStatus0 = "Communication is normal."
+	OmronStatus1 = "The message header is not fins"
+	OmronStatus2 = "Data length too long"
+	OmronStatus3 = "This command does not support"
+	OmronStatus20 = "Exceeding connection limit"
+	OmronStatus21 = "The specified node is already in the connection"
+	OmronStatus22 = "Attempt to connect to a protected network node that is not yet configured in the PLC"
+	OmronStatus23 = "The current client's network node exceeds the normal range"
+	OmronStatus24 = "The current client's network node is already in use"
+	OmronStatus25 = "All network nodes are already in use"
+	# AB PLC related
+	AllenBradley04 = "The IOI could not be deciphered. Either it was not formed correctly or the match tag does not exist."
+	AllenBradley05 = "The particular item referenced (usually instance) could not be found."
+	AllenBradley06 = "The amount of data requested would not fit into the response buffer. Partial data transfer has occurred."
+	AllenBradley0A = "An error has occurred trying to process one of the attributes."
+	AllenBradley13 = "Not enough command data / parameters were supplied in the command to execute the service requested."
+	AllenBradley1C = "An insufficient number of attributes were provided compared to the attribute count."
+	AllenBradley1E = "A service request in this service went wrong."
+	AllenBradley26 = "The IOI word length did not match the amount of IOI which was processed."
+
+	AllenBradleySessionStatus00 = "success"
+	AllenBradleySessionStatus01 = "The sender issued an invalid or unsupported encapsulation command."
+	AllenBradleySessionStatus02 = "Insufficient memory resources in the receiver to handle the command. This is not an application error. Instead, it only results if the encapsulation layer cannot obtain memory resources that it need."
+	AllenBradleySessionStatus03 = "Poorly formed or incorrect data in the data portion of the encapsulation message."
+	AllenBradleySessionStatus64 = "An originator used an invalid session handle when sending an encapsulation message."
+	AllenBradleySessionStatus65 = "The target received a message of invalid length."
+	AllenBradleySessionStatus69 = "Unsupported encapsulation protocol revision."
+	# Panasonic PLC related
+	PanasonicReceiveLengthMustLargerThan9 = "The received data length must be greater than 9"
+	PanasonicAddressParameterCannotBeNull = "Address parameter is not allowed to be empty"
+	PanasonicMewStatus20 = "Error unknown"
+	PanasonicMewStatus21 = "Nack error, the remote unit could not be correctly identified, or a data error occurred."
+	PanasonicMewStatus22 = "WACK Error: The receive buffer for the remote unit is full."
+	PanasonicMewStatus23 = "Multiple port error: The remote unit number (01 to 16) is set to repeat with the local unit."
+	PanasonicMewStatus24 = "Transport format error: An attempt was made to send data that does not conform to the transport format, or a frame data overflow or a data error occurred."
+	PanasonicMewStatus25 = "Hardware error: Transport system hardware stopped operation."
+	PanasonicMewStatus26 = "Unit Number error: The remote unit's numbering setting exceeds the range of 01 to 63."
+	PanasonicMewStatus27 = "Error not supported: Receiver data frame overflow. An attempt was made to send data of different frame lengths between different modules."
+	PanasonicMewStatus28 = "No answer error: The remote unit does not exist. (timeout)."
+	PanasonicMewStatus29 = "Buffer Close error: An attempt was made to send or receive a buffer that is in a closed state."
+	PanasonicMewStatus30 = "Timeout error: Persisted in transport forbidden State."
+	PanasonicMewStatus40 = "BCC Error: A transmission error occurred in the instruction data."
+	PanasonicMewStatus41 = "Malformed: The sent instruction information does not conform to the transmission format."
+	PanasonicMewStatus42 = "Error not supported: An unsupported instruction was sent. An instruction was sent to a target station that was not supported."
+	PanasonicMewStatus43 = "Processing Step Error: Additional instructions were sent when the transfer request information was suspended."
+	PanasonicMewStatus50 = "Link Settings Error: A link number that does not actually exist is set."
+	PanasonicMewStatus51 = "Simultaneous operation error: When issuing instructions to other units, the transmit buffer for the local unit is full."
+	PanasonicMewStatus52 = "Transport suppression Error: Unable to transfer to other units."
+	PanasonicMewStatus53 = "Busy error: Other instructions are being processed when the command is received."
+	PanasonicMewStatus60 = "Parameter error: Contains code that cannot be used in the directive, or the code does not have a zone specified parameter (X, Y, D), and so on."
+	PanasonicMewStatus61 = "Data error: Contact number, area number, Data code format (BCD,HEX, etc.) overflow, overflow, and area specified error."
+	PanasonicMewStatus62 = "Register ERROR: Excessive logging of data in an unregistered state of operations (Monitoring records, tracking records, etc.). )。"
+	PanasonicMewStatus63 = "PLC mode error: When an instruction is issued, the run mode is not able to process the instruction."
+	PanasonicMewStatus65 = "Protection Error: Performs a write operation to the program area or system register in the storage protection state."
+	PanasonicMewStatus66 = "Address Error: Address (program address, absolute address, etc.) Data encoding form (BCD, hex, etc.), overflow, underflow, or specified range error."
+	PanasonicMewStatus67 = "Missing data error: The data to be read does not exist. (reads data that is not written to the comment register.)"
+	
+	def __setattr__(self, f, v):
+		'''All properties is readonly, cannot change by setter'''
+		raise AttributeError('{}.{} is READ ONLY'.format(type(self).__name__, f))
+
+
+class StringResources:
+	'''系统的资源类，System String Resouces'''
+	Language = DefaultLanguage()
+
 
 class OperateResult:
 	'''结果对象类，可以携带额外的数据信息'''
@@ -285,13 +589,13 @@ class OperateResult:
 	# 是否成功的标志
 	IsSuccess = False
 	# 操作返回的错误消息
-	Message = StringResources.SuccessText()
+	Message = StringResources.Language.SuccessText
 	# 错误码
 	ErrorCode = 0
 	# 返回显示的文本
 	def ToMessageShowString( self ):
 		'''获取错误代号及文本描述'''
-		return StringResources.ErrorCode() + ":" + str(self.ErrorCode) + "\r\n" + StringResources.TextDescription() + ":" + self.Message
+		return StringResources.Language.ErrorCode + ":" + str(self.ErrorCode) + "\r\n" + StringResources.Language.TextDescription + ":" + self.Message
 	def CopyErrorFromOther(self, result):
 		'''从另一个结果类中拷贝错误信息'''
 		if result != None:
@@ -305,11 +609,11 @@ class OperateResult:
 		failed.Message = result.Message
 		return failed
 	@staticmethod
-	def CreateSuccessResult(Content1=None,Content2=None,Content3=None,Content4=None,Content5=None,Content6=None,Content7=None,Content8=None,Content9=None,Content10=None):
+	def CreateSuccessResult( Content1 = None, Content2 = None, Content3 = None, Content4 = None, Content5 = None, Content6 = None, Content7 = None, Content8 = None, Content9 = None, Content10 = None):
 		'''创建一个成功的对象'''
 		success = OperateResult()
 		success.IsSuccess = True
-		success.Message = StringResources.SuccessText()
+		success.Message = StringResources.Language.SuccessText
 		if(Content2 == None and Content3 == None and Content4 == None and Content5 == None and Content6 == None and Content7 == None and Content8 == None and Content9 == None and Content10 == None) :
 			success.Content = Content1
 		else:
@@ -530,7 +834,7 @@ class ByteTransform:
 		data = bytearray(length)
 		for i in range(length):
 			data[i]=buffer[i+index]
-		return SoftBasic.ByteToBoolArray( data, length * 8 )
+		return SoftBasic.ByteToBoolArray( data )
 
 	def TransByte( self, buffer, index ):
 		'''将buffer中的字节转化成byte对象，需要传入索引'''
@@ -1104,10 +1408,12 @@ class SoftBasic:
 		else:
 			return ''.join(str_list)
 	@staticmethod
-	def ByteToBoolArray( InBytes, length ):
+	def ByteToBoolArray( InBytes, length = None ):
 		'''从字节数组中提取bool数组变量信息'''
 		if InBytes == None:
 			return None
+		if length == None:
+			length = len(InBytes) * 8
 		if length > len(InBytes) * 8:
 			length = len(InBytes) * 8
 		buffer = []
@@ -1419,7 +1725,7 @@ class NetworkBase:
 		if netMsg.CheckHeadBytesLegal( SoftBasic.TokenToBytes(self.Token) ) == False:
 			# 令牌校验失败
 			if socket != None: socket.close()
-			result.Message = StringResources.TokenCheckFailed()
+			result.Message = StringResources.Language.TokenCheckFailed
 			return result
 
 		contentLength = netMsg.GetContentLengthByHeadBytes( )
@@ -1559,7 +1865,7 @@ class NetworkDoubleBase(NetworkBase):
 			self.isSocketError = False
 			result.IsSuccess = read.IsSuccess
 			result.Content = read.Content
-			result.Message = StringResources.SuccessText
+			result.Message = StringResources.Language.SuccessText
 			# string tmp2 = BasicFramework.SoftBasic.ByteToHexString( result.Content, '-' )
 		else:
 			self.isSocketError = True
@@ -1834,11 +2140,11 @@ class ModbusInfo:
 	@staticmethod
 	def GetDescriptionByErrorCode( code ):
 		'''通过错误码来获取到对应的文本消息'''
-		if code == 0x01: return StringResources.ModbusTcpFunctionCodeNotSupport()
-		elif code == 0x02: return StringResources.ModbusTcpFunctionCodeOverBound()
-		elif code == 0x03: return StringResources.ModbusTcpFunctionCodeQuantityOver()
-		elif code == 0x04: return StringResources.ModbusTcpFunctionCodeReadWriteException()
-		else: return StringResources.UnknownError
+		if code == 0x01: return StringResources.Language.ModbusTcpFunctionCodeNotSupport
+		elif code == 0x02: return StringResources.Language.ModbusTcpFunctionCodeOverBound
+		elif code == 0x03: return StringResources.Language.ModbusTcpFunctionCodeQuantityOver
+		elif code == 0x04: return StringResources.Language.ModbusTcpFunctionCodeReadWriteException
+		else: return StringResources.Language.UnknownError
 	@staticmethod
 	def AnalysisReadAddress( address, isStartWithZero ):
 		'''分析Modbus协议的地址信息，该地址适应于tcp及rtu模式'''
@@ -1846,7 +2152,7 @@ class ModbusInfo:
 			mAddress = ModbusAddress(address)
 			if isStartWithZero == False:
 				if mAddress.Address < 1:
-					raise RuntimeError(StringResources.ModbusAddressMustMoreThanOne())
+					raise RuntimeError(StringResources.Language.ModbusAddressMustMoreThanOne)
 				else:
 					mAddress.Address = mAddress.Address - 1
 			return OperateResult.CreateSuccessResult(mAddress)
@@ -2106,7 +2412,7 @@ class ModbusTcpNet(NetworkDeviceBase):
 		elif code == ModbusInfo.ReadInputRegister():
 			command = self.BuildReadInputRegisterCommand( address, length )
 		else:
-			command = OperateResult( msg = StringResources.ModbusTcpFunctionCodeNotSupport() )
+			command = OperateResult( msg = StringResources.Language.ModbusTcpFunctionCodeNotSupport )
 		if command.IsSuccess == False : return OperateResult.CreateFailedResult( command )
 
 		resultBytes = self.CheckModbusTcpResponse( command.Content )
@@ -2329,7 +2635,7 @@ class MelsecHelper:
 			return result
 		
 		result.IsSuccess = True
-		result.Message = StringResources.SuccessText()
+		result.Message = StringResources.Language.SuccessText
 		return result
 	@staticmethod
 	def McAnalysisAddress( address = "0" ):
@@ -2384,7 +2690,7 @@ class MelsecHelper:
 			return result
 		
 		result.IsSuccess = True
-		result.Message = StringResources.SuccessText()
+		result.Message = StringResources.Language.SuccessText
 		return result
 	@staticmethod
 	def BuildBytesFromData( value, length = None ):
@@ -2428,16 +2734,12 @@ class MelsecA1ENet(NetworkDeviceBase):
 		self.port = port
 		self.WordLength = 1
 	@staticmethod
-	def BuildReadCommand(address,length,plcNumber):
+	def BuildReadCommand(address,length,isBit,plcNumber):
 		'''根据类型地址长度确认需要读取的指令头'''
 		analysis = MelsecHelper.McA1EAnalysisAddress( address )
 		if analysis.IsSuccess == False : return OperateResult.CreateFailedResult( analysis )
 		
-		subtitle = 0
-		if analysis.Content1.DataType == 0x01:
-			subtitle = 0x00
-		else:
-			subtitle = 0x01
+		subtitle = 0x00 if isBit else 0x01
 
 		_PLCCommand = bytearray(12)
 		_PLCCommand[0]  = subtitle                               # 副标题
@@ -2529,7 +2831,7 @@ class MelsecA1ENet(NetworkDeviceBase):
 	def Read( self, address, length ):
 		'''从三菱PLC中读取想要的数据，返回读取结果'''
 		# 获取指令
-		command = MelsecA1ENet.BuildReadCommand( address, length, self.PLCNumber )
+		command = MelsecA1ENet.BuildReadCommand( address, length, False, self.PLCNumber )
 		if command.IsSuccess == False :
 			return OperateResult.CreateFailedResult( command )
 
@@ -2539,10 +2841,10 @@ class MelsecA1ENet(NetworkDeviceBase):
 
 		# 错误代码验证
 		errorCode = read.Content[1]
-		if errorCode != 0 : return OperateResult(err=errorCode, msg=StringResources.MelsecPleaseReferToManulDocument())
+		if errorCode != 0 : return OperateResult(err=errorCode, msg=StringResources.Language.MelsecPleaseReferToManulDocument)
 
 		# 数据解析，需要传入是否使用位的参数
-		return MelsecA1ENet.ExtractActualData( read.Content, command.Content[0] == 0x00 )
+		return MelsecA1ENet.ExtractActualData( read.Content, False )
 	def ReadBool( self, address, length = None ):
 		'''从三菱PLC中批量读取位软元件，返回读取结果'''
 		if length == None:
@@ -2552,19 +2854,22 @@ class MelsecA1ENet(NetworkDeviceBase):
 			else:
 				return OperateResult.CreateSuccessResult(read.Content[0])
 		else:
-			# 解析地址
-			analysis = MelsecHelper.McA1EAnalysisAddress( address )
-			if analysis.IsSuccess == False : 
-				return OperateResult.CreateFailedResult( analysis )
-
-			# 位读取校验
-			if analysis.Content1.DataType == 0x00 : 
-				return OperateResult( msg = StringResources.MelsecReadBitInfo() )
+			# 获取指令
+			command = MelsecA1ENet.BuildReadCommand( address, length, True, self.PLCNumber )
+			if command.IsSuccess == False :
+				return OperateResult.CreateFailedResult( command )
 
 			# 核心交互
-			read = self.Read( address, length )
-			if read.IsSuccess == False : 
-				return OperateResult.CreateFailedResult( read )
+			read = self.ReadFromCoreServer( command.Content )
+			if read.IsSuccess == False : return OperateResult.CreateFailedResult( read )
+
+			# 错误代码验证
+			errorCode = read.Content[1]
+			if errorCode != 0 : return OperateResult(err=errorCode, msg=StringResources.Language.MelsecPleaseReferToManulDocument)
+
+			# 数据解析，需要传入是否使用位的参数
+			extract = MelsecA1ENet.ExtractActualData( read.Content, True )
+			if extract.IsSuccess == False: return OperateResult.CreateFailedResult( extract )
 
 			# 转化bool数组
 			content = []
@@ -2586,7 +2891,7 @@ class MelsecA1ENet(NetworkDeviceBase):
 
 		# 错误码校验
 		errorCode = read.Content[1]
-		if errorCode != 0 : return OperateResult(err=errorCode, msg=StringResources.MelsecPleaseReferToManulDocument())
+		if errorCode != 0 : return OperateResult(err=errorCode, msg=StringResources.Language.MelsecPleaseReferToManulDocument)
 
 		# 成功
 		return OperateResult.CreateSuccessResult( )
@@ -2613,7 +2918,7 @@ class MelsecMcNet(NetworkDeviceBase):
 		self.port = port
 		self.WordLength = 1
 	@staticmethod
-	def BuildReadCommand(address,length,networkNumber = 0,networkStationNumber = 0):
+	def BuildReadCommand( address, length, isBit, networkNumber = 0, networkStationNumber = 0 ):
 		'''根据类型地址长度确认需要读取的指令头'''
 		analysis = MelsecHelper.McAnalysisAddress( address )
 		if analysis.IsSuccess == False : return OperateResult.CreateFailedResult( analysis )
@@ -2632,7 +2937,7 @@ class MelsecMcNet(NetworkDeviceBase):
 		_PLCCommand[10] = 0x00
 		_PLCCommand[11] = 0x01                                   # 批量读取数据命令
 		_PLCCommand[12] = 0x04
-		_PLCCommand[13] = analysis.Content1.DataType             # 以点为单位还是字为单位成批读取
+		_PLCCommand[13] = 0x01 if isBit else 0x00                # 以点为单位还是字为单位成批读取
 		_PLCCommand[14] = 0x00
 		_PLCCommand[15] = analysis.Content2 % 256                # 起始地址的地位
 		_PLCCommand[16] = analysis.Content2 // 256
@@ -2724,7 +3029,7 @@ class MelsecMcNet(NetworkDeviceBase):
 	def Read( self, address, length ):
 		'''从三菱PLC中读取想要的数据，返回读取结果'''
 		# 获取指令
-		command = MelsecMcNet.BuildReadCommand( address, length, self.NetworkNumber, self.NetworkStationNumber )
+		command = MelsecMcNet.BuildReadCommand( address, length, False, self.NetworkNumber, self.NetworkStationNumber )
 		if command.IsSuccess == False :
 			return OperateResult.CreateFailedResult( command )
 
@@ -2734,10 +3039,10 @@ class MelsecMcNet(NetworkDeviceBase):
 
 		# 错误代码验证
 		errorCode = read.Content[9] * 256 + read.Content[10]
-		if errorCode != 0 : return OperateResult(err=errorCode, msg=StringResources.MelsecPleaseReferToManulDocument())
+		if errorCode != 0 : return OperateResult(err=errorCode, msg=StringResources.Language.MelsecPleaseReferToManulDocument)
 
 		# 数据解析，需要传入是否使用位的参数
-		return MelsecMcNet.ExtractActualData( read.Content, command.Content[13] == 1 )
+		return MelsecMcNet.ExtractActualData( read.Content, False )
 	def ReadBool( self, address, length = None ):
 		'''从三菱PLC中批量读取位软元件，返回读取结果'''
 		if length == None:
@@ -2747,19 +3052,22 @@ class MelsecMcNet(NetworkDeviceBase):
 			else:
 				return OperateResult.CreateSuccessResult(read.Content[0])
 		else:
-			# 解析地址
-			analysis = MelsecHelper.McAnalysisAddress( address )
-			if analysis.IsSuccess == False : 
-				return OperateResult.CreateFailedResult( analysis )
-
-			# 位读取校验
-			if analysis.Content1.DataType == 0x00 : 
-				return OperateResult( msg = StringResources.MelsecReadBitInfo() )
+			# 获取指令
+			command = MelsecMcNet.BuildReadCommand( address, length, True, self.NetworkNumber, self.NetworkStationNumber )
+			if command.IsSuccess == False :
+				return OperateResult.CreateFailedResult( command )
 
 			# 核心交互
-			read = self.Read( address, length )
-			if read.IsSuccess == False : 
-				return OperateResult.CreateFailedResult( read )
+			read = self.ReadFromCoreServer( command.Content )
+			if read.IsSuccess == False : return OperateResult.CreateFailedResult( read )
+
+			# 错误代码验证
+			errorCode = read.Content[9] * 256 + read.Content[10]
+			if errorCode != 0 : return OperateResult(err=errorCode, msg=StringResources.Language.MelsecPleaseReferToManulDocument)
+
+			# 数据解析，需要传入是否使用位的参数
+			extract =  MelsecMcNet.ExtractActualData( read.Content, True )
+			if extract.IsSuccess == False : return OperateResult.CreateFailedResult( extract )
 
 			# 转化bool数组
 			content = []
@@ -2781,7 +3089,7 @@ class MelsecMcNet(NetworkDeviceBase):
 
 		# 错误码校验
 		errorCode = read.Content[9] * 256 + read.Content[10]
-		if errorCode != 0 : return OperateResult(err=errorCode, msg=StringResources.MelsecPleaseReferToManulDocument())
+		if errorCode != 0 : return OperateResult(err=errorCode, msg=StringResources.Language.MelsecPleaseReferToManulDocument )
 
 		# 成功
 		return OperateResult.CreateSuccessResult( )
@@ -2959,7 +3267,7 @@ class MelsecMcAsciiNet(NetworkDeviceBase):
 
 		# 错误代码验证
 		errorCode = int( read.Content[18:22].decode('ascii'), 16 )
-		if errorCode != 0 : return OperateResult( err= errorCode, msg = StringResources.MelsecPleaseReferToManulDocument() )
+		if errorCode != 0 : return OperateResult( err= errorCode, msg = StringResources.Language.MelsecPleaseReferToManulDocument )
 
 		# 数据解析，需要传入是否使用位的参数
 		return MelsecMcAsciiNet.ExtractActualData( read.Content, command.Content[29] == 0x31 )
@@ -2975,7 +3283,7 @@ class MelsecMcAsciiNet(NetworkDeviceBase):
 			if analysis.IsSuccess == False : return OperateResult.CreateFailedResult( analysis )
 
 			# 位读取校验
-			if analysis.Content1.DataType == 0x00 : return OperateResult( msg = StringResources.MelsecReadBitInfo )
+			if analysis.Content1.DataType == 0x00 : return OperateResult( msg = StringResources.Language.MelsecReadBitInfo )
 
 			# 核心交互
 			read = self.Read( address, length )
@@ -3001,7 +3309,7 @@ class MelsecMcAsciiNet(NetworkDeviceBase):
 
 		# 错误码验证
 		errorCode = int( read.Content[18:22].decode('ascii'), 16 )
-		if errorCode != 0 : return OperateResult( err = errorCode, msg = StringResources.MelsecPleaseReferToManulDocument() )
+		if errorCode != 0 : return OperateResult( err = errorCode, msg = StringResources.Language.MelsecPleaseReferToManulDocument )
 
 		# 写入成功
 		return OperateResult.CreateSuccessResult( )
@@ -3093,7 +3401,7 @@ class SiemensS7Net(NetworkDeviceBase):
 				result.Content3 = 1
 				result.Content2 = SiemensS7Net.CalculateAddressStarted( address[1:] )
 			else:
-				result.Message = StringResources.NotSupportedDataType()
+				result.Message = StringResources.Language.NotSupportedDataType
 				result.Content1 = 0
 				result.Content2 = 0
 				result.Content3 = 0
@@ -3531,7 +3839,7 @@ class SiemensFetchWriteNet(NetworkDeviceBase):
 				result.Content1 = 0x06
 				result.Content2 = SiemensFetchWriteNet.CalculateAddressStarted( address[1:])
 			else:
-				result.Message = StringResources.NotSupportedDataType()
+				result.Message = StringResources.Language.NotSupportedDataType
 				result.Content1 = 0
 				result.Content2 = 0
 				result.Content3 = 0
@@ -3753,7 +4061,7 @@ class OmronFinsNet(NetworkDoubleBase):
 				# AR区
 				result.Content1 = OmronFinsDataType.AR
 			else:
-				raise RuntimeError( StringResources.NotSupportedDataType() )
+				raise RuntimeError( StringResources.Language.NotSupportedDataType )
 
 			if isBit == True:
 				# 位操作
@@ -3808,17 +4116,17 @@ class OmronFinsNet(NetworkDoubleBase):
 	@staticmethod
 	def GetStatusDescription( err ):
 		'''获取错误信息的字符串描述文本'''
-		if err == 0: return StringResources.OmronStatus0()
-		elif err == 1: return StringResources.OmronStatus1()
-		elif err == 2: return StringResources.OmronStatus2()
-		elif err == 3: return StringResources.OmronStatus3()
-		elif err == 20: return StringResources.OmronStatus20()
-		elif err == 21: return StringResources.OmronStatus21()
-		elif err == 22: return StringResources.OmronStatus22()
-		elif err == 23: return StringResources.OmronStatus23()
-		elif err == 24: return StringResources.OmronStatus24()
-		elif err == 25: return StringResources.OmronStatus25()
-		else: return StringResources.UnknownError()
+		if err == 0: return StringResources.Language.OmronStatus0
+		elif err == 1: return StringResources.Language.OmronStatus1
+		elif err == 2: return StringResources.Language.OmronStatus2
+		elif err == 3: return StringResources.Language.OmronStatus3
+		elif err == 20: return StringResources.Language.OmronStatus20
+		elif err == 21: return StringResources.Language.OmronStatus21
+		elif err == 22: return StringResources.Language.OmronStatus22
+		elif err == 23: return StringResources.Language.OmronStatus23
+		elif err == 24: return StringResources.Language.OmronStatus24
+		elif err == 25: return StringResources.Language.OmronStatus25
+		else: return StringResources.Language.UnknownError
 	def PackCommand( self, cmd ):
 		'''将普通的指令打包成完整的指令'''
 		buffer = bytearray(26 + len(cmd))
@@ -4134,7 +4442,7 @@ class NetworkXBase(NetworkBase):
 		# 检查令牌
 		if self.CheckRemoteToken(headResult.Content) == False:
 			self.CloseSocket(socket)
-			return OperateResult( msg = StringResources.TokenCheckFailed() )
+			return OperateResult( msg = StringResources.Language.TokenCheckFailed )
 
 		contentLength = struct.unpack( '<i', headResult.Content[(HslProtocol.HeadByteLength() - 4):])[0]
 		# 接收内容
