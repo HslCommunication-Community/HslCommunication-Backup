@@ -231,7 +231,7 @@ namespace HslCommunication.Language
 
         /***********************************************************************************
          * 
-         *    AB PLC 相关
+         *    AB PLC related
          * 
          ************************************************************************************/
 
@@ -255,7 +255,7 @@ namespace HslCommunication.Language
 
         /***********************************************************************************
          * 
-         *    Panasonic PLC 相关
+         *    Panasonic PLC related
          * 
          ************************************************************************************/
         public override string PanasonicReceiveLengthMustLargerThan9 => "The received data length must be greater than 9";

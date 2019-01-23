@@ -8,7 +8,7 @@ using System.Text;
 using System.Windows.Forms;
 using HslCommunication.ModBus;
 
-namespace ModbusTcpServer
+namespace HslCommunicationDemo
 {
     public partial class FormTrustedClient : Form
     {

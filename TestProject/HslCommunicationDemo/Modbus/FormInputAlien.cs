@@ -8,7 +8,7 @@ using System.Net;
 using System.Text;
 using System.Windows.Forms;
 
-namespace ModbusTcpServer
+namespace HslCommunicationDemo
 {
     public partial class FormInputAlien : Form
     {

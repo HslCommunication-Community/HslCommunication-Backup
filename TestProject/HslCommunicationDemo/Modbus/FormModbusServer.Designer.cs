@@ -1,6 +1,6 @@
-﻿namespace ModbusTcpServer
+﻿namespace HslCommunicationDemo
 {
-    partial class FormModbus
+    partial class FormModbusServer
     {
         /// <summary>
         /// Required designer variable.

@@ -11,11 +11,11 @@ using HslCommunication;
 using HslCommunication.ModBus;
 using System.Threading;
 
-namespace ModbusTcpServer
+namespace HslCommunicationDemo
 {
-    public partial class FormModbus : Form
+    public partial class FormModbusServer : Form
     {
-        public FormModbus( )
+        public FormModbusServer( )
         {
             InitializeComponent( );
         }
@@ -174,13 +174,20 @@ namespace ModbusTcpServer
         /// <param name="e"></param>
         private void LogNet_BeforeSaveToFile( object sender, HslCommunication.LogNet.HslEventArgs e )
         {
-            if (InvokeRequired)
+            try
             {
-                Invoke( new Action<object, HslCommunication.LogNet.HslEventArgs>( LogNet_BeforeSaveToFile ), sender, e );
+                if (InvokeRequired)
+                {
+                    Invoke( new Action<object, HslCommunication.LogNet.HslEventArgs>( LogNet_BeforeSaveToFile ), sender, e );
+                    return;
+                }
+
+                textBox1.AppendText( e.HslMessage.ToString( ) + Environment.NewLine );
+            }
+            catch
+            {
                 return;
             }
-
-            textBox1.AppendText( e.HslMessage.ToString( ) + Environment.NewLine );
         }
 
 

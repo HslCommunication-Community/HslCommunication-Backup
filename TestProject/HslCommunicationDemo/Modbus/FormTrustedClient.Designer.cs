@@ -1,4 +1,4 @@
-﻿namespace ModbusTcpServer
+﻿namespace HslCommunicationDemo
 {
     partial class FormTrustedClient
     {

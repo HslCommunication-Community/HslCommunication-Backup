@@ -679,14 +679,22 @@ namespace HslCommunication.Profinet.Omron
                 if (response.Length >= 30)
                 {
                     err = response[28] * 256 + response[29];
-                    if (err > 0) return new OperateResult<byte[]>( err, StringResources.Language.OmronReceiveDataError );
+                    // 暂时忽略所有的报警信息
+                    // if (err > 0) return new OperateResult<byte[]>( err, StringResources.Language.OmronReceiveDataError );
 
-                    if (!isRead) return OperateResult.CreateSuccessResult( new byte[0] );
+                    if (!isRead)
+                    {
+                        OperateResult<byte[]> success = OperateResult.CreateSuccessResult( new byte[0] );
+                        success.ErrorCode = err;
+                        return success;
+                    }
                     // 读取操作
                     byte[] content = new byte[response.Length - 30];
                     if (content.Length > 0) Array.Copy( response, 30, content, 0, content.Length );
-                    
-                    return OperateResult.CreateSuccessResult( content );
+
+                    OperateResult<byte[]> success2 = OperateResult.CreateSuccessResult( content );
+                    success2.ErrorCode = err;
+                    return success2;
                 }
             }
 

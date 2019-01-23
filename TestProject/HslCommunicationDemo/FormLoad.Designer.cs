@@ -66,6 +66,7 @@
             this.button17 = new System.Windows.Forms.Button();
             this.button16 = new System.Windows.Forms.Button();
             this.groupBox7 = new System.Windows.Forms.GroupBox();
+            this.button44 = new System.Windows.Forms.Button();
             this.button23 = new System.Windows.Forms.Button();
             this.groupBox8 = new System.Windows.Forms.GroupBox();
             this.button31 = new System.Windows.Forms.Button();
@@ -98,7 +99,7 @@
             this.button43 = new System.Windows.Forms.Button();
             this.button42 = new System.Windows.Forms.Button();
             this.button40 = new System.Windows.Forms.Button();
-            this.button44 = new System.Windows.Forms.Button();
+            this.button45 = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -211,6 +212,7 @@
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.button45);
             this.groupBox2.Controls.Add(this.button34);
             this.groupBox2.Controls.Add(this.button21);
             this.groupBox2.Controls.Add(this.button19);
@@ -563,6 +565,17 @@
             this.groupBox7.TabStop = false;
             this.groupBox7.Text = "Robot(机器人)";
             // 
+            // button44
+            // 
+            this.button44.Location = new System.Drawing.Point(19, 63);
+            this.button44.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.button44.Name = "button44";
+            this.button44.Size = new System.Drawing.Size(150, 32);
+            this.button44.TabIndex = 1;
+            this.button44.Text = "EFORT-ER7BC10 (旧版)";
+            this.button44.UseVisualStyleBackColor = true;
+            this.button44.Click += new System.EventHandler(this.button44_Click);
+            // 
             // button23
             // 
             this.button23.Location = new System.Drawing.Point(19, 24);
@@ -890,16 +903,16 @@
             this.button40.UseVisualStyleBackColor = true;
             this.button40.Click += new System.EventHandler(this.button40_Click);
             // 
-            // button44
+            // button45
             // 
-            this.button44.Location = new System.Drawing.Point(19, 63);
-            this.button44.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.button44.Name = "button44";
-            this.button44.Size = new System.Drawing.Size(150, 32);
-            this.button44.TabIndex = 1;
-            this.button44.Text = "EFORT-ER7BC10 (旧版)";
-            this.button44.UseVisualStyleBackColor = true;
-            this.button44.Click += new System.EventHandler(this.button44_Click);
+            this.button45.Location = new System.Drawing.Point(19, 184);
+            this.button45.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.button45.Name = "button45";
+            this.button45.Size = new System.Drawing.Size(150, 32);
+            this.button45.TabIndex = 4;
+            this.button45.Text = "Modbus Server";
+            this.button45.UseVisualStyleBackColor = true;
+            this.button45.Click += new System.EventHandler(this.button45_Click);
             // 
             // FormLoad
             // 
@@ -1021,6 +1034,7 @@
         private System.Windows.Forms.LinkLabel linkLabel1;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button button44;
+        private System.Windows.Forms.Button button45;
     }
 }
 
