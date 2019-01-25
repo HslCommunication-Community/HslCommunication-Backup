@@ -289,6 +289,9 @@
     <Compile Include="..\HslCommunication_Net45\Core\Net\IReadWriteNet.cs">
       <Link>Core\Net\IReadWriteNet.cs</Link>
     </Compile>
+    <Compile Include="..\HslCommunication_Net45\Core\Net\IRobotNet.cs">
+      <Link>Core\Net\IRobotNet.cs</Link>
+    </Compile>
     <Compile Include="..\HslCommunication_Net45\Core\Net\NetSupport.cs">
       <Link>Core\Net\NetSupport.cs</Link>
     </Compile>

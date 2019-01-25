@@ -13,7 +13,7 @@ namespace HslCommunication.Robot.EFORT
     /// <summary>
     /// 埃夫特机器人对应型号为ER7B-C10，此协议为定制版，使用前请测试
     /// </summary>
-    public class ER7BC10 : NetworkDoubleBase<EFORTMessage, RegularByteTransform>
+    public class ER7BC10 : NetworkDoubleBase<EFORTMessage, RegularByteTransform>, IRobotNet
     {
 
         #region Constructor
@@ -93,7 +93,17 @@ namespace HslCommunication.Robot.EFORT
             return EfortData.PraseFrom( read.Content );
         }
 
+        /// <summary>
+        /// 读取机器人的详细信息，返回JSON格式的字符串信息
+        /// </summary>
+        /// <returns>结果数据信息</returns>
+        public OperateResult<string> ReadJsonString( )
+        {
+            OperateResult<EfortData> read = Read( );
+            if (!read.IsSuccess) return OperateResult.CreateFailedResult<string>( read );
 
+            return OperateResult.CreateSuccessResult( Newtonsoft.Json.JsonConvert.SerializeObject( read.Content ) );
+        }
 
 
         #endregion

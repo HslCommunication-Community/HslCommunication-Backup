@@ -191,6 +191,7 @@
     <Compile Include="Core\Net\ClassNetHandle.cs" />
     <Compile Include="Core\Net\CommunicationProtocol.cs" />
     <Compile Include="Core\Net\IReadWriteNet.cs" />
+    <Compile Include="Core\Net\IRobotNet.cs" />
     <Compile Include="Core\Net\NetSupport.cs" />
     <Compile Include="Core\Net\NetworkBase\NetworkAlienClient.cs" />
     <Compile Include="Core\Net\NetworkBase\NetworkBase.cs" />

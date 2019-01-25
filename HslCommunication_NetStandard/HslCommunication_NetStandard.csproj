@@ -66,6 +66,7 @@
     <Compile Include="..\HslCommunication_Net45\Core\Net\ClassNetHandle.cs" Link="Core\Net\ClassNetHandle.cs" />
     <Compile Include="..\HslCommunication_Net45\Core\Net\CommunicationProtocol.cs" Link="Core\Net\CommunicationProtocol.cs" />
     <Compile Include="..\HslCommunication_Net45\Core\Net\IReadWriteNet.cs" Link="Core\Net\IReadWriteNet.cs" />
+    <Compile Include="..\HslCommunication_Net45\Core\Net\IRobotNet.cs" Link="Core\Net\IRobotNet.cs" />
     <Compile Include="..\HslCommunication_Net45\Core\Net\NetSupport.cs" Link="Core\Net\NetSupport.cs" />
     <Compile Include="..\HslCommunication_Net45\Core\Net\NetworkBase\NetworkAlienClient.cs" Link="Core\Net\NetworkBase\NetworkAlienClient.cs" />
     <Compile Include="..\HslCommunication_Net45\Core\Net\NetworkBase\NetworkBase.cs" Link="Core\Net\NetworkBase\NetworkBase.cs" />
