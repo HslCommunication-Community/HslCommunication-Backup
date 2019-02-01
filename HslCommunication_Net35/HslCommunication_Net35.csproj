@@ -241,6 +241,9 @@
     <Compile Include="..\HslCommunication_Net45\Core\Address\DeviceAddressBase.cs">
       <Link>Core\Address\DeviceAddressBase.cs</Link>
     </Compile>
+    <Compile Include="..\HslCommunication_Net45\Core\Address\ModbusAddress.cs">
+      <Link>Core\Address\ModbusAddress.cs</Link>
+    </Compile>
     <Compile Include="..\HslCommunication_Net45\Core\IMessage\AlienMessage.cs">
       <Link>Core\IMessage\AlienMessage.cs</Link>
     </Compile>
@@ -487,9 +490,6 @@
     <Compile Include="..\HslCommunication_Net45\LogNet\View\LogNetAnalysisControl.designer.cs">
       <Link>LogNet\View\LogNetAnalysisControl.designer.cs</Link>
       <DependentUpon>LogNetAnalysisControl.cs</DependentUpon>
-    </Compile>
-    <Compile Include="..\HslCommunication_Net45\ModBus\ModbusAddress.cs">
-      <Link>ModBus\ModbusAddress.cs</Link>
     </Compile>
     <Compile Include="..\HslCommunication_Net45\ModBus\ModbusAscii\ModbusAscii.cs">
       <Link>ModBus\ModbusAscii\ModbusAscii.cs</Link>

@@ -1,4 +1,5 @@
-﻿using HslCommunication.ModBus;
+﻿using HslCommunication.Core.Address;
+using HslCommunication.ModBus;
 using HslCommunication.Serial;
 using System;
 using System.Collections.Generic;

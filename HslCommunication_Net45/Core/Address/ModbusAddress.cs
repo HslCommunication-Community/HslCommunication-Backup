@@ -1,11 +1,11 @@
 ﻿using HslCommunication.BasicFramework;
-using HslCommunication.Core.Address;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using HslCommunication.ModBus;
 
-namespace HslCommunication.ModBus
+namespace HslCommunication.Core.Address
 {
     /// <summary>
     /// Modbus协议地址格式，可以携带站号，功能码，地址信息
@@ -49,7 +49,19 @@ namespace HslCommunication.ModBus
             AnalysisAddress( address );
         }
 
-
+        /// <summary>
+        /// 实例化一个默认的对象，使用默认的地址初始化
+        /// </summary>
+        /// <param name="station">站号信息</param>
+        /// <param name="function">功能码信息</param>
+        /// <param name="address">地址信息</param>
+        public ModbusAddress( byte station, byte function, ushort address )
+        {
+            Station = -1;
+            Function = function;
+            Address = 0;
+        }
+        
         #endregion
 
         #region Public Properties
@@ -104,7 +116,7 @@ namespace HslCommunication.ModBus
 
         #endregion
 
-        #region Create Command
+        #region Create Read Write Command
         
         /// <summary>
         /// 创建一个读取线圈的字节对象
@@ -141,8 +153,7 @@ namespace HslCommunication.ModBus
             buffer[5] = BitConverter.GetBytes( length )[0];
             return buffer;
         }
-
-
+        
         /// <summary>
         /// 创建一个读取寄存器的字节对象
         /// </summary>
@@ -160,8 +171,7 @@ namespace HslCommunication.ModBus
             buffer[5] = BitConverter.GetBytes( length )[0];
             return buffer;
         }
-
-
+        
         /// <summary>
         /// 创建一个写入单个线圈的指令
         /// </summary>
@@ -179,8 +189,7 @@ namespace HslCommunication.ModBus
             buffer[5] = 0x00;
             return buffer;
         }
-
-
+        
         /// <summary>
         /// 创建一个写入单个寄存器的指令
         /// </summary>
@@ -198,8 +207,7 @@ namespace HslCommunication.ModBus
             buffer[5] = values[1];
             return buffer;
         }
-
-
+        
         /// <summary>
         /// 创建一个写入批量线圈的指令
         /// </summary>
@@ -220,8 +228,7 @@ namespace HslCommunication.ModBus
             data.CopyTo( buffer, 7 );
             return buffer;
         }
-
-
+        
         /// <summary>
         /// 创建一个写入批量寄存器的指令
         /// </summary>
@@ -241,16 +248,15 @@ namespace HslCommunication.ModBus
             values.CopyTo( buffer, 7 );
             return buffer;
         }
-
-
+        
         #endregion
 
-        #region Address Add
+        #region Address Operate
         
         /// <summary>
         /// 地址新增指定的数
         /// </summary>
-        /// <param name="value"></param>
+        /// <param name="value">数据值信息</param>
         /// <returns>新增后的地址信息</returns>
         public ModbusAddress AddressAdd( int value )
         {
@@ -261,8 +267,7 @@ namespace HslCommunication.ModBus
                 Address = (ushort)(this.Address + value),
             };
         }
-
-
+        
         /// <summary>
         /// 地址新增1
         /// </summary>
@@ -271,16 +276,15 @@ namespace HslCommunication.ModBus
         {
             return AddressAdd( 1 );
         }
-
-
+        
         #endregion
 
         #region Object Override
         
         /// <summary>
-        /// 获取本对象的字符串表示形式
+        /// 返回表示当前对象的字符串
         /// </summary>
-        /// <returns></returns>
+        /// <returns>地址表示形式</returns>
         public override string ToString( )
         {
             StringBuilder sb = new StringBuilder( );

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using HslCommunication.Core.Address;
 
 namespace HslCommunication.ModBus
 {
@@ -11,15 +12,8 @@ namespace HslCommunication.ModBus
     /// </summary>
     public class ModbusInfo
     {
-
-        /*****************************************************************************************
-         * 
-         *    本服务器和客户端支持的常用功能码
-         * 
-         *******************************************************************************************/
-
-
-
+        #region Function Declaration
+        
         /// <summary>
         /// 读取线圈
         /// </summary>
@@ -60,19 +54,10 @@ namespace HslCommunication.ModBus
         /// </summary>
         public const byte WriteRegister = 0x10;
 
+        #endregion
 
-
-
-
-
-        /*****************************************************************************************
-         * 
-         *    本服务器和客户端支持的异常返回
-         * 
-         *******************************************************************************************/
-
-
-
+        #region ErrCode Declaration
+        
         /// <summary>
         /// 不支持该功能码
         /// </summary>
@@ -90,16 +75,10 @@ namespace HslCommunication.ModBus
         /// </summary>
         public const byte FunctionCodeReadWriteException = 0x04;
 
-
-
-
-
-
-
-
-        #region Static Method
-
-
+        #endregion
+        
+        #region Static Helper Method
+        
         /// <summary>
         /// 将modbus指令打包成Modbus-Tcp指令
         /// </summary>
@@ -228,9 +207,5 @@ namespace HslCommunication.ModBus
 
 
         #endregion
-
-
-
-
     }
 }

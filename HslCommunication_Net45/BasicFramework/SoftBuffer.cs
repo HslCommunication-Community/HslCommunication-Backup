@@ -41,26 +41,26 @@ namespace HslCommunication.BasicFramework
 
         #endregion
 
-        #region Byte Support
+        #region Byte Operate Support
 
         /// <summary>
         /// 设置指定的位置的数据块，如果超出，则丢弃数据
         /// </summary>
         /// <param name="data">数据块信息</param>
-        /// <param name="index">存储的索引</param>
-        public void SetBytes( byte[] data, int index )
+        /// <param name="destIndex">目标存储的索引</param>
+        public void SetBytes( byte[] data, int destIndex )
         {
-            if (index < capacity && index >= 0 && data != null)
+            if (destIndex < capacity && destIndex >= 0 && data != null)
             {
                 hybirdLock.Enter( );
 
-                if ((data.Length + index) > buffer.Length)
+                if ((data.Length + destIndex) > buffer.Length)
                 {
-                    Array.Copy( data, 0, buffer, index, (buffer.Length - index) );
+                    Array.Copy( data, 0, buffer, destIndex, (buffer.Length - destIndex) );
                 }
                 else
                 {
-                    data.CopyTo( buffer, index );
+                    data.CopyTo( buffer, destIndex );
                 }
 
                 hybirdLock.Leave( );
@@ -71,24 +71,46 @@ namespace HslCommunication.BasicFramework
         /// 设置指定的位置的数据块，如果超出，则丢弃数据
         /// </summary>
         /// <param name="data">数据块信息</param>
-        /// <param name="index">存储的索引</param>
+        /// <param name="destIndex">目标存储的索引</param>
         /// <param name="length">准备拷贝的数据长度</param>
-        public void SetBytes( byte[] data, int index, int length )
+        public void SetBytes( byte[] data, int destIndex, int length )
         {
-            if (index < capacity && index >= 0 && data != null)
+            if (destIndex < capacity && destIndex >= 0 && data != null)
             {
                 if (length > data.Length) length = data.Length;
 
                 hybirdLock.Enter( );
 
-                if ((length + index) > buffer.Length)
+                if ((length + destIndex) > buffer.Length)
                 {
-                    Array.Copy( data, 0, buffer, index, (buffer.Length - index) );
+                    Array.Copy( data, 0, buffer, destIndex, (buffer.Length - destIndex) );
                 }
                 else
                 {
-                    Array.Copy( data, 0, buffer, index, length );
+                    Array.Copy( data, 0, buffer, destIndex, length );
                 }
+
+                hybirdLock.Leave( );
+            }
+        }
+
+        /// <summary>
+        /// 设置指定的位置的数据块，如果超出，则丢弃数据
+        /// </summary>
+        /// <param name="data">数据块信息</param>
+        /// <param name="sourceIndex">Data中的起始位置</param>
+        /// <param name="destIndex">目标存储的索引</param>
+        /// <param name="length">准备拷贝的数据长度</param>
+        /// <exception cref="IndexOutOfRangeException"></exception>
+        public void SetBytes( byte[] data, int sourceIndex, int destIndex, int length )
+        {
+            if (destIndex < capacity && destIndex >= 0 && data != null)
+            {
+                if (length > data.Length) length = data.Length;
+
+                hybirdLock.Enter( );
+
+                Array.Copy( data, sourceIndex, buffer, destIndex, length );
 
                 hybirdLock.Leave( );
             }

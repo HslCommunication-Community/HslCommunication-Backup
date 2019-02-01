@@ -50,6 +50,7 @@
     <Compile Include="..\HslCommunication_Net45\BasicFramework\SoftVersion.cs" Link="BasicFramework\SoftVersion.cs" />
     <Compile Include="..\HslCommunication_Net45\BasicFramework\SoftZipped.cs" Link="BasicFramework\SoftZipped.cs" />
     <Compile Include="..\HslCommunication_Net45\Core\Address\DeviceAddressBase.cs" Link="Core\Address\DeviceAddressBase.cs" />
+    <Compile Include="..\HslCommunication_Net45\Core\Address\ModbusAddress.cs" Link="Core\Address\ModbusAddress.cs" />
     <Compile Include="..\HslCommunication_Net45\Core\IMessage\AlienMessage.cs" Link="Core\IMessage\AlienMessage.cs" />
     <Compile Include="..\HslCommunication_Net45\Core\IMessage\AllenBradleyMessage.cs" Link="Core\IMessage\AllenBradleyMessage.cs" />
     <Compile Include="..\HslCommunication_Net45\Core\IMessage\EFORTMessage.cs" Link="Core\IMessage\EFORTMessage.cs" />
@@ -126,7 +127,6 @@
     <Compile Include="..\HslCommunication_Net45\LogNet\Logs\LogNetDateTime.cs" Link="LogNet\Logs\LogNetDateTime.cs" />
     <Compile Include="..\HslCommunication_Net45\LogNet\Logs\LogNetFileSize.cs" Link="LogNet\Logs\LogNetFileSize.cs" />
     <Compile Include="..\HslCommunication_Net45\LogNet\Logs\LogNetSingle.cs" Link="LogNet\Logs\LogNetSingle.cs" />
-    <Compile Include="..\HslCommunication_Net45\ModBus\ModbusAddress.cs" Link="ModBus\ModbusAddress.cs" />
     <Compile Include="..\HslCommunication_Net45\ModBus\ModbusInfo.cs" Link="ModBus\ModbusInfo.cs" />
     <Compile Include="..\HslCommunication_Net45\ModBus\ModBusMonitorAddress.cs" Link="ModBus\ModBusMonitorAddress.cs" />
     <Compile Include="..\HslCommunication_Net45\ModBus\ModBusState.cs" Link="ModBus\ModBusState.cs" />

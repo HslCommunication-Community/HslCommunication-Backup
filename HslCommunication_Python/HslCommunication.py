@@ -3322,7 +3322,6 @@ class MelsecMcAsciiNet(NetworkDeviceBase):
 			return self.Write( address, buffer )
 		else:
 			return self.WriteBool( address, [values] )
-        
 
 # 西门子的数据类
 class SiemensPLCS(Enum):
@@ -4040,7 +4039,7 @@ class OmronFinsNet(NetworkDoubleBase):
 		self.SA1 = value
 		self.handSingle[19] = value
 	handSingle = bytearray([0x46, 0x49, 0x4E, 0x53,0x00, 0x00, 0x00, 0x0C, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01])
-       
+
 	@staticmethod
 	def AnalysisAddress( address, isBit ):
 		result = OperateResult( )

@@ -844,7 +844,7 @@ namespace HslCommunication.Profinet.Siemens
                 // 语法标记，ANY -> Syntax tag, any
                 _PLCCommand[21 + ii * 12] = 0x10;
                 // 按字为单位 -> by word
-                _PLCCommand[22 + ii * 12] = 0x02;
+                _PLCCommand[22 + ii * 12] = 0x02; // (byte)(address[ii].Content1 == 0x1D ? 0x1D : address[ii].Content1 == 0x1C ? 0x1C : 0x02);
                 // 访问数据的个数 -> Number of Access data
                 _PLCCommand[23 + ii * 12] = (byte)(length[ii] / 256);
                 _PLCCommand[24 + ii * 12] = (byte)(length[ii] % 256);
