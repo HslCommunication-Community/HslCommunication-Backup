@@ -3702,7 +3702,7 @@ class SiemensS7Net(NetworkDeviceBase):
 		else :
 			result = OperateResult()
 			result.ErrorCode = read.ErrorCode
-			result.Message = "数据块长度校验失败"
+			result.Message = StringResources.Language.SiemensDataLengthCheckFailed
 			return result
 	
 	def Read( self, address, length ):
@@ -3755,7 +3755,7 @@ class SiemensS7Net(NetworkDeviceBase):
 		else:
 			result = OperateResult()
 			result.ErrorCode = read.ErrorCode
-			result.Message = "数据块长度校验失败"
+			result.Message = StringResources.Language.SiemensDataLengthCheckFailed
 			return result
 	def ReadBool( self, address ):
 		'''读取指定地址的bool数据'''
@@ -3828,7 +3828,7 @@ class SiemensFetchWriteNet(NetworkDeviceBase):
 					result.Content3 = int( adds[0][1:] )
 
 				if result.Content3 > 255:
-					result.Message = "DB块数据无法大于255"
+					result.Message = StringResources.Language.SiemensDBAddressNotAllowedLargerThan255
 					return result
 
 				result.Content2 = SiemensFetchWriteNet.CalculateAddressStarted( address[ address.find( '.' ) + 1:] )
@@ -3880,7 +3880,7 @@ class SiemensFetchWriteNet(NetworkDeviceBase):
 
 		if analysis.Content1 == 0x01 or analysis.Content1 == 0x06 or analysis.Content1 == 0x07:
 			if count % 2 != 0:
-				result.Message = "读取的数据长度必须为偶数"
+				result.Message = StringResources.Language.SiemensReadLengthMustBeEvenNumber
 				return result
 			else:
 				# 指定数据长度
@@ -3928,7 +3928,7 @@ class SiemensFetchWriteNet(NetworkDeviceBase):
 
 		if analysis.Content1 == 0x01 or analysis.Content1 == 0x06 or analysis.Content1 == 0x07:
 			if data.Length % 2 != 0:
-				result.Message = "写入的数据长度必须为偶数"
+				result.Message = StringResources.Language.SiemensReadLengthMustBeEvenNumber
 				return result
 			else:
 				# 指定数据长度
@@ -4074,7 +4074,7 @@ class OmronFinsNet(NetworkDoubleBase):
 				if len(splits) > 1:
 					result.Content2[2] = int(splits[1])
 					if result.Content2[2] > 15:
-						raise RuntimeError( "欧姆龙位地址必须0-15之间" )
+						raise RuntimeError( StringResources.Language.OmronAddressMustBeZeroToFiveteen )
 			else:
 				# 字操作
 				addr = int( address[1:] )
