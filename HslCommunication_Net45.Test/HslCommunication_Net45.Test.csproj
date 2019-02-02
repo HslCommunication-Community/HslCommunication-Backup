@@ -65,6 +65,7 @@
     <Compile Include="Core\Transfer\ReverseWordTransformTest3.cs" />
     <Compile Include="Documentation\Samples\Algorithms\ConnectPool.cs" />
     <Compile Include="Documentation\Samples\BasicFramework\SoftAnimation.cs" />
+    <Compile Include="Documentation\Samples\BasicFramework\SoftBufferExample.cs" />
     <Compile Include="Documentation\Samples\BasicFramework\SoftFileSaveBaseExample.cs" />
     <Compile Include="Documentation\Samples\Core\IReadWriteNet.cs" />
     <Compile Include="Core\Net\HslProtocolTest.cs" />

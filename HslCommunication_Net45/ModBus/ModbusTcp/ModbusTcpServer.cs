@@ -25,7 +25,7 @@ namespace HslCommunication.ModBus
     /// <item>线圈，功能码对应01，05，15</item>
     /// <item>离散输入，功能码对应02</item>
     /// <item>寄存器，功能码对应03，06，16</item>
-    /// <item>输入寄存器，功能码对应04</item>
+    /// <item>输入寄存器，功能码对应04，输入寄存器在服务器端可以实现读写的操作</item>
     /// </list>
     /// </remarks>
     /// <example>
@@ -41,17 +41,13 @@ namespace HslCommunication.ModBus
         /// </summary>
         public ModbusTcpServer( )
         {
-            Coils = new bool[DataPoolLength];
-            InputCoils = new bool[DataPoolLength];
-
+            // 四个数据池初始化，线圈，输入线圈，寄存器，只读寄存器
             coilBuffer = new SoftBuffer( DataPoolLength );
+            inputBuffer = new SoftBuffer( DataPoolLength );
             registerBuffer = new SoftBuffer( DataPoolLength * 2 );
             inputRegisterBuffer = new SoftBuffer( DataPoolLength * 2 );
             
-            hybirdLockCoil = new SimpleHybirdLock( );
-            hybirdLockInput = new SimpleHybirdLock( );
             lock_trusted_clients = new SimpleHybirdLock( );
-
             subscriptions = new List<ModBusMonitorAddress>( );
             subcriptionHybirdLock = new SimpleHybirdLock( );
             byteTransform = new ReverseWordTransform( );
@@ -65,11 +61,17 @@ namespace HslCommunication.ModBus
 
         #region Public Members
 
+        /// <summary>
+        /// 当接收到来自tcp客户端或是串口的数据的时候出发的委托
+        /// </summary>
+        /// <param name="modbusTcpServer">本服务器对象</param>
+        /// <param name="data">实际的数据信息</param>
+        public delegate void DataReceivedDelegate( ModbusTcpServer modbusTcpServer, byte[] data );
 
         /// <summary>
         /// 接收到数据的时候就行触发
         /// </summary>
-        public event Action<ModbusTcpServer, byte[]> OnDataReceived;
+        public event DataReceivedDelegate OnDataReceived;
 
         /// <summary>
         /// 当前在线的客户端的数量
@@ -110,14 +112,9 @@ namespace HslCommunication.ModBus
         #endregion
 
         #region Data Pool
-
-        // 数据池，用来模拟真实的Modbus数据区块
-        private bool[] Coils;                         // 线圈池
-        private SimpleHybirdLock hybirdLockCoil;      // 线圈池的同步锁
-        private bool[] InputCoils;                    // 只读的输入线圈
-        private SimpleHybirdLock hybirdLockInput;     // 只读输入线圈的同步锁
-
-        private SoftBuffer coilBuffer;
+        
+        private SoftBuffer coilBuffer;                // 线圈的数据池
+        private SoftBuffer inputBuffer;               // 离散输入的数据池
         private SoftBuffer registerBuffer;            // 寄存器的数据池
         private SoftBuffer inputRegisterBuffer;       // 输入寄存器的数据池
 
@@ -149,21 +146,9 @@ namespace HslCommunication.ModBus
         {
             byte[] buffer = new byte[DataPoolLength * 6];
             // 存储线圈
-            hybirdLockCoil.Enter( );
-            for (int i = 0; i < DataPoolLength; i++)
-            {
-                if (Coils[i]) buffer[i] = 0x01;
-            }
-            hybirdLockCoil.Leave( );
-
+            Array.Copy( coilBuffer.GetBytes( ), 0, buffer, 0, DataPoolLength );
             // 存储离散信息
-            hybirdLockInput.Enter( );
-            for (int i = 0; i < DataPoolLength; i++)
-            {
-                if (InputCoils[i]) buffer[DataPoolLength + i] = 0x01;
-            }
-            hybirdLockInput.Leave( );
-
+            Array.Copy( inputBuffer.GetBytes( ), 0, buffer, DataPoolLength, DataPoolLength );
             // 存储寄存器
             Array.Copy( registerBuffer.GetBytes( ), 0, buffer, DataPoolLength * 2, DataPoolLength * 2 );
             // 存储输入寄存器
@@ -193,22 +178,8 @@ namespace HslCommunication.ModBus
             byte[] buffer = System.IO.File.ReadAllBytes( path );
             if (buffer.Length < DataPoolLength * 6) throw new Exception( "File is not correct" );
 
-            // 线圈数据加载
-            hybirdLockCoil.Enter( );
-            for (int i = 0; i < DataPoolLength; i++)
-            {
-                if (buffer[i] == 0x01) Coils[i] = true;
-            }
-            hybirdLockCoil.Leave( );
-
-            // 离散寄存器信息加载
-            hybirdLockInput.Enter( );
-            for (int i = 0; i < DataPoolLength; i++)
-            {
-                if (buffer[DataPoolLength + i] == 0x01) InputCoils[i] = true;
-            }
-            hybirdLockInput.Leave( );
-
+            coilBuffer.SetBytes( buffer, 0, 0, DataPoolLength );
+            inputBuffer.SetBytes( buffer, DataPoolLength, 0, DataPoolLength );
             registerBuffer.SetBytes( buffer, DataPoolLength * 2, 0, DataPoolLength * 2 );
             inputRegisterBuffer.SetBytes( buffer, DataPoolLength * 4, 0, DataPoolLength * 2 );
         }
@@ -216,9 +187,7 @@ namespace HslCommunication.ModBus
         #endregion
 
         #region Coil Read Write
-
-
-
+        
         /// <summary>
         /// 读取地址的线圈的通断情况
         /// </summary>
@@ -228,11 +197,7 @@ namespace HslCommunication.ModBus
         public bool ReadCoil( string address )
         {
             ushort add = ushort.Parse( address );
-            bool result = false;
-            hybirdLockCoil.Enter( );
-            result = Coils[add];
-            hybirdLockCoil.Leave( );
-            return result;
+            return coilBuffer.GetByte( add ) != 0x00;
         }
 
 
@@ -246,17 +211,7 @@ namespace HslCommunication.ModBus
         public bool[] ReadCoil( string address, ushort length )
         {
             ushort add = ushort.Parse( address );
-            bool[] result = new bool[length];
-            hybirdLockCoil.Enter( );
-            for (int i = add; i < add + length; i++)
-            {
-                if (i <= ushort.MaxValue)
-                {
-                    result[i - add] = Coils[i];
-                }
-            }
-            hybirdLockCoil.Leave( );
-            return result;
+            return coilBuffer.GetBytes( add, length ).Select( m => m != 0x00 ).ToArray( );
         }
 
         /// <summary>
@@ -269,9 +224,7 @@ namespace HslCommunication.ModBus
         public void WriteCoil( string address, bool data )
         {
             ushort add = ushort.Parse( address );
-            hybirdLockCoil.Enter( );
-            Coils[add] = data;
-            hybirdLockCoil.Leave( );
+            coilBuffer.SetValue( data ? 0x01 : 0x00, add );
         }
 
         /// <summary>
@@ -284,17 +237,9 @@ namespace HslCommunication.ModBus
         public void WriteCoil( string address, bool[] data )
         {
             if (data == null) return;
-            ushort add = ushort.Parse( address );
 
-            hybirdLockCoil.Enter( );
-            for (int i = add; i < add + data.Length; i++)
-            {
-                if (i <= ushort.MaxValue)
-                {
-                    Coils[i] = data[i - add];
-                }
-            }
-            hybirdLockCoil.Leave( );
+            ushort add = ushort.Parse( address );
+            coilBuffer.SetBytes( data.Select( m => (byte)(m ? 0x01 : 0x00) ).ToArray( ), add );
         }
 
 
@@ -311,12 +256,8 @@ namespace HslCommunication.ModBus
         /// <exception cref="IndexOutOfRangeException"></exception>
         public bool ReadDiscrete( string address )
         {
-            bool result = false;
             ushort add = ushort.Parse( address );
-            hybirdLockInput.Enter( );
-            result = InputCoils[add];
-            hybirdLockInput.Leave( );
-            return result;
+            return inputBuffer.GetByte( add ) != 0x00;
         }
 
 
@@ -329,18 +270,8 @@ namespace HslCommunication.ModBus
         /// <exception cref="IndexOutOfRangeException"></exception>
         public bool[] ReadDiscrete( string address, ushort length )
         {
-            bool[] result = new bool[length];
             ushort add = ushort.Parse( address );
-            hybirdLockInput.Enter( );
-            for (int i = add; i < add + length; i++)
-            {
-                if (i <= ushort.MaxValue)
-                {
-                    result[i - add] = InputCoils[i];
-                }
-            }
-            hybirdLockInput.Leave( );
-            return result;
+            return inputBuffer.GetBytes( add, length ).Select( m => m != 0x00 ).ToArray( );
         }
 
         /// <summary>
@@ -352,9 +283,7 @@ namespace HslCommunication.ModBus
         public void WriteDiscrete( string address, bool data )
         {
             ushort add = ushort.Parse( address );
-            hybirdLockInput.Enter( );
-            InputCoils[add] = data;
-            hybirdLockInput.Leave( );
+            inputBuffer.SetValue( data ? 0x01 : 0x00, add );
         }
 
         /// <summary>
@@ -366,16 +295,9 @@ namespace HslCommunication.ModBus
         public void WriteDiscrete( string address, bool[] data )
         {
             if (data == null) return;
+
             ushort add = ushort.Parse( address );
-            hybirdLockInput.Enter( );
-            for (int i = add; i < add + data.Length; i++)
-            {
-                if (i <= ushort.MaxValue)
-                {
-                    InputCoils[i] = data[i - add];
-                }
-            }
-            hybirdLockInput.Leave( );
+            inputBuffer.SetBytes( data.Select( m => (byte)(m ? 0x01 : 0x00) ).ToArray( ), add );
         }
 
 

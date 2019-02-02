@@ -24,10 +24,10 @@ namespace HslCommunication_Net45.Test.Documentation.Samples.Modbus
         public void Example1( )
         {
             
-            modbusServer.WriteCoil( "100", true );                              // 往线圈100地址写入true
-            modbusServer.WriteCoil( "100", new bool[] { true, false, true } );  // 往线圈100-102的地址写入true,false,true
-            bool coil_100 = modbusServer.ReadCoil( "100" );                     // 读取线圈100的值
-            bool[] coil_100_102 = modbusServer.ReadCoil( "100", 3 );            // 读取线圈100-102的值
+            modbusServer.WriteCoil( "100", true );                                     // 往线圈100地址写入true
+            modbusServer.WriteCoil( "100", new bool[] { true, false, true } );         // 往线圈100-102的地址写入true,false,true
+            bool coil_100 = modbusServer.ReadCoil( "100" );                            // 读取线圈100的值
+            bool[] coil_100_102 = modbusServer.ReadCoil( "100", 3 );                   // 读取线圈100-102的值
 
 
             
@@ -38,20 +38,24 @@ namespace HslCommunication_Net45.Test.Documentation.Samples.Modbus
 
 
             
-            modbusServer.Write( "100", (short)1234 );                              // 往寄存器100写入1234值
-            modbusServer.Write( "100", new short[] { 1234, -1234, 567 } );         // 往寄存器100-102写入1234,-1234,567
-            short reg_100 = modbusServer.ReadInt16( "100" );                       // 读取寄存器100的值
-            short[] reg_100_102 = modbusServer.ReadInt16( "100", 3 );              // 读取寄存器100-102的值
+            modbusServer.Write( "100", (short)1234 );                                  // 往寄存器100写入1234值
+            modbusServer.Write( "100", new short[] { 1234, -1234, 567 } );             // 往寄存器100-102写入1234,-1234,567
+            short reg_100 = modbusServer.ReadInt16( "100" );                           // 读取寄存器100的值
+            short[] reg_100_102 = modbusServer.ReadInt16( "100", 3 );                  // 读取寄存器100-102的值
 
 
             
-            modbusServer.Write( "x=4;100", (short)1234 );                           // 往输入寄存器100写入1234值
-            modbusServer.Write( "x=4;100", new short[] { 1234, -1234, 567 } );      // 往输入寄存器00-102写入1234,-1234,567
-            short intReg_100 = modbusServer.ReadInt16( "x=4;100" );                 // 读取输入寄存器100的值
-            short[] intReg_100_102 = modbusServer.ReadInt16( "x=4;100", 3 );        // 读取输入寄存器100-102的值
+            modbusServer.Write( "x=4;100", (short)1234 );                              // 往输入寄存器100写入1234值
+            modbusServer.Write( "x=4;100", new short[] { 1234, -1234, 567 } );         // 往输入寄存器00-102写入1234,-1234,567
+            short intReg_100 = modbusServer.ReadInt16( "x=4;100" );                    // 读取输入寄存器100的值
+            short[] intReg_100_102 = modbusServer.ReadInt16( "x=4;100", 3 );           // 读取输入寄存器100-102的值
 
 
-            // 寄存器其他的数据类型写入，请参照Write方法的重载，支持short,ushort,int,uint,long,ulong,float,double,string类型数据的读写
+            // 寄存器其他的数据类型写入，请参照Write方法的重载，支持byte数组,short,ushort,int,uint,long,ulong,float,double,string类型数据的读写
+
+
+            // 也支持多字节的数据的情况下调整大小端
+            modbusServer.DataFormat = HslCommunication.Core.DataFormat.ABCD;    // 默认是ABCD，这个格式和modbus-slave的排列是一致的
 
         }
 

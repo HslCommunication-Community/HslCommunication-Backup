@@ -13,6 +13,10 @@ namespace HslCommunication.BasicFramework
     /// 这个类可以实现什么功能呢，就是你有一个大的数组，作为你的应用程序的中间数据池，允许你往byte[]数组里存放指定长度的子byte[]数组，也允许从里面拿数据，
     /// 这些操作都是线程安全的，当然，本类扩展了一些额外的方法支持，也可以直接赋值或获取基本的数据类型对象。
     /// </remarks>
+    /// <example>
+    /// 此处举例一些数据的读写说明，可以此处的数据示例。
+    /// <code lang="cs" source="HslCommunication_Net45.Test\Documentation\Samples\BasicFramework\SoftBufferExample.cs" region="SoftBufferExample1" title="SoftBuffer示例" />
+    /// </example>
     public class SoftBuffer
     {
         #region Constructor
@@ -149,7 +153,17 @@ namespace HslCommunication.BasicFramework
         #endregion
 
         #region BCL Set Support
-        
+
+        /// <summary>
+        /// 设置byte类型的数据到缓存区
+        /// </summary>
+        /// <param name="value">byte数值</param>
+        /// <param name="index">索引位置</param>
+        public void SetValue(byte value, int index )
+        {
+            SetBytes( new byte[value], index );
+        }
+ 
         /// <summary>
         /// 设置short类型的数据到缓存区
         /// </summary>
@@ -313,6 +327,16 @@ namespace HslCommunication.BasicFramework
         #endregion
 
         #region BCL Get Support
+
+        /// <summary>
+        /// 获取byte类型的数据
+        /// </summary>
+        /// <param name="index">索引位置</param>
+        /// <returns>byte数值</returns>
+        public byte GetByte( int index )
+        {
+            return GetBytes( index, 1 )[0];
+        }
 
         /// <summary>
         /// 获取short类型的数组到缓存区
@@ -490,6 +514,35 @@ namespace HslCommunication.BasicFramework
             return GetUInt64( index, 1 )[0];
         }
 
+        #endregion
+
+        #region Customer Support
+
+        /// <summary>
+        /// 读取自定义类型的数据，需要规定解析规则
+        /// </summary>
+        /// <typeparam name="T">类型名称</typeparam>
+        /// <param name="index">起始索引</param>
+        /// <returns>自定义的数据类型</returns>
+        public T GetCustomer<T>( int index ) where T : IDataTransfer, new()
+        {
+            T Content = new T( );
+            byte[] read = GetBytes( index, Content.ReadCount );
+            Content.ParseSource( read );
+            return Content;
+        }
+
+        /// <summary>
+        /// 写入自定义类型的数据到缓存中去，需要规定生成字节的方法
+        /// </summary>
+        /// <typeparam name="T">自定义类型</typeparam>
+        /// <param name="data">实例对象</param>
+        /// <param name="index">起始地址</param>
+        public void SetCustomer<T>( T data, int index ) where T : IDataTransfer, new()
+        {
+            SetBytes( data.ToSource( ), index );
+        }
+        
         #endregion
 
         #region Private Member
