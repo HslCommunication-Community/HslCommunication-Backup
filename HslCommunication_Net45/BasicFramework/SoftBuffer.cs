@@ -542,7 +542,20 @@ namespace HslCommunication.BasicFramework
         {
             SetBytes( data.ToSource( ), index );
         }
-        
+
+        #endregion
+
+        #region Public Properties
+
+        /// <summary>
+        /// 获取或设置当前的数据缓存类的解析规则
+        /// </summary>
+        public IByteTransform ByteTransform
+        {
+            get => byteTransform;
+            set => byteTransform = value;
+        }
+
         #endregion
 
         #region Private Member
