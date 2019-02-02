@@ -264,7 +264,7 @@ namespace HslCommunication.Serial
                 }
             }
 
-            //resetEvent.Set( );
+            // resetEvent.Set( );
             byte[] result = ms.ToArray( );
             ms.Dispose( );
             return OperateResult.CreateSuccessResult( result );
@@ -315,7 +315,7 @@ namespace HslCommunication.Serial
         }
 
         /// <summary>
-        /// 是否在发送数据前清空缓冲数据。
+        /// 是否在发送数据前清空缓冲数据，默认是false
         /// </summary>
         public bool IsClearCacheBeforeRead
         {
@@ -326,8 +326,7 @@ namespace HslCommunication.Serial
         #endregion
 
         #region Private Member
-
-
+        
         private SerialPort SP_ReadData = null;                    // 串口交互的核心
         private SimpleHybirdLock hybirdLock;                      // 数据交互的锁
         private ILogNet logNet;                                   // 日志存储
