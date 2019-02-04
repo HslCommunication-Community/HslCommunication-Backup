@@ -268,6 +268,12 @@ namespace HslCommunication_Net45.Test.BasicFramework
             Assert.IsTrue( SoftBasic.IsTwoBytesEquel( b2, buffer ) );
         }
 
+        [TestMethod]
+        public void GetEnumFromStringTest( )
+        {
+            System.IO.FileMode fileMode = SoftBasic.GetEnumFromString<System.IO.FileMode>( "Append" );
+            Assert.IsTrue( fileMode == System.IO.FileMode.Append );
+        }
 
     }
 

@@ -313,8 +313,7 @@ namespace HslCommunication.BasicFramework
         #endregion
 
         #region Enum About
-
-
+        
         /// <summary>
         /// 获取一个枚举类型的所有枚举值，可直接应用于组合框数据 ->
         /// Gets all the enumeration values of an enumeration type that can be applied directly to the combo box data
@@ -327,6 +326,21 @@ namespace HslCommunication.BasicFramework
         public static TEnum[] GetEnumValues<TEnum>( ) where TEnum : struct
         {
             return (TEnum[])Enum.GetValues( typeof( TEnum ) );
+        }
+
+        /// <summary>
+        /// 从字符串的枚举值数据转换成真实的枚举值数据 ->
+        /// Convert enumeration value data from strings to real enumeration value data
+        /// </summary>
+        /// <typeparam name="TEnum">枚举的类型值</typeparam>
+        /// <param name="value">枚举的字符串的数据值</param>
+        /// <returns>真实的枚举值</returns>
+        /// <example>
+        /// <code lang="cs" source="HslCommunication_Net45.Test\Documentation\Samples\BasicFramework\SoftBasicExample.cs" region="GetEnumFromStringExample" title="GetEnumFromString示例" />
+        /// </example>
+        public static TEnum GetEnumFromString<TEnum>(string value ) where TEnum : struct
+        {
+            return (TEnum)Enum.Parse( typeof( TEnum ), value );
         }
 
         #endregion
