@@ -586,6 +586,18 @@ namespace HslCommunication
     ///             <item>VIP群将免费使用全新的控件库，谢谢支持。地址：https://github.com/dathlin/HslControlsDemo </item>
     ///         </list>
     ///     </revision>
+    ///     <revision date="2019-2-7" version="5.7.3" author="Richard.Hu">
+    ///         <list type="bullet">
+    ///             <item>欧姆龙读写机制更改，报警的异常不再视为失败，仍然可以解析数据。</item>
+    ///             <item>Modbus地址优化，Modbus服务器的地址读写优化。</item>
+    ///             <item>新增一个数据池类，SoftBuffer，主要用来缓存字节数组内存的，支持BCL数据类型读写。</item>
+    ///             <item>Modbus服务器的数据池更新，使用了最新的数据池类SoftBuffer。</item>
+    ///             <item>SoftBasic类新增一个GetEnumFromString方法，支持从字符串直接生成枚举值，已通过单元测试。</item>
+    ///             <item>新增一个机器人的读取接口信息IRobotNet，统一化所有的机器人的数据读取。</item>
+    ///             <item>Demo程序中增加modbus的服务器功能。</item>
+    ///             <item>VIP群将免费使用全新的控件库，谢谢支持。地址：https://github.com/dathlin/HslControlsDemo </item>
+    ///         </list>
+    ///     </revision>
     /// </revisionHistory>
     [System.Runtime.CompilerServices.CompilerGeneratedAttribute( )]
     public class NamespaceDoc

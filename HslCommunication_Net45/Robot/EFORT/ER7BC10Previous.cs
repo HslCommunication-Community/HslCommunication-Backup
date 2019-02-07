@@ -13,7 +13,6 @@ namespace HslCommunication.Robot.EFORT
     /// </summary>
     public class ER7BC10Previous : NetworkDoubleBase<EFORTMessagePrevious, RegularByteTransform>, IRobotNet
     {
-
         #region Constructor
 
         /// <summary>
