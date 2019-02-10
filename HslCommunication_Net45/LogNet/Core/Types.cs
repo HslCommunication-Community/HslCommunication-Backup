@@ -146,6 +146,11 @@ namespace HslCommunication.LogNet
         public string KeyWord { get; set; }
 
         /// <summary>
+        /// 是否取消写入到文件中去，在事件BeforeSaveToFile触发的时候捕获即可设置。
+        /// </summary>
+        public bool Cancel { get; set; }
+
+        /// <summary>
         /// 返回表示当前对象的字符串
         /// </summary>
         /// <returns>字符串信息</returns>

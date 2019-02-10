@@ -386,6 +386,9 @@ namespace HslCommunication.LogNet
                         isSave = !filtrateKeyword.Contains( current.KeyWord );
                         filtrateLock.Leave( );
 
+                        // 检查是否被设置为强制不存储
+                        if (current.Cancel) isSave = false;
+
                         // 如果需要存储的就过滤掉
                         if (isSave)
                         {
