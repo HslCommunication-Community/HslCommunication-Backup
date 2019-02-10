@@ -98,9 +98,9 @@
             this.label4.AutoSize = true;
             this.label4.Location = new System.Drawing.Point(467, 9);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(68, 17);
+            this.label4.Size = new System.Drawing.Size(66, 17);
             this.label4.TabIndex = 10;
-            this.label4.Text = "使用协议：";
+            this.label4.Text = "Protocols:";
             // 
             // linkLabel1
             // 
@@ -118,9 +118,9 @@
             this.label2.AutoSize = true;
             this.label2.Location = new System.Drawing.Point(12, 9);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(68, 17);
+            this.label2.Size = new System.Drawing.Size(53, 17);
             this.label2.TabIndex = 8;
-            this.label2.Text = "博客地址：";
+            this.label2.Text = "blogs：";
             // 
             // panel1
             // 
@@ -174,9 +174,9 @@
             this.label6.AutoSize = true;
             this.label6.Location = new System.Drawing.Point(8, 50);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(44, 17);
+            this.label6.Size = new System.Drawing.Size(36, 17);
             this.label6.TabIndex = 6;
-            this.label6.Text = "令牌：";
+            this.label6.Text = "pwd:";
             // 
             // button2
             // 
@@ -185,7 +185,7 @@
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(91, 28);
             this.button2.TabIndex = 5;
-            this.button2.Text = "断开连接";
+            this.button2.Text = "disconnect";
             this.button2.UseVisualStyleBackColor = true;
             this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
@@ -195,7 +195,7 @@
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(91, 28);
             this.button1.TabIndex = 4;
-            this.button1.Text = "连接";
+            this.button1.Text = "connect";
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
@@ -212,9 +212,9 @@
             this.label3.AutoSize = true;
             this.label3.Location = new System.Drawing.Point(251, 17);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(56, 17);
+            this.label3.Size = new System.Drawing.Size(36, 17);
             this.label3.TabIndex = 2;
-            this.label3.Text = "端口号：";
+            this.label3.Text = "port:";
             // 
             // textBox1
             // 
@@ -229,9 +229,9 @@
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(8, 17);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(56, 17);
+            this.label1.Size = new System.Drawing.Size(55, 17);
             this.label1.TabIndex = 0;
-            this.label1.Text = "Ip地址：";
+            this.label1.Text = "Ip addr:";
             // 
             // panel2
             // 
@@ -281,7 +281,7 @@
             this.button11.Name = "button11";
             this.button11.Size = new System.Drawing.Size(91, 28);
             this.button11.TabIndex = 30;
-            this.button11.Text = "列表长度";
+            this.button11.Text = "list length";
             this.button11.UseVisualStyleBackColor = true;
             this.button11.Click += new System.EventHandler(this.button11_Click);
             // 
@@ -291,7 +291,7 @@
             this.button10.Name = "button10";
             this.button10.Size = new System.Drawing.Size(91, 28);
             this.button10.TabIndex = 29;
-            this.button10.Text = "列表收缩";
+            this.button10.Text = "list shrink";
             this.button10.UseVisualStyleBackColor = true;
             this.button10.Click += new System.EventHandler(this.button10_Click);
             // 
@@ -301,7 +301,7 @@
             this.button9.Name = "button9";
             this.button9.Size = new System.Drawing.Size(91, 28);
             this.button9.TabIndex = 28;
-            this.button9.Text = "列表添加";
+            this.button9.Text = "list add";
             this.button9.UseVisualStyleBackColor = true;
             this.button9.Click += new System.EventHandler(this.button9_Click);
             // 
@@ -309,9 +309,9 @@
             // 
             this.button8.Location = new System.Drawing.Point(367, 234);
             this.button8.Name = "button8";
-            this.button8.Size = new System.Drawing.Size(91, 28);
+            this.button8.Size = new System.Drawing.Size(110, 28);
             this.button8.TabIndex = 27;
-            this.button8.Text = "自定义命令";
+            this.button8.Text = "customer";
             this.button8.UseVisualStyleBackColor = true;
             this.button8.Click += new System.EventHandler(this.button8_Click);
             // 
@@ -321,7 +321,7 @@
             this.button7.Name = "button7";
             this.button7.Size = new System.Drawing.Size(91, 28);
             this.button7.TabIndex = 26;
-            this.button7.Text = "清空";
+            this.button7.Text = "clear";
             this.button7.UseVisualStyleBackColor = true;
             // 
             // textBox8
@@ -338,9 +338,9 @@
             this.label8.AutoSize = true;
             this.label8.Location = new System.Drawing.Point(719, 241);
             this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(44, 17);
+            this.label8.Size = new System.Drawing.Size(47, 17);
             this.label8.TabIndex = 24;
-            this.label8.Text = "耗时：";
+            this.label8.Text = "spend:";
             // 
             // textBox9
             // 
@@ -355,9 +355,9 @@
             this.label12.AutoSize = true;
             this.label12.Location = new System.Drawing.Point(583, 241);
             this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(44, 17);
+            this.label12.Size = new System.Drawing.Size(51, 17);
             this.label12.TabIndex = 22;
-            this.label12.Text = "次数：";
+            this.label12.Text = "times：";
             // 
             // button4
             // 
@@ -365,7 +365,7 @@
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(91, 28);
             this.button4.TabIndex = 21;
-            this.button4.Text = "读取";
+            this.button4.Text = "request";
             this.button4.UseVisualStyleBackColor = true;
             this.button4.Click += new System.EventHandler(this.button4_Click_1);
             // 
@@ -383,9 +383,9 @@
             this.label13.AutoSize = true;
             this.label13.Location = new System.Drawing.Point(8, 269);
             this.label13.Name = "label13";
-            this.label13.Size = new System.Drawing.Size(44, 17);
+            this.label13.Size = new System.Drawing.Size(41, 17);
             this.label13.TabIndex = 20;
-            this.label13.Text = "数据：";
+            this.label13.Text = "text：";
             // 
             // textBox11
             // 
@@ -400,9 +400,9 @@
             this.label14.AutoSize = true;
             this.label14.Location = new System.Drawing.Point(8, 241);
             this.label14.Name = "label14";
-            this.label14.Size = new System.Drawing.Size(56, 17);
+            this.label14.Size = new System.Drawing.Size(40, 17);
             this.label14.TabIndex = 17;
-            this.label14.Text = "关键字：";
+            this.label14.Text = "key：";
             // 
             // textBox7
             // 
@@ -435,9 +435,9 @@
             this.label10.AutoSize = true;
             this.label10.Location = new System.Drawing.Point(173, 186);
             this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(44, 17);
+            this.label10.Size = new System.Drawing.Size(51, 17);
             this.label10.TabIndex = 13;
-            this.label10.Text = "次数：";
+            this.label10.Text = "times：";
             // 
             // button3
             // 
@@ -445,7 +445,7 @@
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(91, 28);
             this.button3.TabIndex = 12;
-            this.button3.Text = "写key";
+            this.button3.Text = "write key";
             this.button3.UseVisualStyleBackColor = true;
             this.button3.Click += new System.EventHandler(this.button3_Click);
             // 
@@ -463,9 +463,9 @@
             this.label9.AutoSize = true;
             this.label9.Location = new System.Drawing.Point(8, 39);
             this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(44, 17);
+            this.label9.Size = new System.Drawing.Size(41, 17);
             this.label9.TabIndex = 11;
-            this.label9.Text = "数据：";
+            this.label9.Text = "text：";
             // 
             // textBox5
             // 
@@ -480,9 +480,9 @@
             this.label7.AutoSize = true;
             this.label7.Location = new System.Drawing.Point(8, 11);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(56, 17);
+            this.label7.Size = new System.Drawing.Size(40, 17);
             this.label7.TabIndex = 7;
-            this.label7.Text = "关键字：";
+            this.label7.Text = "key：";
             // 
             // FormRedisClient
             // 
@@ -500,7 +500,7 @@
             this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.Name = "FormRedisClient";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "Redis网络客户端";
+            this.Text = "Redis Client Test";
             this.Load += new System.EventHandler(this.FormClient_Load);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
