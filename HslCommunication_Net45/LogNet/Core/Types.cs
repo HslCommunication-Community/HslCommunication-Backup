@@ -61,7 +61,7 @@ namespace HslCommunication.LogNet
 
 
     #endregion
-    
+
     #region Message Degree
 
     /// <summary>
@@ -110,9 +110,9 @@ namespace HslCommunication.LogNet
         /// <summary>
         /// 默认的无参构造器
         /// </summary>
-        public HslMessageItem()
+        public HslMessageItem( )
         {
-            Id = Interlocked.Increment(ref IdNumber);
+            Id = Interlocked.Increment( ref IdNumber );
         }
 
         /// <summary>
@@ -144,7 +144,7 @@ namespace HslCommunication.LogNet
         /// 消息的关键字
         /// </summary>
         public string KeyWord { get; set; }
-        
+
         /// <summary>
         /// 返回表示当前对象的字符串
         /// </summary>
@@ -153,11 +153,11 @@ namespace HslCommunication.LogNet
         {
             if (string.IsNullOrEmpty( KeyWord ))
             {
-                return $"[{Degree}] {Time.ToString( "yyyy-MM-dd HH:mm:ss.fff" )} Thread [{ThreadId.ToString( "D2" )}] {Text}";
+                return $"[{Degree}] {Time.ToString( "yyyy-MM-dd HH:mm:ss.fff" )} Thread [{ThreadId.ToString( "D3" )}] {Text}";
             }
             else
             {
-                return $"[{Degree}] {Time.ToString( "yyyy-MM-dd HH:mm:ss.fff" )} Thread [{ThreadId.ToString( "D2" )}] {KeyWord} : {Text}";
+                return $"[{Degree}] {Time.ToString( "yyyy-MM-dd HH:mm:ss.fff" )} Thread [{ThreadId.ToString( "D3" )}] {KeyWord} : {Text}";
             }
         }
 
@@ -165,13 +165,12 @@ namespace HslCommunication.LogNet
         /// 返回表示当前对象的字符串，剔除了关键字
         /// </summary>
         /// <returns>字符串信息</returns>
-        public string ToStringWithoutKeyword()
+        public string ToStringWithoutKeyword( )
         {
-            return $"[{Degree}] {Time.ToString( "yyyy-MM-dd HH:mm:ss.fff" )} Thread [{ThreadId.ToString( "D2" )}] {Text}";
+            return $"[{Degree}] {Time.ToString( "yyyy-MM-dd HH:mm:ss.fff" )} Thread [{ThreadId.ToString( "D3" )}] {Text}";
         }
     }
 
     #endregion
-
-
+    
 }
