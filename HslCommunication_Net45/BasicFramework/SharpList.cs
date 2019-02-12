@@ -21,10 +21,7 @@ namespace HslCommunication.BasicFramework
         /// <param name="appendLast">是否从最后一个数添加</param>
         public SharpList( int count, bool appendLast = false )
         {
-            if (count > 8192)
-            {
-                capacity = 4096;
-            }
+            if (count > 8192) capacity = 4096;
 
             array = new T[capacity + count];
             hybirdLock = new SimpleHybirdLock( );
@@ -39,13 +36,7 @@ namespace HslCommunication.BasicFramework
         /// <summary>
         /// 获取数据的个数
         /// </summary>
-        public int Count
-        {
-            get
-            {
-                return count;
-            }
-        }
+        public int Count => count;
 
         #endregion
 
