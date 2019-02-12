@@ -82,8 +82,7 @@ namespace HslCommunication.BasicFramework
         #endregion
 
         #region DataSize Format
-
-
+        
         /// <summary>
         /// 从一个字节大小返回带单位的描述
         /// </summary>
@@ -116,6 +115,38 @@ namespace HslCommunication.BasicFramework
             }
         }
 
+        #endregion
+
+        #region TimeSpan Format
+
+        /// <summary>
+        /// 从一个时间差返回带单位的描述
+        /// </summary>
+        /// <param name="ts">实际的时间差</param>
+        /// <returns>最终的字符串值</returns>
+        /// <example>
+        /// 比如说我们获取了一个时间差信息
+        /// <code lang="cs" source="HslCommunication_Net45.Test\Documentation\Samples\BasicFramework\SoftBasicExample.cs" region="GetTimeSpanDescriptionExample" title="GetTimeSpanDescription示例" />
+        /// </example>
+        public static string GetTimeSpanDescription( TimeSpan ts )
+        {
+            if (ts.TotalSeconds <= 60)
+            {
+                return (int)ts.TotalSeconds + " 秒";
+            }
+            else if (ts.TotalMinutes <= 60)
+            {
+                return ts.TotalMinutes.ToString( "F1" ) + " 分钟";
+            }
+            else if (ts.TotalHours <= 24)
+            {
+                return ts.TotalHours.ToString( "F1" ) + " 小时";
+            }
+            else
+            {
+                return ts.TotalDays.ToString( "F1" ) + " 天";
+            }
+        }
 
         #endregion
 

@@ -85,6 +85,19 @@ namespace HslCommunication_Net45.Test.Documentation.Samples.BasicFramework
             #endregion
         }
 
+        public void GetTimeSpanDescriptionExample( )
+        {
+            #region GetTimeSpanDescriptionExample
+
+            string size = SoftBasic.GetTimeSpanDescription( TimeSpan.FromMinutes( 12.3d ) );
+
+            // 12.3 分钟
+            Console.WriteLine( size );
+
+
+            #endregion
+        }
+
         public void AddArrayDataExample( )
         {
             #region AddArrayDataExample
