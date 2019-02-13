@@ -598,6 +598,17 @@ namespace HslCommunication
     ///             <item>VIP群将免费使用全新的控件库，谢谢支持。地址：https://github.com/dathlin/HslControlsDemo </item>
     ///         </list>
     ///     </revision>
+    ///     <revision date="2019-2-13" version="5.7.4" author="Richard.Hu">
+    ///         <list type="bullet">
+    ///             <item>日志存储的线程号格式化改为D3，也即三位有效数字。</item>
+    ///             <item>日志存储事件BeforeSaveToFile里允许设置日志Cancel属性，强制当前的记录不存储。</item>
+    ///             <item>JSON库更新到12.0.1版本。</item>
+    ///             <item>SoftBasic新增一个GetTimeSpanDescription方法，用来将时间差转换成文本的方法。</item>
+    ///             <item>调整日志分析控件不随字体变化而变化。</item>
+    ///             <item>其他的代码精简优化。</item>
+    ///             <item>VIP群将免费使用全新的控件库，谢谢支持。地址：https://github.com/dathlin/HslControlsDemo </item>
+    ///         </list>
+    ///     </revision>
     /// </revisionHistory>
     [System.Runtime.CompilerServices.CompilerGeneratedAttribute( )]
     public class NamespaceDoc
