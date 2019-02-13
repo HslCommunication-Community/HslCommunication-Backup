@@ -43,7 +43,7 @@ linux系统，实现了日志功能，流水号生成功能，邮件发送功能
 ## HSL能干什么？
 HSL能将工业生产现场的设备进行万物互联，将数据在底层自由的传输，无论是主动的还是被动的，无论你的采集系统是什么（通常采集系统为windows电脑，或是嵌入式系统，或是基于linux的盒子），
 都可以实现数据的随意传输，方便快速实现强大，实时，高响应的健壮系统，无论您是构建C/S系统，还是B/S系统，还是C-B-S-A（集成桌面客户端，浏览器，安卓）混合系统，都是快速而且低成本的实现，
-只要拥有了工业现场的一手数据，即可以搭建强大的实时监视功能的软件，生产报表及自动化排产的软件，各种工艺参数历史追踪的软件，基于数据经验的机器学习软件，以及全功能等等。
+只要拥有了工业现场的一手数据，即可以搭建强大的实时监视功能的软件，生产报表及自动化排产的软件，各种工艺参数历史追踪的软件，基于数据经验的机器学习软件，以及全功能的MES系统等等。
 
 **顺便聊聊** ，传统的工业模式都是采购现成的工业软件，包括上位机软件及MES系统，而忽视了自身的研发能力。对于一些行业标准的功能软件来说，比如ERP系统，财务软件，这些可以直接采购即可，
 但是对于上位机及MES系统而言，各个企业的实际需求千差万别，难以有通用的场景，而目前的现状都是花大钱办小事，所以在此处，给出一条面向未来的模式实现：对于生产企业而言，
@@ -67,7 +67,7 @@ Install-Package HslCommunication
 ## Contact
 * 工业软件交流QQ群：[592132877](http://shang.qq.com/wpa/qunwpa?idkey=2278cb9c2e0c04fc305c43e41acff940499a34007dfca9e83a7291e726f9c4e8)
 * 邮箱地址(Email)：hsl200909@163.com
-* 技术支持VIP群（打赏超过200RMB可加入）：[838185568](http://shang.qq.com/wpa/qunwpa?idkey=eee02ce1acde63c6316cbb380a80e033a14170ab7ca981f1cac83e0b657c8860)
+* 技术支持VIP群（打赏超过200RMB可加入）：[838185568](http://shang.qq.com/wpa/qunwpa?idkey=eee02ce1acde63c6316cbb380a80e033a14170ab7ca981f1cac83e0b657c8860) 新群：948305931
 
 ## HslCommunication.dll Summary 
 完整的项目介绍地址： [http://www.cnblogs.com/dathlin/p/7703805.html](http://www.cnblogs.com/dathlin/p/7703805.html)
@@ -85,6 +85,7 @@ Install-Package HslCommunication
 * 西门子PPI访问
 * [欧姆龙PLC访问](http://www.cnblogs.com/dathlin/p/8723961.html)
 * [AB PLC访问](https://www.cnblogs.com/dathlin/p/9607929.html)
+* 埃夫特机器人的数据访问
 * [邮件功能使用](http://www.cnblogs.com/dathlin/p/8463613.html)
 * [流水号生成器](http://www.cnblogs.com/dathlin/p/7811489.html)
 * [软件注册码功能](http://www.cnblogs.com/dathlin/p/7832315.html)
