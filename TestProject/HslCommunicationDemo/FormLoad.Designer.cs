@@ -37,6 +37,7 @@
             this.button2 = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.button45 = new System.Windows.Forms.Button();
             this.button34 = new System.Windows.Forms.Button();
             this.button21 = new System.Windows.Forms.Button();
             this.button19 = new System.Windows.Forms.Button();
@@ -99,7 +100,6 @@
             this.button43 = new System.Windows.Forms.Button();
             this.button42 = new System.Windows.Forms.Button();
             this.button40 = new System.Windows.Forms.Button();
-            this.button45 = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -225,6 +225,17 @@
             this.groupBox2.TabIndex = 1;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Modbus";
+            // 
+            // button45
+            // 
+            this.button45.Location = new System.Drawing.Point(19, 184);
+            this.button45.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.button45.Name = "button45";
+            this.button45.Size = new System.Drawing.Size(150, 32);
+            this.button45.TabIndex = 4;
+            this.button45.Text = "Modbus Server";
+            this.button45.UseVisualStyleBackColor = true;
+            this.button45.Click += new System.EventHandler(this.button45_Click);
             // 
             // button34
             // 
@@ -798,14 +809,14 @@
             // 
             this.mesDemoToolStripMenuItem.Name = "mesDemoToolStripMenuItem";
             this.mesDemoToolStripMenuItem.Size = new System.Drawing.Size(256, 22);
-            this.mesDemoToolStripMenuItem.Text = "Mes Demo";
+            this.mesDemoToolStripMenuItem.Text = "Mes Demo [简易MES系统示例]";
             this.mesDemoToolStripMenuItem.Click += new System.EventHandler(this.mesDemoToolStripMenuItem_Click);
             // 
             // gitToolStripMenuItem
             // 
             this.gitToolStripMenuItem.Name = "gitToolStripMenuItem";
             this.gitToolStripMenuItem.Size = new System.Drawing.Size(256, 22);
-            this.gitToolStripMenuItem.Text = "Git";
+            this.gitToolStripMenuItem.Text = "Git [源代码地址]";
             this.gitToolStripMenuItem.Click += new System.EventHandler(this.gitToolStripMenuItem_Click);
             // 
             // patronageToolStripMenuItem
@@ -902,17 +913,6 @@
             this.button40.Text = "RedisClient";
             this.button40.UseVisualStyleBackColor = true;
             this.button40.Click += new System.EventHandler(this.button40_Click);
-            // 
-            // button45
-            // 
-            this.button45.Location = new System.Drawing.Point(19, 184);
-            this.button45.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.button45.Name = "button45";
-            this.button45.Size = new System.Drawing.Size(150, 32);
-            this.button45.TabIndex = 4;
-            this.button45.Text = "Modbus Server";
-            this.button45.UseVisualStyleBackColor = true;
-            this.button45.Click += new System.EventHandler(this.button45_Click);
             // 
             // FormLoad
             // 
