@@ -3054,8 +3054,7 @@ class MelsecMcNet(NetworkDeviceBase):
 		else:
 			# 获取指令
 			command = MelsecMcNet.BuildReadCommand( address, length, True, self.NetworkNumber, self.NetworkStationNumber )
-			if command.IsSuccess == False :
-				return OperateResult.CreateFailedResult( command )
+			if command.IsSuccess == False : return OperateResult.CreateFailedResult( command )
 
 			# 核心交互
 			read = self.ReadFromCoreServer( command.Content )
@@ -3116,7 +3115,7 @@ class MelsecMcAsciiNet(NetworkDeviceBase):
 		self.port = port
 		self.WordLength = 1
 	@staticmethod
-	def BuildReadCommand( address, length, networkNumber = 0, networkStationNumber = 0 ):
+	def BuildReadCommand( address, length, isBit, networkNumber = 0, networkStationNumber = 0 ):
 		'''根据类型地址长度确认需要读取的报文'''
 		analysis = MelsecHelper.McAnalysisAddress( address )
 		if analysis.IsSuccess == False : return OperateResult.CreateFailedResult( analysis )
@@ -3152,7 +3151,7 @@ class MelsecMcAsciiNet(NetworkDeviceBase):
 		_PLCCommand[26] = 0x30                                                               # 以点为单位还是字为单位成批读取
 		_PLCCommand[27] = 0x30
 		_PLCCommand[28] = 0x30
-		_PLCCommand[29] = 0x30 if analysis.Content1.DataType == 0 else 0x31
+		_PLCCommand[29] = 0x30 if isBit else 0x31
 		_PLCCommand[30] = analysis.Content1.AsciiCode.encode('ascii')[0]                     # 软元件类型
 		_PLCCommand[31] = analysis.Content1.AsciiCode.encode('ascii')[1]
 		_PLCCommand[32:38] = MelsecHelper.BuildBytesFromAddress( analysis.Content2, analysis.Content1 )           # 起始地址的地位
@@ -3255,10 +3254,11 @@ class MelsecMcAsciiNet(NetworkDeviceBase):
 				Content[i * 2:i * 2+2] = struct.pack('<H',tmp)
 
 			return OperateResult.CreateSuccessResult( Content )
+
 	def Read( self, address, length ):
 		'''从三菱PLC中读取想要的数据，返回读取结果'''
 		# 获取指令
-		command = MelsecMcAsciiNet.BuildReadCommand( address, length, self.NetworkNumber, self.NetworkStationNumber )
+		command = MelsecMcAsciiNet.BuildReadCommand( address, length, False, self.NetworkNumber, self.NetworkStationNumber )
 		if command.IsSuccess == False : return OperateResult.CreateFailedResult( command )
 
 		# 核心交互
@@ -3270,7 +3270,7 @@ class MelsecMcAsciiNet(NetworkDeviceBase):
 		if errorCode != 0 : return OperateResult( err= errorCode, msg = StringResources.Language.MelsecPleaseReferToManulDocument )
 
 		# 数据解析，需要传入是否使用位的参数
-		return MelsecMcAsciiNet.ExtractActualData( read.Content, command.Content[29] == 0x31 )
+		return MelsecMcAsciiNet.ExtractActualData( read.Content, False )
 	def ReadBool( self, address, length = None ):
 		if length == None:
 			read = self.ReadBool( address, 1 )
@@ -3278,25 +3278,31 @@ class MelsecMcAsciiNet(NetworkDeviceBase):
 
 			return OperateResult.CreateSuccessResult( read.Content[0] )
 		else:
-			# 解析地址
-			analysis = MelsecHelper.McAnalysisAddress( address )
-			if analysis.IsSuccess == False : return OperateResult.CreateFailedResult( analysis )
-
-			# 位读取校验
-			if analysis.Content1.DataType == 0x00 : return OperateResult( msg = StringResources.Language.MelsecReadBitInfo )
-
+			# 获取指令
+			command = MelsecMcAsciiNet.BuildReadCommand( address, length, True, self.NetworkNumber, self.NetworkStationNumber )
+			if command.IsSuccess == False : return OperateResult.CreateFailedResult( command )
+			
 			# 核心交互
-			read = self.Read( address, length )
+			read = self.ReadFromCoreServer( command.Content )
 			if read.IsSuccess == False : return OperateResult.CreateFailedResult( read )
+
+			# 错误代码验证
+			errorCode = int( read.Content[18:22].decode('ascii'), 16 )
+			if errorCode != 0 : return OperateResult( err= errorCode, msg = StringResources.Language.MelsecPleaseReferToManulDocument )
+				
+			# 数据解析，需要传入是否使用位的参数
+			extract =  MelsecMcAsciiNet.ExtractActualData( read.Content, True )
+			if extract.IsSuccess == False : return OperateResult.CreateFailedResult( extract )
 
 			# 转化bool数组
 			content = []
-			for i in range(len(read.Content)):
-				if read.Content[i] == 0x01:
+			for i in range(length):
+				if extract.Content[i] == 0x01:
 					content.append(True)
 				else:
 					content.append(False)
 			return OperateResult.CreateSuccessResult( content )
+
 	def Write( self, address, value ):
 		'''向PLC写入数据，数据格式为原始的字节类型'''
 		# 解析指令
