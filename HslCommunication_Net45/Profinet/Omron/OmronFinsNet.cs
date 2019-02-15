@@ -686,15 +686,20 @@ namespace HslCommunication.Profinet.Omron
                     {
                         OperateResult<byte[]> success = OperateResult.CreateSuccessResult( new byte[0] );
                         success.ErrorCode = err;
+                        success.Message = GetStatusDescription( err );
                         return success;
                     }
-                    // 读取操作
-                    byte[] content = new byte[response.Length - 30];
-                    if (content.Length > 0) Array.Copy( response, 30, content, 0, content.Length );
+                    else
+                    {
+                        // 读取操作
+                        byte[] content = new byte[response.Length - 30];
+                        if (content.Length > 0) Array.Copy( response, 30, content, 0, content.Length );
 
-                    OperateResult<byte[]> success2 = OperateResult.CreateSuccessResult( content );
-                    success2.ErrorCode = err;
-                    return success2;
+                        OperateResult<byte[]> success = OperateResult.CreateSuccessResult( content );
+                        success.ErrorCode = err;
+                        success.Message = GetStatusDescription( err );
+                        return success;
+                    }
                 }
             }
 

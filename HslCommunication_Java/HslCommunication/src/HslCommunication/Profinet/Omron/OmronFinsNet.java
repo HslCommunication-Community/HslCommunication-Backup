@@ -490,6 +490,7 @@ public class OmronFinsNet extends NetworkDeviceBase<FinsMessage,ReverseWordTrans
                 if (!isRead) {
                     // 写入操作
                     success.ErrorCode = err;
+                    success.Message = GetStatusDescription(err);
                     return success;
                 } else {
                     // 读取操作
@@ -498,6 +499,7 @@ public class OmronFinsNet extends NetworkDeviceBase<FinsMessage,ReverseWordTrans
                         System.arraycopy(response, 30, content, 0, content.length);
                     }
                     success.ErrorCode = err;
+                    success.Message = GetStatusDescription(err);
                     success.Content = content;
                     return success;
                 }
