@@ -3072,7 +3072,7 @@ class MelsecMcNet(NetworkDeviceBase):
 			# 转化bool数组
 			content = []
 			for i in range(length):
-				if read.Content[i] == 0x01:
+				if extract.Content[i] == 0x01:
 					content.append(True)
 				else:
 					content.append(False)

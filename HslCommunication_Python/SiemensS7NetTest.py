@@ -1,7 +1,7 @@
 '''
 MIT License
 
-Copyright (c) 2017-2018 Richard.Hu
+Copyright (c) 2017-2019 Richard.Hu
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -29,16 +29,16 @@ from HslCommunication import SiemensS7Net
 from HslCommunication import SiemensPLCS
 from HslCommunication import SoftBasic
 
-def printReadResult(result):
+def printReadResult(result, addr):
     if result.IsSuccess:
-    	print(result.Content)
+    	print("success[" + addr + "]   " + str(result.Content))
     else:
-    	print("failed   "+result.Message)
-def printWriteResult(result):
+    	print("failed[" + addr + "]   "+result.Message)
+def printWriteResult(result, addr):
     if result.IsSuccess:
-        print("success")
+        print("success[" + addr + "]")
     else:
-        print("falied  " + result.Message)
+        print("falied[" + addr + "]  " + result.Message)
 
 if __name__ == "__main__":
     siemens = SiemensS7Net(SiemensPLCS.S1200, "192.168.8.12")
@@ -47,55 +47,55 @@ if __name__ == "__main__":
     else:
         # bool read write test
         siemens.WriteBool("M80.6",True)
-        printReadResult(siemens.ReadBool("M80.6"))
+        printReadResult(siemens.ReadBool("M80.6"), "M80.6")
 
         # byte read write test
         siemens.WriteByte("M100", 58)
-        printReadResult(siemens.ReadByte("M100"))
+        printReadResult(siemens.ReadByte("M100"), "M100")
 
         # int16 read write test
         siemens.WriteInt16("M102", 12358)
-        printReadResult(siemens.ReadInt16("M102"))
+        printReadResult(siemens.ReadInt16("M102"), "M102")
 
         # int16 read write test
         siemens.WriteInt16("M104", -12358)
-        printReadResult(siemens.ReadInt16("M104"))
+        printReadResult(siemens.ReadInt16("M104"), "M104")
 
         # uint16 read write test
         siemens.WriteUInt16("M106", 52358)
-        printReadResult(siemens.ReadUInt16("M106"))
+        printReadResult(siemens.ReadUInt16("M106"), "M106")
 
         # int32 read write test
         siemens.WriteInt32("M108", 12345678)
-        printReadResult(siemens.ReadInt32("M108"))
+        printReadResult(siemens.ReadInt32("M108"), "M108")
 
         # int32 read write test
         siemens.WriteInt32("M112", -12345678)
-        printReadResult(siemens.ReadInt32("M112"))
+        printReadResult(siemens.ReadInt32("M112"), "M112")
 
         # uint32 read write test
         siemens.WriteUInt32("M116", 123456789)
-        printReadResult(siemens.ReadInt32("M116"))
+        printReadResult(siemens.ReadInt32("M116"), "M116")
 
         # int64 read write test
         siemens.WriteInt64("M120", 12345678901234)
-        printReadResult(siemens.ReadInt64("M120"))
+        printReadResult(siemens.ReadInt64("M120"), "M120")
 
         # float read write test
         siemens.WriteFloat("M130", 123.456)
-        printReadResult(siemens.ReadFloat("M130"))
+        printReadResult(siemens.ReadFloat("M130"), "M130")
 
         # double read write test
         siemens.WriteDouble("M140", 123.456789)
-        printReadResult(siemens.ReadDouble("M140"))
+        printReadResult(siemens.ReadDouble("M140"), "M140")
 
         # string read write test
         siemens.WriteString("M150", '123456')
-        printReadResult(siemens.ReadString("M150",6))
+        printReadResult(siemens.ReadString("M150",6), "M150")
 
         # int16 array read write test
         siemens.WriteInt16("M160", [123,456,789,-1234])
-        printReadResult(siemens.ReadInt16("M160",4))
+        printReadResult(siemens.ReadInt16("M160",4), "M160")
 
         # read block
         read = siemens.Read("M100",10)

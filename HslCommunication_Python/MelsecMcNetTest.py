@@ -28,16 +28,16 @@ Warning: The following code can only be run in the Test plc, prohibit the use of
 from HslCommunication import MelsecMcNet
 from HslCommunication import SoftBasic
 
-def printReadResult(result):
+def printReadResult(result, addr):
     if result.IsSuccess:
-    	print(result.Content)
+    	print("success[" + addr + "]   " + str(result.Content))
     else:
-    	print("failed   "+result.Message)
-def printWriteResult(result):
+    	print("failed[" + addr + "]   " + result.Message)
+def printWriteResult(result, addr):
     if result.IsSuccess:
-        print("success")
+        print("success[" + addr + "]")
     else:
-        print("falied  " + result.Message)
+        print("falied[" + addr + "]  " + result.Message)
 
 if __name__ == "__main__":
     print(SoftBasic.GetUniqueStringByGuidAndRandom())
@@ -47,54 +47,54 @@ if __name__ == "__main__":
     else:
         # bool read write test
         melsecNet.WriteBool("M200",True)
-        printReadResult(melsecNet.ReadBool("M200"))
+        printReadResult(melsecNet.ReadBool("M200"),"M200")
 
         # bool array read write test
         melsecNet.WriteBool("M300",[True,False,True,True,False])
-        printReadResult(melsecNet.ReadBool("M300",5))
+        printReadResult(melsecNet.ReadBool("M300",5),"M300")
 
         # int16 read write test
         melsecNet.WriteInt16("D200", 12358)
-        printReadResult(melsecNet.ReadInt16("D200"))
+        printReadResult(melsecNet.ReadInt16("D200"), "D200")
 
         # int16 read write test
         melsecNet.WriteInt16("D201", -12358)
-        printReadResult(melsecNet.ReadInt16("D201"))
+        printReadResult(melsecNet.ReadInt16("D201"), "D201")
 
         # uint16 read write test
         melsecNet.WriteUInt16("D202", 52358)
-        printReadResult(melsecNet.ReadUInt16("D202"))
+        printReadResult(melsecNet.ReadUInt16("D202"), "D202")
 
         # int32 read write test
         melsecNet.WriteInt32("D210", 12345678)
-        printReadResult(melsecNet.ReadInt32("D210"))
+        printReadResult(melsecNet.ReadInt32("D210"), "D210")
 
         # int32 read write test
         melsecNet.WriteInt32("D212", -12345678)
-        printReadResult(melsecNet.ReadInt32("D212"))
+        printReadResult(melsecNet.ReadInt32("D212"), "D212")
 
         # uint32 read write test
         melsecNet.WriteUInt32("D214", 123456789)
-        printReadResult(melsecNet.ReadInt32("D214"))
+        printReadResult(melsecNet.ReadInt32("D214"), "D214")
 
         # int64 read write test
         melsecNet.WriteInt64("D220", 12345678901234)
-        printReadResult(melsecNet.ReadInt64("D220"))
+        printReadResult(melsecNet.ReadInt64("D220"), "D220")
 
         # float read write test
         melsecNet.WriteFloat("D230", 123.456)
-        printReadResult(melsecNet.ReadFloat("D230"))
+        printReadResult(melsecNet.ReadFloat("D230"), "D230")
 
         # double read write test
         melsecNet.WriteDouble("D240", 123.456789)
-        printReadResult(melsecNet.ReadDouble("D240"))
+        printReadResult(melsecNet.ReadDouble("D240"), "D240")
 
         # string read write test
         melsecNet.WriteString("D250", '123456')
-        printReadResult(melsecNet.ReadString("D250",3))
+        printReadResult(melsecNet.ReadString("D250",3), "D250")
 
         # int16 array read write test
         melsecNet.WriteInt16("D260", [123,456,789,-1234])
-        printReadResult(melsecNet.ReadInt16("D260",4))
+        printReadResult(melsecNet.ReadInt16("D260",4), "D260")
 
         melsecNet.ConnectClose()
