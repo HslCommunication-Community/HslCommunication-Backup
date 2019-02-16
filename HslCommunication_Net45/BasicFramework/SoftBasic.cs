@@ -170,15 +170,8 @@ namespace HslCommunication.BasicFramework
 
             if (array.Length == max)
             {
-                for (int i = 0; i < array.Length - data.Length; i++)
-                {
-                    array[i] = array[i + 1];
-                }
-
-                for (int i = 0; i < data.Length; i++)
-                {
-                    array[array.Length - data.Length + i] = data[i];
-                }
+                Array.Copy( array, data.Length, array, 0, array.Length - data.Length );
+                Array.Copy( data, 0, array, array.Length - data.Length, data.Length );
             }
             else
             {
