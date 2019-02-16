@@ -1480,6 +1480,17 @@ class SoftBasic:
 			data = float(size) / 1024 / 1024 / 1024
 			return '{:.2f}'.format(data) + " Gb"
 	@staticmethod
+	def GetTimeSpanDescription( totalSeconds ):
+		'''从一个时间差返回带单位的描述'''
+		if totalSeconds <= 60:
+			return int(totalSeconds) + " 秒"
+		elif totalSeconds <= 3600:
+			return '{:.1f}'.format(totalSeconds / 60) + " 分钟"
+		elif totalSeconds <= 86400:
+			return '{:.1f}'.format(totalSeconds / 3600) + " 小时"
+		else:
+			return '{:.1f}'.format(totalSeconds / 86400) + " 天"
+	@staticmethod
 	def ByteToHexString(inBytes,segment=' '):
 		'''将字节数组转换成十六进制的表示形式，需要传入2个参数，数据和分隔符，该方法还存在一点问题'''
 		str_list = []
