@@ -650,6 +650,7 @@ class SoftIncrementCount:
 		self.hybirdLock.release()
 		return value
 	
+# ↓ Message About Implementation ==========================================================================================
 
 class INetMessage:
 	'''数据消息的基本基类'''
@@ -691,6 +692,31 @@ class S7Message (INetMessage):
 		else:
 			return False
 
+class FetchWriteMessage (INetMessage):
+	'''西门子Fetch/Write消息解析协议'''
+	def ProtocolHeadBytesLength(self):
+		'''协议头数据长度，也即是第一次接收的数据长度'''
+		return 16
+	def GetContentLengthByHeadBytes(self):
+		'''二次接收的数据长度'''
+		if self.SendBytes != None:
+			if self.SendBytes[5] == 0x04: return 0
+			else: return self.SendBytes[12] * 256 + self.SendBytes[13]
+		else:
+			return 16
+	def CheckHeadBytesLegal(self,token):
+		'''令牌检查是否成功'''
+		if self.HeadBytes != None:
+			if self.HeadBytes[0] == 0x53 and self.HeadBytes[1] == 0x35:
+				return True
+			else:
+				return False
+		else:
+			return False
+	def GetHeadBytesIdentity(self):
+		'''获取头子节里的消息标识'''
+		return self.HeadBytes[3]
+
 class MelsecA1EBinaryMessage(INetMessage):
 	'''三菱的A兼容1E帧协议解析规则'''
 	def	ProtocolHeadBytesLength(self):
@@ -728,6 +754,7 @@ class MelsecA1EBinaryMessage(INetMessage):
 				return False
 		else:
 			return False
+
 class MelsecQnA3EBinaryMessage(INetMessage):
 	'''三菱的Qna兼容3E帧协议解析规则'''
 	def ProtocolHeadBytesLength(self):
@@ -748,6 +775,7 @@ class MelsecQnA3EBinaryMessage(INetMessage):
 				return False
 		else:
 			return False
+
 class MelsecQnA3EAsciiMessage(INetMessage):
 	'''三菱的Qna兼容3E帧的ASCII协议解析规则'''
 	def ProtocolHeadBytesLength(self):
@@ -814,13 +842,65 @@ class HslMessage (INetMessage):
 			return False
 		else:
 			return SoftBasic.IsTwoBytesEquel(self.HeadBytes,12,token,0,16)
+
+class AllenBradleyMessage (INetMessage):
+	'''用于和 AllenBradley PLC 交互的消息协议类'''
+	def ProtocolHeadBytesLength(self):
+		'''协议头数据长度，也即是第一次接收的数据长度'''
+		return 24
+	def GetContentLengthByHeadBytes(self):
+		'''二次接收的数据长度'''
+		if self.SendBytes != None:
+			return struct.unpack('<h',self.SendBytes[2:4])[0]
+		else:
+			return 0
+	def CheckHeadBytesLegal(self,token):
+		'''令牌检查是否成功'''
+		return True
+	def GetHeadBytesIdentity(self):
+		'''获取头子节里的消息标识'''
+		return 0
+
+class EFORTMessage (INetMessage):
+	'''埃夫特机器人的消息对象'''
+	def ProtocolHeadBytesLength(self):
+		'''协议头数据长度，也即是第一次接收的数据长度'''
+		return 18
+	def GetContentLengthByHeadBytes(self):
+		'''二次接收的数据长度'''
+		if self.SendBytes != None:
+			return struct.unpack('<h',self.SendBytes[16:18])[0] - 18
+		else:
+			return 0
+	def CheckHeadBytesLegal(self,token):
+		'''令牌检查是否成功'''
+		return True
+
+class EFORTMessagePrevious (INetMessage):
+	'''旧版的机器人的消息类对象，保留此类为了实现兼容'''
+	def ProtocolHeadBytesLength(self):
+		'''协议头数据长度，也即是第一次接收的数据长度'''
+		return 17
+	def GetContentLengthByHeadBytes(self):
+		'''二次接收的数据长度'''
+		if self.SendBytes != None:
+			return struct.unpack('<h',self.SendBytes[15:17])[0] - 17
+		else:
+			return 0
+	def CheckHeadBytesLegal(self,token):
+		'''令牌检查是否成功'''
+		return True
+
+# ↑ Message About Implementation ==========================================================================================
+
+# ↓ ByteTransform Implementation ==========================================================================================
+
 class DataFormat(Enum):
 	'''应用于多字节数据的解析或是生成格式'''
 	ABCD = 0
 	BADC = 1
 	CDAB = 2
 	DCBA = 3
-
 
 class ByteTransform:
 	'''数据转换类的基础，提供了一些基础的方法实现.'''
@@ -1372,6 +1452,8 @@ class ByteTransformHelper:
 		except Exception as ex:
 			return OperateResult( msg = "数据转化失败，源数据：" + SoftBasic.ByteToHexString( result.Content ) + " 消息：" + str(ex))
 
+
+# ↑ ByteTransform Implementation ==========================================================================================
 
 class DeviceAddressBase:
 	'''所有设备通信类的地址基础类'''
