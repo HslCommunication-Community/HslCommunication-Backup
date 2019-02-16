@@ -13,7 +13,7 @@ namespace HslCommunication.ModBus
     /// Modbus-Rtu通讯协议的类库，多项式码0xA001
     /// </summary>
     /// <remarks>
-    /// 本客户端支持的标准的modbus-tcp协议，内置的消息号会进行自增，地址格式采用富文本表示形式
+    /// 本客户端支持的标准的modbus-rtu协议，自动实现了CRC16的验证，地址格式采用富文本表示形式
     /// <note type="important">
     /// 地址共可以携带3个信息，最完整的表示方式"s=2;x=3;100"，对应的modbus报文是 02 03 00 64 00 01 的前四个字节，站号，功能码，起始地址，下面举例
     /// <list type="definition">
