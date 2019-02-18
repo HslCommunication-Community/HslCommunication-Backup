@@ -122,13 +122,11 @@ namespace HslCommunication.Profinet.Omron
         /// 设备的标识号
         /// </summary>
         public byte SID { get; set; } = 0x00;
-
-
+        
         #endregion
         
         #region Build Command
-
-
+        
         /// <summary>
         /// 将普通的指令打包成完整的指令
         /// </summary>
@@ -169,25 +167,10 @@ namespace HslCommunication.Profinet.Omron
         /// <returns>带有成功标志的报文数据</returns>
         public OperateResult<byte[]> BuildReadCommand( string address, ushort length ,bool isBit)
         {
-            var analysis = AnalysisAddress( address, isBit );
-            if (!analysis.IsSuccess) return OperateResult.CreateFailedResult<byte[]>( analysis );
+            var command = OmronFinsNetHelper.BuildReadCommand( address, length, isBit );
+            if (!command.IsSuccess) return command;
 
-            byte[] _PLCCommand = new byte[8];
-            _PLCCommand[0] = 0x01;    // 读取存储区数据
-            _PLCCommand[1] = 0x01;
-            if(isBit)
-            {
-                _PLCCommand[2] = analysis.Content1.BitCode;
-            }
-            else
-            {
-                _PLCCommand[2] = analysis.Content1.WordCode;
-            }
-            analysis.Content2.CopyTo( _PLCCommand, 3 );
-            _PLCCommand[6] = (byte)(length / 256);                       // 长度
-            _PLCCommand[7] = (byte)(length % 256);
-
-            return OperateResult.CreateSuccessResult( PackCommand( _PLCCommand ) );
+            return OperateResult.CreateSuccessResult( PackCommand( command.Content ) );
         }
 
 
@@ -196,42 +179,15 @@ namespace HslCommunication.Profinet.Omron
         /// 根据类型地址以及需要写入的数据来生成指令头
         /// </summary>
         /// <param name="address">起始地址</param>
-        /// <param name="value"></param>
+        /// <param name="value">真实的数据值信息</param>
         /// <param name="isBit">是否是位操作</param>
         /// <returns>带有成功标志的报文数据</returns>
         public OperateResult<byte[]> BuildWriteCommand( string address, byte[] value, bool isBit )
         {
-            var analysis = AnalysisAddress( address, isBit );
-            if (!analysis.IsSuccess) return OperateResult.CreateFailedResult<byte[]>( analysis );
-
-            byte[] _PLCCommand = new byte[8 + value.Length];
-            _PLCCommand[0] = 0x01;
-            _PLCCommand[1] = 0x02;
-
-            if (isBit)
-            {
-                _PLCCommand[2] = analysis.Content1.BitCode;
-            }
-            else
-            {
-                _PLCCommand[2] = analysis.Content1.WordCode;
-            }
-
-            analysis.Content2.CopyTo( _PLCCommand, 3 );
-            if (isBit)
-            {
-                _PLCCommand[6] = (byte)(value.Length / 256);
-                _PLCCommand[7] = (byte)(value.Length % 256);
-            }
-            else
-            {
-                _PLCCommand[6] = (byte)(value.Length / 2 / 256);
-                _PLCCommand[7] = (byte)(value.Length / 2 % 256);
-            }
-
-            value.CopyTo( _PLCCommand, 8 );
-
-            return OperateResult.CreateSuccessResult( PackCommand( _PLCCommand ) );
+            var command = OmronFinsNetHelper.BuildWriteWordCommand( address, value, isBit );
+            if (!command.IsSuccess) return command;
+            
+            return OperateResult.CreateSuccessResult( PackCommand( command.Content ) );
         }
 
 
@@ -258,7 +214,7 @@ namespace HslCommunication.Profinet.Omron
             buffer[3] = read.Content2[4];
 
             int status = BitConverter.ToInt32( buffer, 0 );
-            if(status != 0) return new OperateResult( status, GetStatusDescription( status ) );
+            if(status != 0) return new OperateResult( status, OmronFinsNetHelper.GetStatusDescription( status ) );
 
             // 提取PLC的节点地址
             if (read.Content2.Length >= 16) DA1 = read.Content2[15];
@@ -328,7 +284,7 @@ namespace HslCommunication.Profinet.Omron
             if(!read.IsSuccess) return OperateResult.CreateFailedResult<byte[]>( read );
 
             // 数据有效性分析
-            OperateResult<byte[]> valid = ResponseValidAnalysis( read.Content, true );
+            OperateResult<byte[]> valid = OmronFinsNetHelper.ResponseValidAnalysis( read.Content, true );
             if(!valid.IsSuccess) return OperateResult.CreateFailedResult<byte[]>( valid );
 
             // 读取到了正确的数据
@@ -392,7 +348,7 @@ namespace HslCommunication.Profinet.Omron
             if (!read.IsSuccess) return OperateResult.CreateFailedResult<bool[]>( read );
 
             // 数据有效性分析
-            OperateResult<byte[]> valid = ResponseValidAnalysis( read.Content, true );
+            OperateResult<byte[]> valid = OmronFinsNetHelper.ResponseValidAnalysis( read.Content, true );
             if (!valid.IsSuccess) return OperateResult.CreateFailedResult<bool[]>( valid );
 
             // 返回正确的数据信息
@@ -483,7 +439,7 @@ namespace HslCommunication.Profinet.Omron
             if (!read.IsSuccess) return read;
 
             // 数据有效性分析
-            OperateResult<byte[]> valid = ResponseValidAnalysis( read.Content, false );
+            OperateResult<byte[]> valid = OmronFinsNetHelper.ResponseValidAnalysis( read.Content, false );
             if (!valid.IsSuccess) return valid;
 
             // 成功
@@ -494,8 +450,7 @@ namespace HslCommunication.Profinet.Omron
         #endregion
         
         #region Write bool[]
-
-
+        
         /// <summary>
         /// 向PLC中位软元件写入bool数组，返回值说明，比如你写入D100,values[0]对应D100.0
         /// </summary>
@@ -531,7 +486,7 @@ namespace HslCommunication.Profinet.Omron
             if (!read.IsSuccess) return read;
 
             // 数据有效性分析
-            OperateResult<byte[]> valid = ResponseValidAnalysis( read.Content, false );
+            OperateResult<byte[]> valid = OmronFinsNetHelper.ResponseValidAnalysis( read.Content, false );
             if (!valid.IsSuccess) return valid;
 
             // 写入成功
@@ -570,165 +525,5 @@ namespace HslCommunication.Profinet.Omron
 
         #endregion
 
-        #region Static Method Helper
-        
-
-        /// <summary>
-        /// 解析数据地址，Omron手册第188页
-        /// </summary>
-        /// <param name="address">数据地址</param>
-        /// <param name="isBit">是否是位地址</param>
-        /// <returns>解析后的结果地址对象</returns>
-        private static OperateResult<OmronFinsDataType, byte[]> AnalysisAddress( string address, bool isBit )
-        {
-            var result = new OperateResult<OmronFinsDataType, byte[]>( );
-            try
-            {
-                switch (address[0])
-                {
-                    case 'D':
-                    case 'd':
-                        {
-                            // DM区数据
-                            result.Content1 = OmronFinsDataType.DM;
-                            break;
-                        }
-                    case 'C':
-                    case 'c':
-                        {
-                            // CIO区数据
-                            result.Content1 = OmronFinsDataType.CIO;
-                            break;
-                        }
-                    case 'W':
-                    case 'w':
-                        {
-                            // WR区
-                            result.Content1 = OmronFinsDataType.WR;
-                            break;
-                        }
-                    case 'H':
-                    case 'h':
-                        {
-                            // HR区
-                            result.Content1 = OmronFinsDataType.HR;
-                            break;
-                        }
-                    case 'A':
-                    case 'a':
-                        {
-                            // AR区
-                            result.Content1 = OmronFinsDataType.AR;
-                            break;
-                        }
-                    default: throw new Exception( StringResources.Language.NotSupportedDataType );
-                }
-
-                if (isBit)
-                {
-                    // 位操作
-                    string[] splits = address.Substring( 1 ).Split( new char[] { '.' }, StringSplitOptions.RemoveEmptyEntries );
-                    ushort addr = ushort.Parse( splits[0] );
-                    result.Content2 = new byte[3];
-                    result.Content2[0] = BitConverter.GetBytes( addr )[1];
-                    result.Content2[1] = BitConverter.GetBytes( addr )[0];
-
-                    if (splits.Length > 1)
-                    {
-                        result.Content2[2] = byte.Parse( splits[1] );
-                        if (result.Content2[2] > 15)
-                        {
-                            throw new Exception( StringResources.Language.OmronAddressMustBeZeroToFiveteen );
-                        }
-                    }
-                }
-                else
-                {
-                    // 字操作
-                    ushort addr = ushort.Parse( address.Substring( 1 ) );
-                    result.Content2 = new byte[3];
-                    result.Content2[0] = BitConverter.GetBytes( addr )[1];
-                    result.Content2[1] = BitConverter.GetBytes( addr )[0];
-                }
-            }
-            catch (Exception ex)
-            {
-                result.Message = ex.Message;
-                return result;
-            }
-
-            result.IsSuccess = true;
-            return result;
-        }
-
-        private static OperateResult<byte[]> ResponseValidAnalysis( byte[] response, bool isRead )
-        {
-            // 数据有效性分析
-            if (response.Length >= 16)
-            {
-                // 提取错误码
-                byte[] buffer = new byte[4];
-                buffer[0] = response[15];
-                buffer[1] = response[14];
-                buffer[2] = response[13];
-                buffer[3] = response[12];
-
-                int err = BitConverter.ToInt32( buffer, 0 );
-                if (err > 0) return new OperateResult<byte[]>( err, GetStatusDescription( err ) );
-
-                if (response.Length >= 30)
-                {
-                    err = response[28] * 256 + response[29];
-                    // 暂时忽略所有的报警信息
-                    // if (err > 0) return new OperateResult<byte[]>( err, StringResources.Language.OmronReceiveDataError );
-
-                    if (!isRead)
-                    {
-                        OperateResult<byte[]> success = OperateResult.CreateSuccessResult( new byte[0] );
-                        success.ErrorCode = err;
-                        success.Message = GetStatusDescription( err );
-                        return success;
-                    }
-                    else
-                    {
-                        // 读取操作
-                        byte[] content = new byte[response.Length - 30];
-                        if (content.Length > 0) Array.Copy( response, 30, content, 0, content.Length );
-
-                        OperateResult<byte[]> success = OperateResult.CreateSuccessResult( content );
-                        success.ErrorCode = err;
-                        success.Message = GetStatusDescription( err );
-                        return success;
-                    }
-                }
-            }
-
-            return new OperateResult<byte[]>( StringResources.Language.OmronReceiveDataError );
-        }
-
-        /// <summary>
-        /// 获取错误信息的字符串描述文本
-        /// </summary>
-        /// <param name="err">错误码</param>
-        /// <returns>文本描述</returns>
-        public static string GetStatusDescription( int err )
-        {
-            switch (err)
-            {
-                case 0: return StringResources.Language.OmronStatus0;
-                case 1: return StringResources.Language.OmronStatus1;
-                case 2: return StringResources.Language.OmronStatus2;
-                case 3: return StringResources.Language.OmronStatus3;
-                case 20: return StringResources.Language.OmronStatus20;
-                case 21: return StringResources.Language.OmronStatus21;
-                case 22: return StringResources.Language.OmronStatus22;
-                case 23: return StringResources.Language.OmronStatus23;
-                case 24: return StringResources.Language.OmronStatus24;
-                case 25: return StringResources.Language.OmronStatus25;
-                default: return StringResources.Language.UnknownError;
-            }
-        }
-
-        #endregion
     }
 }
