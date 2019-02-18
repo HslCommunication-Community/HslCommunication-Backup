@@ -72,7 +72,7 @@
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(667, 25);
             this.label5.TabIndex = 5;
-            this.label5.Text = "如果不小心点错了，需要退款，请通过支付宝或是本组件的交流群联系作者，群号：592132877";
+            this.label5.Text = "如果不小心点错了，需要退款，请通过支付宝或是本组件的交流群联系作者，群号：592132877(满) 948305931";
             // 
             // pictureBox2
             // 
