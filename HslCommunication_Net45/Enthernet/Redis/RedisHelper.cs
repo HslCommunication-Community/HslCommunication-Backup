@@ -13,8 +13,7 @@ namespace HslCommunication.Enthernet.Redis
     public class RedisHelper
     {
         #region Socket Helper
-
-
+        
         /// <summary>
         /// 接收一行命令数据
         /// </summary>
@@ -22,24 +21,7 @@ namespace HslCommunication.Enthernet.Redis
         /// <returns>带有结果对象的数据信息</returns>
         public static OperateResult<byte[]> ReceiveCommandLine( Socket socket )
         {
-            List<byte> bufferArray = new List<byte>( );
-            try
-            {
-                // 接收到\n为止
-                while (true)
-                {
-                    byte[] head = NetSupport.ReadBytesFromSocket( socket, 1 );
-                    bufferArray.AddRange( head );
-                    if (head[0] == '\n') break;
-                }
-
-                // 指令头已经接收完成
-                return OperateResult.CreateSuccessResult( bufferArray.ToArray( ) );
-            }
-            catch (Exception ex)
-            {
-                return new OperateResult<byte[]>( ex.Message );
-            }
+            return NetSupport.ReceiveCommandLineFromSocket( socket, (byte)'\n' );
         }
 
         /// <summary>
@@ -54,13 +36,11 @@ namespace HslCommunication.Enthernet.Redis
             {
                 List<byte> bufferArray = new List<byte>( );
                 bufferArray.AddRange( NetSupport.ReadBytesFromSocket( socket, length ) );
-                while (true)
-                {
-                    byte[] head = NetSupport.ReadBytesFromSocket( socket, 1 );
-                    bufferArray.AddRange( head );
-                    if (head[0] == '\n') break;
-                }
 
+                OperateResult<byte[]> commandTail = ReceiveCommandLine( socket );
+                if (!commandTail.IsSuccess) return commandTail;
+
+                bufferArray.AddRange( commandTail.Content );
                 return OperateResult.CreateSuccessResult( bufferArray.ToArray( ) );
             }
             catch (Exception ex)
