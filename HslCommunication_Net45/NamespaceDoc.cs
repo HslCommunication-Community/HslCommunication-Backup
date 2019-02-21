@@ -609,6 +609,17 @@ namespace HslCommunication
     ///             <item>VIP群将免费使用全新的控件库，谢谢支持。地址：https://github.com/dathlin/HslControlsDemo </item>
     ///         </list>
     ///     </revision>
+    ///     <revision date="2019-2-21" version="5.8.0" author="Richard.Hu">
+    ///         <list type="bullet">
+    ///             <item>SoftBasic修复AddArrayData方法批量添加数据异常的bug，导致曲线控件显示异常。</item>
+    ///             <item>提炼一个公共的欧姆龙辅助类，准备为串口协议做基础的通用支持。</item>
+    ///             <item>RedisHelper类代码优化精简，提炼部分的公共逻辑到NetSupport。</item>
+    ///             <item>SoftBuffer: 新增读写单个的位操作，通过位的与或非来实现。</item>
+    ///             <item>SiemensS7Server：新增一个s7协议的服务器，可以模拟PLC，进行通讯测试或是虚拟开发。</item>
+    ///             <item>其他的代码精简优化。</item>
+    ///             <item>VIP群将免费使用全新的控件库，谢谢支持。地址：https://github.com/dathlin/HslControlsDemo </item>
+    ///         </list>
+    ///     </revision>
     /// </revisionHistory>
     [System.Runtime.CompilerServices.CompilerGeneratedAttribute( )]
     public class NamespaceDoc
