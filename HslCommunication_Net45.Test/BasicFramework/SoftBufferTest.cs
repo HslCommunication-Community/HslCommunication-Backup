@@ -34,6 +34,24 @@ namespace HslCommunication_Net45.Test.BasicFramework
         }
 
         [TestMethod]
+        public void BoolTest( )
+        {
+            SoftBuffer softBuffer = new SoftBuffer( 1000 );
+
+            softBuffer.SetBool( true, 1234 );
+            Assert.IsTrue( softBuffer.GetBool( 1234 ) );
+
+            softBuffer.SetBool( true, 2234 );
+            Assert.IsTrue( softBuffer.GetBool( 2234 ) );
+            
+            softBuffer.SetBool( false, 2234 );
+            Assert.IsTrue( !softBuffer.GetBool( 2234 ) );
+
+            softBuffer.SetBool( true, 8 );
+            Assert.IsTrue( softBuffer.GetByte( 1 ) == 0x01 );
+        }
+
+        [TestMethod]
         public void Int16Test( )
         {
             SoftBuffer softBuffer = new SoftBuffer( 1000 );

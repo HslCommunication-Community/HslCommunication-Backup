@@ -45,6 +45,98 @@ namespace HslCommunication.BasicFramework
 
         #endregion
 
+        #region Bool Operate Support
+
+        /// <summary>
+        /// 设置指定的位置的数据块，如果超出，则丢弃数据
+        /// </summary>
+        /// <param name="value">数据块信息</param>
+        /// <param name="destIndex">目标存储的索引</param>
+        public void SetBool( bool value, int destIndex )
+        {
+            if (destIndex < capacity * 8 && destIndex >= 0 )
+            {
+                hybirdLock.Enter( );
+
+                int byteIndex = destIndex / 8;
+                int offect = destIndex % 8;
+
+                if (value)
+                {
+                    buffer[byteIndex] = (byte)(buffer[byteIndex] | getOrByte( offect ));
+                }
+                else
+                {
+                    buffer[byteIndex] = (byte)(buffer[byteIndex] & getAndByte( offect ));
+                }
+
+                hybirdLock.Leave( );
+            }
+        }
+
+
+        /// <summary>
+        /// 获取指定的位置的bool值，如果超出，则引发异常
+        /// </summary>
+        /// <param name="destIndex">目标存储的索引</param>
+        public bool GetBool( int destIndex )
+        {
+            bool result = false;
+            if (destIndex < capacity * 8 && destIndex >= 0)
+            {
+                hybirdLock.Enter( );
+
+                int byteIndex = destIndex / 8;
+                int offect = destIndex % 8;
+
+                result = (buffer[byteIndex] & getOrByte( offect )) == getOrByte( offect );
+
+                hybirdLock.Leave( );
+            }
+            else
+            {
+                throw new IndexOutOfRangeException( "destIndex" );
+            }
+
+            return result;
+        }
+
+        private byte getAndByte(int offect )
+        {
+            switch (offect)
+            {
+                case 0: return 0xFE;
+                case 1: return 0xFD;
+                case 2: return 0xFB;
+                case 3: return 0xF7;
+                case 4: return 0xEF;
+                case 5: return 0xDF;
+                case 6: return 0xBF;
+                case 7: return 0x7F;
+                default: return 0xFF;
+            }
+        }
+
+
+        private byte getOrByte( int offect )
+        {
+            switch (offect)
+            {
+                case 0: return 0x01;
+                case 1: return 0x02;
+                case 2: return 0x04;
+                case 3: return 0x08;
+                case 4: return 0x10;
+                case 5: return 0x20;
+                case 6: return 0x40;
+                case 7: return 0x80;
+                default: return 0x00;
+            }
+        }
+        
+
+        #endregion
+
         #region Byte Operate Support
 
         /// <summary>
