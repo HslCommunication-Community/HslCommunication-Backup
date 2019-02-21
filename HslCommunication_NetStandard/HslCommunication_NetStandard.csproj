@@ -71,6 +71,7 @@
     <Compile Include="..\HslCommunication_Net45\Core\Net\NetSupport.cs" Link="Core\Net\NetSupport.cs" />
     <Compile Include="..\HslCommunication_Net45\Core\Net\NetworkBase\NetworkAlienClient.cs" Link="Core\Net\NetworkBase\NetworkAlienClient.cs" />
     <Compile Include="..\HslCommunication_Net45\Core\Net\NetworkBase\NetworkBase.cs" Link="Core\Net\NetworkBase\NetworkBase.cs" />
+    <Compile Include="..\HslCommunication_Net45\Core\Net\NetworkBase\NetworkDataServerBase.cs" Link="Core\Net\NetworkBase\NetworkDataServerBase.cs" />
     <Compile Include="..\HslCommunication_Net45\Core\Net\NetworkBase\NetworkDeviceBase.cs" Link="Core\Net\NetworkBase\NetworkDeviceBase.cs" />
     <Compile Include="..\HslCommunication_Net45\Core\Net\NetworkBase\NetworkDoubleBase.cs" Link="Core\Net\NetworkBase\NetworkDoubleBase.cs" />
     <Compile Include="..\HslCommunication_Net45\Core\Net\NetworkBase\NetworkFileServerBase.cs" Link="Core\Net\NetworkBase\NetworkFileServerBase.cs" />
@@ -149,6 +150,7 @@
     <Compile Include="..\HslCommunication_Net45\Profinet\Siemens\SiemensFetchWriteNet.cs" Link="Profinet\Siemens\SiemensFetchWriteNet.cs" />
     <Compile Include="..\HslCommunication_Net45\Profinet\Siemens\SiemensPLCS.cs" Link="Profinet\Siemens\SiemensPLCS.cs" />
     <Compile Include="..\HslCommunication_Net45\Profinet\Siemens\SiemensS7Net.cs" Link="Profinet\Siemens\SiemensS7Net.cs" />
+    <Compile Include="..\HslCommunication_Net45\Profinet\Siemens\SiemensS7Server.cs" Link="Profinet\Siemens\SiemensS7Server.cs" />
     <Compile Include="..\HslCommunication_Net45\Robot\EFORT\EfortData.cs" Link="Robot\EFORT\EfortData.cs" />
     <Compile Include="..\HslCommunication_Net45\Robot\EFORT\ER7BC10.cs" Link="Robot\EFORT\ER7BC10.cs" />
     <Compile Include="..\HslCommunication_Net45\Robot\EFORT\ER7BC10Previous.cs" Link="Robot\EFORT\ER7BC10Previous.cs" />

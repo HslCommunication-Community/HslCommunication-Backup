@@ -100,6 +100,7 @@
             this.button43 = new System.Windows.Forms.Button();
             this.button42 = new System.Windows.Forms.Button();
             this.button40 = new System.Windows.Forms.Button();
+            this.button46 = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -117,6 +118,7 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.button46);
             this.groupBox1.Controls.Add(this.button39);
             this.groupBox1.Controls.Add(this.button36);
             this.groupBox1.Controls.Add(this.button10);
@@ -914,6 +916,17 @@
             this.button40.UseVisualStyleBackColor = true;
             this.button40.Click += new System.EventHandler(this.button40_Click);
             // 
+            // button46
+            // 
+            this.button46.Location = new System.Drawing.Point(18, 264);
+            this.button46.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.button46.Name = "button46";
+            this.button46.Size = new System.Drawing.Size(150, 32);
+            this.button46.TabIndex = 7;
+            this.button46.Text = "S7 Server";
+            this.button46.UseVisualStyleBackColor = true;
+            this.button46.Click += new System.EventHandler(this.button46_Click);
+            // 
             // FormLoad
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 17F);
@@ -1035,6 +1048,7 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button button44;
         private System.Windows.Forms.Button button45;
+        private System.Windows.Forms.Button button46;
     }
 }
 

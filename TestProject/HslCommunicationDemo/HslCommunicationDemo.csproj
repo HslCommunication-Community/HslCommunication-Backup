@@ -169,6 +169,12 @@
     <Compile Include="Modbus\FormTrustedClient.Designer.cs">
       <DependentUpon>FormTrustedClient.cs</DependentUpon>
     </Compile>
+    <Compile Include="PLC\FormS7Server.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="PLC\FormS7Server.Designer.cs">
+      <DependentUpon>FormS7Server.cs</DependentUpon>
+    </Compile>
     <Compile Include="Redis\FormRedisSubscribe.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -403,6 +409,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Modbus\FormTrustedClient.resx">
       <DependentUpon>FormTrustedClient.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PLC\FormS7Server.resx">
+      <DependentUpon>FormS7Server.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Redis\FormRedisSubscribe.resx">
       <DependentUpon>FormRedisSubscribe.cs</DependentUpon>

@@ -702,7 +702,7 @@ namespace HslCommunication.Profinet.Siemens
         /// Start address, such as M100,I0,Q0,DB2.100</param>
         /// <returns>解析数据地址，解析出地址类型，起始地址，DB块的地址 ->
         /// Parse data address, parse out address type, start address, db block address</returns>
-        private static OperateResult<byte, int, ushort> AnalysisAddress( string address )
+        public static OperateResult<byte, int, ushort> AnalysisAddress( string address )
         {
             var result = new OperateResult<byte, int, ushort>( );
             try

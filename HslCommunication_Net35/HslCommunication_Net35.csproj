@@ -303,6 +303,9 @@
     <Compile Include="..\HslCommunication_Net45\Core\Net\NetworkBase\NetworkBase.cs">
       <Link>Core\Net\NetworkBase\NetworkBase.cs</Link>
     </Compile>
+    <Compile Include="..\HslCommunication_Net45\Core\Net\NetworkBase\NetworkDataServerBase.cs">
+      <Link>Core\Net\NetworkBase\NetworkDataServerBase.cs</Link>
+    </Compile>
     <Compile Include="..\HslCommunication_Net45\Core\Net\NetworkBase\NetworkDeviceBase.cs">
       <Link>Core\Net\NetworkBase\NetworkDeviceBase.cs</Link>
     </Compile>
@@ -573,6 +576,9 @@
     </Compile>
     <Compile Include="..\HslCommunication_Net45\Profinet\Siemens\SiemensS7Net.cs">
       <Link>Profinet\Siemens\SiemensS7Net.cs</Link>
+    </Compile>
+    <Compile Include="..\HslCommunication_Net45\Profinet\Siemens\SiemensS7Server.cs">
+      <Link>Profinet\Siemens\SiemensS7Server.cs</Link>
     </Compile>
     <Compile Include="..\HslCommunication_Net45\Robot\EFORT\EfortData.cs">
       <Link>Robot\EFORT\EfortData.cs</Link>
