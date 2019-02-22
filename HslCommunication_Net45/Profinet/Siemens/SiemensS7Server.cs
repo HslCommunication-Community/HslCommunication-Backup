@@ -405,7 +405,20 @@ namespace HslCommunication.Profinet.Siemens
         private const int DataPoolLength = 65536;      // 数据的长度
         private int station = 1;                       // 服务器的站号数据，对于tcp无效，对于rtu来说，如果小于0，则忽略站号信息
         private int onlineCount = 0;                   // 在线的客户端的数量
-       
+
+        #endregion
+
+        #region Object Override
+
+        /// <summary>
+        /// 返回表示当前对象的字符串
+        /// </summary>
+        /// <returns>字符串信息</returns>
+        public override string ToString( )
+        {
+            return $"SiemensS7Server[{Port}]";
+        }
+
         #endregion
     }
 }
