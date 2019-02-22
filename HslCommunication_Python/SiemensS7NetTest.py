@@ -41,7 +41,7 @@ def printWriteResult(result, addr):
         print("falied[" + addr + "]  " + result.Message)
 
 if __name__ == "__main__":
-    siemens = SiemensS7Net(SiemensPLCS.S1200, "192.168.8.12")
+    siemens = SiemensS7Net(SiemensPLCS.S1200, "127.0.0.1")
     if siemens.ConnectServer().IsSuccess == False:
         print("connect falied")
     else:

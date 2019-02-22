@@ -1773,19 +1773,58 @@ class HslProtocol:
 			return HslProtocol.CommandBytesBase( HslProtocol.ProtocolUserString(), customer, token, buffer )
 
 
+# ↓ NetSupport Implementation ==========================================================================================
+
+class NetSupport:
+	'''静态的方法支持类，提供一些网络的静态支持，支持从套接字从同步接收指定长度的字节数据，并支持报告进度。'''
+	SocketBufferSize = 2048
+	@staticmethod
+	def ReadBytesFromSocket(socket, receive, report = None, reportByPercent = False, response = False):
+		'''读取socket数据的基础方法，只适合用来接收指令头，或是同步数据'''
+		bytes_receive = bytearray()
+		count_receive = 0
+		percent = 0
+		while count_receive < receive:
+			receive_length = NetSupport.SocketBufferSize if (receive - count_receive) >= NetSupport.SocketBufferSize else (receive - count_receive)
+			bytes_receive.extend( socket.recv( receive_length ) )
+			count_receive = len(bytes_receive)
+			if reportByPercent:
+				percentCurrent = count_receive * 100 / receive
+				if percent != percentCurrent:
+					percent = percentCurrent
+					if report != None: report(count_receive, receive)
+			else:
+				if report != None: report(count_receive, receive)
+			if response: socket.send(struct.pack('<q',count_receive))
+		return bytes_receive
+
+	@staticmethod
+	def ReceiveCommandLineFromSocket( socket, endCode ):
+		'''接收一行命令数据，需要自己指定这个结束符'''
+		bufferArray = bytearray()
+		try:
+			while True:
+				head = NetSupport.ReadBytesFromSocket(socket,1)
+				bufferArray.extend(head)
+				if head[0] == endCode: break
+			return OperateResult.CreateSuccessResult(bufferArray)
+		except Exception as e:
+			return OperateResult(str(e))
+
+# ↑ NetSupport Implementation ==========================================================================================
 
 class NetworkBase:
 	'''网络基础类的核心'''
 	Token = uuid.UUID('{00000000-0000-0000-0000-000000000000}')
-	CoreSocket = socket.socket()
+	CoreSocket = None
 	def Receive(self,socket,length):
 		'''接收固定长度的字节数组'''
 		totle = 0
 		data = bytearray()
 		try:
 			while totle < length:
-				data.extend(socket.recv(length-totle))
-				totle += len(data)
+				data.extend( socket.recv( length-totle ))
+				totle = len(data)
 			return OperateResult.CreateSuccessResult(data)
 		except Exception as e:
 			result = OperateResult()
@@ -1897,7 +1936,7 @@ class NetworkDoubleBase(NetworkBase):
 			# 如果是异形模式
 			if self.isUseSpecifiedSocket :
 				if self.isSocketError:
-					return OperateResult( msg = '连接不可用' )
+					return OperateResult( msg = StringResources.Language.ConnectionIsNotAvailable )
 				else:
 					return OperateResult.CreateSuccessResult( self.CoreSocket )
 			else:
@@ -4650,3 +4689,209 @@ class NetPushClient(NetworkXBase):
 			self.Send(self.CoreSocket, struct.pack('<i', 100 ) )
 
 		self.CloseSocket(self.CoreSocket)
+
+
+# ↓ Redis Implementation ==========================================================================================
+
+class RedisHelper:
+	'''提供了redis辅助类的一些方法'''
+	@staticmethod
+	def ReceiveCommandLine( socket ):
+		'''接收一行命令数据'''
+		return NetSupport.ReceiveCommandLineFromSocket(socket, ord('\n'))
+	@staticmethod
+	def ReceiveCommandString( socket, length ):
+		'''接收一行字符串的信息'''
+		try:
+			bufferArray = bytearray()
+			bufferArray.extend(NetSupport.ReadBytesFromSocket(socket, length))
+
+			commandTail = RedisHelper.ReceiveCommandLine(socket)
+			if commandTail.IsSuccess == False: return commandTail
+
+			bufferArray.extend(commandTail.Content)
+			return OperateResult.CreateSuccessResult(bufferArray)
+		except Exception as e:
+			return OperateResult(str(e))
+	@staticmethod
+	def ReceiveCommand( socket ):
+		'''从网络接收一条redis消息'''
+		bufferArray = bytearray()
+		readCommandLine = RedisHelper.ReceiveCommandLine( socket )
+		if readCommandLine.IsSuccess == False: return readCommandLine
+		
+		bufferArray.extend(readCommandLine.Content)
+		if readCommandLine.Content[0] == ord('+') or readCommandLine.Content[0] == ord('-') or readCommandLine.Content[0] == ord(':'):
+			# 状态回复，错误回复，整数回复
+			return OperateResult.CreateSuccessResult(bufferArray)
+		elif readCommandLine.Content[0] == ord('$'):
+			# 批量回复，允许最大512M字节
+			lengthResult = RedisHelper.GetNumberFromCommandLine(readCommandLine.Content)
+			if lengthResult.IsSuccess == False: return OperateResult.CreateFailedResult(lengthResult)
+			
+			if lengthResult.Content < 0: return OperateResult.CreateSuccessResult(bufferArray)
+			
+			# 接收字符串信息
+			receiveContent = RedisHelper.ReceiveCommandString(socket, lengthResult.Content)
+			if receiveContent.IsSuccess == False: return receiveContent
+			
+			bufferArray.extend(receiveContent.Content)
+			return OperateResult.CreateSuccessResult(bufferArray)
+		elif readCommandLine.Content[0] == ord('*'):
+			# 多参数的情况的回复
+			lengthResult = RedisHelper.GetNumberFromCommandLine( readCommandLine.Content )
+			if lengthResult.IsSuccess == False: return lengthResult
+			
+			for i in range(lengthResult.Content):
+				receiveCommand = RedisHelper.ReceiveCommand( socket )
+				if receiveCommand.IsSuccess == False: return receiveCommand
+				bufferArray.extend(receiveCommand.Content)
+			
+			return OperateResult.CreateSuccessResult(bufferArray)
+		else:
+			return OperateResult("Not Supported HeadCode:" + chr(readCommandLine.Content[0]))
+				
+
+	@staticmethod
+	def PackStringCommand( commands ):
+		'''将字符串数组打包成一个redis的报文信息'''
+		sb = "*"
+		sb += str(len(commands))
+		sb += "\r\n"
+		for i in range(len(commands)):
+			sb += "$"
+			sb += str(len(commands[i].encode(encoding='utf-8')))
+			sb += "\r\n"
+			sb += commands[i]
+			sb += "\r\n"
+		return sb.encode(encoding='utf-8')
+
+	@staticmethod
+	def GetNumberFromCommandLine( commandLine ):
+		'''从原始的结果数据对象中提取出数字数据'''
+		try:
+			command = commandLine.decode(encoding='utf-8').strip('\n')
+			return OperateResult.CreateSuccessResult(int(command[1:]))
+		except Exception as e:
+			return OperateResult(msg = str(e))
+	@staticmethod
+	def GetStringFromCommandLine( commandLine ):
+		'''从结果的数据对象里提取字符串的信息'''
+		try:
+			if commandLine[0] != ord('$'): return OperateResult(commandLine.decode(encoding='utf-8'))
+			
+			index_start = -1
+			index_end = -1
+			for i in range(len(commandLine)):
+				if commandLine[i] == ord('\n') or commandLine[i] == ord('\r'):
+					index_start = i
+				if commandLine[i] == ord('\n'):
+					index_end = i
+					break
+			length = int(commandLine[1: index_start].decode(encoding='utf-8'))
+			if length < 0: return OperateResult(msg="(nil) None Value")
+				
+			return OperateResult.CreateSuccessResult(commandLine[index_end + 1:index_end + 1 + length].decode(encoding='utf-8'))
+		except Exception as e:
+			return OperateResult(msg = str(e))
+	@staticmethod
+	def GetStringsFromCommandLine( commandLine ):
+		'''从redis的结果数据中分析出所有的字符串信息'''
+		try:
+			lists = []
+			if commandLine[0] != ord('*'): return OperateResult(commandLine.decode(encoding='utf-8'))
+
+			index = 0
+			for i in range(len(commandLine)):
+				if commandLine[i] == ord('\n') or commandLine[i] == ord('\r'):
+					index = i
+					break
+			length = int(commandLine[1: index].decode(encoding='utf-8'))
+			for i in range(length):
+				# 提取所有的字符串内容
+				index_end = -1
+				for j in range(len(commandLine)):
+					if commandLine[j] == ord('\n'):
+						index_end = j
+						break
+				index = index_end + 1
+				if commandLine[index] == ord('$'):
+					# 寻找子字符串
+					index_start = -1
+					for j in range(len(commandLine)):
+						if commandLine[j + index] == ord('\n') or commandLine[j + index] == ord('\r'):
+							index_start = j + index
+							break
+					stringLength = int(commandLine[index + 1: index_start].decode(encoding='utf-8'))
+					if stringLength >= 0:
+						for j in range(len(commandLine)):
+							if commandLine[j + index] == ord('\n'):
+								index_end = j
+								break
+						index = index_end + 1
+						lists.append(commandLine[index:index+stringLength].decode(encoding='utf-8'))
+						index += stringLength
+					else:
+						lists.append(None)
+				else:
+					index_start = -1
+					for j in range(len(commandLine)):
+						if commandLine[j + index] == ord('\n') or commandLine[j + index] == ord('\r'):
+							index_start = j + index
+							break
+					lists.append(commandLine[index, index_start - 1].decode(encoding='utf-8'))
+			return OperateResult.CreateSuccessResult(lists)
+		except Exception as e:
+			return OperateResult(msg = str(e))
+
+class RedisClient( NetworkDoubleBase ):
+	'''这是一个redis的客户端类，支持读取，写入，发布订阅，但是不支持订阅，如果需要订阅，请使用另一个类'''
+	Password = None
+	def __init__(self, ipAddress, port, password):
+		'''实例化一个客户端的对象，用于和服务器通信'''
+		self.iNetMessage = HslMessage()
+		self.byteTransform = RegularByteTransform()
+		self.ipAddress = ipAddress
+		self.port = port
+		self.receiveTimeOut = 30000
+		self.Password = password
+	def InitializationOnConnect( self, socket ):
+		'''如果设置了密码，对密码进行验证'''
+		if self.Password == None: return super().InitializationOnConnect( socket )
+		if self.Password == "": return super().InitializationOnConnect( socket )
+		
+		command = RedisHelper.PackStringCommand( ["AUTH", self.Password] )
+		read = self.ReadFromCoreSocketServer( socket, command )
+		if read.IsSuccess == False: return read
+		
+		msg = read.Content.decode(encoding='utf-8')
+		if msg.startswith("+OK") == False: return OperateResult(msg)
+
+		return OperateResult.CreateSuccessResult( )
+	def ReadFromCoreSocketServer( self, socket, send ):
+		'''在其他指定的套接字上，使用报文来通讯，传入需要发送的消息，返回一条完整的数据指令'''
+		sendResult = self.Send( socket, send )
+		if sendResult.IsSuccess == False: return OperateResult.CreateFailedResult(sendResult)
+		
+		tmp = SoftBasic.ByteToHexString(send, ' ')
+		if self.receiveTimeOut < 0: return OperateResult.CreateSuccessResult(bytearray())
+
+		return RedisHelper.ReceiveCommand(socket)
+	def ReadCustomer( self, command ):
+		'''自定义的指令交互方法，该指令用空格分割，举例：LTRIM AAAAA 0 999 就是收缩列表，GET AAA 就是获取键值，需要对返回的数据进行二次分析'''
+		byteCommand = RedisHelper.PackStringCommand( command.split( ' ' ) )
+
+		read = self.ReadFromCoreServer( byteCommand )
+		if read.IsSuccess == False: return OperateResult.CreateFailedResult(read)
+	
+		return OperateResult.CreateSuccessResult(read.Content.decode(encoding='utf-8'))
+
+	def ReadKey( self, key ):
+		'''返回 key 所关联的字符串值。如果 key 不存在那么返回特殊值 nil 。假如 key 储存的值不是字符串类型，返回一个错误，因为 GET 只能用于处理字符串值。'''
+		command = RedisHelper.PackStringCommand( ["GET", key] )
+
+		read = self.ReadFromCoreServer( command )
+		if read.IsSuccess == False: return OperateResult.CreateFailedResult(read)
+		
+		return RedisHelper.GetStringFromCommandLine( read.Content )
+# ↑ Redis Implementation ==========================================================================================
