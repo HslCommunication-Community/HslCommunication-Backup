@@ -102,7 +102,7 @@ namespace HslCommunication.Robot.EFORT
             OperateResult<EfortData> read = Read( );
             if (!read.IsSuccess) return OperateResult.CreateFailedResult<string>( read );
 
-            return OperateResult.CreateSuccessResult( Newtonsoft.Json.JsonConvert.SerializeObject( read.Content ) );
+            return OperateResult.CreateSuccessResult( Newtonsoft.Json.JsonConvert.SerializeObject( read.Content, Newtonsoft.Json.Formatting.Indented ) );
         }
 
 
