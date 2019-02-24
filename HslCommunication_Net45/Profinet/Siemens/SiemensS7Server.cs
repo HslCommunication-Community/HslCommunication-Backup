@@ -11,8 +11,50 @@ using HslCommunication.Core.IMessage;
 namespace HslCommunication.Profinet.Siemens
 {
     /// <summary>
-    /// 西门子S7协议的虚拟服务器，支持TCP协议，无视PLC的
+    /// 西门子S7协议的虚拟服务器，支持TCP协议，无视PLC的型号，所以在客户端进行操作操作的时候，选择1200或是1500或是300或是400都是一样的。
     /// </summary>
+    /// <remarks>
+    /// 地址支持的列表如下：
+    /// <list type="table">
+    ///   <listheader>
+    ///     <term>地址名称</term>
+    ///     <term>示例</term>
+    ///     <term>地址进制</term>
+    ///   </listheader>
+    ///   <item>
+    ///     <term>中间寄存器</term>
+    ///     <term>M100,M200</term>
+    ///     <term>10</term>
+    ///   </item>
+    ///   <item>
+    ///     <term>输入寄存器</term>
+    ///     <term>I100,I200</term>
+    ///     <term>10</term>
+    ///   </item>
+    ///   <item>
+    ///     <term>输出寄存器</term>
+    ///     <term>Q100,Q200</term>
+    ///     <term>10</term>
+    ///   </item>
+    ///   <item>
+    ///     <term>DB寄存器</term>
+    ///     <term>DB1.100,DB1.200</term>
+    ///     <term>10</term>
+    ///   </item>
+    /// </list>
+    /// <note type="important">对于200smartPLC的V区，就是DB1.X，例如，V100=DB1.100</note>
+    /// </remarks>
+    /// <example>
+    /// 你可以很快速并且简单的创建一个虚拟的s7服务器
+    /// <code lang="cs" source="HslCommunication_Net45.Test\Documentation\Samples\Profinet\SiemensS7ServerExample.cs" region="UseExample1" title="简单的创建服务器" />
+    /// 当然如果需要高级的服务器，指定日志，限制客户端的IP地址，获取客户端发送的信息，在服务器初始化的时候就要参照下面的代码：
+    /// <code lang="cs" source="HslCommunication_Net45.Test\Documentation\Samples\Profinet\SiemensS7ServerExample.cs" region="UseExample4" title="定制服务器" />
+    /// 服务器创建好之后，我们就可以对服务器进行一些读写的操作了，下面的代码是基础的BCL类型的读写操作。
+    /// <code lang="cs" source="HslCommunication_Net45.Test\Documentation\Samples\Profinet\SiemensS7ServerExample.cs" region="ReadWriteExample" title="基础的读写示例" />
+    /// 高级的对于byte数组类型的数据进行批量化的读写操作如下：   
+    /// <code lang="cs" source="HslCommunication_Net45.Test\Documentation\Samples\Profinet\SiemensS7ServerExample.cs" region="BytesReadWrite" title="字节的读写示例" />
+    /// 更高级操作请参见源代码。
+    /// </example>
     public class SiemensS7Server : NetworkDataServerBase
     {
         #region Constructor
@@ -403,7 +445,6 @@ namespace HslCommunication.Profinet.Siemens
         private SoftBuffer memeryBuffer;               // 寄存器的数据池
         private SoftBuffer dbBlockBuffer;              // 输入寄存器的数据池
         private const int DataPoolLength = 65536;      // 数据的长度
-        private int station = 1;                       // 服务器的站号数据，对于tcp无效，对于rtu来说，如果小于0，则忽略站号信息
         private int onlineCount = 0;                   // 在线的客户端的数量
 
         #endregion

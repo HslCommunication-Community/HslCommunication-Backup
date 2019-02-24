@@ -113,22 +113,22 @@ namespace HslCommunication_Net45.Test.Documentation.Samples.Profinet
             siemens.Write( "M100", (short)1234 );                // 写入M100  short值  ,W3C0,R3C0 效果是一样的
             siemens.Write( "M100", (ushort)45678 );              // 写入M100  ushort值
             siemens.Write( "M100", 1234566 );                    // 写入M100  int值
-            siemens.Write( "M100", (uint)1234566 );               // 写入M100  uint值
-            siemens.Write( "M100", 123.456f );                    // 写入M100  float值
-            siemens.Write( "M100", 123.456d );                    // 写入M100  double值
-            siemens.Write( "M100", 123456661235123534L );          // 写入M100  long值
-            siemens.Write( "M100", 523456661235123534UL );          // 写入M100  ulong值
-            siemens.Write( "M100", "K123456789" );                // 写入M100  string值
+            siemens.Write( "M100", (uint)1234566 );              // 写入M100  uint值
+            siemens.Write( "M100", 123.456f );                   // 写入M100  float值
+            siemens.Write( "M100", 123.456d );                   // 写入M100  double值
+            siemens.Write( "M100", 123456661235123534L );        // 写入M100  long值
+            siemens.Write( "M100", 523456661235123534UL );       // 写入M100  ulong值
+            siemens.Write( "M100", "K123456789" );               // 写入M100  string值
 
             // 读取数组
-            siemens.Write( "M100", new short[] { 123, 3566, -123 } );                // 写入M100  short值  ,W3C0,R3C0 效果是一样的
-            siemens.Write( "M100", new ushort[] { 12242, 42321, 12323 } );              // 写入M100  ushort值
-            siemens.Write( "M100", new int[] { 1234312312, 12312312, -1237213 } );                    // 写入M100  int值
-            siemens.Write( "M100", new uint[] { 523123212, 213, 13123 } );               // 写入M100  uint值
-            siemens.Write( "M100", new float[] { 123.456f, 35.3f, -675.2f } );                    // 写入M100  float值
-            siemens.Write( "M100", new double[] { 12343.542312d, 213123.123d, -231232.53432d } );                    // 写入M100  double值
-            siemens.Write( "M100", new long[] { 1231231242312, 34312312323214, -1283862312631823 } );          // 写入M100  long值
-            siemens.Write( "M100", new ulong[] { 1231231242312, 34312312323214, 9731283862312631823 } );          // 写入M100  ulong值
+            siemens.Write( "M100", new short[] { 123, 3566, -123 } );                                      // 写入M100  short值  ,W3C0,R3C0 效果是一样的
+            siemens.Write( "M100", new ushort[] { 12242, 42321, 12323 } );                                 // 写入M100  ushort值
+            siemens.Write( "M100", new int[] { 1234312312, 12312312, -1237213 } );                         // 写入M100  int值
+            siemens.Write( "M100", new uint[] { 523123212, 213, 13123 } );                                 // 写入M100  uint值
+            siemens.Write( "M100", new float[] { 123.456f, 35.3f, -675.2f } );                             // 写入M100  float值
+            siemens.Write( "M100", new double[] { 12343.542312d, 213123.123d, -231232.53432d } );          // 写入M100  double值
+            siemens.Write( "M100", new long[] { 1231231242312, 34312312323214, -1283862312631823 } );      // 写入M100  long值
+            siemens.Write( "M100", new ulong[] { 1231231242312, 34312312323214, 9731283862312631823 } );   // 写入M100  ulong值
 
             #endregion
         }

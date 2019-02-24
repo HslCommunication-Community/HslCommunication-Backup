@@ -27,6 +27,47 @@ namespace HslCommunication.Profinet.Siemens
     /// 一个西门子的客户端类，使用S7协议来进行数据交互 ->
     /// A Siemens client class that uses the S7 protocol for data interaction
     /// </summary>
+    /// <remarks>
+    /// 地址支持的列表如下：
+    /// <list type="table">
+    ///   <listheader>
+    ///     <term>地址名称</term>
+    ///     <term>示例</term>
+    ///     <term>地址进制</term>
+    ///   </listheader>
+    ///   <item>
+    ///     <term>中间寄存器</term>
+    ///     <term>M100,M200</term>
+    ///     <term>10</term>
+    ///   </item>
+    ///   <item>
+    ///     <term>输入寄存器</term>
+    ///     <term>I100,I200</term>
+    ///     <term>10</term>
+    ///   </item>
+    ///   <item>
+    ///     <term>输出寄存器</term>
+    ///     <term>Q100,Q200</term>
+    ///     <term>10</term>
+    ///   </item>
+    ///   <item>
+    ///     <term>DB寄存器</term>
+    ///     <term>DB1.100,DB1.200</term>
+    ///     <term>10</term>
+    ///   </item>
+    ///   <item>
+    ///     <term>定时器的值</term>
+    ///     <term>T100,T200</term>
+    ///     <term>10</term>
+    ///   </item>
+    ///   <item>
+    ///     <term>计数器的值</term>
+    ///     <term>C100,C200</term>
+    ///     <term>10</term>
+    ///   </item>
+    /// </list>
+    /// <note type="important">对于200smartPLC的V区，就是DB1.X，例如，V100=DB1.100</note>
+    /// </remarks>
     /// <example>
     /// <code lang="cs" source="HslCommunication_Net45.Test\Documentation\Samples\Profinet\SiemensS7Net.cs" region="Usage" title="简单的短连接使用" />
     /// <code lang="cs" source="HslCommunication_Net45.Test\Documentation\Samples\Profinet\SiemensS7Net.cs" region="Usage2" title="简单的长连接使用" />

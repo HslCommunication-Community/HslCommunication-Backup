@@ -23,23 +23,9 @@ namespace HslCommunication.Core.Net
         }
 
         #endregion
-
-        /// <summary>
-        /// 系统的数据转换接口
-        /// </summary>
-        public IByteTransform ByteTransform { get; set; }
-
-
+        
         #region Virtual Method
         
-        /**************************************************************************************************
-         * 
-         *    说明：子类中需要重写基础的读取和写入方法，来支持不同的数据访问规则
-         *    
-         *    此处没有将读写位纳入进来，因为各种设备的支持不尽相同，比较麻烦
-         * 
-         **************************************************************************************************/
-         
         /// <summary>
         /// 从设备读取原始数据
         /// </summary>
@@ -129,6 +115,11 @@ namespace HslCommunication.Core.Net
         #endregion
 
         #region Public Members
+
+        /// <summary>
+        /// 系统的数据转换接口
+        /// </summary>
+        public IByteTransform ByteTransform { get; set; }
 
         /// <summary>
         /// 当接收到来自客户的数据信息时触发的对象，该数据可能来自tcp或是串口
