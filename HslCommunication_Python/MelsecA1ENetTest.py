@@ -25,6 +25,7 @@ SOFTWARE.
 警告：以下代码只能在测试PLC中运行，禁止使用生产现场的PLC来测试，否则，后果自负
 Warning: The following code can only be run in the Test plc, prohibit the use of the production site PLC to test, otherwise, the consequences
 '''
+
 from HslCommunication import MelsecA1ENet
 from HslCommunication import SoftBasic
 
