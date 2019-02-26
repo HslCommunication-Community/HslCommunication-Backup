@@ -626,4 +626,20 @@ namespace HslCommunication
     {
 
     }
+
+
+    // 工作的备忘录
+    // 1. 三菱的代码提炼，重构，抽象，将MC协议核心提取，适配不同的格式要求。
+    // 2. redis的协议在Python上的实现，并且测试。
+    // 3. python新增对串口的支持并测试。
+    // 4. python新增对ab plc的支持。
+    // 5. .net端对安川机器人的支持，已经有协议文档。
+    // 6. .net端对库卡机器人的支持，http://blog.davidrobot.com/2014/09/kukavarproxy_index.html?tdsourcetag=s_pctim_aiomsg
+    // 7. .net端对三菱Qna兼容3C帧协议的支持。
+    // 8. .net端对欧姆龙的Fins串口协议的支持
+
+    // 组件之外的计划
+    // 1. 研究MQTT协议的通讯
+    // 2. 研究 ML.NET 的机器学习的平台
+    // 3. 工业网关的深入集成
 }
