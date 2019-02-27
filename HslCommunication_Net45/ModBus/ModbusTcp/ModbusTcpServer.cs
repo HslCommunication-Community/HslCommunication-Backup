@@ -224,7 +224,7 @@ namespace HslCommunication.ModBus
         public void WriteCoil( string address, bool data )
         {
             ushort add = ushort.Parse( address );
-            coilBuffer.SetValue( data ? 0x01 : 0x00, add );
+            coilBuffer.SetValue( (byte)(data ? 0x01 : 0x00), add );
         }
 
         /// <summary>
@@ -283,7 +283,7 @@ namespace HslCommunication.ModBus
         public void WriteDiscrete( string address, bool data )
         {
             ushort add = ushort.Parse( address );
-            inputBuffer.SetValue( data ? 0x01 : 0x00, add );
+            inputBuffer.SetValue( (byte)(data ? 0x01 : 0x00), add );
         }
 
         /// <summary>
@@ -1409,7 +1409,7 @@ namespace HslCommunication.ModBus
         /// <summary>
         /// 新增一个数据监视的任务，针对的是寄存器
         /// </summary>
-        /// <param name="monitor"></param>
+        /// <param name="monitor">监视地址对象</param>
         public void AddSubcription( ModBusMonitorAddress monitor )
         {
             subcriptionHybirdLock.Enter( );
@@ -1433,8 +1433,8 @@ namespace HslCommunication.ModBus
         /// 在数据变更后，进行触发是否产生订阅
         /// </summary>
         /// <param name="address">数据地址</param>
-        /// <param name="before"></param>
-        /// <param name="after"></param>
+        /// <param name="before">修改之前的数</param>
+        /// <param name="after">修改之后的数</param>
         private void OnRegisterBeforWrite( ushort address, short before, short after )
         {
             subcriptionHybirdLock.Enter( );
