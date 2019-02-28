@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using HslCommunication.BasicFramework;
 
 namespace HslCommunication.Profinet.Melsec
 {
@@ -34,8 +35,8 @@ namespace HslCommunication.Profinet.Melsec
         private OperateResult CheckPlcReadResponse( byte[] ack )
         {
             if (ack.Length == 0) return new OperateResult( StringResources.Language.MelsecFxReceiveZore );
-            if (ack[0] == 0x15) return new OperateResult( StringResources.Language.MelsecFxAckNagative );
-            if (ack[0] != 0x02) return new OperateResult( StringResources.Language.MelsecFxAckWrong + ack[0] );
+            if (ack[0] == 0x15) return new OperateResult( StringResources.Language.MelsecFxAckNagative + " Actual: " + SoftBasic.ByteToHexString( ack, ' ' ) );
+            if (ack[0] != 0x02) return new OperateResult( StringResources.Language.MelsecFxAckWrong + ack[0] + " Actual: " + SoftBasic.ByteToHexString( ack, ' ' ) );
 
             if (!MelsecHelper.CheckCRC( ack )) return new OperateResult( StringResources.Language.MelsecFxCrcCheckFailed );
 
@@ -45,8 +46,8 @@ namespace HslCommunication.Profinet.Melsec
         private OperateResult CheckPlcWriteResponse( byte[] ack )
         {
             if (ack.Length == 0) return new OperateResult( StringResources.Language.MelsecFxReceiveZore );
-            if (ack[0] == 0x15) return new OperateResult( StringResources.Language.MelsecFxAckNagative );
-            if (ack[0] != 0x06) return new OperateResult( StringResources.Language.MelsecFxAckWrong + ack[0] );
+            if (ack[0] == 0x15) return new OperateResult( StringResources.Language.MelsecFxAckNagative + " Actual: " + SoftBasic.ByteToHexString( ack, ' ' ) );
+            if (ack[0] != 0x06) return new OperateResult( StringResources.Language.MelsecFxAckWrong + ack[0] + " Actual: " + SoftBasic.ByteToHexString( ack, ' ' ) );
 
             return OperateResult.CreateSuccessResult( );
         }
