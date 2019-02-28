@@ -42,7 +42,7 @@ namespace HslCommunicationDemo
         {
             panel2.Enabled = false;
             userCurve1.SetLeftCurve( "A", new float[0], Color.Tomato );
-            comboBox1.SelectedIndex = 2;
+            comboBox1.SelectedIndex = 0;
 
             Language( Program.Language );
 
@@ -148,7 +148,7 @@ namespace HslCommunicationDemo
             }
             else
             {
-                MessageBox.Show( DateTime.Now.ToString( "[HH:mm:ss] " ) + $"[{address}] 读取失败{Environment.NewLine}原因：{result.ToMessageShowString( )}" );
+                MessageBox.Show( DateTime.Now.ToString( "[HH:mm:ss] " ) + $"[{address}] Read Failed {Environment.NewLine} Reason：{result.ToMessageShowString( )}" );
             }
         }
 
@@ -161,11 +161,11 @@ namespace HslCommunicationDemo
         {
             if (result.IsSuccess)
             {
-                MessageBox.Show( DateTime.Now.ToString( "[HH:mm:ss] " ) + $"[{address}] 写入成功" );
+                MessageBox.Show( DateTime.Now.ToString( "[HH:mm:ss] " ) + $"[{address}] Write Success" );
             }
             else
             {
-                MessageBox.Show( DateTime.Now.ToString( "[HH:mm:ss] " ) + $"[{address}] 写入失败{Environment.NewLine}原因：{result.ToMessageShowString( )}" );
+                MessageBox.Show( DateTime.Now.ToString( "[HH:mm:ss] " ) + $"[{address}] Write Failed {Environment.NewLine} Reason：{result.ToMessageShowString( )}" );
             }
         }
 
@@ -627,53 +627,6 @@ namespace HslCommunicationDemo
         }
 
         // private MelsecMcAsciiNet melsec_ascii_net = null;
-
-        #endregion
-
-        #region 压力测试
-
-        private int thread_status = 0;
-        private int failed = 0;
-        private DateTime thread_time_start = DateTime.Now;
-        // 压力测试，开3个线程，每个线程进行读写操作，看使用时间
-        private void button3_Click( object sender, EventArgs e )
-        {
-            thread_status = 3;
-            failed = 0;
-            thread_time_start = DateTime.Now;
-            new Thread( new ThreadStart( thread_test2 ) ) { IsBackground = true, }.Start( );
-            new Thread( new ThreadStart( thread_test2 ) ) { IsBackground = true, }.Start( );
-            new Thread( new ThreadStart( thread_test2 ) ) { IsBackground = true, }.Start( );
-            button3.Enabled = false;
-        }
-
-        private void thread_test2( )
-        {
-            int count = 500;
-            while (count > 0)
-            {
-                if (!melsecA3C.Write( "D100", (short)1234 ).IsSuccess) failed++;
-                if (!melsecA3C.ReadInt16( "D100" ).IsSuccess) failed++;
-                count--;
-            }
-            thread_end( );
-        }
-
-        private void thread_end( )
-        {
-            if (Interlocked.Decrement( ref thread_status ) == 0)
-            {
-                // 执行完成
-                Invoke( new Action( ( ) =>
-                {
-                    button3.Enabled = true;
-                    MessageBox.Show( "耗时：" + (DateTime.Now - thread_time_start).TotalSeconds + Environment.NewLine + "失败次数：" + failed );
-                } ) );
-            }
-        }
-
-
-
 
         #endregion
 
