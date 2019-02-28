@@ -52,6 +52,9 @@ namespace HslCommunication.ModBus
             subcriptionHybirdLock = new SimpleHybirdLock( );
             byteTransform = new ReverseWordTransform( );
 
+            lockModbusClient = new SimpleHybirdLock( );
+            listsModbusClient = new List<ModBusState>( );
+
 #if !NETSTANDARD2_0
             serialPort = new SerialPort( );
 #endif
@@ -825,8 +828,42 @@ namespace HslCommunication.ModBus
 
         #endregion
 
-        #region NetServer Override
+        #region Online Managment
 
+        private List<ModBusState> listsModbusClient;
+        private SimpleHybirdLock lockModbusClient;
+
+        private void AddModbusClient( ModBusState modBusState )
+        {
+            lockModbusClient.Enter( );
+            listsModbusClient.Add( modBusState );
+            lockModbusClient.Leave( );
+        }
+
+        private void RemoveModbusClient( ModBusState modBusState )
+        {
+            lockModbusClient.Enter( );
+            listsModbusClient.Remove( modBusState );
+            lockModbusClient.Leave( );
+        }
+
+        /// <summary>
+        /// 关闭之后进行的操作
+        /// </summary>
+        protected override void CloseAction( )
+        {
+            lockModbusClient.Enter( );
+            for (int i = 0; i < listsModbusClient.Count; i++)
+            {
+                listsModbusClient[i]?.WorkSocket?.Close( );
+            }
+            listsModbusClient.Clear( );
+            lockModbusClient.Leave( );
+        }
+        
+        #endregion
+
+        #region NetServer Override
 
         /// <summary>
         /// 当接收到了新的请求的时候执行的操作
@@ -870,6 +907,7 @@ namespace HslCommunication.ModBus
                 {
                     state.WorkSocket.BeginReceive( state.HeadByte, 0, 6, SocketFlags.None, new AsyncCallback( ModbusHeadReveiveCallback ), state );
                     System.Threading.Interlocked.Increment( ref onlineCount );
+                    AddModbusClient( state );
                 }
                 catch (Exception ex)
                 {
@@ -915,6 +953,7 @@ namespace HslCommunication.ModBus
                     {
                         LogNet?.WriteException( ToString( ), string.Format( StringResources.Language.ClientOfflineInfo, state.IpEndPoint ), ex );
                         System.Threading.Interlocked.Decrement( ref onlineCount );
+                        RemoveModbusClient( state );
                     }
                     return;
                 }
@@ -936,6 +975,7 @@ namespace HslCommunication.ModBus
                     {
                         LogNet?.WriteException( ToString( ), string.Format( StringResources.Language.ClientOfflineInfo, state.IpEndPoint ), ex );
                         System.Threading.Interlocked.Decrement( ref onlineCount );
+                        RemoveModbusClient( state );
                     }
                     return;
                 }
@@ -964,6 +1004,7 @@ namespace HslCommunication.ModBus
                         {
                             LogNet?.WriteException( ToString( ), string.Format( StringResources.Language.ClientOfflineInfo, state.IpEndPoint ), ex );
                             System.Threading.Interlocked.Decrement( ref onlineCount );
+                            RemoveModbusClient( state );
                         }
                         return;
                     }
@@ -976,6 +1017,7 @@ namespace HslCommunication.ModBus
                     {
                         LogNet?.WriteWarn( ToString( ), string.Format( StringResources.Language.ClientOfflineInfo, state.IpEndPoint ) + StringResources.Language.ModbusMatchFailed );
                         System.Threading.Interlocked.Decrement( ref onlineCount );
+                        RemoveModbusClient( state );
                     }
                 }
             }
@@ -1005,6 +1047,7 @@ namespace HslCommunication.ModBus
                     {
                         LogNet?.WriteException( ToString( ), string.Format( StringResources.Language.ClientOfflineInfo, state.IpEndPoint ), ex );
                         System.Threading.Interlocked.Decrement( ref onlineCount );
+                        RemoveModbusClient( state );
                     }
                     return;
                 }
@@ -1029,6 +1072,7 @@ namespace HslCommunication.ModBus
                     {
                         LogNet?.WriteError( ToString( ), string.Format( StringResources.Language.ClientOfflineInfo, state.IpEndPoint ) );
                         System.Threading.Interlocked.Decrement( ref onlineCount );
+                        RemoveModbusClient( state );
                     }
                     return;
                 }
@@ -1051,6 +1095,7 @@ namespace HslCommunication.ModBus
                     {
                         LogNet?.WriteException( ToString( ), string.Format( StringResources.Language.ClientOfflineInfo, state.IpEndPoint ), ex );
                         System.Threading.Interlocked.Decrement( ref onlineCount );
+                        RemoveModbusClient( state );
                     }
                     return;
                 }
@@ -1070,6 +1115,7 @@ namespace HslCommunication.ModBus
                     {
                         LogNet?.WriteException( ToString( ), string.Format( StringResources.Language.ClientOfflineInfo, state.IpEndPoint ), ex );
                         System.Threading.Interlocked.Decrement( ref onlineCount );
+                        RemoveModbusClient( state );
                     }
                     return;
                 }
@@ -1095,6 +1141,7 @@ namespace HslCommunication.ModBus
                     if (state.IsModbusOffline( ))
                     {
                         LogNet?.WriteException( ToString( ), string.Format( StringResources.Language.ClientOfflineInfo, state.IpEndPoint ), ex );
+                        RemoveModbusClient( state );
                         state = null;
                         System.Threading.Interlocked.Decrement( ref onlineCount );
                     }

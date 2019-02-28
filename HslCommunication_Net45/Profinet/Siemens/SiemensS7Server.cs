@@ -72,6 +72,8 @@ namespace HslCommunication.Profinet.Siemens
                                    
             WordLength              = 2;
             ByteTransform           = new ReverseBytesTransform( );
+            lockOnlineClient        = new SimpleHybirdLock( );
+            listsOnlineClient       = new List<AppSession>( );
         }
 
         #endregion
@@ -195,6 +197,41 @@ namespace HslCommunication.Profinet.Siemens
         }
 
         #endregion
+        
+        #region Online Managment
+
+        private List<AppSession> listsOnlineClient;
+        private SimpleHybirdLock lockOnlineClient;
+
+        private void AddClient( AppSession modBusState )
+        {
+            lockOnlineClient.Enter( );
+            listsOnlineClient.Add( modBusState );
+            lockOnlineClient.Leave( );
+        }
+
+        private void RemoveClient( AppSession modBusState )
+        {
+            lockOnlineClient.Enter( );
+            listsOnlineClient.Remove( modBusState );
+            lockOnlineClient.Leave( );
+        }
+
+        /// <summary>
+        /// 关闭之后进行的操作
+        /// </summary>
+        protected override void CloseAction( )
+        {
+            lockOnlineClient.Enter( );
+            for (int i = 0; i < listsOnlineClient.Count; i++)
+            {
+                listsOnlineClient[i]?.WorkSocket?.Close( );
+            }
+            listsOnlineClient.Clear( );
+            lockOnlineClient.Leave( );
+        }
+
+        #endregion
 
         #region NetServer Override
 
@@ -227,6 +264,7 @@ namespace HslCommunication.Profinet.Siemens
             {
                 socket.BeginReceive( new byte[0], 0, 0, SocketFlags.None, new AsyncCallback( SocketAsyncCallBack ), appSession );
                 System.Threading.Interlocked.Increment( ref onlineCount );
+                AddClient( appSession );
             }
             catch
             {
@@ -284,6 +322,7 @@ namespace HslCommunication.Profinet.Siemens
                     session.WorkSocket?.Close( );
                     LogNet?.WriteDebug( ToString( ), string.Format( StringResources.Language.ClientOfflineInfo, session.IpEndPoint ) );
                     System.Threading.Interlocked.Decrement( ref onlineCount );
+                    RemoveClient( session );
                     return;
                 }
             }
