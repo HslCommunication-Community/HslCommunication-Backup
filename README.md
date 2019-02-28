@@ -65,9 +65,9 @@ Install-Package HslCommunication
 * python: **Visual Studio Code**
 
 ## Contact
-* 工业软件交流QQ群：[592132877](http://shang.qq.com/wpa/qunwpa?idkey=2278cb9c2e0c04fc305c43e41acff940499a34007dfca9e83a7291e726f9c4e8)
+* 工业软件交流QQ群：[592132877](http://shang.qq.com/wpa/qunwpa?idkey=2278cb9c2e0c04fc305c43e41acff940499a34007dfca9e83a7291e726f9c4e8)   新群：948305931
 * 邮箱地址(Email)：hsl200909@163.com
-* 技术支持VIP群（打赏超过200RMB可加入）：[838185568](http://shang.qq.com/wpa/qunwpa?idkey=eee02ce1acde63c6316cbb380a80e033a14170ab7ca981f1cac83e0b657c8860) 新群：948305931
+* 技术支持VIP群（打赏超过200RMB可加入）：[838185568](http://shang.qq.com/wpa/qunwpa?idkey=eee02ce1acde63c6316cbb380a80e033a14170ab7ca981f1cac83e0b657c8860)
 
 ## HslCommunication.dll Summary 
 完整的项目介绍地址： [http://www.cnblogs.com/dathlin/p/7703805.html](http://www.cnblogs.com/dathlin/p/7703805.html)
@@ -122,6 +122,7 @@ Install-Package HslCommunication
 * 同步网络通讯功能 **NetSimplify**
 * 异步网络通讯功能 **NetComplex**
 * 数据订阅推送 **NetPush**
+* Redis读写操作
 
 
 ## Second Extensions Project (内含几个Demo)
