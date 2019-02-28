@@ -253,7 +253,7 @@ namespace HslCommunication.BasicFramework
         /// <param name="index">索引位置</param>
         public void SetValue(byte value, int index )
         {
-            SetBytes( new byte[value], index );
+            SetBytes( new byte[] { value }, index );
         }
  
         /// <summary>
