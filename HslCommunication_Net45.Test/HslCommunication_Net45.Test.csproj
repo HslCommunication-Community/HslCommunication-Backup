@@ -101,6 +101,7 @@
     <Compile Include="Profinet\AllenBradley\AllenBradleyHelper.cs" />
     <Compile Include="Profinet\Melsec\MelsecFxLinksTest.cs" />
     <Compile Include="Profinet\Melsec\MelsecFxSerialTest.cs" />
+    <Compile Include="Profinet\Melsec\MelsecMcNetTest.cs" />
     <Compile Include="Profinet\Panasonic\PanasonicMewtocolTest.cs" />
     <Compile Include="UnitTest1.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

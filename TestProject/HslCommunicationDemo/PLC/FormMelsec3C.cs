@@ -13,16 +13,16 @@ using HslCommunication;
 
 namespace HslCommunicationDemo
 {
-    public partial class FormMelsecLinks : Form
+    public partial class FormMelsec3C : Form
     {
-        public FormMelsecLinks( )
+        public FormMelsec3C( )
         {
             InitializeComponent( );
-            melsecSerial = new MelsecFxLinks( );
+            melsecA3C = new MelsecA3CNet1( );
         }
 
 
-        private MelsecFxLinks melsecSerial = null;
+        private MelsecA3CNet1 melsecA3C = null;
 
         private void linkLabel1_LinkClicked( object sender, LinkLabelLinkClickedEventArgs e )
         {
@@ -195,12 +195,12 @@ namespace HslCommunicationDemo
             }
             
 
-            melsecSerial?.Close( );
-            melsecSerial = new MelsecFxLinks( );
+            melsecA3C?.Close( );
+            melsecA3C = new MelsecA3CNet1( );
             
             try
             {
-                melsecSerial.SerialPortInni( sp =>
+                melsecA3C.SerialPortInni( sp =>
                 {
                     sp.PortName = textBox1.Text;
                     sp.BaudRate = baudRate;
@@ -208,12 +208,10 @@ namespace HslCommunicationDemo
                     sp.StopBits = stopBits == 0 ? System.IO.Ports.StopBits.None : (stopBits == 1 ? System.IO.Ports.StopBits.One : System.IO.Ports.StopBits.Two);
                     sp.Parity = comboBox1.SelectedIndex == 0 ? System.IO.Ports.Parity.None : (comboBox1.SelectedIndex == 1 ? System.IO.Ports.Parity.Odd : System.IO.Ports.Parity.Even);
                 } );
-                melsecSerial.Station = byte.Parse( textBox15.Text );
-                melsecSerial.WaittingTime = byte.Parse( textBox18.Text );
-                melsecSerial.SumCheck = checkBox1.Checked;
+                melsecA3C.Station = byte.Parse( textBox15.Text );
 
 
-                melsecSerial.Open( );
+                melsecA3C.Open( );
                 button2.Enabled = true;
                 button1.Enabled = false;
                 panel2.Enabled = true;
@@ -227,7 +225,7 @@ namespace HslCommunicationDemo
         private void button2_Click( object sender, EventArgs e )
         {
             // 断开连接
-            melsecSerial.Close( );
+            melsecA3C.Close( );
             button2.Enabled = false;
             button1.Enabled = true;
             panel2.Enabled = false;
@@ -243,59 +241,59 @@ namespace HslCommunicationDemo
         private void button_read_bool_Click( object sender, EventArgs e )
         {
             // 读取bool变量
-            readResultRender( melsecSerial.ReadBool( textBox3.Text ), textBox3.Text, textBox4 );
+            readResultRender( melsecA3C.ReadBool( textBox3.Text ), textBox3.Text, textBox4 );
         }
 
         private void button_read_short_Click( object sender, EventArgs e )
         {
             // 读取short变量
-            readResultRender( melsecSerial.ReadInt16( textBox3.Text ), textBox3.Text, textBox4 );
+            readResultRender( melsecA3C.ReadInt16( textBox3.Text ), textBox3.Text, textBox4 );
         }
 
         private void button_read_ushort_Click( object sender, EventArgs e )
         {
             // 读取ushort变量
-            readResultRender( melsecSerial.ReadUInt16( textBox3.Text ), textBox3.Text, textBox4 );
+            readResultRender( melsecA3C.ReadUInt16( textBox3.Text ), textBox3.Text, textBox4 );
         }
 
         private void button_read_int_Click( object sender, EventArgs e )
         {
             // 读取int变量
-            readResultRender( melsecSerial.ReadInt32( textBox3.Text ), textBox3.Text, textBox4 );
+            readResultRender( melsecA3C.ReadInt32( textBox3.Text ), textBox3.Text, textBox4 );
         }
         private void button_read_uint_Click( object sender, EventArgs e )
         {
             // 读取uint变量
-            readResultRender( melsecSerial.ReadUInt32( textBox3.Text ), textBox3.Text, textBox4 );
+            readResultRender( melsecA3C.ReadUInt32( textBox3.Text ), textBox3.Text, textBox4 );
         }
         private void button_read_long_Click( object sender, EventArgs e )
         {
             // 读取long变量
-            readResultRender( melsecSerial.ReadInt64( textBox3.Text ), textBox3.Text, textBox4 );
+            readResultRender( melsecA3C.ReadInt64( textBox3.Text ), textBox3.Text, textBox4 );
         }
 
         private void button_read_ulong_Click( object sender, EventArgs e )
         {
             // 读取ulong变量
-            readResultRender( melsecSerial.ReadUInt64( textBox3.Text ), textBox3.Text, textBox4 );
+            readResultRender( melsecA3C.ReadUInt64( textBox3.Text ), textBox3.Text, textBox4 );
         }
 
         private void button_read_float_Click( object sender, EventArgs e )
         {
             // 读取float变量
-            readResultRender( melsecSerial.ReadFloat( textBox3.Text ), textBox3.Text, textBox4 );
+            readResultRender( melsecA3C.ReadFloat( textBox3.Text ), textBox3.Text, textBox4 );
         }
 
         private void button_read_double_Click( object sender, EventArgs e )
         {
             // 读取double变量
-            readResultRender( melsecSerial.ReadDouble( textBox3.Text ), textBox3.Text, textBox4 );
+            readResultRender( melsecA3C.ReadDouble( textBox3.Text ), textBox3.Text, textBox4 );
         }
 
         private void button_read_string_Click( object sender, EventArgs e )
         {
             // 读取字符串
-            readResultRender( melsecSerial.ReadString( textBox3.Text, ushort.Parse( textBox5.Text ) ), textBox3.Text, textBox4 );
+            readResultRender( melsecA3C.ReadString( textBox3.Text, ushort.Parse( textBox5.Text ) ), textBox3.Text, textBox4 );
         }
 
 
@@ -309,7 +307,7 @@ namespace HslCommunicationDemo
             // bool写入
             try
             {
-                writeResultRender( melsecSerial.Write( textBox8.Text,bool.Parse( textBox7.Text )), textBox8.Text );
+                writeResultRender( melsecA3C.Write( textBox8.Text,bool.Parse( textBox7.Text )), textBox8.Text );
             }
             catch (Exception ex)
             {
@@ -322,7 +320,7 @@ namespace HslCommunicationDemo
             // short写入
             try
             {
-                writeResultRender( melsecSerial.Write( textBox8.Text, short.Parse( textBox7.Text ) ), textBox8.Text );
+                writeResultRender( melsecA3C.Write( textBox8.Text, short.Parse( textBox7.Text ) ), textBox8.Text );
             }
             catch (Exception ex)
             {
@@ -335,7 +333,7 @@ namespace HslCommunicationDemo
             // ushort写入
             try
             {
-                writeResultRender( melsecSerial.Write( textBox8.Text, ushort.Parse( textBox7.Text ) ), textBox8.Text );
+                writeResultRender( melsecA3C.Write( textBox8.Text, ushort.Parse( textBox7.Text ) ), textBox8.Text );
             }
             catch (Exception ex)
             {
@@ -349,7 +347,7 @@ namespace HslCommunicationDemo
             // int写入
             try
             {
-                writeResultRender( melsecSerial.Write( textBox8.Text, int.Parse( textBox7.Text ) ), textBox8.Text );
+                writeResultRender( melsecA3C.Write( textBox8.Text, int.Parse( textBox7.Text ) ), textBox8.Text );
             }
             catch (Exception ex)
             {
@@ -362,7 +360,7 @@ namespace HslCommunicationDemo
             // uint写入
             try
             {
-                writeResultRender( melsecSerial.Write( textBox8.Text, uint.Parse( textBox7.Text ) ), textBox8.Text );
+                writeResultRender( melsecA3C.Write( textBox8.Text, uint.Parse( textBox7.Text ) ), textBox8.Text );
             }
             catch (Exception ex)
             {
@@ -375,7 +373,7 @@ namespace HslCommunicationDemo
             // long写入
             try
             {
-                writeResultRender( melsecSerial.Write( textBox8.Text, long.Parse( textBox7.Text ) ), textBox8.Text );
+                writeResultRender( melsecA3C.Write( textBox8.Text, long.Parse( textBox7.Text ) ), textBox8.Text );
             }
             catch (Exception ex)
             {
@@ -388,7 +386,7 @@ namespace HslCommunicationDemo
             // ulong写入
             try
             {
-                writeResultRender( melsecSerial.Write( textBox8.Text, ulong.Parse( textBox7.Text ) ), textBox8.Text );
+                writeResultRender( melsecA3C.Write( textBox8.Text, ulong.Parse( textBox7.Text ) ), textBox8.Text );
             }
             catch (Exception ex)
             {
@@ -401,7 +399,7 @@ namespace HslCommunicationDemo
             // float写入
             try
             {
-                writeResultRender( melsecSerial.Write( textBox8.Text, float.Parse( textBox7.Text ) ), textBox8.Text );
+                writeResultRender( melsecA3C.Write( textBox8.Text, float.Parse( textBox7.Text ) ), textBox8.Text );
             }
             catch (Exception ex)
             {
@@ -414,7 +412,7 @@ namespace HslCommunicationDemo
             // double写入
             try
             {
-                writeResultRender( melsecSerial.Write( textBox8.Text, double.Parse( textBox7.Text ) ), textBox8.Text );
+                writeResultRender( melsecA3C.Write( textBox8.Text, double.Parse( textBox7.Text ) ), textBox8.Text );
             }
             catch (Exception ex)
             {
@@ -428,7 +426,7 @@ namespace HslCommunicationDemo
             // string写入
             try
             {
-                writeResultRender( melsecSerial.Write( textBox8.Text, textBox7.Text ), textBox8.Text );
+                writeResultRender( melsecA3C.Write( textBox8.Text, textBox7.Text ), textBox8.Text );
             }
             catch (Exception ex)
             {
@@ -447,7 +445,7 @@ namespace HslCommunicationDemo
         {
             try
             {
-                OperateResult<byte[]> read = melsecSerial.Read( textBox6.Text, ushort.Parse( textBox9.Text ) );
+                OperateResult<byte[]> read = melsecA3C.Read( textBox6.Text, ushort.Parse( textBox9.Text ) );
                 if (read.IsSuccess)
                 {
                     textBox10.Text = "结果：" + HslCommunication.BasicFramework.SoftBasic.ByteToHexString( read.Content );
@@ -474,7 +472,7 @@ namespace HslCommunicationDemo
         {
             try
             {
-                OperateResult<byte[]> read = melsecSerial.ReadBase( HslCommunication.BasicFramework.SoftBasic.HexStringToBytes( textBox13.Text ) );
+                OperateResult<byte[]> read = melsecA3C.ReadBase( HslCommunication.BasicFramework.SoftBasic.HexStringToBytes( textBox13.Text ) );
                 if (read.IsSuccess)
                 {
                     textBox11.Text = "结果：" + HslCommunication.BasicFramework.SoftBasic.ByteToHexString( read.Content );
@@ -533,7 +531,7 @@ namespace HslCommunicationDemo
 
                 try
                 {
-                    OperateResult<short> read = melsecSerial.ReadInt16( textBox12.Text );
+                    OperateResult<short> read = melsecA3C.ReadInt16( textBox12.Text );
                     if (read.IsSuccess)
                     {
                         // 显示曲线
@@ -560,7 +558,7 @@ namespace HslCommunicationDemo
 
         private void test1()
         {
-            OperateResult<bool[]> read = melsecSerial.ReadBool( "M100", 10 );
+            OperateResult<bool[]> read = melsecA3C.ReadBool( "M100", 10 );
             if(read.IsSuccess)
             {
                 bool m100 = read.Content[0];
@@ -576,55 +574,55 @@ namespace HslCommunicationDemo
 
         private void test3( )
         {
-            short d100_short = melsecSerial.ReadInt16( "D100" ).Content;
-            ushort d100_ushort = melsecSerial.ReadUInt16( "D100" ).Content;
-            int d100_int = melsecSerial.ReadInt32( "D100" ).Content;
-            uint d100_uint = melsecSerial.ReadUInt32( "D100" ).Content;
-            long d100_long = melsecSerial.ReadInt64( "D100" ).Content;
-            ulong d100_ulong = melsecSerial.ReadUInt64( "D100" ).Content;
-            float d100_float = melsecSerial.ReadFloat( "D100" ).Content;
-            double d100_double = melsecSerial.ReadDouble( "D100" ).Content;
+            short d100_short = melsecA3C.ReadInt16( "D100" ).Content;
+            ushort d100_ushort = melsecA3C.ReadUInt16( "D100" ).Content;
+            int d100_int = melsecA3C.ReadInt32( "D100" ).Content;
+            uint d100_uint = melsecA3C.ReadUInt32( "D100" ).Content;
+            long d100_long = melsecA3C.ReadInt64( "D100" ).Content;
+            ulong d100_ulong = melsecA3C.ReadUInt64( "D100" ).Content;
+            float d100_float = melsecA3C.ReadFloat( "D100" ).Content;
+            double d100_double = melsecA3C.ReadDouble( "D100" ).Content;
             // need to specify the text length
-            string d100_string = melsecSerial.ReadString( "D100", 10 ).Content;
+            string d100_string = melsecA3C.ReadString( "D100", 10 ).Content;
         }
         private void test4( )
         {
-            melsecSerial.Write( "D100", (short)5 );
-            melsecSerial.Write( "D100", (ushort)5 );
-            melsecSerial.Write( "D100", 5 );
-            melsecSerial.Write( "D100", (uint)5 );
-            melsecSerial.Write( "D100", (long)5 );
-            melsecSerial.Write( "D100", (ulong)5 );
-            melsecSerial.Write( "D100", 5f );
-            melsecSerial.Write( "D100", 5d );
+            melsecA3C.Write( "D100", (short)5 );
+            melsecA3C.Write( "D100", (ushort)5 );
+            melsecA3C.Write( "D100", 5 );
+            melsecA3C.Write( "D100", (uint)5 );
+            melsecA3C.Write( "D100", (long)5 );
+            melsecA3C.Write( "D100", (ulong)5 );
+            melsecA3C.Write( "D100", 5f );
+            melsecA3C.Write( "D100", 5d );
             // length should Multiples of 2 
-            melsecSerial.Write( "D100", "12345678" );
+            melsecA3C.Write( "D100", "12345678" );
         }
 
 
         private void test5( )
         {
-            OperateResult<byte[]> read = melsecSerial.Read( "D100", 10 );
+            OperateResult<byte[]> read = melsecA3C.Read( "D100", 10 );
             if(read.IsSuccess)
             {
-                int count = melsecSerial.ByteTransform.TransInt32( read.Content, 0 );
-                float temp = melsecSerial.ByteTransform.TransSingle( read.Content, 4 );
-                short name1 = melsecSerial.ByteTransform.TransInt16( read.Content, 8 );
+                int count = melsecA3C.ByteTransform.TransInt32( read.Content, 0 );
+                float temp = melsecA3C.ByteTransform.TransSingle( read.Content, 4 );
+                short name1 = melsecA3C.ByteTransform.TransInt16( read.Content, 8 );
                 string barcode = Encoding.ASCII.GetString( read.Content, 10, 10 );
             }
         }
 
         private void test6( )
         {
-            OperateResult<UserType> read = melsecSerial.ReadCustomer<UserType>( "D100" );
+            OperateResult<UserType> read = melsecA3C.ReadCustomer<UserType>( "D100" );
             if (read.IsSuccess)
             {
                 UserType value = read.Content;
             }
             // write value
-            melsecSerial.WriteCustomer( "D100", new UserType( ) );
+            melsecA3C.WriteCustomer( "D100", new UserType( ) );
 
-            melsecSerial.LogNet = new HslCommunication.LogNet.LogNetSingle( Application.StartupPath + "\\Logs.txt" );
+            melsecA3C.LogNet = new HslCommunication.LogNet.LogNetSingle( Application.StartupPath + "\\Logs.txt" );
 
         }
 
@@ -654,8 +652,8 @@ namespace HslCommunicationDemo
             int count = 500;
             while (count > 0)
             {
-                if (!melsecSerial.Write( "D100", (short)1234 ).IsSuccess) failed++;
-                if (!melsecSerial.ReadInt16( "D100" ).IsSuccess) failed++;
+                if (!melsecA3C.Write( "D100", (short)1234 ).IsSuccess) failed++;
+                if (!melsecA3C.ReadInt16( "D100" ).IsSuccess) failed++;
                 count--;
             }
             thread_end( );
@@ -681,29 +679,29 @@ namespace HslCommunicationDemo
 
         private void button3_Click_1( object sender, EventArgs e )
         {
-            OperateResult operate = melsecSerial.StartPLC( );
-            if(!operate.IsSuccess)
-            {
-                MessageBox.Show( "Start Failed：" + operate.Message );
-            }
-            else
-            {
-                MessageBox.Show( "Start Success" );
-            }
+            //OperateResult operate = melsecA3C.StartPLC( );
+            //if(!operate.IsSuccess)
+            //{
+            //    MessageBox.Show( "启动失败：" + operate.Message );
+            //}
+            //else
+            //{
+            //    MessageBox.Show( "启动成功" );
+            //}
         }
 
         private void button4_Click( object sender, EventArgs e )
         {
 
-            OperateResult operate = melsecSerial.StopPLC( );
-            if (!operate.IsSuccess)
-            {
-                MessageBox.Show( "Stop Failed：" + operate.Message );
-            }
-            else
-            {
-                MessageBox.Show( "Stop Success" );
-            }
+            //OperateResult operate = melsecA3C.StopPLC( );
+            //if (!operate.IsSuccess)
+            //{
+            //    MessageBox.Show( "停止失败：" + operate.Message );
+            //}
+            //else
+            //{
+            //    MessageBox.Show( "停止成功" );
+            //}
         }
     }
 }

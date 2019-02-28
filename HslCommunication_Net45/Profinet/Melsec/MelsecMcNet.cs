@@ -21,6 +21,124 @@ namespace HslCommunication.Profinet.Melsec
     /// <item>Q02CPU PLC </item>
     /// <item>L02CPU PLC </item>
     /// </list>
+    /// 地址的输入的格式如下：
+    /// <list type="table">
+    ///   <listheader>
+    ///     <term>地址名称</term>
+    ///     <term>示例</term>
+    ///     <term>地址进制</term>
+    ///   </listheader>
+    ///   <item>
+    ///     <term>内部继电器</term>
+    ///     <term>M100,M200</term>
+    ///     <term>10</term>
+    ///   </item>
+    ///   <item>
+    ///     <term>输入继电器</term>
+    ///     <term>X100,X1A0</term>
+    ///     <term>16</term>
+    ///   </item>
+    ///   <item>
+    ///     <term>输出继电器</term>
+    ///     <term>Y100,Y1A0</term>
+    ///     <term>16</term>
+    ///   </item>
+    ///    <item>
+    ///     <term>锁存继电器</term>
+    ///     <term>L100,L200</term>
+    ///     <term>10</term>
+    ///   </item>
+    ///   <item>
+    ///     <term>报警器</term>
+    ///     <term>F100,F200</term>
+    ///     <term>10</term>
+    ///   </item>
+    ///   <item>
+    ///     <term>边沿继电器</term>
+    ///     <term>V100,V200</term>
+    ///     <term>10</term>
+    ///   </item>
+    ///   <item>
+    ///     <term>链接继电器</term>
+    ///     <term>B100,B1A0</term>
+    ///     <term>16</term>
+    ///   </item>
+    ///    <item>
+    ///     <term>步进继电器</term>
+    ///     <term>S100,S200</term>
+    ///     <term>10</term>
+    ///   </item>
+    ///   <item>
+    ///     <term>数据寄存器</term>
+    ///     <term>D1000,D2000</term>
+    ///     <term>10</term>
+    ///   </item>
+    ///   <item>
+    ///     <term>链接寄存器</term>
+    ///     <term>W100,W1A0</term>
+    ///     <term>16</term>
+    ///   </item>
+    ///   <item>
+    ///     <term>文件寄存器</term>
+    ///     <term>R100,R200</term>
+    ///     <term>10</term>
+    ///   </item>
+    ///   <item>
+    ///     <term>ZR文件寄存器</term>
+    ///     <term>ZR100,ZR2A0</term>
+    ///     <term>16</term>
+    ///   </item>
+    ///   <item>
+    ///     <term>变址寄存器</term>
+    ///     <term>Z100,Z200</term>
+    ///     <term>10</term>
+    ///   </item>
+    ///   <item>
+    ///     <term>定时器的触点</term>
+    ///     <term>TS100,TS200</term>
+    ///     <term>10</term>
+    ///   </item>
+    ///   <item>
+    ///     <term>定时器的线圈</term>
+    ///     <term>TC100,TC200</term>
+    ///     <term>10</term>
+    ///   </item>
+    ///   <item>
+    ///     <term>定时器的当前值</term>
+    ///     <term>TN100,TN200</term>
+    ///     <term>10</term>
+    ///   </item>
+    ///   <item>
+    ///     <term>累计定时器的触点</term>
+    ///     <term>SS100,SS200</term>
+    ///     <term>10</term>
+    ///   </item>
+    ///   <item>
+    ///     <term>累计定时器的线圈</term>
+    ///     <term>SC100,SC200</term>
+    ///     <term>10</term>
+    ///   </item>
+    ///   <item>
+    ///     <term>累计定时器的当前值</term>
+    ///     <term>SN100,SN200</term>
+    ///     <term>10</term>
+    ///   </item>
+    ///   <item>
+    ///     <term>计数器的触点</term>
+    ///     <term>CS100,CS200</term>
+    ///     <term>10</term>
+    ///   </item>
+    ///   <item>
+    ///     <term>计数器的线圈</term>
+    ///     <term>CC100,CC200</term>
+    ///     <term>10</term>
+    ///   </item>
+    ///   <item>
+    ///     <term>计数器的当前</term>
+    ///     <term>CN100,CN200</term>
+    ///     <term>10</term>
+    ///   </item>
+    /// </list>
     /// </remarks>
     /// <example>
     /// <code lang="cs" source="HslCommunication_Net45.Test\Documentation\Samples\Profinet\melsecTest.cs" region="Usage" title="简单的短连接使用" />
@@ -28,7 +146,6 @@ namespace HslCommunication.Profinet.Melsec
     /// </example>
     public class MelsecMcNet : NetworkDeviceBase<MelsecQnA3EBinaryMessage, RegularByteTransform>
     {
-
         #region Constructor
 
         /// <summary>
@@ -83,49 +200,7 @@ namespace HslCommunication.Profinet.Melsec
         /// <param name="length">读取的数据长度，字最大值960，位最大值7168</param>
         /// <returns>带成功标志的结果数据对象</returns>
         /// <remarks>
-        /// 地址支持的列表如下：
-        /// <list type="table">
-        ///   <listheader>
-        ///     <term>地址名称</term>
-        ///     <term>示例</term>
-        ///     <term>地址进制</term>
-        ///   </listheader>
-        ///   <item>
-        ///     <term>数据寄存器</term>
-        ///     <term>D1000,D2000</term>
-        ///     <term>10</term>
-        ///   </item>
-        ///   <item>
-        ///     <term>链接寄存器</term>
-        ///     <term>W100,W1A0</term>
-        ///     <term>16</term>
-        ///   </item>
-        ///   <item>
-        ///     <term>文件寄存器</term>
-        ///     <term>R100,R200</term>
-        ///     <term>10</term>
-        ///   </item>
-        ///   <item>
-        ///     <term>ZR文件寄存器</term>
-        ///     <term>ZR100,ZR2A0</term>
-        ///     <term>16</term>
-        ///   </item>
-        ///   <item>
-        ///     <term>变址寄存器</term>
-        ///     <term>Z100,Z200</term>
-        ///     <term>10</term>
-        ///   </item>
-        ///   <item>
-        ///     <term>定时器的值</term>
-        ///     <term>T100,T200</term>
-        ///     <term>10</term>
-        ///   </item>
-        ///   <item>
-        ///     <term>计数器的值</term>
-        ///     <term>C100,C200</term>
-        ///     <term>10</term>
-        ///   </item>
-        /// </list>
+        /// 地址支持的列表参考 <seealso cref="MelsecMcNet"/> 的备注说明
         /// </remarks>
         /// <example>
         /// 假设起始地址为D100，D100存储了温度，100.6℃值为1006，D101存储了压力，1.23Mpa值为123，D102，D103存储了产量计数，读取如下：
@@ -151,8 +226,6 @@ namespace HslCommunication.Profinet.Melsec
             return ExtractActualData( read.Content, false );
         }
 
-
-
         /// <summary>
         /// 从三菱PLC中批量读取位软元件，返回读取结果
         /// </summary>
@@ -160,54 +233,7 @@ namespace HslCommunication.Profinet.Melsec
         /// <param name="length">读取的长度</param>
         /// <returns>带成功标志的结果数据对象</returns>
         /// <remarks>
-        /// 地址支持的列表如下：
-        /// <list type="table">
-        ///   <listheader>
-        ///     <term>地址名称</term>
-        ///     <term>示例</term>
-        ///     <term>地址进制</term>
-        ///   </listheader>
-        ///   <item>
-        ///     <term>内部继电器</term>
-        ///     <term>M100,M200</term>
-        ///     <term>10</term>
-        ///   </item>
-        ///   <item>
-        ///     <term>输入继电器</term>
-        ///     <term>X100,X1A0</term>
-        ///     <term>16</term>
-        ///   </item>
-        ///   <item>
-        ///     <term>输出继电器</term>
-        ///     <term>Y100,Y1A0</term>
-        ///     <term>16</term>
-        ///   </item>
-        ///    <item>
-        ///     <term>锁存继电器</term>
-        ///     <term>L100,L200</term>
-        ///     <term>10</term>
-        ///   </item>
-        ///   <item>
-        ///     <term>报警器</term>
-        ///     <term>F100,F200</term>
-        ///     <term>10</term>
-        ///   </item>
-        ///   <item>
-        ///     <term>边沿继电器</term>
-        ///     <term>V100,V200</term>
-        ///     <term>10</term>
-        ///   </item>
-        ///   <item>
-        ///     <term>链接继电器</term>
-        ///     <term>B100,B1A0</term>
-        ///     <term>16</term>
-        ///   </item>
-        ///    <item>
-        ///     <term>步进继电器</term>
-        ///     <term>S100,S200</term>
-        ///     <term>10</term>
-        ///   </item>
-        /// </list>
+        /// 地址支持的列表参考 <seealso cref="MelsecMcNet"/> 的备注说明
         /// </remarks>
         /// <example>
         /// <code lang="cs" source="HslCommunication_Net45.Test\Documentation\Samples\Profinet\melsecTest.cs" region="ReadBool" title="Bool类型示例" />
@@ -254,8 +280,7 @@ namespace HslCommunication.Profinet.Melsec
         #endregion
 
         #region Write Override
-
-
+        
         /// <summary>
         /// 向PLC写入数据，数据格式为原始的字节类型
         /// </summary>
@@ -286,12 +311,10 @@ namespace HslCommunication.Profinet.Melsec
             return OperateResult.CreateSuccessResult( );
         }
         
-
         #endregion
         
         #region Write bool[]
-
-
+        
         /// <summary>
         /// 向PLC中位软元件写入bool数组，返回值说明，比如你写入M100,values[0]对应M100
         /// </summary>
@@ -317,12 +340,99 @@ namespace HslCommunication.Profinet.Melsec
         /// <returns>返回写入结果</returns>
         public OperateResult Write( string address, bool[] values )
         {
-            return Write( address, values.Select( m => m ? (byte)0x01 : (byte)0x00 ).ToArray( ) );
+            OperateResult<byte[]> coreResult = MelsecHelper.BuildWriteBitCoreCommand( address, values );
+            if (!coreResult.IsSuccess) return coreResult;
+
+            // 核心交互
+            OperateResult<byte[]> read = ReadFromCoreServer( PackMcCommand( coreResult.Content, NetworkNumber, NetworkStationNumber ) );
+            if (!read.IsSuccess) return read;
+
+            // 错误码校验
+            ushort ErrorCode = BitConverter.ToUInt16( read.Content, 9 );
+            if (ErrorCode != 0) return new OperateResult<byte[]>( ErrorCode, StringResources.Language.MelsecPleaseReferToManulDocument );
+
+            // 成功
+            return OperateResult.CreateSuccessResult( );
         }
 
+        #endregion
+
+        #region Remote Operate
+
+        /// <summary>
+        /// 远程Run操作
+        /// </summary>
+        /// <returns>是否成功</returns>
+        public OperateResult RemoteRun( )
+        {
+            // 核心交互
+            OperateResult<byte[]> read = ReadFromCoreServer( PackMcCommand( new byte[] { 0x01, 0x10, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00 }, NetworkNumber, NetworkStationNumber ) );
+            if (!read.IsSuccess) return read;
+
+            // 错误码校验
+            ushort ErrorCode = BitConverter.ToUInt16( read.Content, 9 );
+            if (ErrorCode != 0) return new OperateResult( ErrorCode, StringResources.Language.MelsecPleaseReferToManulDocument );
+
+            // 成功
+            return OperateResult.CreateSuccessResult( );
+        }
+        
+        /// <summary>
+        /// 远程Stop操作
+        /// </summary>
+        /// <returns>是否成功</returns>
+        public OperateResult RemoteStop( )
+        {
+            // 核心交互
+            OperateResult<byte[]> read = ReadFromCoreServer( PackMcCommand( new byte[] { 0x02, 0x10, 0x00, 0x00, 0x01, 0x00 }, NetworkNumber, NetworkStationNumber ) );
+            if (!read.IsSuccess) return read;
+
+            // 错误码校验
+            ushort ErrorCode = BitConverter.ToUInt16( read.Content, 9 );
+            if (ErrorCode != 0) return new OperateResult( ErrorCode, StringResources.Language.MelsecPleaseReferToManulDocument );
+
+            // 成功
+            return OperateResult.CreateSuccessResult( );
+        }
+
+        /// <summary>
+        /// 远程Reset操作
+        /// </summary>
+        /// <returns>是否成功</returns>
+        public OperateResult RemoteReset()
+        {
+            // 核心交互
+            OperateResult<byte[]> read = ReadFromCoreServer( PackMcCommand( new byte[] { 0x06, 0x10, 0x00, 0x00, 0x01, 0x00 }, NetworkNumber, NetworkStationNumber ) );
+            if (!read.IsSuccess) return read;
+
+            // 错误码校验
+            ushort ErrorCode = BitConverter.ToUInt16( read.Content, 9 );
+            if (ErrorCode != 0) return new OperateResult( ErrorCode, StringResources.Language.MelsecPleaseReferToManulDocument );
+
+            // 成功
+            return OperateResult.CreateSuccessResult( );
+        }
+
+        /// <summary>
+        /// 读取PLC的型号信息
+        /// </summary>
+        /// <returns>返回型号的结果对象</returns>
+        public OperateResult<string> ReadPlcType( )
+        {
+            // 核心交互
+            OperateResult<byte[]> read = ReadFromCoreServer( PackMcCommand( new byte[] { 0x01, 0x01, 0x00, 0x00 }, NetworkNumber, NetworkStationNumber ) );
+            if (!read.IsSuccess) return OperateResult.CreateFailedResult<string>( read );
+
+            // 错误码校验
+            ushort ErrorCode = BitConverter.ToUInt16( read.Content, 9 );
+            if (ErrorCode != 0) return new OperateResult<string>( ErrorCode, StringResources.Language.MelsecPleaseReferToManulDocument );
+
+            // 成功
+            return OperateResult.CreateSuccessResult( Encoding.ASCII.GetString( read.Content, 11, 16 ).TrimEnd( ) );
+        }
 
         #endregion
-        
+
         #region Object Override
 
         /// <summary>
@@ -338,6 +448,31 @@ namespace HslCommunication.Profinet.Melsec
 
         #region Static Method Helper
 
+        /// <summary>
+        /// 将MC协议的核心报文打包成一个可以直接对PLC进行发送的原始报文
+        /// </summary>
+        /// <param name="mcCore">MC协议的核心报文</param>
+        /// <param name="networkNumber">网络号</param>
+        /// <param name="networkStationNumber">网络站号</param>
+        /// <returns>原始报文信息</returns>
+        public static byte[] PackMcCommand(byte[] mcCore, byte networkNumber = 0, byte networkStationNumber = 0)
+        {
+            byte[] _PLCCommand = new byte[11 + mcCore.Length];
+            _PLCCommand[0] = 0x50;                                               // 副标题
+            _PLCCommand[1] = 0x00;
+            _PLCCommand[2] = networkNumber;                                      // 网络号
+            _PLCCommand[3] = 0xFF;                                               // PLC编号
+            _PLCCommand[4] = 0xFF;                                               // 目标模块IO编号
+            _PLCCommand[5] = 0x03;
+            _PLCCommand[6] = networkStationNumber;                               // 目标模块站号
+            _PLCCommand[7] = (byte)((_PLCCommand.Length - 9) % 256);             // 请求数据长度
+            _PLCCommand[8] = (byte)((_PLCCommand.Length - 9) / 256);
+            _PLCCommand[9] = 0x0A;                                               // CPU监视定时器
+            _PLCCommand[10] = 0x00;
+            mcCore.CopyTo( _PLCCommand, 11 );
+
+            return _PLCCommand;
+        }
 
         /// <summary>
         /// 根据类型地址长度确认需要读取的指令头
@@ -350,34 +485,13 @@ namespace HslCommunication.Profinet.Melsec
         /// <returns>带有成功标志的指令数据</returns>
         public static OperateResult<byte[]> BuildReadCommand( string address, ushort length, bool isBit, byte networkNumber = 0, byte networkStationNumber = 0 )
         {
-            OperateResult<MelsecMcDataType, int> analysis = MelsecHelper.McAnalysisAddress( address );
-            if (!analysis.IsSuccess) return OperateResult.CreateFailedResult<byte[]>( analysis );
-            
-            byte[] _PLCCommand = new byte[21];
-            _PLCCommand[0]  = 0x50;                                               // 副标题
-            _PLCCommand[1]  = 0x00;                                            
-            _PLCCommand[2]  = networkNumber;                                      // 网络号
-            _PLCCommand[3]  = 0xFF;                                               // PLC编号
-            _PLCCommand[4]  = 0xFF;                                               // 目标模块IO编号
-            _PLCCommand[5]  = 0x03;                                            
-            _PLCCommand[6]  = networkStationNumber;                               // 目标模块站号
-            _PLCCommand[7]  = 0x0C;                                               // 请求数据长度
-            _PLCCommand[8]  = 0x00;                                            
-            _PLCCommand[9]  = 0x0A;                                               // CPU监视定时器
-            _PLCCommand[10] = 0x00;                                            
-            _PLCCommand[11] = 0x01;                                               // 批量读取数据命令
-            _PLCCommand[12] = 0x04;
-            _PLCCommand[13] = isBit ? (byte)0x01 : (byte)0x00;                    // 以点为单位还是字为单位成批读取
-            _PLCCommand[14] = 0x00;
-            _PLCCommand[15] = BitConverter.GetBytes( analysis.Content2 )[0];      // 起始地址的地位
-            _PLCCommand[16] = BitConverter.GetBytes( analysis.Content2 )[1];
-            _PLCCommand[17] = BitConverter.GetBytes( analysis.Content2 )[2];
-            _PLCCommand[18] = analysis.Content1.DataCode;                         // 指明读取的数据
-            _PLCCommand[19] = (byte)(length % 256);                               // 软元件的长度
-            _PLCCommand[20] = (byte)(length / 256);
+            OperateResult<byte[]> coreResult = MelsecHelper.BuildReadMcCoreCommand( address, length, isBit );
+            if (!coreResult.IsSuccess) return coreResult;
 
-            return OperateResult.CreateSuccessResult( _PLCCommand );
+            return OperateResult.CreateSuccessResult( PackMcCommand( coreResult.Content, networkNumber, networkStationNumber ) );
         }
+
+        
 
         /// <summary>
         /// 根据类型地址以及需要写入的数据来生成指令头
@@ -389,60 +503,10 @@ namespace HslCommunication.Profinet.Melsec
         /// <returns>解析后的指令</returns>
         public static OperateResult<byte[]> BuildWriteCommand( string address, byte[] value, byte networkNumber = 0, byte networkStationNumber = 0 )
         {
-            OperateResult<MelsecMcDataType, int> analysis = MelsecHelper.McAnalysisAddress( address );
-            if (!analysis.IsSuccess) return OperateResult.CreateFailedResult<byte[]>( analysis );
+            OperateResult<byte[]> coreResult = MelsecHelper.BuildWriteWordCoreCommand( address, value );
+            if (!coreResult.IsSuccess) return coreResult;
 
-            int length = -1;
-            if (analysis.Content1.DataType == 1)
-            {
-                // 按照位写入的操作，数据需要重新计算
-                length = value.Length;
-                value = MelsecHelper.TransBoolArrayToByteData( value );
-            }
-
-            byte[] _PLCCommand = new byte[21 + value.Length];
-            _PLCCommand[0]  = 0x50;                                          // 副标题
-            _PLCCommand[1]  = 0x00;
-            _PLCCommand[2]  = networkNumber;                                 // 网络号
-            _PLCCommand[3]  = 0xFF;                                          // PLC编号
-            _PLCCommand[4]  = 0xFF;                                          // 目标模块IO编号
-            _PLCCommand[5]  = 0x03;
-            _PLCCommand[6]  = networkStationNumber;                          // 目标模块站号
-            _PLCCommand[7]  = (byte)((_PLCCommand.Length - 9) % 256);        // 请求数据长度
-            _PLCCommand[8]  = (byte)((_PLCCommand.Length - 9) / 256);
-            _PLCCommand[9]  = 0x0A;                                          // CPU监视定时器
-            _PLCCommand[10] = 0x00;
-            _PLCCommand[11] = 0x01;                                          // 批量读取数据命令
-            _PLCCommand[12] = 0x14;
-            _PLCCommand[13] = analysis.Content1.DataType;                    // 以点为单位还是字为单位成批读取
-            _PLCCommand[14] = 0x00;
-            _PLCCommand[15] = BitConverter.GetBytes( analysis.Content2 )[0];               // 起始地址的地位
-            _PLCCommand[16] = BitConverter.GetBytes( analysis.Content2 )[1];
-            _PLCCommand[17] = BitConverter.GetBytes( analysis.Content2 )[2];
-            _PLCCommand[18] = analysis.Content1.DataCode;                    // 指明写入的数据
-
-            // 判断是否进行位操作
-            if (analysis.Content1.DataType == 1)
-            {
-                if (length > 0)
-                {
-                    _PLCCommand[19] = (byte)(length % 256);                  // 软元件长度的地位
-                    _PLCCommand[20] = (byte)(length / 256);
-                }
-                else
-                {
-                    _PLCCommand[19] = (byte)(value.Length * 2 % 256);        // 软元件长度的地位
-                    _PLCCommand[20] = (byte)(value.Length * 2 / 256);
-                }
-            }
-            else
-            {
-                _PLCCommand[19] = (byte)(value.Length / 2 % 256);            // 软元件长度的地位
-                _PLCCommand[20] = (byte)(value.Length / 2 / 256);
-            }
-            Array.Copy( value, 0, _PLCCommand, 21, value.Length );
-
-            return OperateResult.CreateSuccessResult( _PLCCommand );
+            return OperateResult.CreateSuccessResult( PackMcCommand( coreResult.Content, networkNumber, networkStationNumber ) );
         }
 
         /// <summary>

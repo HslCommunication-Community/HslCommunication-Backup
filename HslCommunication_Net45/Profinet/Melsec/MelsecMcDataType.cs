@@ -106,14 +106,49 @@ namespace HslCommunication.Profinet.Melsec
         public readonly static MelsecMcDataType Z = new MelsecMcDataType( 0xCC, 0x00, "Z*", 10 );
 
         /// <summary>
-        /// 定时器的值
+        /// 定时器的当前值
         /// </summary>
-        public readonly static MelsecMcDataType T = new MelsecMcDataType( 0xC2, 0x00, "TN", 10 );
+        public readonly static MelsecMcDataType TN = new MelsecMcDataType( 0xC2, 0x00, "TN", 10 );
 
         /// <summary>
-        /// 计数器的值
+        /// 定时器的触点
         /// </summary>
-        public readonly static MelsecMcDataType C = new MelsecMcDataType( 0xC5, 0x00, "CN", 10 );
+        public readonly static MelsecMcDataType TS = new MelsecMcDataType( 0xC1, 0x01, "TS", 10 );
+
+        /// <summary>
+        /// 定时器的线圈
+        /// </summary>
+        public readonly static MelsecMcDataType TC = new MelsecMcDataType( 0xC0, 0x01, "TC", 10 );
+
+        /// <summary>
+        /// 累计定时器的触点
+        /// </summary>
+        public readonly static MelsecMcDataType SS = new MelsecMcDataType( 0xC7, 0x01, "SS", 10 );
+
+        /// <summary>
+        /// 累计定时器的线圈
+        /// </summary>
+        public readonly static MelsecMcDataType SC = new MelsecMcDataType( 0xC6, 0x01, "SC", 10 );
+
+        /// <summary>
+        /// 累计定时器的当前值
+        /// </summary>
+        public readonly static MelsecMcDataType SN = new MelsecMcDataType( 0xC8, 0x00, "SN", 100 );
+
+        /// <summary>
+        /// 计数器的当前值
+        /// </summary>
+        public readonly static MelsecMcDataType CN = new MelsecMcDataType( 0xC5, 0x00, "CN", 10 );
+
+        /// <summary>
+        /// 计数器的触点
+        /// </summary>
+        public readonly static MelsecMcDataType CS = new MelsecMcDataType( 0xC4, 0x01, "CS", 10 );
+
+        /// <summary>
+        /// 计数器的线圈
+        /// </summary>
+        public readonly static MelsecMcDataType CC = new MelsecMcDataType( 0xC3, 0x01, "CC", 10 );
 
         /// <summary>
         /// 文件寄存器ZR区

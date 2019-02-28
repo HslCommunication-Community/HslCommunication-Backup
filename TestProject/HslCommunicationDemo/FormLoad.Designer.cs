@@ -29,6 +29,7 @@
         private void InitializeComponent( )
         {
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.button46 = new System.Windows.Forms.Button();
             this.button39 = new System.Windows.Forms.Button();
             this.button36 = new System.Windows.Forms.Button();
             this.button10 = new System.Windows.Forms.Button();
@@ -100,7 +101,7 @@
             this.button43 = new System.Windows.Forms.Button();
             this.button42 = new System.Windows.Forms.Button();
             this.button40 = new System.Windows.Forms.Button();
-            this.button46 = new System.Windows.Forms.Button();
+            this.button47 = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -134,6 +135,17 @@
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Siemens PLC(西门子 PLC)";
+            // 
+            // button46
+            // 
+            this.button46.Location = new System.Drawing.Point(18, 264);
+            this.button46.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.button46.Name = "button46";
+            this.button46.Size = new System.Drawing.Size(150, 32);
+            this.button46.TabIndex = 7;
+            this.button46.Text = "S7 Virtual Server";
+            this.button46.UseVisualStyleBackColor = true;
+            this.button46.Click += new System.EventHandler(this.button46_Click);
             // 
             // button39
             // 
@@ -285,6 +297,7 @@
             // 
             // groupBox3
             // 
+            this.groupBox3.Controls.Add(this.button47);
             this.groupBox3.Controls.Add(this.button38);
             this.groupBox3.Controls.Add(this.button32);
             this.groupBox3.Controls.Add(this.button13);
@@ -916,16 +929,16 @@
             this.button40.UseVisualStyleBackColor = true;
             this.button40.Click += new System.EventHandler(this.button40_Click);
             // 
-            // button46
+            // button47
             // 
-            this.button46.Location = new System.Drawing.Point(18, 264);
-            this.button46.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.button46.Name = "button46";
-            this.button46.Size = new System.Drawing.Size(150, 32);
-            this.button46.TabIndex = 7;
-            this.button46.Text = "S7 Server";
-            this.button46.UseVisualStyleBackColor = true;
-            this.button46.Click += new System.EventHandler(this.button46_Click);
+            this.button47.Location = new System.Drawing.Point(15, 224);
+            this.button47.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.button47.Name = "button47";
+            this.button47.Size = new System.Drawing.Size(150, 32);
+            this.button47.TabIndex = 6;
+            this.button47.Text = "A-3C (format1)";
+            this.button47.UseVisualStyleBackColor = true;
+            this.button47.Click += new System.EventHandler(this.button47_Click);
             // 
             // FormLoad
             // 
@@ -1049,6 +1062,7 @@
         private System.Windows.Forms.Button button44;
         private System.Windows.Forms.Button button45;
         private System.Windows.Forms.Button button46;
+        private System.Windows.Forms.Button button47;
     }
 }
 

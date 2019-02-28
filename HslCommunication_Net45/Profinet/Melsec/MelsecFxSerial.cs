@@ -320,11 +320,27 @@ namespace HslCommunication.Profinet.Melsec
             {
                 startAddress = (ushort)(startAddress + 0x0500);
             }
-            else if (analysis.Content1 == MelsecMcDataType.C)
+            else if (analysis.Content1 == MelsecMcDataType.CS)
+            {
+                startAddress += (ushort)(startAddress + 0x01C0);
+            }
+            else if (analysis.Content1 == MelsecMcDataType.CC)
+            {
+                startAddress += (ushort)(startAddress + 0x03C0);
+            }
+            else if (analysis.Content1 == MelsecMcDataType.CN)
             {
                 startAddress += (ushort)(startAddress + 0x0E00);
             }
-            else if (analysis.Content1 == MelsecMcDataType.T)
+            else if (analysis.Content1 == MelsecMcDataType.TS)
+            {
+                startAddress += (ushort)(startAddress + 0x00C0);
+            }
+            else if (analysis.Content1 == MelsecMcDataType.TC)
+            {
+                startAddress += (ushort)(startAddress + 0x02C0);
+            }
+            else if (analysis.Content1 == MelsecMcDataType.TN)
             {
                 startAddress += (ushort)(startAddress + 0x0600);
             }
@@ -554,16 +570,54 @@ namespace HslCommunication.Profinet.Melsec
                     case 'T':
                     case 't':
                         {
-                            result.Content1 = MelsecMcDataType.T;
-                            result.Content2 = Convert.ToUInt16( address.Substring( 1 ), MelsecMcDataType.T.FromBase );
-                            break;
+                            if (address[1] == 'N' || address[1] == 'n')
+                            {
+                                result.Content1 = MelsecMcDataType.TN;
+                                result.Content2 = Convert.ToUInt16( address.Substring( 2 ), MelsecMcDataType.TN.FromBase );
+                                break;
+                            }
+                            else if (address[1] == 'S' || address[1] == 's')
+                            {
+                                result.Content1 = MelsecMcDataType.TS;
+                                result.Content2 = Convert.ToUInt16( address.Substring( 2 ), MelsecMcDataType.TS.FromBase );
+                                break;
+                            }
+                            else if (address[1] == 'C' || address[1] == 'c')
+                            {
+                                result.Content1 = MelsecMcDataType.TC;
+                                result.Content2 = Convert.ToUInt16( address.Substring( 2 ), MelsecMcDataType.TC.FromBase );
+                                break;
+                            }
+                            else
+                            {
+                                throw new Exception( StringResources.Language.NotSupportedDataType );
+                            }
                         }
                     case 'C':
                     case 'c':
                         {
-                            result.Content1 = MelsecMcDataType.C;
-                            result.Content2 = Convert.ToUInt16( address.Substring( 1 ), MelsecMcDataType.C.FromBase );
-                            break;
+                            if (address[1] == 'N' || address[1] == 'n')
+                            {
+                                result.Content1 = MelsecMcDataType.CN;
+                                result.Content2 = Convert.ToUInt16( address.Substring( 2 ), MelsecMcDataType.CN.FromBase );
+                                break;
+                            }
+                            else if (address[1] == 'S' || address[1] == 's')
+                            {
+                                result.Content1 = MelsecMcDataType.CS;
+                                result.Content2 = Convert.ToUInt16( address.Substring( 2 ), MelsecMcDataType.CS.FromBase );
+                                break;
+                            }
+                            else if (address[1] == 'C' || address[1] == 'c')
+                            {
+                                result.Content1 = MelsecMcDataType.CC;
+                                result.Content2 = Convert.ToUInt16( address.Substring( 2 ), MelsecMcDataType.CC.FromBase );
+                                break;
+                            }
+                            else
+                            {
+                                throw new Exception( StringResources.Language.NotSupportedDataType );
+                            }
                         }
                     default: throw new Exception( StringResources.Language.NotSupportedDataType );
                 }
@@ -603,7 +657,7 @@ namespace HslCommunication.Profinet.Melsec
                     startAddress = (ushort)(startAddress * 2 + 0x1000);
                 }
             }
-            else if (analysis.Content1 == MelsecMcDataType.C)
+            else if (analysis.Content1 == MelsecMcDataType.CN)
             {
                 if (startAddress >= 200)
                 {
@@ -614,7 +668,7 @@ namespace HslCommunication.Profinet.Melsec
                     startAddress = (ushort)(startAddress * 2 + 0x0A00);
                 }
             }
-            else if (analysis.Content1 == MelsecMcDataType.T)
+            else if (analysis.Content1 == MelsecMcDataType.TN)
             {
                 startAddress = (ushort)(startAddress * 2 + 0x0800);
             }
@@ -661,13 +715,21 @@ namespace HslCommunication.Profinet.Melsec
             {
                 startAddress = (ushort)(startAddress / 8 + 0x0000);
             }
-            else if (analysis.Content1 == MelsecMcDataType.C)
+            else if (analysis.Content1 == MelsecMcDataType.CS)
             {
                 startAddress += (ushort)(startAddress / 8 + 0x01C0);
             }
-            else if (analysis.Content1 == MelsecMcDataType.T)
+            else if (analysis.Content1 == MelsecMcDataType.CC)
+            {
+                startAddress += (ushort)(startAddress / 8 + 0x03C0);
+            }
+            else if (analysis.Content1 == MelsecMcDataType.TS)
             {
                 startAddress += (ushort)(startAddress / 8 + 0x00C0);
+            }
+            else if (analysis.Content1 == MelsecMcDataType.TC)
+            {
+                startAddress += (ushort)(startAddress / 8 + 0x02C0);
             }
             else
             {
