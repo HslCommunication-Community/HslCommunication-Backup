@@ -10,6 +10,126 @@ namespace HslCommunication.Profinet.Melsec
     /// <summary>
     /// 基于Qna 兼容3C帧的格式一的通讯，具体的地址需要参照三菱的基本地址
     /// </summary>
+    /// <remarks>
+    /// 地址的输入的格式如下：
+    /// <list type="table">
+    ///   <listheader>
+    ///     <term>地址名称</term>
+    ///     <term>示例</term>
+    ///     <term>地址进制</term>
+    ///   </listheader>
+    ///   <item>
+    ///     <term>内部继电器</term>
+    ///     <term>M100,M200</term>
+    ///     <term>10</term>
+    ///   </item>
+    ///   <item>
+    ///     <term>输入继电器</term>
+    ///     <term>X100,X1A0</term>
+    ///     <term>16</term>
+    ///   </item>
+    ///   <item>
+    ///     <term>输出继电器</term>
+    ///     <term>Y100,Y1A0</term>
+    ///     <term>16</term>
+    ///   </item>
+    ///    <item>
+    ///     <term>锁存继电器</term>
+    ///     <term>L100,L200</term>
+    ///     <term>10</term>
+    ///   </item>
+    ///   <item>
+    ///     <term>报警器</term>
+    ///     <term>F100,F200</term>
+    ///     <term>10</term>
+    ///   </item>
+    ///   <item>
+    ///     <term>边沿继电器</term>
+    ///     <term>V100,V200</term>
+    ///     <term>10</term>
+    ///   </item>
+    ///   <item>
+    ///     <term>链接继电器</term>
+    ///     <term>B100,B1A0</term>
+    ///     <term>16</term>
+    ///   </item>
+    ///    <item>
+    ///     <term>步进继电器</term>
+    ///     <term>S100,S200</term>
+    ///     <term>10</term>
+    ///   </item>
+    ///   <item>
+    ///     <term>数据寄存器</term>
+    ///     <term>D1000,D2000</term>
+    ///     <term>10</term>
+    ///   </item>
+    ///   <item>
+    ///     <term>链接寄存器</term>
+    ///     <term>W100,W1A0</term>
+    ///     <term>16</term>
+    ///   </item>
+    ///   <item>
+    ///     <term>文件寄存器</term>
+    ///     <term>R100,R200</term>
+    ///     <term>10</term>
+    ///   </item>
+    ///   <item>
+    ///     <term>ZR文件寄存器</term>
+    ///     <term>ZR100,ZR2A0</term>
+    ///     <term>16</term>
+    ///   </item>
+    ///   <item>
+    ///     <term>变址寄存器</term>
+    ///     <term>Z100,Z200</term>
+    ///     <term>10</term>
+    ///   </item>
+    ///   <item>
+    ///     <term>定时器的触点</term>
+    ///     <term>TS100,TS200</term>
+    ///     <term>10</term>
+    ///   </item>
+    ///   <item>
+    ///     <term>定时器的线圈</term>
+    ///     <term>TC100,TC200</term>
+    ///     <term>10</term>
+    ///   </item>
+    ///   <item>
+    ///     <term>定时器的当前值</term>
+    ///     <term>TN100,TN200</term>
+    ///     <term>10</term>
+    ///   </item>
+    ///   <item>
+    ///     <term>累计定时器的触点</term>
+    ///     <term>SS100,SS200</term>
+    ///     <term>10</term>
+    ///   </item>
+    ///   <item>
+    ///     <term>累计定时器的线圈</term>
+    ///     <term>SC100,SC200</term>
+    ///     <term>10</term>
+    ///   </item>
+    ///   <item>
+    ///     <term>累计定时器的当前值</term>
+    ///     <term>SN100,SN200</term>
+    ///     <term>10</term>
+    ///   </item>
+    ///   <item>
+    ///     <term>计数器的触点</term>
+    ///     <term>CS100,CS200</term>
+    ///     <term>10</term>
+    ///   </item>
+    ///   <item>
+    ///     <term>计数器的线圈</term>
+    ///     <term>CC100,CC200</term>
+    ///     <term>10</term>
+    ///   </item>
+    ///   <item>
+    ///     <term>计数器的当前</term>
+    ///     <term>CN100,CN200</term>
+    ///     <term>10</term>
+    ///   </item>
+    /// </list>
+    /// </remarks>
     public class MelsecA3CNet1 : SerialDeviceBase<RegularByteTransform>
     {
         #region Constructor
@@ -161,6 +281,61 @@ namespace HslCommunication.Profinet.Melsec
 
             // 提取结果
             return OperateResult.CreateSuccessResult( );
+        }
+
+        #endregion
+
+        #region Remote Operate
+
+        /// <summary>
+        /// 远程Run操作
+        /// </summary>
+        /// <returns>是否成功</returns>
+        public OperateResult RemoteRun( )
+        {
+            // 核心交互
+            OperateResult<byte[]> read = ReadBase( PackCommand( Encoding.ASCII.GetBytes( "1001000000010000" ), this.station ) );
+            if (!read.IsSuccess) return read;
+
+            // 结果验证
+            if (read.Content[0] != 0x06 && read.Content[0] != 0x02) return new OperateResult( read.Content[0], "Faild:" + Encoding.ASCII.GetString( read.Content, 1, read.Content.Length - 1 ) );
+
+            // 成功
+            return OperateResult.CreateSuccessResult( );
+        }
+
+        /// <summary>
+        /// 远程Stop操作
+        /// </summary>
+        /// <returns>是否成功</returns>
+        public OperateResult RemoteStop( )
+        {
+            // 核心交互
+            OperateResult<byte[]> read = ReadBase( PackCommand( Encoding.ASCII.GetBytes( "100200000001" ), this.station ) );
+            if (!read.IsSuccess) return read;
+
+            // 结果验证
+            if (read.Content[0] != 0x06 && read.Content[0] != 0x02) return new OperateResult( read.Content[0], "Faild:" + Encoding.ASCII.GetString( read.Content, 1, read.Content.Length - 1 ) );
+
+            // 成功
+            return OperateResult.CreateSuccessResult( );
+        }
+
+        /// <summary>
+        /// 读取PLC的型号信息
+        /// </summary>
+        /// <returns>返回型号的结果对象</returns>
+        public OperateResult<string> ReadPlcType( )
+        {
+            // 核心交互
+            OperateResult<byte[]> read = ReadBase( PackCommand( Encoding.ASCII.GetBytes( "01010000" ), this.station ) );
+            if (!read.IsSuccess) return OperateResult.CreateFailedResult<string>( read );
+
+            // 结果验证
+            if (read.Content[0] != 0x06 && read.Content[0] != 0x02) return new OperateResult<string>( read.Content[0], "Faild:" + Encoding.ASCII.GetString( read.Content, 1, read.Content.Length - 1 ) );
+
+            // 成功
+            return OperateResult.CreateSuccessResult( Encoding.ASCII.GetString( read.Content, 11, 16 ).TrimEnd( ) );
         }
 
         #endregion
