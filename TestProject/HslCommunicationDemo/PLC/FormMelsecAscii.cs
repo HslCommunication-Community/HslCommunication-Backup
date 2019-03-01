@@ -592,5 +592,47 @@ namespace HslCommunicationDemo
 
 
         #endregion
+
+        private void button4_Click( object sender, EventArgs e )
+        {
+            // 远程启动
+            OperateResult runResult = melsec_net.RemoteRun( );
+            if (runResult.IsSuccess)
+            {
+                MessageBox.Show( "Run Success" );
+            }
+            else
+            {
+                MessageBox.Show( "Failed: " + runResult.ToMessageShowString( ) );
+            }
+        }
+
+        private void button5_Click( object sender, EventArgs e )
+        {
+            // 远程停止
+            OperateResult runResult = melsec_net.RemoteStop( );
+            if (runResult.IsSuccess)
+            {
+                MessageBox.Show( "Stop Success" );
+            }
+            else
+            {
+                MessageBox.Show( "Failed: " + runResult.ToMessageShowString( ) );
+            }
+        }
+
+        private void button6_Click( object sender, EventArgs e )
+        {
+            // 读取型号
+            OperateResult<string> readResult = melsec_net.ReadPlcType( );
+            if (readResult.IsSuccess)
+            {
+                MessageBox.Show( "Type:" + readResult.Content );
+            }
+            else
+            {
+                MessageBox.Show( "Failed: " + readResult.ToMessageShowString( ) );
+            }
+        }
     }
 }

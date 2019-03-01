@@ -61,6 +61,7 @@
             this.textBox6 = new System.Windows.Forms.TextBox();
             this.label11 = new System.Windows.Forms.Label();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.button3 = new System.Windows.Forms.Button();
             this.label24 = new System.Windows.Forms.Label();
             this.label19 = new System.Windows.Forms.Label();
             this.button14 = new System.Windows.Forms.Button();
@@ -100,7 +101,9 @@
             this.label4 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.label20 = new System.Windows.Forms.Label();
-            this.button3 = new System.Windows.Forms.Button();
+            this.button5 = new System.Windows.Forms.Button();
+            this.button4 = new System.Windows.Forms.Button();
+            this.button6 = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.groupBox5.SuspendLayout();
@@ -360,6 +363,7 @@
             // 
             // groupBox3
             // 
+            this.groupBox3.Controls.Add(this.button6);
             this.groupBox3.Controls.Add(this.textBox10);
             this.groupBox3.Controls.Add(this.label13);
             this.groupBox3.Controls.Add(this.button25);
@@ -406,7 +410,7 @@
             // 
             this.textBox9.Location = new System.Drawing.Point(239, 27);
             this.textBox9.Name = "textBox9";
-            this.textBox9.Size = new System.Drawing.Size(102, 23);
+            this.textBox9.Size = new System.Drawing.Size(80, 23);
             this.textBox9.TabIndex = 7;
             this.textBox9.Text = "10";
             // 
@@ -438,6 +442,8 @@
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.button5);
+            this.groupBox2.Controls.Add(this.button4);
             this.groupBox2.Controls.Add(this.button3);
             this.groupBox2.Controls.Add(this.label24);
             this.groupBox2.Controls.Add(this.label19);
@@ -461,6 +467,16 @@
             this.groupBox2.TabIndex = 1;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "单数据写入测试";
+            // 
+            // button3
+            // 
+            this.button3.Location = new System.Drawing.Point(13, 190);
+            this.button3.Name = "button3";
+            this.button3.Size = new System.Drawing.Size(184, 28);
+            this.button3.TabIndex = 22;
+            this.button3.Text = "压力测试，快速读写3000次";
+            this.button3.UseVisualStyleBackColor = true;
+            this.button3.Click += new System.EventHandler(this.button3_Click);
             // 
             // label24
             // 
@@ -851,15 +867,35 @@
             this.label20.TabIndex = 6;
             this.label20.Text = "作者：Richard Hu";
             // 
-            // button3
+            // button5
             // 
-            this.button3.Location = new System.Drawing.Point(13, 190);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(184, 28);
-            this.button3.TabIndex = 22;
-            this.button3.Text = "压力测试，快速读写3000次";
-            this.button3.UseVisualStyleBackColor = true;
-            this.button3.Click += new System.EventHandler(this.button3_Click);
+            this.button5.Location = new System.Drawing.Point(101, 156);
+            this.button5.Name = "button5";
+            this.button5.Size = new System.Drawing.Size(95, 28);
+            this.button5.TabIndex = 25;
+            this.button5.Text = "remote stop";
+            this.button5.UseVisualStyleBackColor = true;
+            this.button5.Click += new System.EventHandler(this.button5_Click);
+            // 
+            // button4
+            // 
+            this.button4.Location = new System.Drawing.Point(13, 156);
+            this.button4.Name = "button4";
+            this.button4.Size = new System.Drawing.Size(82, 28);
+            this.button4.TabIndex = 24;
+            this.button4.Text = "remote run";
+            this.button4.UseVisualStyleBackColor = true;
+            this.button4.Click += new System.EventHandler(this.button4_Click);
+            // 
+            // button6
+            // 
+            this.button6.Location = new System.Drawing.Point(338, 24);
+            this.button6.Name = "button6";
+            this.button6.Size = new System.Drawing.Size(82, 28);
+            this.button6.TabIndex = 25;
+            this.button6.Text = "plc type";
+            this.button6.UseVisualStyleBackColor = true;
+            this.button6.Click += new System.EventHandler(this.button6_Click);
             // 
             // FormMelsecAscii
             // 
@@ -973,5 +1009,8 @@
         private System.Windows.Forms.Label label24;
         private System.Windows.Forms.Label label23;
         private System.Windows.Forms.Button button3;
+        private System.Windows.Forms.Button button5;
+        private System.Windows.Forms.Button button4;
+        private System.Windows.Forms.Button button6;
     }
 }

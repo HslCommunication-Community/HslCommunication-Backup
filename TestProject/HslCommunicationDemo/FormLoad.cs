@@ -291,6 +291,7 @@ namespace HslCommunicationDemo
                 }
                 else
                 {
+                    HslCommunication.StringResources.SeteLanguageEnglish( );
                     Program.Language = 2;
                     Language( Program.Language );
                 }
@@ -298,6 +299,7 @@ namespace HslCommunicationDemo
             else
             {
                 Program.Language = 2;
+                HslCommunication.StringResources.SeteLanguageEnglish( );
                 Language( Program.Language );
             }
         }
