@@ -103,6 +103,7 @@
     <Compile Include="Profinet\Melsec\MelsecFxSerialTest.cs" />
     <Compile Include="Profinet\Melsec\MelsecMcNetTest.cs" />
     <Compile Include="Profinet\Panasonic\PanasonicMewtocolTest.cs" />
+    <Compile Include="Profinet\Siemens\SiemensTest.cs" />
     <Compile Include="UnitTest1.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
