@@ -210,9 +210,7 @@ namespace HslCommunication.Profinet.Melsec
             // 数据解析，需要传入是否使用位的参数
             return ExtractActualData( read.Content, false );
         }
-
-
-
+        
         /// <summary>
         /// 从三菱PLC中批量读取位软元件，返回读取结果
         /// </summary>
@@ -397,7 +395,7 @@ namespace HslCommunication.Profinet.Melsec
             if (errorCode != 0) return new OperateResult<string>( errorCode, StringResources.Language.MelsecPleaseReferToManulDocument );
 
             // 成功
-            return OperateResult.CreateSuccessResult( Encoding.ASCII.GetString( read.Content, 11, 16 ).TrimEnd( ) );
+            return OperateResult.CreateSuccessResult( Encoding.ASCII.GetString( read.Content, 22, 16 ).TrimEnd( ) );
         }
 
         #endregion
