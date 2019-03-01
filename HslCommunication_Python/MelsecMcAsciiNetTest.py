@@ -27,6 +27,7 @@ Warning: The following code can only be run in the Test plc, prohibit the use of
 '''
 from HslCommunication import MelsecMcAsciiNet
 
+
 def printReadResult(result, addr):
     if result.IsSuccess:
     	print("success[" + addr + "]   " + str(result.Content))

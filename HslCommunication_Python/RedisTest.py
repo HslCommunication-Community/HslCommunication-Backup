@@ -118,7 +118,8 @@ class RedisTest(unittest.TestCase):
         self.assertTrue( redisClient.ExistsHashKey( "UnitTest:1#", "test3" ).Content == 1 )
         self.assertTrue( redisClient.ExistsHashKey( "UnitTest:1#", "test10" ).Content == 0 )
         self.assertTrue( redisClient.DeleteKey( "UnitTest:1#" ).Content == 1 )
-
+        
+        redisClient.ConnectClose()
 if __name__ == "__main__":
     # 简单的使用如下：
     # redisClient = RedisClient("127.0.0.1", 6379, "")

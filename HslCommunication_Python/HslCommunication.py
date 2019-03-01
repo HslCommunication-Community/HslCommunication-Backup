@@ -1575,6 +1575,15 @@ class SoftBasic:
 			if b1[ii+start1] != b2[ii+start2]: return False
 		return True
 	@staticmethod
+	def IsTwoBytesAllEquel( b1, b2 ):
+		'''判断两个字节是否相同'''
+		if b1 == None or b2 == None: return False
+		if len(b1) != len(b2) : return False
+
+		for ii in range(len(b1)):
+			if b1[ii] != b2[ii]: return False
+		return True
+	@staticmethod
 	def TokenToBytes( token ):
 		'''将uuid的token值转化成统一的bytes数组，方便和java，C#通讯'''
 		buffer = bytearray(token.bytes)
@@ -3463,13 +3472,21 @@ class MelsecMcAsciiNet(NetworkDeviceBase):
 
 # 西门子的数据类
 class SiemensPLCS(Enum):
-	'''西门子PLC的类对象'''
+	'''西门子PLC的类型对象'''
 	S1200 = 0
 	S300 = 1
-	S1500 = 2
-	S200Smart = 3
+	S400 = 2
+	S1500 = 3
+	S200Smart = 4
 class SiemensS7Net(NetworkDeviceBase):
-	'''一个西门子的客户端类，使用S7协议来进行数据交互'''
+	'''一个西门子的客户端类，使用S7协议来进行数据交互，支持s200smart，s300，s400，s1200，s1500的通讯
+	
+	在实例化的时候除了需要指定PLC型号，ip地址之外，有些特殊的plc是需要设置机架号和槽号的，示例的示例如下：
+
+	siemens = SiemensS7Net(SiemensPLCS.S1200, "192.168.8.13")
+
+	siemens.SetSlotAndRack(0, 2)  # 这行代码不是必须的，S400系列时需要根据实际来进行设置，才能正确的读到数据
+	'''
 	CurrentPlc = SiemensPLCS.S1200
 	plcHead1 = bytearray([0x03,0x00,0x00,0x16,0x11,0xE0,0x00,0x00,0x00,0x01,0x00,0xC0,0x01,0x0A,0xC1,0x02,0x01,0x02,0xC2,0x02,0x01,0x00])
 	plcHead2 = bytearray([0x03,0x00,0x00,0x19,0x02,0xF0,0x80,0x32,0x01,0x00,0x00,0x04,0x00,0x00,0x08,0x00,0x00,0xF0,0x00,0x00,0x01,0x00,0x01,0x01,0xE0])
@@ -3489,6 +3506,9 @@ class SiemensS7Net(NetworkDeviceBase):
 			self.plcHead1[21] = 0
 		elif siemens == SiemensPLCS.S300:
 			self.plcHead1[21] = 2
+		elif siemens == SiemensPLCS.S400:
+			self.plcHead1[21] = 3
+			self.plcHead1[17] = 0x00
 		elif siemens == SiemensPLCS.S1500:
 			self.plcHead1[21] = 0
 		elif siemens == SiemensPLCS.S200Smart:
@@ -3789,6 +3809,9 @@ class SiemensS7Net(NetworkDeviceBase):
 		_PLCCommand[35:] = buffer
 
 		return OperateResult.CreateSuccessResult(_PLCCommand)
+	def SetSlotAndRack(self, rack, slot):
+		'''设置西门字的机架号和槽号的信息，当和400PLC通信时就需要动态来调整'''
+		self.plcHead1[21] = (rack * 0x20) + slot
 	def InitializationOnConnect( self, socket ):
 		'''连接上服务器后需要进行的二次握手操作'''
 		# msg = SoftBasic.ByteToHexString(self.plcHead1, ' ')
