@@ -114,7 +114,7 @@ namespace HslCommunication.Profinet.AllenBradley
             buffer[1] = (byte)((offect - 2) / 2);
             buffer[offect++] = BitConverter.GetBytes( length )[0];
             buffer[offect++] = BitConverter.GetBytes( length )[1];
-
+            
             byte[] data = new byte[offect];
             Array.Copy( buffer, 0, data, 0, offect );
             return data;

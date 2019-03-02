@@ -636,7 +636,7 @@ namespace HslCommunication
     // 5. .net端对安川机器人的支持，已经有协议文档。
     // 6. .net端对库卡机器人的支持，http://blog.davidrobot.com/2014/09/kukavarproxy_index.html?tdsourcetag=s_pctim_aiomsg
     // 7. .net端对三菱Qna兼容3C帧协议的支持。                                         ===================== 已实现，通过基本的测试
-    // 8. .net端对欧姆龙的Fins串口协议的支持
+    // 8. .net端对欧姆龙的Fins串口协议的支持                                           ==================== 已实现，正在最后的测试
     // 9. .net端对基恩士PLC的串口支持 https://china.keyence.com/support/user/plc/sample-program/index.jsp
 
     // 组件之外的计划

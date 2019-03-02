@@ -10,6 +10,11 @@ namespace HslCommunication.Profinet.Omron
     /// <summary>
     /// 欧姆龙的HostLink协议的实现
     /// </summary>
+    /// <remarks>
+    /// 感谢 深圳～拾忆 的测试
+    /// 欧姆龙的地址参考如下：
+    /// 
+    /// </remarks>
     public class OmronHostLink : SerialDeviceBase<ReverseWordTransform>
     {
         #region Constructor
@@ -313,12 +318,7 @@ namespace HslCommunication.Profinet.Omron
 
                 if (response.Length > 27)
                 {
-                    Content = new byte[(response.Length - 27) / 2];
-                    for (int i = 0; i < Content.Length / 2; i++)
-                    {
-                        ushort tmp = Convert.ToUInt16( Encoding.ASCII.GetString( response, i * 4 + 23, 4 ), 16 );
-                        BitConverter.GetBytes( tmp ).CopyTo( Content, i * 2 );
-                    }
+                    Content = BasicFramework.SoftBasic.HexStringToBytes( Encoding.ASCII.GetString( response, 23, response.Length - 27 ) );
                 }
 
                 if (err > 0) return new OperateResult<byte[]>( )
