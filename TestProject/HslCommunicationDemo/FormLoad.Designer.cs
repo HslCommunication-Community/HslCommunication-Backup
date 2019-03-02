@@ -44,6 +44,7 @@
             this.button19 = new System.Windows.Forms.Button();
             this.button6 = new System.Windows.Forms.Button();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.button47 = new System.Windows.Forms.Button();
             this.button38 = new System.Windows.Forms.Button();
             this.button32 = new System.Windows.Forms.Button();
             this.button13 = new System.Windows.Forms.Button();
@@ -101,7 +102,7 @@
             this.button43 = new System.Windows.Forms.Button();
             this.button42 = new System.Windows.Forms.Button();
             this.button40 = new System.Windows.Forms.Button();
-            this.button47 = new System.Windows.Forms.Button();
+            this.button48 = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -312,6 +313,17 @@
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Melsec PLC(三菱 PLC)";
             // 
+            // button47
+            // 
+            this.button47.Location = new System.Drawing.Point(15, 224);
+            this.button47.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.button47.Name = "button47";
+            this.button47.Size = new System.Drawing.Size(150, 32);
+            this.button47.TabIndex = 6;
+            this.button47.Text = "A-3C (format1)";
+            this.button47.UseVisualStyleBackColor = true;
+            this.button47.Click += new System.EventHandler(this.button47_Click);
+            // 
             // button38
             // 
             this.button38.Location = new System.Drawing.Point(15, 184);
@@ -464,6 +476,7 @@
             // 
             // groupBox5
             // 
+            this.groupBox5.Controls.Add(this.button48);
             this.groupBox5.Controls.Add(this.button11);
             this.groupBox5.Location = new System.Drawing.Point(586, 29);
             this.groupBox5.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
@@ -929,16 +942,16 @@
             this.button40.UseVisualStyleBackColor = true;
             this.button40.Click += new System.EventHandler(this.button40_Click);
             // 
-            // button47
+            // button48
             // 
-            this.button47.Location = new System.Drawing.Point(15, 224);
-            this.button47.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.button47.Name = "button47";
-            this.button47.Size = new System.Drawing.Size(150, 32);
-            this.button47.TabIndex = 6;
-            this.button47.Text = "A-3C (format1)";
-            this.button47.UseVisualStyleBackColor = true;
-            this.button47.Click += new System.EventHandler(this.button47_Click);
+            this.button48.Location = new System.Drawing.Point(19, 64);
+            this.button48.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.button48.Name = "button48";
+            this.button48.Size = new System.Drawing.Size(150, 32);
+            this.button48.TabIndex = 1;
+            this.button48.Text = "Fins HostLink";
+            this.button48.UseVisualStyleBackColor = true;
+            this.button48.Click += new System.EventHandler(this.button48_Click);
             // 
             // FormLoad
             // 
@@ -1063,6 +1076,7 @@
         private System.Windows.Forms.Button button45;
         private System.Windows.Forms.Button button46;
         private System.Windows.Forms.Button button47;
+        private System.Windows.Forms.Button button48;
     }
 }
 

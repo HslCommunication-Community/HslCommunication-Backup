@@ -629,19 +629,20 @@ namespace HslCommunication
 
 
     // 工作的备忘录
-    // 1. 三菱的代码提炼，重构，抽象，将MC协议核心提取，适配不同的格式要求。
-    // 2. redis的协议在Python上的实现，并且测试。                       =================== 已实现，通过单元测试
+    // 1. 三菱的代码提炼，重构，抽象，将MC协议核心提取，适配不同的格式要求。       =================== 基本差不多实现。已完成对三菱3C协议的适配
+    // 2. redis的协议在Python上的实现，并且测试。                                     =================== 已实现，通过单元测试
     // 3. python新增对串口的支持并测试。
     // 4. python新增对ab plc的支持。
     // 5. .net端对安川机器人的支持，已经有协议文档。
     // 6. .net端对库卡机器人的支持，http://blog.davidrobot.com/2014/09/kukavarproxy_index.html?tdsourcetag=s_pctim_aiomsg
-    // 7. .net端对三菱Qna兼容3C帧协议的支持。
+    // 7. .net端对三菱Qna兼容3C帧协议的支持。                                         ===================== 已实现，通过基本的测试
     // 8. .net端对欧姆龙的Fins串口协议的支持
     // 9. .net端对基恩士PLC的串口支持 https://china.keyence.com/support/user/plc/sample-program/index.jsp
 
     // 组件之外的计划
-    // 1. 研究MQTT协议的通讯
+    // 1. 研究MQTT协议的通讯                                                           ===================== 研究完成在C#的服务器构建和客户端的数据推送操作
     // 2. 研究 ML.NET 的机器学习的平台
     // 3. 工业网关的深入集成
     // 4. HslCommunication官网集成项目发布接收及案例展示平台
+    // 5. 研究PyQt的界面开发和实现
 }

@@ -565,6 +565,9 @@
     <Compile Include="..\HslCommunication_Net45\Profinet\Omron\OmronFinsNetHelper.cs">
       <Link>Profinet\Omron\OmronFinsNetHelper.cs</Link>
     </Compile>
+    <Compile Include="..\HslCommunication_Net45\Profinet\Omron\OmronHostLink.cs">
+      <Link>Profinet\Omron\OmronHostLink.cs</Link>
+    </Compile>
     <Compile Include="..\HslCommunication_Net45\Profinet\Panasonic\PanasonicMewtocol.cs">
       <Link>Profinet\Panasonic\PanasonicMewtocol.cs</Link>
     </Compile>

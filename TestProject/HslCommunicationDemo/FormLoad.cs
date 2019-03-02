@@ -805,5 +805,17 @@ namespace HslCommunicationDemo
             System.Threading.Thread.Sleep( 200 );
             Show( );
         }
+
+        private void button48_Click( object sender, EventArgs e )
+        {
+            Hide( );
+            System.Threading.Thread.Sleep( 200 );
+            using (FormOmronHostLink form = new FormOmronHostLink( ))
+            {
+                form.ShowDialog( );
+            }
+            System.Threading.Thread.Sleep( 200 );
+            Show( );
+        }
     }
 }

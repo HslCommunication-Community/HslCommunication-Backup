@@ -24,7 +24,6 @@ namespace HslCommunication.Profinet.Omron
     /// </example>
     public class OmronFinsNet : NetworkDeviceBase<FinsMessage,ReverseWordTransform>
     {
-
         #region Constructor
 
         /// <summary>
