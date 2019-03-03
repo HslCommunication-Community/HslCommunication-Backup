@@ -46,17 +46,17 @@ namespace HslCommunication.Profinet.Melsec
         public int FromBase { get; private set; }
 
         /// <summary>
-        /// X输入寄存器
+        /// X输入继电器
         /// </summary>
         public readonly static MelsecMcDataType X = new MelsecMcDataType( 0x9C, 0x01, "X*", 16 );
 
         /// <summary>
-        /// Y输出寄存器
+        /// Y输出继电器
         /// </summary>
         public readonly static MelsecMcDataType Y = new MelsecMcDataType( 0x9D, 0x01, "Y*", 16 );
 
         /// <summary>
-        /// M中间寄存器
+        /// M中间继电器
         /// </summary>
         public readonly static MelsecMcDataType M = new MelsecMcDataType( 0x90, 0x01, "M*", 10 );
 
@@ -154,5 +154,69 @@ namespace HslCommunication.Profinet.Melsec
         /// 文件寄存器ZR区
         /// </summary>
         public readonly static MelsecMcDataType ZR = new MelsecMcDataType( 0xB0, 0x00, "ZR", 16 );
+
+
+
+
+        /// <summary>
+        /// X输入继电器
+        /// </summary>
+        public readonly static MelsecMcDataType Keyence_X = new MelsecMcDataType( 0x9C, 0x01, "X*", 16 );
+        /// <summary>
+        /// Y输出继电器
+        /// </summary>
+        public readonly static MelsecMcDataType Keyence_Y = new MelsecMcDataType( 0x9D, 0x01, "Y*", 16 );
+        /// <summary>
+        /// 链接继电器
+        /// </summary>
+        public readonly static MelsecMcDataType Keyence_B = new MelsecMcDataType( 0xA0, 0x01, "B*", 16 );
+        /// <summary>
+        /// 内部辅助继电器
+        /// </summary>
+        public readonly static MelsecMcDataType Keyence_M = new MelsecMcDataType( 0x90, 0x01, "M*", 10 );
+        /// <summary>
+        /// 锁存继电器
+        /// </summary>
+        public readonly static MelsecMcDataType Keyence_L = new MelsecMcDataType( 0x92, 0x01, "L*", 10 );
+        /// <summary>
+        /// 控制继电器
+        /// </summary>
+        public readonly static MelsecMcDataType Keyence_SM = new MelsecMcDataType( 0x91, 0x01, "SM", 10 );
+        /// <summary>
+        /// 控制存储器
+        /// </summary>
+        public readonly static MelsecMcDataType Keyence_SD = new MelsecMcDataType( 0xA9, 0x00, "SD", 10 );
+        /// <summary>
+        /// 数据存储器
+        /// </summary>
+        public readonly static MelsecMcDataType Keyence_D = new MelsecMcDataType( 0xA8, 0x00, "D*", 10 );
+        /// <summary>
+        /// 文件寄存器
+        /// </summary>
+        public readonly static MelsecMcDataType Keyence_R = new MelsecMcDataType( 0xAF, 0x00, "R*", 10 );
+        /// <summary>
+        /// 文件寄存器
+        /// </summary>
+        public readonly static MelsecMcDataType Keyence_ZR = new MelsecMcDataType( 0xB0, 0x00, "ZR", 16 );
+        /// <summary>
+        /// 链路寄存器
+        /// </summary>
+        public readonly static MelsecMcDataType Keyence_W = new MelsecMcDataType( 0xB4, 0x00, "W*", 16 );
+        /// <summary>
+        /// 计时器（当前值）
+        /// </summary>
+        public readonly static MelsecMcDataType Keyence_TN = new MelsecMcDataType( 0xC2, 0x00, "TN", 10 );
+        /// <summary>
+        /// 计时器（接点）
+        /// </summary>
+        public readonly static MelsecMcDataType Keyence_TS = new MelsecMcDataType( 0xC1, 0x01, "TS", 10 );
+        /// <summary>
+        /// 计数器（当前值）
+        /// </summary>
+        public readonly static MelsecMcDataType Keyence_CN = new MelsecMcDataType( 0xC5, 0x00, "CN", 10 );
+        /// <summary>
+        /// 计数器（接点）
+        /// </summary>
+        public readonly static MelsecMcDataType Keyence_CS = new MelsecMcDataType( 0xC4, 0x01, "CS", 10 );
     }
 }

@@ -32,38 +32,75 @@ namespace HslCommunication.Profinet.Siemens
     /// <list type="table">
     ///   <listheader>
     ///     <term>地址名称</term>
+    ///     <term>地址代号</term>
     ///     <term>示例</term>
     ///     <term>地址进制</term>
+    ///     <term>字操作</term>
+    ///     <term>位操作</term>
+    ///     <term>备注</term>
     ///   </listheader>
     ///   <item>
     ///     <term>中间寄存器</term>
+    ///     <term>M</term>
     ///     <term>M100,M200</term>
     ///     <term>10</term>
+    ///     <term>√</term>
+    ///     <term>√</term>
+    ///     <term></term>
     ///   </item>
     ///   <item>
     ///     <term>输入寄存器</term>
+    ///     <term>I</term>
     ///     <term>I100,I200</term>
     ///     <term>10</term>
+    ///     <term>√</term>
+    ///     <term>√</term>
+    ///     <term></term>
     ///   </item>
     ///   <item>
     ///     <term>输出寄存器</term>
+    ///     <term>Q</term>
     ///     <term>Q100,Q200</term>
     ///     <term>10</term>
+    ///     <term>√</term>
+    ///     <term>√</term>
+    ///     <term></term>
     ///   </item>
     ///   <item>
-    ///     <term>DB寄存器</term>
+    ///     <term>DB块寄存器</term>
+    ///     <term>DB</term>
     ///     <term>DB1.100,DB1.200</term>
     ///     <term>10</term>
+    ///     <term>√</term>
+    ///     <term>√</term>
+    ///     <term></term>
+    ///   </item>
+    ///   <item>
+    ///     <term>V寄存器</term>
+    ///     <term>V</term>
+    ///     <term>V100,V200</term>
+    ///     <term>10</term>
+    ///     <term>√</term>
+    ///     <term>√</term>
+    ///     <term>V寄存器本质就是DB块1</term>
     ///   </item>
     ///   <item>
     ///     <term>定时器的值</term>
+    ///     <term>T</term>
     ///     <term>T100,T200</term>
     ///     <term>10</term>
+    ///     <term>√</term>
+    ///     <term>√</term>
+    ///     <term>未测试通过</term>
     ///   </item>
     ///   <item>
     ///     <term>计数器的值</term>
+    ///     <term>C</term>
     ///     <term>C100,C200</term>
     ///     <term>10</term>
+    ///     <term>√</term>
+    ///     <term>√</term>
+    ///     <term>未测试通过</term>
     ///   </item>
     /// </list>
     /// <note type="important">对于200smartPLC的V区，就是DB1.X，例如，V100=DB1.100</note>

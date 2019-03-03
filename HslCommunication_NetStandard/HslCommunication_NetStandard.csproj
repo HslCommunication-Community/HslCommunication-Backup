@@ -137,6 +137,8 @@
     <Compile Include="..\HslCommunication_Net45\NamespaceDoc.cs" Link="NamespaceDoc.cs" />
     <Compile Include="..\HslCommunication_Net45\Profinet\AllenBradley\AllenBradleyHelper.cs" Link="Profinet\AllenBradley\AllenBradleyHelper.cs" />
     <Compile Include="..\HslCommunication_Net45\Profinet\AllenBradley\AllenBradleyNet.cs" Link="Profinet\AllenBradley\AllenBradleyNet.cs" />
+    <Compile Include="..\HslCommunication_Net45\Profinet\Keyence\KeyenceMcAsciiNet.cs" Link="Profinet\Keyence\KeyenceMcAsciiNet.cs" />
+    <Compile Include="..\HslCommunication_Net45\Profinet\Keyence\KeyenceMcNet.cs" Link="Profinet\Keyence\KeyenceMcNet.cs" />
     <Compile Include="..\HslCommunication_Net45\Profinet\Melsec\MelsecA1EDataType.cs" Link="Profinet\Melsec\MelsecA1EDataType.cs" />
     <Compile Include="..\HslCommunication_Net45\Profinet\Melsec\MelsecA1ENet.cs" Link="Profinet\Melsec\MelsecA1ENet.cs" />
     <Compile Include="..\HslCommunication_Net45\Profinet\Melsec\MelsecHelper.cs" Link="Profinet\Melsec\MelsecHelper.cs" />
@@ -196,6 +198,7 @@
     <Folder Include="Profinet\Siemens\" />
     <Folder Include="Profinet\AllenBradley\" />
     <Folder Include="Profinet\Panasonic\" />
+    <Folder Include="Profinet\Keyence\" />
     <Folder Include="Robot\EFORT\" />
     <Folder Include="Language\" />
     <Folder Include="Instrument\" />

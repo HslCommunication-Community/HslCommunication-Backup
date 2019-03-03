@@ -13,7 +13,63 @@ namespace HslCommunication.Profinet.Omron
     /// <remarks>
     /// 感谢 深圳～拾忆 的测试
     /// 欧姆龙的地址参考如下：
-    /// 
+    /// 地址支持的列表如下：
+    /// <list type="table">
+    ///   <listheader>
+    ///     <term>地址名称</term>
+    ///     <term>地址代号</term>
+    ///     <term>示例</term>
+    ///     <term>地址进制</term>
+    ///     <term>字操作</term>
+    ///     <term>位操作</term>
+    ///     <term>备注</term>
+    ///   </listheader>
+    ///   <item>
+    ///     <term>DM Area</term>
+    ///     <term>D</term>
+    ///     <term>D100,D200</term>
+    ///     <term>10</term>
+    ///     <term>√</term>
+    ///     <term>√</term>
+    ///     <term></term>
+    ///   </item>
+    ///   <item>
+    ///     <term>CIO Area</term>
+    ///     <term>C</term>
+    ///     <term>C100,C200</term>
+    ///     <term>10</term>
+    ///     <term>√</term>
+    ///     <term>√</term>
+    ///     <term></term>
+    ///   </item>
+    ///   <item>
+    ///     <term>Work Area</term>
+    ///     <term>W</term>
+    ///     <term>W100,W200</term>
+    ///     <term>10</term>
+    ///     <term>√</term>
+    ///     <term>√</term>
+    ///     <term></term>
+    ///   </item>
+    ///   <item>
+    ///     <term>Holding Bit Area</term>
+    ///     <term>H</term>
+    ///     <term>H100,H200</term>
+    ///     <term>10</term>
+    ///     <term>√</term>
+    ///     <term>√</term>
+    ///     <term></term>
+    ///   </item>
+    ///   <item>
+    ///     <term>Auxiliary Bit Area</term>
+    ///     <term>A</term>
+    ///     <term>A100,A200</term>
+    ///     <term>10</term>
+    ///     <term>√</term>
+    ///     <term>√</term>
+    ///     <term></term>
+    ///   </item>
+    /// </list>
     /// </remarks>
     public class OmronHostLink : SerialDeviceBase<ReverseWordTransform>
     {
@@ -72,12 +128,11 @@ namespace HslCommunication.Profinet.Omron
         public byte UnitNumber { get; set; }
 
         #endregion
-
-
+        
         #region Read Write Support
 
         /// <summary>
-        /// 批量读取PLC的数据，以字为单位，支持读取X,Y,M,S,D,T,C，具体的地址范围需要根据PLC型号来确认
+        /// 批量读取PLC的数据，以字为单位，具体的地址参考文档
         /// </summary>
         /// <param name="address">地址信息</param>
         /// <param name="length">数据长度</param>
@@ -101,7 +156,7 @@ namespace HslCommunication.Profinet.Omron
         }
 
         /// <summary>
-        /// 批量写入PLC的数据，以字为单位，也就是说最少2个字节信息，支持X,Y,M,S,D,T,C，具体的地址范围需要根据PLC型号来确认
+        /// 批量写入PLC的数据，以字为单位，也就是说最少2个字节信息，具体的地址参考文档
         /// </summary>
         /// <param name="address">地址信息</param>
         /// <param name="value">数据值</param>
@@ -127,48 +182,13 @@ namespace HslCommunication.Profinet.Omron
         #endregion
 
         #region Bool Read Write
-
-
+        
         /// <summary>
         /// 从欧姆龙PLC中批量读取位软元件，返回读取结果
         /// </summary>
-        /// <param name="address">读取地址，格式为"D100","C100","W100","H100","A100"</param>
+        /// <param name="address">读取地址，具体的地址参考文档</param>
         /// <param name="length">读取的长度</param>
         /// <returns>带成功标志的结果数据对象</returns>
-        /// <remarks>
-        /// 地址支持的列表如下：
-        /// <list type="table">
-        ///   <listheader>
-        ///     <term>地址名称</term>
-        ///     <term>示例</term>
-        ///     <term>地址进制</term>
-        ///   </listheader>
-        ///   <item>
-        ///     <term>DM Area</term>
-        ///     <term>D100.0,D200.10</term>
-        ///     <term>10</term>
-        ///   </item>
-        ///   <item>
-        ///     <term>CIO Area</term>
-        ///     <term>C100.0,C200.10</term>
-        ///     <term>10</term>
-        ///   </item>
-        ///   <item>
-        ///     <term>Work Area</term>
-        ///     <term>W100.0,W200.10</term>
-        ///     <term>10</term>
-        ///   </item>
-        ///   <item>
-        ///     <term>Holding Bit Area</term>
-        ///     <term>H100.0,H200.10</term>
-        ///     <term>10</term>
-        ///   </item>
-        ///   <item>
-        ///     <term>Auxiliary Bit Area</term>
-        ///     <term>A100.0,A200.1</term>
-        ///     <term>10</term>
-        ///   </item>
-        /// </list>
         /// </remarks>
         /// <example>
         /// <code lang="cs" source="HslCommunication_Net45.Test\Documentation\Samples\Profinet\OmronFinsNet.cs" region="ReadBool" title="ReadBool示例" />
@@ -190,12 +210,11 @@ namespace HslCommunication.Profinet.Omron
             // 返回正确的数据信息
             return OperateResult.CreateSuccessResult( valid.Content.Select( m => m != 0x00 ? true : false ).ToArray( ) );
         }
-
-
+        
         /// <summary>
         /// 从欧姆龙PLC中批量读取位软元件，返回读取结果
         /// </summary>
-        /// <param name="address">读取地址，格式为"D100.0","C100.15","W100.7","H100.4","A100.9"</param>
+        /// <param name="address">读取地址，具体的地址参考文档</param>
         /// <returns>带成功标志的结果数据对象</returns>
         /// <remarks>
         /// 地址的格式请参照<see cref="ReadBool(string, ushort)"/>方法
@@ -210,12 +229,11 @@ namespace HslCommunication.Profinet.Omron
 
             return OperateResult.CreateSuccessResult( read.Content[0] );
         }
-
-
+        
         /// <summary>
         /// 向PLC中位软元件写入bool数组，返回值说明，比如你写入D100,values[0]对应D100.0
         /// </summary>
-        /// <param name="address">要写入的数据地址</param>
+        /// <param name="address">要写入的数据地址，具体的地址参考文档</param>
         /// <param name="value">要写入的实际数据，长度为8的倍数</param>
         /// <returns>返回写入结果</returns>
         /// <example>
@@ -225,12 +243,11 @@ namespace HslCommunication.Profinet.Omron
         {
             return Write( address, new bool[] { value } );
         }
-
-
+        
         /// <summary>
         /// 向PLC中位软元件写入bool数组，返回值说明，比如你写入D100,values[0]对应D100.0
         /// </summary>
-        /// <param name="address">要写入的数据地址</param>
+        /// <param name="address">要写入的数据地址，具体的地址参考文档</param>
         /// <param name="values">要写入的实际数据，可以指定任意的长度</param>
         /// <returns>返回写入结果</returns>
         /// <example>
@@ -253,9 +270,7 @@ namespace HslCommunication.Profinet.Omron
             // 成功
             return OperateResult.CreateSuccessResult( );
         }
-
-
-
+        
         #endregion
 
         #region Build Command

@@ -21,122 +21,214 @@ namespace HslCommunication.Profinet.Melsec
     /// <item>Q02CPU PLC </item>
     /// <item>L02CPU PLC </item>
     /// </list>
-    /// 地址的输入的格式如下：
+    /// 地址的输入的格式说明如下：
     /// <list type="table">
     ///   <listheader>
     ///     <term>地址名称</term>
+    ///     <term>地址代号</term>
     ///     <term>示例</term>
     ///     <term>地址进制</term>
+    ///     <term>字操作</term>
+    ///     <term>位操作</term>
+    ///     <term>备注</term>
     ///   </listheader>
     ///   <item>
     ///     <term>内部继电器</term>
+    ///     <term>M</term>
     ///     <term>M100,M200</term>
     ///     <term>10</term>
+    ///     <term>√</term>
+    ///     <term>√</term>
+    ///     <term></term>
     ///   </item>
     ///   <item>
     ///     <term>输入继电器</term>
+    ///     <term>X</term>
     ///     <term>X100,X1A0</term>
     ///     <term>16</term>
+    ///     <term>√</term>
+    ///     <term>√</term>
+    ///     <term></term>
     ///   </item>
     ///   <item>
     ///     <term>输出继电器</term>
+    ///     <term>Y</term>
     ///     <term>Y100,Y1A0</term>
     ///     <term>16</term>
+    ///     <term>√</term>
+    ///     <term>√</term>
+    ///     <term></term>
     ///   </item>
     ///    <item>
     ///     <term>锁存继电器</term>
+    ///     <term>L</term>
     ///     <term>L100,L200</term>
     ///     <term>10</term>
+    ///     <term>√</term>
+    ///     <term>√</term>
+    ///     <term></term>
     ///   </item>
     ///   <item>
     ///     <term>报警器</term>
+    ///     <term>F</term>
     ///     <term>F100,F200</term>
     ///     <term>10</term>
+    ///     <term>√</term>
+    ///     <term>√</term>
+    ///     <term></term>
     ///   </item>
     ///   <item>
     ///     <term>边沿继电器</term>
+    ///     <term>V</term>
     ///     <term>V100,V200</term>
     ///     <term>10</term>
+    ///     <term>√</term>
+    ///     <term>√</term>
+    ///     <term></term>
     ///   </item>
     ///   <item>
     ///     <term>链接继电器</term>
+    ///     <term>B</term>
     ///     <term>B100,B1A0</term>
     ///     <term>16</term>
+    ///     <term>√</term>
+    ///     <term>√</term>
+    ///     <term></term>
     ///   </item>
-    ///    <item>
+    ///   <item>
     ///     <term>步进继电器</term>
+    ///     <term>S</term>
     ///     <term>S100,S200</term>
     ///     <term>10</term>
+    ///     <term>√</term>
+    ///     <term>√</term>
+    ///     <term></term>
     ///   </item>
     ///   <item>
     ///     <term>数据寄存器</term>
+    ///     <term>D</term>
     ///     <term>D1000,D2000</term>
     ///     <term>10</term>
+    ///     <term>√</term>
+    ///     <term>×</term>
+    ///     <term></term>
     ///   </item>
     ///   <item>
     ///     <term>链接寄存器</term>
+    ///     <term>W</term>
     ///     <term>W100,W1A0</term>
     ///     <term>16</term>
+    ///     <term>√</term>
+    ///     <term>×</term>
+    ///     <term></term>
     ///   </item>
     ///   <item>
     ///     <term>文件寄存器</term>
+    ///     <term>R</term>
     ///     <term>R100,R200</term>
     ///     <term>10</term>
+    ///     <term>√</term>
+    ///     <term>×</term>
+    ///     <term></term>
     ///   </item>
     ///   <item>
     ///     <term>ZR文件寄存器</term>
+    ///     <term>ZR</term>
     ///     <term>ZR100,ZR2A0</term>
     ///     <term>16</term>
+    ///     <term>√</term>
+    ///     <term>×</term>
+    ///     <term></term>
     ///   </item>
     ///   <item>
     ///     <term>变址寄存器</term>
+    ///     <term>Z</term>
     ///     <term>Z100,Z200</term>
     ///     <term>10</term>
+    ///     <term>√</term>
+    ///     <term>×</term>
+    ///     <term></term>
     ///   </item>
     ///   <item>
     ///     <term>定时器的触点</term>
+    ///     <term>TS</term>
     ///     <term>TS100,TS200</term>
     ///     <term>10</term>
+    ///     <term>√</term>
+    ///     <term>√</term>
+    ///     <term></term>
     ///   </item>
     ///   <item>
     ///     <term>定时器的线圈</term>
+    ///     <term>TC</term>
     ///     <term>TC100,TC200</term>
     ///     <term>10</term>
+    ///     <term>√</term>
+    ///     <term>√</term>
+    ///     <term></term>
     ///   </item>
     ///   <item>
     ///     <term>定时器的当前值</term>
+    ///     <term>TN</term>
     ///     <term>TN100,TN200</term>
     ///     <term>10</term>
+    ///     <term>√</term>
+    ///     <term>×</term>
+    ///     <term></term>
     ///   </item>
     ///   <item>
     ///     <term>累计定时器的触点</term>
+    ///     <term>SS</term>
     ///     <term>SS100,SS200</term>
     ///     <term>10</term>
+    ///     <term>√</term>
+    ///     <term>√</term>
+    ///     <term></term>
     ///   </item>
     ///   <item>
     ///     <term>累计定时器的线圈</term>
+    ///     <term>SC</term>
     ///     <term>SC100,SC200</term>
     ///     <term>10</term>
+    ///     <term>√</term>
+    ///     <term>√</term>
+    ///     <term></term>
     ///   </item>
     ///   <item>
     ///     <term>累计定时器的当前值</term>
+    ///     <term>SN</term>
     ///     <term>SN100,SN200</term>
     ///     <term>10</term>
+    ///     <term>√</term>
+    ///     <term>×</term>
+    ///     <term></term>
     ///   </item>
     ///   <item>
     ///     <term>计数器的触点</term>
+    ///     <term>CS</term>
     ///     <term>CS100,CS200</term>
     ///     <term>10</term>
+    ///     <term>√</term>
+    ///     <term>√</term>
+    ///     <term></term>
     ///   </item>
     ///   <item>
     ///     <term>计数器的线圈</term>
+    ///     <term>CC</term>
     ///     <term>CC100,CC200</term>
     ///     <term>10</term>
+    ///     <term>√</term>
+    ///     <term>√</term>
+    ///     <term></term>
     ///   </item>
     ///   <item>
     ///     <term>计数器的当前</term>
+    ///     <term>CN</term>
     ///     <term>CN100,CN200</term>
     ///     <term>10</term>
+    ///     <term>√</term>
+    ///     <term>×</term>
+    ///     <term></term>
     ///   </item>
     /// </list>
     /// </remarks>
@@ -151,7 +243,7 @@ namespace HslCommunication.Profinet.Melsec
         /// <summary>
         /// 实例化三菱的Qna兼容3E帧协议的通讯对象
         /// </summary>
-        public MelsecMcNet()
+        public MelsecMcNet( )
         {
             WordLength = 1;
         }
@@ -159,7 +251,7 @@ namespace HslCommunication.Profinet.Melsec
         /// <summary>
         /// 实例化一个三菱的Qna兼容3E帧协议的通讯对象
         /// </summary>
-        /// <param name="ipAddress">PLCd的Ip地址</param>
+        /// <param name="ipAddress">PLC的Ip地址</param>
         /// <param name="port">PLC的端口</param>
         public MelsecMcNet( string ipAddress, int port )
         {
@@ -191,7 +283,21 @@ namespace HslCommunication.Profinet.Melsec
 
         #endregion
 
-        #region Read Support
+        #region Virtual Address Analysis
+
+        /// <summary>
+        /// 分析地址的方法，允许派生类里进行重写操作
+        /// </summary>
+        /// <param name="address">地址信息</param>
+        /// <returns>解析后的数据信息</returns>
+        protected virtual OperateResult<MelsecMcDataType, int> McAnalysisAddress( string address )
+        {
+            return MelsecHelper.McAnalysisAddress( address );
+        }
+
+        #endregion
+
+        #region Read Write Support
 
         /// <summary>
         /// 从三菱PLC中读取想要的数据，输入地址，按照字单位读取，返回读取结果
@@ -210,12 +316,12 @@ namespace HslCommunication.Profinet.Melsec
         /// </example>
         public override OperateResult<byte[]> Read( string address, ushort length )
         {
-            // 获取指令
-            var command = BuildReadCommand( address, length, false, NetworkNumber, NetworkStationNumber );
-            if (!command.IsSuccess) return OperateResult.CreateFailedResult<byte[]>( command );
-
+            // 分析地址
+            OperateResult<byte[]> coreResult = MelsecHelper.BuildReadMcCoreCommand( address, length, false, McAnalysisAddress );
+            if (!coreResult.IsSuccess) return coreResult;
+            
             // 核心交互
-            var read = ReadFromCoreServer( command.Content );
+            var read = ReadFromCoreServer( PackMcCommand( coreResult.Content, this.NetworkNumber, this.NetworkStationNumber ) );
             if (!read.IsSuccess) return OperateResult.CreateFailedResult<byte[]>( read );
 
             // 错误代码验证
@@ -225,6 +331,40 @@ namespace HslCommunication.Profinet.Melsec
             // 数据解析，需要传入是否使用位的参数
             return ExtractActualData( read.Content, false );
         }
+
+        /// <summary>
+        /// 向PLC写入数据，数据格式为原始的字节类型
+        /// </summary>
+        /// <param name="address">初始地址</param>
+        /// <param name="value">原始的字节数据</param>
+        /// <example>
+        /// 假设起始地址为D100，D100存储了温度，100.6℃值为1006，D101存储了压力，1.23Mpa值为123，D102，D103存储了产量计数，写入如下：
+        /// <code lang="cs" source="HslCommunication_Net45.Test\Documentation\Samples\Profinet\melsecTest.cs" region="WriteExample2" title="Write示例" />
+        /// 以下是写入不同类型数据的示例
+        /// <code lang="cs" source="HslCommunication_Net45.Test\Documentation\Samples\Profinet\melsecTest.cs" region="WriteExample1" title="Write示例" />
+        /// </example>
+        /// <returns>结果</returns>
+        public override OperateResult Write( string address, byte[] value )
+        {
+            // 分析地址
+            OperateResult<byte[]> coreResult = MelsecHelper.BuildWriteWordCoreCommand( address, value, McAnalysisAddress );
+            if (!coreResult.IsSuccess) return coreResult;
+
+            // 核心交互
+            OperateResult<byte[]> read = ReadFromCoreServer( PackMcCommand( coreResult.Content, NetworkNumber, NetworkStationNumber ) );
+            if (!read.IsSuccess) return read;
+
+            // 错误码校验
+            ushort ErrorCode = BitConverter.ToUInt16( read.Content, 9 );
+            if (ErrorCode != 0) return new OperateResult<byte[]>( ErrorCode, StringResources.Language.MelsecPleaseReferToManulDocument );
+
+            // 成功
+            return OperateResult.CreateSuccessResult( );
+        }
+
+        #endregion
+
+        #region Bool Operate Support
 
         /// <summary>
         /// 从三菱PLC中批量读取位软元件，返回读取结果
@@ -241,11 +381,11 @@ namespace HslCommunication.Profinet.Melsec
         public OperateResult<bool[]> ReadBool( string address, ushort length )
         {
             // 获取指令
-            var command = BuildReadCommand( address, length, true, NetworkNumber, NetworkStationNumber );
-            if (!command.IsSuccess) return OperateResult.CreateFailedResult<bool[]>( command );
+            OperateResult<byte[]> coreResult = MelsecHelper.BuildReadMcCoreCommand( address, length, true, McAnalysisAddress );
+            if (!coreResult.IsSuccess) return OperateResult.CreateFailedResult<bool[]>( coreResult );
 
             // 核心交互
-            var read = ReadFromCoreServer( command.Content );
+            var read = ReadFromCoreServer( PackMcCommand( coreResult.Content, NetworkNumber, NetworkStationNumber ) );
             if (!read.IsSuccess) return OperateResult.CreateFailedResult<bool[]>( read );
 
             // 错误代码验证
@@ -274,46 +414,6 @@ namespace HslCommunication.Profinet.Melsec
 
             return OperateResult.CreateSuccessResult<bool>( read.Content[0] );
         }
-
-
-
-        #endregion
-
-        #region Write Override
-        
-        /// <summary>
-        /// 向PLC写入数据，数据格式为原始的字节类型
-        /// </summary>
-        /// <param name="address">初始地址</param>
-        /// <param name="value">原始的字节数据</param>
-        /// <example>
-        /// 假设起始地址为D100，D100存储了温度，100.6℃值为1006，D101存储了压力，1.23Mpa值为123，D102，D103存储了产量计数，写入如下：
-        /// <code lang="cs" source="HslCommunication_Net45.Test\Documentation\Samples\Profinet\melsecTest.cs" region="WriteExample2" title="Write示例" />
-        /// 以下是写入不同类型数据的示例
-        /// <code lang="cs" source="HslCommunication_Net45.Test\Documentation\Samples\Profinet\melsecTest.cs" region="WriteExample1" title="Write示例" />
-        /// </example>
-        /// <returns>结果</returns>
-        public override OperateResult Write( string address, byte[] value )
-        {
-            // 解析指令
-            OperateResult<byte[]> command = BuildWriteCommand( address, value, NetworkNumber, NetworkStationNumber );
-            if (!command.IsSuccess) return command;
-
-            // 核心交互
-            OperateResult<byte[]> read = ReadFromCoreServer( command.Content );
-            if (!read.IsSuccess) return read;
-
-            // 错误码校验
-            ushort ErrorCode = BitConverter.ToUInt16( read.Content, 9 );
-            if (ErrorCode != 0) return new OperateResult<byte[]>( ErrorCode, StringResources.Language.MelsecPleaseReferToManulDocument );
-
-            // 成功
-            return OperateResult.CreateSuccessResult( );
-        }
-        
-        #endregion
-        
-        #region Write bool[]
         
         /// <summary>
         /// 向PLC中位软元件写入bool数组，返回值说明，比如你写入M100,values[0]对应M100
@@ -340,7 +440,7 @@ namespace HslCommunication.Profinet.Melsec
         /// <returns>返回写入结果</returns>
         public OperateResult Write( string address, bool[] values )
         {
-            OperateResult<byte[]> coreResult = MelsecHelper.BuildWriteBitCoreCommand( address, values );
+            OperateResult<byte[]> coreResult = MelsecHelper.BuildWriteBitCoreCommand( address, values, McAnalysisAddress );
             if (!coreResult.IsSuccess) return coreResult;
 
             // 核心交互
@@ -472,41 +572,6 @@ namespace HslCommunication.Profinet.Melsec
             mcCore.CopyTo( _PLCCommand, 11 );
 
             return _PLCCommand;
-        }
-
-        /// <summary>
-        /// 根据类型地址长度确认需要读取的指令头
-        /// </summary>
-        /// <param name="address">起始地址</param>
-        /// <param name="length">长度</param>
-        /// <param name="isBit">指示是否按照位成批的读出</param>
-        /// <param name="networkNumber">网络号</param>
-        /// <param name="networkStationNumber">网络站号</param>
-        /// <returns>带有成功标志的指令数据</returns>
-        public static OperateResult<byte[]> BuildReadCommand( string address, ushort length, bool isBit, byte networkNumber = 0, byte networkStationNumber = 0 )
-        {
-            OperateResult<byte[]> coreResult = MelsecHelper.BuildReadMcCoreCommand( address, length, isBit );
-            if (!coreResult.IsSuccess) return coreResult;
-
-            return OperateResult.CreateSuccessResult( PackMcCommand( coreResult.Content, networkNumber, networkStationNumber ) );
-        }
-
-        
-
-        /// <summary>
-        /// 根据类型地址以及需要写入的数据来生成指令头
-        /// </summary>
-        /// <param name="address">起始地址</param>
-        /// <param name="value">数据值，对于写入位地址来说，应该传入{0x01,0x00,0x01} 通断通这样的数组</param>
-        /// <param name="networkNumber">网络号</param>
-        /// <param name="networkStationNumber">网络站号</param>
-        /// <returns>解析后的指令</returns>
-        public static OperateResult<byte[]> BuildWriteCommand( string address, byte[] value, byte networkNumber = 0, byte networkStationNumber = 0 )
-        {
-            OperateResult<byte[]> coreResult = MelsecHelper.BuildWriteWordCoreCommand( address, value );
-            if (!coreResult.IsSuccess) return coreResult;
-
-            return OperateResult.CreateSuccessResult( PackMcCommand( coreResult.Content, networkNumber, networkStationNumber ) );
         }
 
         /// <summary>

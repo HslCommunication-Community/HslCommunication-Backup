@@ -275,6 +275,8 @@
     <Compile Include="NamespaceDoc.cs" />
     <Compile Include="Profinet\AllenBradley\AllenBradleyHelper.cs" />
     <Compile Include="Profinet\AllenBradley\AllenBradleyNet.cs" />
+    <Compile Include="Profinet\Keyence\KeyenceMcAsciiNet.cs" />
+    <Compile Include="Profinet\Keyence\KeyenceMcNet.cs" />
     <Compile Include="Profinet\Melsec\MelsecA1EDataType.cs" />
     <Compile Include="Profinet\Melsec\MelsecA1ENet.cs" />
     <Compile Include="Profinet\Melsec\MelsecA3CNet1.cs" />

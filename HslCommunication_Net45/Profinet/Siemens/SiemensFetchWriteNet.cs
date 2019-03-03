@@ -25,6 +25,72 @@ namespace HslCommunication.Profinet.Siemens
     /// </summary>
     /// <remarks>
     /// 与S7协议相比较而言，本协议不支持对单个的点位的读写操作。如果读取M100.0，需要读取M100的值，然后进行提取位数据
+    /// 地址支持的列表如下：
+    /// <list type="table">
+    ///   <listheader>
+    ///     <term>地址名称</term>
+    ///     <term>地址代号</term>
+    ///     <term>示例</term>
+    ///     <term>地址进制</term>
+    ///     <term>字操作</term>
+    ///     <term>位操作</term>
+    ///     <term>备注</term>
+    ///   </listheader>
+    ///   <item>
+    ///     <term>中间寄存器</term>
+    ///     <term>M</term>
+    ///     <term>M100,M200</term>
+    ///     <term>10</term>
+    ///     <term>√</term>
+    ///     <term>×</term>
+    ///     <term></term>
+    ///   </item>
+    ///   <item>
+    ///     <term>输入寄存器</term>
+    ///     <term>I</term>
+    ///     <term>I100,I200</term>
+    ///     <term>10</term>
+    ///     <term>√</term>
+    ///     <term>×</term>
+    ///     <term></term>
+    ///   </item>
+    ///   <item>
+    ///     <term>输出寄存器</term>
+    ///     <term>Q</term>
+    ///     <term>Q100,Q200</term>
+    ///     <term>10</term>
+    ///     <term>√</term>
+    ///     <term>×</term>
+    ///     <term></term>
+    ///   </item>
+    ///   <item>
+    ///     <term>DB块寄存器</term>
+    ///     <term>DB</term>
+    ///     <term>DB1.100,DB1.200</term>
+    ///     <term>10</term>
+    ///     <term>√</term>
+    ///     <term>×</term>
+    ///     <term></term>
+    ///   </item>
+    ///   <item>
+    ///     <term>定时器的值</term>
+    ///     <term>T</term>
+    ///     <term>T100,T200</term>
+    ///     <term>10</term>
+    ///     <term>√</term>
+    ///     <term>×</term>
+    ///     <term></term>
+    ///   </item>
+    ///   <item>
+    ///     <term>计数器的值</term>
+    ///     <term>C</term>
+    ///     <term>C100,C200</term>
+    ///     <term>10</term>
+    ///     <term>√</term>
+    ///     <term>×</term>
+    ///     <term></term>
+    ///   </item>
+    /// </list>
     /// </remarks>
     /// <example>
     /// <code lang="cs" source="HslCommunication_Net45.Test\Documentation\Samples\Profinet\SiemensFetchWriteNet.cs" region="Usage" title="简单的短连接使用" />
@@ -69,46 +135,6 @@ namespace HslCommunication.Profinet.Siemens
         /// </param>
         /// <param name="length">读取的数量，以字节为单位 -> The number of reads, in bytes</param>
         /// <returns>带有成功标志的字节信息 -> Byte information with a success flag</returns>
-        /// <remarks>
-        /// 地址支持的列表如下：
-        /// <list type="table">
-        ///   <listheader>
-        ///     <term>地址名称</term>
-        ///     <term>示例</term>
-        ///     <term>地址进制</term>
-        ///   </listheader>
-        ///   <item>
-        ///     <term>中间寄存器</term>
-        ///     <term>M100,M200</term>
-        ///     <term>10</term>
-        ///   </item>
-        ///   <item>
-        ///     <term>输入寄存器</term>
-        ///     <term>I100,I200</term>
-        ///     <term>10</term>
-        ///   </item>
-        ///   <item>
-        ///     <term>输出寄存器</term>
-        ///     <term>Q100,Q200</term>
-        ///     <term>10</term>
-        ///   </item>
-        ///   <item>
-        ///     <term>DB寄存器</term>
-        ///     <term>DB1.100,DB1.200</term>
-        ///     <term>10</term>
-        ///   </item>
-        ///   <item>
-        ///     <term>定时器的值</term>
-        ///     <term>T100,T200</term>
-        ///     <term>10</term>
-        ///   </item>
-        ///   <item>
-        ///     <term>计数器的值</term>
-        ///     <term>C100,C200</term>
-        ///     <term>10</term>
-        ///   </item>
-        /// </list>
-        /// </remarks>
         /// <example>
         /// 假设起始地址为M100，M100存储了温度，100.6℃值为1006，M102存储了压力，1.23Mpa值为123，M104，M105，M106，M107存储了产量计数，读取如下：
         /// <code lang="cs" source="HslCommunication_Net45.Test\Documentation\Samples\Profinet\SiemensFetchWriteNet.cs" region="ReadExample2" title="Read示例" />

@@ -10,6 +10,149 @@ namespace HslCommunication.Profinet.Panasonic
     /// <summary>
     /// 松下PLC的数据交互协议，采用Mewtocol协议通讯
     /// </summary>
+    /// <remarks>
+    /// 触点地址的输入的格式说明如下：
+    /// <list type="table">
+    ///   <listheader>
+    ///     <term>地址名称</term>
+    ///     <term>地址代号</term>
+    ///     <term>示例</term>
+    ///     <term>地址进制</term>
+    ///     <term>字操作</term>
+    ///     <term>位操作</term>
+    ///     <term>备注</term>
+    ///   </listheader>
+    ///   <item>
+    ///     <term>外部输入继电器</term>
+    ///     <term>X</term>
+    ///     <term>X0,X100</term>
+    ///     <term>10</term>
+    ///     <term>×</term>
+    ///     <term>√</term>
+    ///     <term></term>
+    ///   </item>
+    ///   <item>
+    ///     <term>外部输出继电器</term>
+    ///     <term>Y</term>
+    ///     <term>Y0,Y100</term>
+    ///     <term>10</term>
+    ///     <term>×</term>
+    ///     <term>√</term>
+    ///     <term></term>
+    ///   </item>
+    ///   <item>
+    ///     <term>内部继电器</term>
+    ///     <term>R</term>
+    ///     <term>R0,R100</term>
+    ///     <term>10</term>
+    ///     <term>×</term>
+    ///     <term>√</term>
+    ///     <term></term>
+    ///   </item>
+    ///   <item>
+    ///     <term>定时器</term>
+    ///     <term>T</term>
+    ///     <term>T0,T100</term>
+    ///     <term>10</term>
+    ///     <term>×</term>
+    ///     <term>√</term>
+    ///     <term></term>
+    ///   </item>
+    ///   <item>
+    ///     <term>计数器</term>
+    ///     <term>C</term>
+    ///     <term>C0,C100</term>
+    ///     <term>10</term>
+    ///     <term>×</term>
+    ///     <term>√</term>
+    ///     <term></term>
+    ///   </item>
+    ///   <item>
+    ///     <term>链接继电器</term>
+    ///     <term>L</term>
+    ///     <term>L0,L100</term>
+    ///     <term>10</term>
+    ///     <term>×</term>
+    ///     <term>√</term>
+    ///     <term></term>
+    ///   </item>
+    /// </list>
+    /// 数据地址的输入的格式说明如下：
+    /// <list type="table">
+    ///   <listheader>
+    ///     <term>地址名称</term>
+    ///     <term>地址代号</term>
+    ///     <term>示例</term>
+    ///     <term>地址进制</term>
+    ///     <term>字操作</term>
+    ///     <term>位操作</term>
+    ///     <term>备注</term>
+    ///   </listheader>
+    ///   <item>
+    ///     <term>数据寄存器 DT</term>
+    ///     <term>D</term>
+    ///     <term>D0,D100</term>
+    ///     <term>10</term>
+    ///     <term>√</term>
+    ///     <term>×</term>
+    ///     <term></term>
+    ///   </item>
+    ///   <item>
+    ///     <term>链接寄存器 LT</term>
+    ///     <term>L</term>
+    ///     <term>L0,L100</term>
+    ///     <term>10</term>
+    ///     <term>√</term>
+    ///     <term>×</term>
+    ///     <term></term>
+    ///   </item>
+    ///   <item>
+    ///     <term>文件寄存器 FL</term>
+    ///     <term>F</term>
+    ///     <term>F0,F100</term>
+    ///     <term>10</term>
+    ///     <term>√</term>
+    ///     <term>×</term>
+    ///     <term></term>
+    ///   </item>
+    ///   <item>
+    ///     <term>目标值 SV</term>
+    ///     <term>S</term>
+    ///     <term>S0,S100</term>
+    ///     <term>10</term>
+    ///     <term>√</term>
+    ///     <term>×</term>
+    ///     <term></term>
+    ///   </item>
+    ///   <item>
+    ///     <term>经过值 EV</term>
+    ///     <term>K</term>
+    ///     <term>K0,K100</term>
+    ///     <term>10</term>
+    ///     <term>√</term>
+    ///     <term>×</term>
+    ///     <term></term>
+    ///   </item>
+    ///   <item>
+    ///     <term>索引寄存器 IX</term>
+    ///     <term>IX</term>
+    ///     <term>IX0,IX100</term>
+    ///     <term>10</term>
+    ///     <term>√</term>
+    ///     <term>×</term>
+    ///     <term></term>
+    ///   </item>
+    ///   <item>
+    ///     <term>索引寄存器 IY</term>
+    ///     <term>IY</term>
+    ///     <term>IY0,IY100</term>
+    ///     <term>10</term>
+    ///     <term>√</term>
+    ///     <term>×</term>
+    ///     <term></term>
+    ///   </item>
+    /// </list>
+    /// </remarks>
     public class PanasonicMewtocol : SerialDeviceBase<RegularByteTransform>
     {
         #region Constructor
@@ -113,7 +256,7 @@ namespace HslCommunication.Profinet.Panasonic
         }
 
         /// <summary>
-        /// 写入bool数据信息
+        /// 写入bool数据信息，存在一定的风险，谨慎操作
         /// </summary>
         /// <param name="address">起始地址</param>
         /// <param name="values">数据值信息</param>

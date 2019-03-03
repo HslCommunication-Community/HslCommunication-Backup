@@ -11,122 +11,214 @@ namespace HslCommunication.Profinet.Melsec
     /// 基于Qna 兼容3C帧的格式一的通讯，具体的地址需要参照三菱的基本地址
     /// </summary>
     /// <remarks>
-    /// 地址的输入的格式如下：
+    /// 地址的输入的格式说明如下：
     /// <list type="table">
     ///   <listheader>
     ///     <term>地址名称</term>
+    ///     <term>地址代号</term>
     ///     <term>示例</term>
     ///     <term>地址进制</term>
+    ///     <term>字操作</term>
+    ///     <term>位操作</term>
+    ///     <term>备注</term>
     ///   </listheader>
     ///   <item>
     ///     <term>内部继电器</term>
+    ///     <term>M</term>
     ///     <term>M100,M200</term>
     ///     <term>10</term>
+    ///     <term>√</term>
+    ///     <term>√</term>
+    ///     <term></term>
     ///   </item>
     ///   <item>
     ///     <term>输入继电器</term>
+    ///     <term>X</term>
     ///     <term>X100,X1A0</term>
     ///     <term>16</term>
+    ///     <term>√</term>
+    ///     <term>√</term>
+    ///     <term></term>
     ///   </item>
     ///   <item>
     ///     <term>输出继电器</term>
+    ///     <term>Y</term>
     ///     <term>Y100,Y1A0</term>
     ///     <term>16</term>
+    ///     <term>√</term>
+    ///     <term>√</term>
+    ///     <term></term>
     ///   </item>
     ///    <item>
     ///     <term>锁存继电器</term>
+    ///     <term>L</term>
     ///     <term>L100,L200</term>
     ///     <term>10</term>
+    ///     <term>√</term>
+    ///     <term>√</term>
+    ///     <term></term>
     ///   </item>
     ///   <item>
     ///     <term>报警器</term>
+    ///     <term>F</term>
     ///     <term>F100,F200</term>
     ///     <term>10</term>
+    ///     <term>√</term>
+    ///     <term>√</term>
+    ///     <term></term>
     ///   </item>
     ///   <item>
     ///     <term>边沿继电器</term>
+    ///     <term>V</term>
     ///     <term>V100,V200</term>
     ///     <term>10</term>
+    ///     <term>√</term>
+    ///     <term>√</term>
+    ///     <term></term>
     ///   </item>
     ///   <item>
     ///     <term>链接继电器</term>
+    ///     <term>B</term>
     ///     <term>B100,B1A0</term>
     ///     <term>16</term>
+    ///     <term>√</term>
+    ///     <term>√</term>
+    ///     <term></term>
     ///   </item>
-    ///    <item>
+    ///   <item>
     ///     <term>步进继电器</term>
+    ///     <term>S</term>
     ///     <term>S100,S200</term>
     ///     <term>10</term>
+    ///     <term>√</term>
+    ///     <term>√</term>
+    ///     <term></term>
     ///   </item>
     ///   <item>
     ///     <term>数据寄存器</term>
+    ///     <term>D</term>
     ///     <term>D1000,D2000</term>
     ///     <term>10</term>
+    ///     <term>√</term>
+    ///     <term>×</term>
+    ///     <term></term>
     ///   </item>
     ///   <item>
     ///     <term>链接寄存器</term>
+    ///     <term>W</term>
     ///     <term>W100,W1A0</term>
     ///     <term>16</term>
+    ///     <term>√</term>
+    ///     <term>×</term>
+    ///     <term></term>
     ///   </item>
     ///   <item>
     ///     <term>文件寄存器</term>
+    ///     <term>R</term>
     ///     <term>R100,R200</term>
     ///     <term>10</term>
+    ///     <term>√</term>
+    ///     <term>×</term>
+    ///     <term></term>
     ///   </item>
     ///   <item>
     ///     <term>ZR文件寄存器</term>
+    ///     <term>ZR</term>
     ///     <term>ZR100,ZR2A0</term>
     ///     <term>16</term>
+    ///     <term>√</term>
+    ///     <term>×</term>
+    ///     <term></term>
     ///   </item>
     ///   <item>
     ///     <term>变址寄存器</term>
+    ///     <term>Z</term>
     ///     <term>Z100,Z200</term>
     ///     <term>10</term>
+    ///     <term>√</term>
+    ///     <term>×</term>
+    ///     <term></term>
     ///   </item>
     ///   <item>
     ///     <term>定时器的触点</term>
+    ///     <term>TS</term>
     ///     <term>TS100,TS200</term>
     ///     <term>10</term>
+    ///     <term>√</term>
+    ///     <term>√</term>
+    ///     <term></term>
     ///   </item>
     ///   <item>
     ///     <term>定时器的线圈</term>
+    ///     <term>TC</term>
     ///     <term>TC100,TC200</term>
     ///     <term>10</term>
+    ///     <term>√</term>
+    ///     <term>√</term>
+    ///     <term></term>
     ///   </item>
     ///   <item>
     ///     <term>定时器的当前值</term>
+    ///     <term>TN</term>
     ///     <term>TN100,TN200</term>
     ///     <term>10</term>
+    ///     <term>√</term>
+    ///     <term>×</term>
+    ///     <term></term>
     ///   </item>
     ///   <item>
     ///     <term>累计定时器的触点</term>
+    ///     <term>SS</term>
     ///     <term>SS100,SS200</term>
     ///     <term>10</term>
+    ///     <term>√</term>
+    ///     <term>√</term>
+    ///     <term></term>
     ///   </item>
     ///   <item>
     ///     <term>累计定时器的线圈</term>
+    ///     <term>SC</term>
     ///     <term>SC100,SC200</term>
     ///     <term>10</term>
+    ///     <term>√</term>
+    ///     <term>√</term>
+    ///     <term></term>
     ///   </item>
     ///   <item>
     ///     <term>累计定时器的当前值</term>
+    ///     <term>SN</term>
     ///     <term>SN100,SN200</term>
     ///     <term>10</term>
+    ///     <term>√</term>
+    ///     <term>×</term>
+    ///     <term></term>
     ///   </item>
     ///   <item>
     ///     <term>计数器的触点</term>
+    ///     <term>CS</term>
     ///     <term>CS100,CS200</term>
     ///     <term>10</term>
+    ///     <term>√</term>
+    ///     <term>√</term>
+    ///     <term></term>
     ///   </item>
     ///   <item>
     ///     <term>计数器的线圈</term>
+    ///     <term>CC</term>
     ///     <term>CC100,CC200</term>
     ///     <term>10</term>
+    ///     <term>√</term>
+    ///     <term>√</term>
+    ///     <term></term>
     ///   </item>
     ///   <item>
     ///     <term>计数器的当前</term>
+    ///     <term>CN</term>
     ///     <term>CN100,CN200</term>
     ///     <term>10</term>
+    ///     <term>√</term>
+    ///     <term>×</term>
+    ///     <term></term>
     ///   </item>
     /// </list>
     /// </remarks>
@@ -164,7 +256,7 @@ namespace HslCommunication.Profinet.Melsec
         public override OperateResult<byte[]> Read( string address, ushort length )
         {
             // 解析指令
-            OperateResult<byte[]> command = MelsecHelper.BuildAsciiReadMcCoreCommand( address, length, false );
+            OperateResult<byte[]> command = MelsecHelper.BuildAsciiReadMcCoreCommand( address, length, false, MelsecHelper.McAnalysisAddress );
             if (!command.IsSuccess) return command;
 
             // 核心交互
@@ -193,7 +285,7 @@ namespace HslCommunication.Profinet.Melsec
         public override OperateResult Write( string address, byte[] value )
         {
             // 解析指令
-            OperateResult<byte[]> command = MelsecHelper.BuildAsciiWriteWordCoreCommand( address, value );
+            OperateResult<byte[]> command = MelsecHelper.BuildAsciiWriteWordCoreCommand( address, value, MelsecHelper.McAnalysisAddress );
             if (!command.IsSuccess) return command;
 
             // 核心交互
@@ -220,7 +312,7 @@ namespace HslCommunication.Profinet.Melsec
         public OperateResult<bool[]> ReadBool( string address, ushort length )
         {
             // 解析指令
-            OperateResult<byte[]> command = MelsecHelper.BuildAsciiReadMcCoreCommand( address, length, true );
+            OperateResult<byte[]> command = MelsecHelper.BuildAsciiReadMcCoreCommand( address, length, true, MelsecHelper.McAnalysisAddress );
             if (!command.IsSuccess) OperateResult.CreateFailedResult<bool[]>( command );
 
             // 核心交互
@@ -269,7 +361,7 @@ namespace HslCommunication.Profinet.Melsec
         public OperateResult Write( string address, bool[] value )
         {
             // 解析指令
-            OperateResult<byte[]> command = MelsecHelper.BuildAsciiWriteBitCoreCommand( address, value );
+            OperateResult<byte[]> command = MelsecHelper.BuildAsciiWriteBitCoreCommand( address, value, MelsecHelper.McAnalysisAddress );
             if (!command.IsSuccess) return command;
 
             // 核心交互
@@ -336,6 +428,19 @@ namespace HslCommunication.Profinet.Melsec
 
             // 成功
             return OperateResult.CreateSuccessResult( Encoding.ASCII.GetString( read.Content, 11, 16 ).TrimEnd( ) );
+        }
+
+        #endregion
+
+        #region Object Override
+
+        /// <summary>
+        /// 返回表示当前对象的字符串
+        /// </summary>
+        /// <returns>字符串信息</returns>
+        public override string ToString()
+        {
+            return $"MelsecA3CNet1";
         }
 
         #endregion

@@ -9,14 +9,125 @@ using HslCommunication.BasicFramework;
 namespace HslCommunication.Profinet.Melsec
 {
     /// <summary>
-    /// 三菱的串口通信的对象，适用于读取FX系列的串口数据
+    /// 三菱的串口通信的对象，适用于读取FX系列的串口数据，支持的类型参考文档说明
     /// </summary>
+    /// <remarks>
+    /// 字读写地址支持的列表如下：
+    /// <list type="table">
+    ///   <listheader>
+    ///     <term>地址名称</term>
+    ///     <term>地址代号</term>
+    ///     <term>示例</term>
+    ///     <term>地址范围</term>
+    ///     <term>地址进制</term>
+    ///     <term>备注</term>
+    ///   </listheader>
+    ///   <item>
+    ///     <term>数据寄存器</term>
+    ///     <term>D</term>
+    ///     <term>D100,D200</term>
+    ///     <term>D0-D511,D8000-D8255</term>
+    ///     <term>10</term>
+    ///     <term></term>
+    ///   </item>
+    ///   <item>
+    ///     <term>定时器的值</term>
+    ///     <term>TN</term>
+    ///     <term>TN10,TN20</term>
+    ///     <term>TN0-TN255</term>
+    ///     <term>10</term>
+    ///     <term></term>
+    ///   </item>
+    ///   <item>
+    ///     <term>计数器的值</term>
+    ///     <term>CN</term>
+    ///     <term>CN10,CN20</term>
+    ///     <term>CN0-CN199,CN200-CN255</term>
+    ///     <term>10</term>
+    ///     <term></term>
+    ///   </item>
+    /// </list>
+    /// 位地址支持的列表如下：
+    /// <list type="table">
+    ///   <listheader>
+    ///     <term>地址名称</term>
+    ///     <term>地址代号</term>
+    ///     <term>示例</term>
+    ///     <term>地址范围</term>
+    ///     <term>地址进制</term>
+    ///     <term>备注</term>
+    ///   </listheader>
+    ///   <item>
+    ///     <term>内部继电器</term>
+    ///     <term>M</term>
+    ///     <term>M100,M200</term>
+    ///     <term>M0-M1023,M8000-M8255</term>
+    ///     <term>10</term>
+    ///     <term></term>
+    ///   </item>
+    ///   <item>
+    ///     <term>输入继电器</term>
+    ///     <term>X</term>
+    ///     <term>X1,X20</term>
+    ///     <term>X0-X177</term>
+    ///     <term>8</term>
+    ///     <term></term>
+    ///   </item>
+    ///   <item>
+    ///     <term>输出继电器</term>
+    ///     <term>Y</term>
+    ///     <term>Y10,Y20</term>
+    ///     <term>Y0-Y177</term>
+    ///     <term>8</term>
+    ///     <term></term>
+    ///   </item>
+    ///   <item>
+    ///     <term>步进继电器</term>
+    ///     <term>S</term>
+    ///     <term>S100,S200</term>
+    ///     <term>S0-S999</term>
+    ///     <term>10</term>
+    ///     <term></term>
+    ///   </item>
+    ///   <item>
+    ///     <term>定时器触点</term>
+    ///     <term>TS</term>
+    ///     <term>TS10,TS20</term>
+    ///     <term>TS0-TS255</term>
+    ///     <term>10</term>
+    ///     <term></term>
+    ///   </item>
+    ///   <item>
+    ///     <term>定时器线圈</term>
+    ///     <term>TC</term>
+    ///     <term>TC10,TC20</term>
+    ///     <term>TC0-TC255</term>
+    ///     <term>10</term>
+    ///     <term></term>
+    ///   </item>
+    ///   <item>
+    ///     <term>计数器触点</term>
+    ///     <term>CS</term>
+    ///     <term>CS10,CS20</term>
+    ///     <term>CS0-CS255</term>
+    ///     <term>10</term>
+    ///     <term></term>
+    ///   </item>
+    ///   <item>
+    ///     <term>计数器线圈</term>
+    ///     <term>CC</term>
+    ///     <term>CC10,CC20</term>
+    ///     <term>CC0-CC255</term>
+    ///     <term>10</term>
+    ///     <term></term>
+    ///   </item>
+    /// </list>
+    /// </remarks>
     /// <example>
     /// <code lang="cs" source="HslCommunication_Net45.Test\Documentation\Samples\Profinet\MelsecFxSerial.cs" region="Usage" title="简单的使用" />
     /// </example>
     public class MelsecFxSerial : SerialDeviceBase<RegularByteTransform>
     {
-
         #region Constructor
 
         /// <summary>
@@ -51,7 +162,7 @@ namespace HslCommunication.Profinet.Melsec
 
             return OperateResult.CreateSuccessResult( );
         }
-        
+
         #endregion
 
         #region Read Support
@@ -59,38 +170,9 @@ namespace HslCommunication.Profinet.Melsec
         /// <summary>
         /// 从三菱PLC中读取想要的数据，返回读取结果
         /// </summary>
-        /// <param name="address">读取地址，格式为"M100","D100","W1A0"</param>
+        /// <param name="address">读取地址，，支持的类型参考文档说明</param>
         /// <param name="length">读取的数据长度</param>
         /// <returns>带成功标志的结果数据对象</returns>
-        /// <remarks>
-        /// 地址支持的列表如下：
-        /// <list type="table">
-        ///   <listheader>
-        ///     <term>地址名称</term>
-        ///     <term>示例</term>
-        ///     <term>地址范围</term>
-        ///     <term>地址进制</term>
-        ///   </listheader>
-        ///   <item>
-        ///     <term>数据寄存器</term>
-        ///     <term>D100,D200</term>
-        ///     <term>D0-D511,D8000-D8255</term>
-        ///     <term>10</term>
-        ///   </item>
-        ///   <item>
-        ///     <term>定时器的值</term>
-        ///     <term>T10,T20</term>
-        ///     <term>T0-T255</term>
-        ///     <term>10</term>
-        ///   </item>
-        ///   <item>
-        ///     <term>计数器的值</term>
-        ///     <term>C10,C20</term>
-        ///     <term>C0-C199,C200-C255</term>
-        ///     <term>10</term>
-        ///   </item>
-        /// </list>
-        /// </remarks>
         /// <example>
         /// 假设起始地址为D100，D100存储了温度，100.6℃值为1006，D101存储了压力，1.23Mpa值为123，D102，D103存储了产量计数，读取如下：
         /// <code lang="cs" source="HslCommunication_Net45.Test\Documentation\Samples\Profinet\MelsecFxSerial.cs" region="ReadExample2" title="Read示例" />
@@ -123,53 +205,6 @@ namespace HslCommunication.Profinet.Melsec
         /// <param name="address">起始地址</param>
         /// <param name="length">读取的长度</param>
         /// <returns>带成功标志的结果数据对象</returns>
-        /// <remarks>
-        /// 地址支持的列表如下：
-        /// <list type="table">
-        ///   <listheader>
-        ///     <term>地址名称</term>
-        ///     <term>示例</term>
-        ///     <term>地址范围</term>
-        ///     <term>地址进制</term>
-        ///   </listheader>
-        ///   <item>
-        ///     <term>内部继电器</term>
-        ///     <term>M100,M200</term>
-        ///     <term>M0-M1023,M8000-M8255</term>
-        ///     <term>10</term>
-        ///   </item>
-        ///   <item>
-        ///     <term>输入继电器</term>
-        ///     <term>X100,X1A0</term>
-        ///     <term>X0-X177</term>
-        ///     <term>8</term>
-        ///   </item>
-        ///   <item>
-        ///     <term>输出继电器</term>
-        ///     <term>Y10,Y20</term>
-        ///     <term>Y0-Y177</term>
-        ///     <term>8</term>
-        ///   </item>
-        ///   <item>
-        ///     <term>步进继电器</term>
-        ///     <term>S100,S200</term>
-        ///     <term>S0-S999</term>
-        ///     <term>10</term>
-        ///   </item>
-        ///   <item>
-        ///     <term>定时器</term>
-        ///     <term>T10,T20</term>
-        ///     <term>T0-T255</term>
-        ///     <term>10</term>
-        ///   </item>
-        ///   <item>
-        ///     <term>计数器</term>
-        ///     <term>C10,C20</term>
-        ///     <term>C0-C255</term>
-        ///     <term>10</term>
-        ///   </item>
-        /// </list>
-        /// </remarks>
         /// <example>
         ///  <code lang="cs" source="HslCommunication_Net45.Test\Documentation\Samples\Profinet\MelsecFxSerial.cs" region="ReadBool" title="Bool类型示例" />
         /// </example>
@@ -190,8 +225,7 @@ namespace HslCommunication.Profinet.Melsec
             // 提取真实的数据
             return ExtractActualBoolData( read.Content, command.Content2, length );
         }
-
-
+        
         /// <summary>
         /// 从三菱PLC中批量读取位软元件，返回读取结果
         /// </summary>
@@ -206,7 +240,6 @@ namespace HslCommunication.Profinet.Melsec
             return OperateResult.CreateSuccessResult<bool>( read.Content[0] );
         }
 
-
         #endregion
 
         #region Write Override
@@ -214,7 +247,7 @@ namespace HslCommunication.Profinet.Melsec
         /// <summary>
         /// 向PLC写入数据，数据格式为原始的字节类型
         /// </summary>
-        /// <param name="address">初始地址</param>
+        /// <param name="address">初始地址，支持的类型参考文档说明</param>
         /// <param name="value">原始的字节数据</param>
         /// <example>
         /// 假设起始地址为D100，D100存储了温度，100.6℃值为1006，D101存储了压力，1.23Mpa值为123，D102，D103存储了产量计数，写入如下：
@@ -245,7 +278,7 @@ namespace HslCommunication.Profinet.Melsec
         #region Write Bool
 
         /// <summary>
-        /// 强制写入位数据的通断，支持的类型为X,Y,M,S,C,T
+        /// 强制写入位数据的通断，支持的类型参考文档说明
         /// </summary>
         /// <param name="address">地址信息</param>
         /// <param name="value">是否为通</param>
@@ -283,7 +316,6 @@ namespace HslCommunication.Profinet.Melsec
         #endregion
 
         #region Static Method Helper
-
         
         /// <summary>
         /// 生成位写入的数据报文信息，该报文可直接用于发送串口给PLC
@@ -643,8 +675,7 @@ namespace HslCommunication.Profinet.Melsec
             // 初步解析，失败就返回
             var analysis = FxAnalysisAddress( address );
             if (!analysis.IsSuccess) return OperateResult.CreateFailedResult<ushort>( analysis );
-
-
+            
             // 二次解析
             ushort startAddress = analysis.Content2;
             if (analysis.Content1 == MelsecMcDataType.D)

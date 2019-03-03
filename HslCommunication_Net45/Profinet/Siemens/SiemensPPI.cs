@@ -144,6 +144,7 @@ namespace HslCommunication.Profinet.Siemens
         /// </summary>
         /// <param name="address">西门子的地址数据信息</param>
         /// <param name="value">数据长度</param>
+        /// <returns>带返回结果的结果对象</returns>
         public override OperateResult Write( string address, byte[] value )
         {
             // 解析指令
@@ -174,6 +175,7 @@ namespace HslCommunication.Profinet.Siemens
         /// </summary>
         /// <param name="address">西门子的地址数据信息</param>
         /// <param name="value">数据长度</param>
+        /// <returns>带返回结果的结果对象</returns>
         public OperateResult Write(string address, bool[] value )
         {
             // 解析指令
@@ -204,6 +206,7 @@ namespace HslCommunication.Profinet.Siemens
         /// </summary>
         /// <param name="address">西门子的地址数据信息</param>
         /// <param name="value">数据长度</param>
+        /// <returns>带返回结果的结果对象</returns>
         public OperateResult Write( string address, bool value )
         {
             return Write( address, new bool[] { value } );
@@ -229,6 +232,7 @@ namespace HslCommunication.Profinet.Siemens
         /// </summary>
         /// <param name="address">西门子的地址数据信息</param>
         /// <param name="value">数据长度</param>
+        /// <returns>带返回结果的结果对象</returns>
         public OperateResult WriteByte(string address, byte value )
         {
             return Write( address, new byte[] { value } );

@@ -10,11 +10,6 @@ namespace HslCommunication.Profinet.Melsec
     /// </summary>
     public class MelsecHelper
     {
-        #region Melsec Fx
-
-
-        #endregion
-
         #region Melsec Mc
 
         /// <summary>
@@ -276,16 +271,174 @@ namespace HslCommunication.Profinet.Melsec
             return result;
         }
 
+
+        /// <summary>
+        /// 基恩士解析数据地址
+        /// </summary>
+        /// <param name="address">数据地址</param>
+        /// <returns>解析值</returns>
+        public static OperateResult<MelsecMcDataType, int> KeyenceAnalysisAddress( string address )
+        {
+            var result = new OperateResult<MelsecMcDataType, int>( );
+            try
+            {
+                switch (address[0])
+                {
+                    case 'M':
+                    case 'm':
+                        {
+                            result.Content1 = MelsecMcDataType.Keyence_M;
+                            result.Content2 = Convert.ToUInt16( address.Substring( 1 ), MelsecMcDataType.Keyence_M.FromBase );
+                            break;
+                        }
+                    case 'X':
+                    case 'x':
+                        {
+                            result.Content1 = MelsecMcDataType.Keyence_X;
+                            result.Content2 = Convert.ToUInt16( address.Substring( 1 ), MelsecMcDataType.Keyence_X.FromBase );
+                            break;
+                        }
+                    case 'Y':
+                    case 'y':
+                        {
+                            result.Content1 = MelsecMcDataType.Keyence_Y;
+                            result.Content2 = Convert.ToUInt16( address.Substring( 1 ), MelsecMcDataType.Keyence_Y.FromBase );
+                            break;
+                        }
+                    case 'B':
+                    case 'b':
+                        {
+                            result.Content1 = MelsecMcDataType.Keyence_B;
+                            result.Content2 = Convert.ToUInt16( address.Substring( 1 ), MelsecMcDataType.Keyence_B.FromBase );
+                            break;
+                        }
+                    case 'L':
+                    case 'l':
+                        {
+                            result.Content1 = MelsecMcDataType.Keyence_L;
+                            result.Content2 = Convert.ToUInt16( address.Substring( 1 ), MelsecMcDataType.Keyence_L.FromBase );
+                            break;
+                        }
+                    case 'S':
+                    case 's':
+                        {
+                            if (address[1] == 'M' || address[1] == 'm')
+                            {
+                                result.Content1 = MelsecMcDataType.Keyence_SM;
+                                result.Content2 = Convert.ToUInt16( address.Substring( 2 ), MelsecMcDataType.Keyence_SM.FromBase );
+                                break;
+                            }
+                            else if (address[1] == 'D' || address[1] == 'd')
+                            {
+                                result.Content1 = MelsecMcDataType.Keyence_SD;
+                                result.Content2 = Convert.ToUInt16( address.Substring( 2 ), MelsecMcDataType.Keyence_SD.FromBase );
+                                break;
+                            }
+                            else
+                            {
+                                throw new Exception( StringResources.Language.NotSupportedDataType );
+                            }
+                        }
+                    case 'D':
+                    case 'd':
+                        {
+                            result.Content1 = MelsecMcDataType.Keyence_D;
+                            result.Content2 = Convert.ToUInt16( address.Substring( 1 ), MelsecMcDataType.Keyence_D.FromBase );
+                            break;
+                        }
+                    case 'R':
+                    case 'r':
+                        {
+                            result.Content1 = MelsecMcDataType.Keyence_R;
+                            result.Content2 = Convert.ToUInt16( address.Substring( 1 ), MelsecMcDataType.Keyence_R.FromBase );
+                            break;
+                        }
+                    case 'Z':
+                    case 'z':
+                        {
+                            if (address[1] == 'R' || address[1] == 'r')
+                            {
+                                result.Content1 = MelsecMcDataType.Keyence_ZR;
+                                result.Content2 = Convert.ToUInt16( address.Substring( 2 ), MelsecMcDataType.Keyence_ZR.FromBase );
+                                break;
+                            }
+                            else
+                            {
+                                throw new Exception( StringResources.Language.NotSupportedDataType );
+                            }
+                        }
+                    case 'W':
+                    case 'w':
+                        {
+                            result.Content1 = MelsecMcDataType.Keyence_W;
+                            result.Content2 = Convert.ToUInt16( address.Substring( 1 ), MelsecMcDataType.Keyence_W.FromBase );
+                            break;
+                        }
+                    case 'T':
+                    case 't':
+                        {
+                            if (address[1] == 'N' || address[1] == 'n')
+                            {
+                                result.Content1 = MelsecMcDataType.Keyence_TN;
+                                result.Content2 = Convert.ToUInt16( address.Substring( 2 ), MelsecMcDataType.Keyence_TN.FromBase );
+                                break;
+                            }
+                            else if (address[1] == 'S' || address[1] == 's')
+                            {
+                                result.Content1 = MelsecMcDataType.Keyence_TS;
+                                result.Content2 = Convert.ToUInt16( address.Substring( 2 ), MelsecMcDataType.Keyence_TS.FromBase );
+                                break;
+                            }
+                            else
+                            {
+                                throw new Exception( StringResources.Language.NotSupportedDataType );
+                            }
+                        }
+                    case 'C':
+                    case 'c':
+                        {
+                            if (address[1] == 'N' || address[1] == 'n')
+                            {
+                                result.Content1 = MelsecMcDataType.Keyence_CN;
+                                result.Content2 = Convert.ToUInt16( address.Substring( 2 ), MelsecMcDataType.Keyence_CN.FromBase );
+                                break;
+                            }
+                            else if (address[1] == 'S' || address[1] == 's')
+                            {
+                                result.Content1 = MelsecMcDataType.Keyence_CS;
+                                result.Content2 = Convert.ToUInt16( address.Substring( 2 ), MelsecMcDataType.Keyence_CS.FromBase );
+                                break;
+                            }
+                            else
+                            {
+                                throw new Exception( StringResources.Language.NotSupportedDataType );
+                            }
+                        }
+                    default: throw new Exception( StringResources.Language.NotSupportedDataType );
+                }
+            }
+            catch (Exception ex)
+            {
+                result.Message = ex.Message;
+                return result;
+            }
+
+            result.IsSuccess = true;
+            result.Message = StringResources.Language.SuccessText;
+            return result;
+        }
+
         /// <summary>
         /// 从地址，长度，是否位读取进行创建读取的MC的核心报文
         /// </summary>
         /// <param name="address">三菱的地址信息，具体格式参照<seealso cref="MelsecMcNet"/> 的注释说明</param>
         /// <param name="length">读取的长度信息</param>
         /// <param name="isBit">是否进行了位读取操作</param>
+        /// <param name="analysisAddress">对地址分析的委托方法</param>
         /// <returns>带有成功标识的报文对象</returns>
-        public static OperateResult<byte[]> BuildReadMcCoreCommand(string address, ushort length, bool isBit)
+        public static OperateResult<byte[]> BuildReadMcCoreCommand(string address, ushort length, bool isBit, Func<string, OperateResult<MelsecMcDataType, int>> analysisAddress)
         {
-            OperateResult<MelsecMcDataType, int> analysis = MelsecHelper.McAnalysisAddress( address );
+            OperateResult<MelsecMcDataType, int> analysis = analysisAddress( address );
             if (!analysis.IsSuccess) return OperateResult.CreateFailedResult<byte[]>( analysis );
 
             byte[] command = new byte[10];
@@ -309,10 +462,11 @@ namespace HslCommunication.Profinet.Melsec
         /// <param name="address">三菱的地址信息，具体格式参照<seealso cref="MelsecMcNet"/> 的注释说明</param>
         /// <param name="length">读取的长度信息</param>
         /// <param name="isBit">是否进行了位读取操作</param>
+        /// <param name="analysisAddress">对地址分析的委托方法</param>
         /// <returns>带有成功标识的报文对象</returns>
-        public static OperateResult<byte[]> BuildAsciiReadMcCoreCommand(string address, ushort length, bool isBit)
+        public static OperateResult<byte[]> BuildAsciiReadMcCoreCommand(string address, ushort length, bool isBit, Func<string, OperateResult<MelsecMcDataType, int>> analysisAddress )
         {
-            OperateResult<MelsecMcDataType, int> analysis = MelsecHelper.McAnalysisAddress( address );
+            OperateResult<MelsecMcDataType, int> analysis = analysisAddress( address );
             if (!analysis.IsSuccess) return OperateResult.CreateFailedResult<byte[]>( analysis );
 
             byte[] command = new byte[20];
@@ -345,10 +499,11 @@ namespace HslCommunication.Profinet.Melsec
         /// </summary>
         /// <param name="address">三菱的地址信息，具体格式参照<seealso cref="MelsecMcNet"/> 的注释说明</param>
         /// <param name="value">实际的原始数据信息</param>
+        /// <param name="analysisAddress">对地址分析的委托方法</param>
         /// <returns>带有成功标识的报文对象</returns>
-        public static OperateResult<byte[]> BuildWriteWordCoreCommand(string address, byte[] value )
+        public static OperateResult<byte[]> BuildWriteWordCoreCommand(string address, byte[] value, Func<string, OperateResult<MelsecMcDataType, int>> analysisAddress )
         {
-            OperateResult<MelsecMcDataType, int> analysis = MelsecHelper.McAnalysisAddress( address );
+            OperateResult<MelsecMcDataType, int> analysis = analysisAddress( address );
             if (!analysis.IsSuccess) return OperateResult.CreateFailedResult<byte[]>( analysis );
 
             if (value == null) value = new byte[0];
@@ -373,10 +528,11 @@ namespace HslCommunication.Profinet.Melsec
         /// </summary>
         /// <param name="address">三菱的地址信息，具体格式参照<seealso cref="MelsecMcNet"/> 的注释说明</param>
         /// <param name="value">实际的原始数据信息</param>
+        /// <param name="analysisAddress">对地址分析的委托方法</param>
         /// <returns>带有成功标识的报文对象</returns>
-        public static OperateResult<byte[]> BuildAsciiWriteWordCoreCommand(string address, byte[] value)
+        public static OperateResult<byte[]> BuildAsciiWriteWordCoreCommand(string address, byte[] value, Func<string, OperateResult<MelsecMcDataType, int>> analysisAddress )
         {
-            OperateResult<MelsecMcDataType, int> analysis = MelsecHelper.McAnalysisAddress( address );
+            OperateResult<MelsecMcDataType, int> analysis = analysisAddress( address );
             if (!analysis.IsSuccess) return OperateResult.CreateFailedResult<byte[]>( analysis );
 
             if (value == null) value = new byte[0];
@@ -418,10 +574,11 @@ namespace HslCommunication.Profinet.Melsec
         /// </summary>
         /// <param name="address">三菱的地址信息，具体格式参照<seealso cref="MelsecMcNet"/> 的注释说明</param>
         /// <param name="value">原始的bool数组数据</param>
+        /// <param name="analysisAddress">对地址分析的委托方法</param>
         /// <returns>带有成功标识的报文对象</returns>
-        public static OperateResult<byte[]> BuildWriteBitCoreCommand( string address, bool[] value )
+        public static OperateResult<byte[]> BuildWriteBitCoreCommand( string address, bool[] value, Func<string, OperateResult<MelsecMcDataType, int>> analysisAddress )
         {
-            OperateResult<MelsecMcDataType, int> analysis = MelsecHelper.McAnalysisAddress( address );
+            OperateResult<MelsecMcDataType, int> analysis = analysisAddress( address );
             if (!analysis.IsSuccess) return OperateResult.CreateFailedResult<byte[]>( analysis );
 
             if (value == null) value = new bool[0];
@@ -447,10 +604,11 @@ namespace HslCommunication.Profinet.Melsec
         /// </summary>
         /// <param name="address">三菱的地址信息，具体格式参照<seealso cref="MelsecMcNet"/> 的注释说明</param>
         /// <param name="value">原始的bool数组数据</param>
+        /// <param name="analysisAddress">对地址分析的委托方法</param>
         /// <returns>带有成功标识的报文对象</returns>
-        public static OperateResult<byte[]> BuildAsciiWriteBitCoreCommand( string address, bool[] value )
+        public static OperateResult<byte[]> BuildAsciiWriteBitCoreCommand( string address, bool[] value, Func<string, OperateResult<MelsecMcDataType, int>> analysisAddress )
         {
-            OperateResult<MelsecMcDataType, int> analysis = MelsecHelper.McAnalysisAddress( address );
+            OperateResult<MelsecMcDataType, int> analysis = analysisAddress( address );
             if (!analysis.IsSuccess) return OperateResult.CreateFailedResult<byte[]>( analysis );
 
             if (value == null) value = new bool[0];

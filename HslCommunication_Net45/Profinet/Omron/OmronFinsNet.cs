@@ -17,6 +17,63 @@ namespace HslCommunication.Profinet.Omron
     /// <note type="important">实例化之后，使用之前，需要初始化三个参数信息，具体见三个参数的说明：<see cref="SA1"/>，<see cref="DA1"/>，<see cref="DA2"/></note>
     /// <br />
     /// <note type="warning">如果在测试的时候报错误码64，经网友 上海-Lex 指点，是因为PLC中产生了报警，如伺服报警，模块错误等产生的，但是数据还是能正常读到的，屏蔽64报警或清除plc错误可解决</note>
+    /// 地址支持的列表如下：
+    /// <list type="table">
+    ///   <listheader>
+    ///     <term>地址名称</term>
+    ///     <term>地址代号</term>
+    ///     <term>示例</term>
+    ///     <term>地址进制</term>
+    ///     <term>字操作</term>
+    ///     <term>位操作</term>
+    ///     <term>备注</term>
+    ///   </listheader>
+    ///   <item>
+    ///     <term>DM Area</term>
+    ///     <term>D</term>
+    ///     <term>D100,D200</term>
+    ///     <term>10</term>
+    ///     <term>√</term>
+    ///     <term>√</term>
+    ///     <term></term>
+    ///   </item>
+    ///   <item>
+    ///     <term>CIO Area</term>
+    ///     <term>C</term>
+    ///     <term>C100,C200</term>
+    ///     <term>10</term>
+    ///     <term>√</term>
+    ///     <term>√</term>
+    ///     <term></term>
+    ///   </item>
+    ///   <item>
+    ///     <term>Work Area</term>
+    ///     <term>W</term>
+    ///     <term>W100,W200</term>
+    ///     <term>10</term>
+    ///     <term>√</term>
+    ///     <term>√</term>
+    ///     <term></term>
+    ///   </item>
+    ///   <item>
+    ///     <term>Holding Bit Area</term>
+    ///     <term>H</term>
+    ///     <term>H100,H200</term>
+    ///     <term>10</term>
+    ///     <term>√</term>
+    ///     <term>√</term>
+    ///     <term></term>
+    ///   </item>
+    ///   <item>
+    ///     <term>Auxiliary Bit Area</term>
+    ///     <term>A</term>
+    ///     <term>A100,A200</term>
+    ///     <term>10</term>
+    ///     <term>√</term>
+    ///     <term>√</term>
+    ///     <term></term>
+    ///   </item>
+    /// </list>
     /// </remarks>
     /// <example>
     /// <code lang="cs" source="HslCommunication_Net45.Test\Documentation\Samples\Profinet\OmronFinsNet.cs" region="Usage" title="简单的短连接使用" />
@@ -231,41 +288,6 @@ namespace HslCommunication.Profinet.Omron
         /// <param name="address">读取地址，格式为"D100","C100","W100","H100","A100"</param>
         /// <param name="length">读取的数据长度</param>
         /// <returns>带成功标志的结果数据对象</returns>
-        /// <remarks>
-        /// 地址支持的列表如下：
-        /// <list type="table">
-        ///   <listheader>
-        ///     <term>地址名称</term>
-        ///     <term>示例</term>
-        ///     <term>地址进制</term>
-        ///   </listheader>
-        ///   <item>
-        ///     <term>DM Area</term>
-        ///     <term>D100,D200</term>
-        ///     <term>10</term>
-        ///   </item>
-        ///   <item>
-        ///     <term>CIO Area</term>
-        ///     <term>C100,C200</term>
-        ///     <term>10</term>
-        ///   </item>
-        ///   <item>
-        ///     <term>Work Area</term>
-        ///     <term>W100,W200</term>
-        ///     <term>10</term>
-        ///   </item>
-        ///   <item>
-        ///     <term>Holding Bit Area</term>
-        ///     <term>H100,H200</term>
-        ///     <term>10</term>
-        ///   </item>
-        ///   <item>
-        ///     <term>Auxiliary Bit Area</term>
-        ///     <term>A100,A200</term>
-        ///     <term>10</term>
-        ///   </item>
-        /// </list>
-        /// </remarks>
         /// <example>
         /// 假设起始地址为D100，D100存储了温度，100.6℃值为1006，D101存储了压力，1.23Mpa值为123，D102,D103存储了产量计数，读取如下：
         /// <code lang="cs" source="HslCommunication_Net45.Test\Documentation\Samples\Profinet\OmronFinsNet.cs" region="ReadExample2" title="Read示例" />
@@ -298,41 +320,6 @@ namespace HslCommunication.Profinet.Omron
         /// <param name="address">读取地址，格式为"D100","C100","W100","H100","A100"</param>
         /// <param name="length">读取的长度</param>
         /// <returns>带成功标志的结果数据对象</returns>
-        /// <remarks>
-        /// 地址支持的列表如下：
-        /// <list type="table">
-        ///   <listheader>
-        ///     <term>地址名称</term>
-        ///     <term>示例</term>
-        ///     <term>地址进制</term>
-        ///   </listheader>
-        ///   <item>
-        ///     <term>DM Area</term>
-        ///     <term>D100.0,D200.10</term>
-        ///     <term>10</term>
-        ///   </item>
-        ///   <item>
-        ///     <term>CIO Area</term>
-        ///     <term>C100.0,C200.10</term>
-        ///     <term>10</term>
-        ///   </item>
-        ///   <item>
-        ///     <term>Work Area</term>
-        ///     <term>W100.0,W200.10</term>
-        ///     <term>10</term>
-        ///   </item>
-        ///   <item>
-        ///     <term>Holding Bit Area</term>
-        ///     <term>H100.0,H200.10</term>
-        ///     <term>10</term>
-        ///   </item>
-        ///   <item>
-        ///     <term>Auxiliary Bit Area</term>
-        ///     <term>A100.0,A200.1</term>
-        ///     <term>10</term>
-        ///   </item>
-        /// </list>
-        /// </remarks>
         /// <example>
         /// <code lang="cs" source="HslCommunication_Net45.Test\Documentation\Samples\Profinet\OmronFinsNet.cs" region="ReadBool" title="ReadBool示例" />
         /// </example>
@@ -386,40 +373,6 @@ namespace HslCommunication.Profinet.Omron
         /// <param name="address">初始地址</param>
         /// <param name="value">原始的字节数据</param>
         /// <returns>结果</returns>
-        /// <remarks>
-        /// 地址支持的列表如下：
-        /// <list type="table">
-        ///   <listheader>
-        ///     <term>地址名称</term>
-        ///     <term>示例</term>
-        ///     <term>地址进制</term>
-        ///   </listheader>
-        ///   <item>
-        ///     <term>DM Area</term>
-        ///     <term>D100,D200</term>
-        ///     <term>10</term>
-        ///   </item>
-        ///   <item>
-        ///     <term>CIO Area</term>
-        ///     <term>C100,C200</term>
-        ///     <term>10</term>
-        ///   </item>
-        ///   <item>
-        ///     <term>Work Area</term>
-        ///     <term>W100,W200</term>
-        ///     <term>10</term>
-        ///   </item>
-        ///   <item>
-        ///     <term>Holding Bit Area</term>
-        ///     <term>H100,H200</term>
-        ///     <term>10</term>
-        ///   </item>
-        ///   <item>
-        ///     <term>Auxiliary Bit Area</term>
-        ///     <term>A100,A200</term>
-        ///     <term>10</term>
-        ///   </item>
-        /// </list>
         /// </remarks>
         /// <example>
         /// 假设起始地址为D100，D100存储了温度，100.6℃值为1006，D101存储了压力，1.23Mpa值为123，D102,D103存储了产量计数，读取如下：
