@@ -76,7 +76,7 @@ namespace HslCommunicationDemo
         {
             if (language == 2)
             {
-                Text = "Melsec Read PLC Demo";
+                Text = "Keyence Read PLC Demo";
                 label2.Text = "Blogs:";
                 label4.Text = "Protocols:";
                 label20.Text = "Author:Richard Hu";

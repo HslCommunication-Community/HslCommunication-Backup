@@ -24,5 +24,17 @@ namespace HslCommunicationDemo
                 "    作者致力于工业的信息化，智能化建设，大力推行智能制造2025，工业4.0建设，致力于降低所有传统企业的信息化转型的成本，大力发展以通信为核心，"+
                 "辅以机器视觉，人工智能技术，将传统的工业转型为，高科技，高智能，绿色的现代化企业。";
         }
+
+        private void linkLabel1_LinkClicked( object sender, LinkLabelLinkClickedEventArgs e )
+        {
+            try
+            {
+                System.Diagnostics.Process.Start( linkLabel1.Text );
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show( ex.Message );
+            }
+        }
     }
 }
