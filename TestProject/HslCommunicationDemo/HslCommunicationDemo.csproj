@@ -179,6 +179,18 @@
     <Compile Include="PLC\FormMelsec3C.Designer.cs">
       <DependentUpon>FormMelsec3C.cs</DependentUpon>
     </Compile>
+    <Compile Include="PLC\FormKeyenceBinary.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="PLC\FormKeyenceBinary.Designer.cs">
+      <DependentUpon>FormKeyenceBinary.cs</DependentUpon>
+    </Compile>
+    <Compile Include="PLC\FormKeyenceAscii.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="PLC\FormKeyenceAscii.Designer.cs">
+      <DependentUpon>FormKeyenceAscii.cs</DependentUpon>
+    </Compile>
     <Compile Include="PLC\FormOmronHostLink.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -428,6 +440,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="PLC\FormMelsec3C.resx">
       <DependentUpon>FormMelsec3C.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PLC\FormKeyenceBinary.resx">
+      <DependentUpon>FormKeyenceBinary.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PLC\FormKeyenceAscii.resx">
+      <DependentUpon>FormKeyenceAscii.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="PLC\FormOmronHostLink.resx">
       <DependentUpon>FormOmronHostLink.cs</DependentUpon>

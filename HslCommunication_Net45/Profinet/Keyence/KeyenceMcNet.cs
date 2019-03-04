@@ -156,18 +156,7 @@ namespace HslCommunication.Profinet.Keyence
     ///     <term>W0000~3FFF</term>
     ///   </item>
     ///   <item>
-    ///     <term>链路寄存器</term>
-    ///     <term>W</term>
-    ///     <term>W100,W1A0</term>
-    ///     <term>16</term>
-    ///     <term>√</term>
-    ///     <term>×</term>
-    ///     <term>W0000~7FFF</term>
-    ///     <term>W0000~3FFF</term>
-    ///     <term>W0000~3FFF</term>
-    ///   </item>
-    ///   <item>
-    ///     <term>计时器（当前值）</term>
+    ///     <term>定时器（当前值）</term>
     ///     <term>TN</term>
     ///     <term>TN100,TN200</term>
     ///     <term>10</term>

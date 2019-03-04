@@ -59,6 +59,7 @@
             this.button9 = new System.Windows.Forms.Button();
             this.button8 = new System.Windows.Forms.Button();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
+            this.button48 = new System.Windows.Forms.Button();
             this.button11 = new System.Windows.Forms.Button();
             this.groupBox6 = new System.Windows.Forms.GroupBox();
             this.linkLabel1 = new System.Windows.Forms.LinkLabel();
@@ -102,7 +103,9 @@
             this.button43 = new System.Windows.Forms.Button();
             this.button42 = new System.Windows.Forms.Button();
             this.button40 = new System.Windows.Forms.Button();
-            this.button48 = new System.Windows.Forms.Button();
+            this.groupBox13 = new System.Windows.Forms.GroupBox();
+            this.button49 = new System.Windows.Forms.Button();
+            this.button50 = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -116,6 +119,7 @@
             this.groupBox11.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.groupBox12.SuspendLayout();
+            this.groupBox13.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupBox1
@@ -487,6 +491,17 @@
             this.groupBox5.TabStop = false;
             this.groupBox5.Text = "Omron PLC(欧姆龙 PLC)";
             // 
+            // button48
+            // 
+            this.button48.Location = new System.Drawing.Point(19, 64);
+            this.button48.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.button48.Name = "button48";
+            this.button48.Size = new System.Drawing.Size(150, 32);
+            this.button48.TabIndex = 1;
+            this.button48.Text = "Fins HostLink";
+            this.button48.UseVisualStyleBackColor = true;
+            this.button48.Click += new System.EventHandler(this.button48_Click);
+            // 
             // button11
             // 
             this.button11.Location = new System.Drawing.Point(19, 24);
@@ -792,7 +807,7 @@
             // 
             // menuStrip1
             // 
-            this.menuStrip1.BackColor = System.Drawing.Color.Coral;
+            this.menuStrip1.BackColor = System.Drawing.Color.LightSeaGreen;
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.aboutToolStripMenuItem,
             this.简体中文ToolStripMenuItem,
@@ -942,16 +957,40 @@
             this.button40.UseVisualStyleBackColor = true;
             this.button40.Click += new System.EventHandler(this.button40_Click);
             // 
-            // button48
+            // groupBox13
             // 
-            this.button48.Location = new System.Drawing.Point(19, 64);
-            this.button48.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.button48.Name = "button48";
-            this.button48.Size = new System.Drawing.Size(150, 32);
-            this.button48.TabIndex = 1;
-            this.button48.Text = "Fins HostLink";
-            this.button48.UseVisualStyleBackColor = true;
-            this.button48.Click += new System.EventHandler(this.button48_Click);
+            this.groupBox13.Controls.Add(this.button50);
+            this.groupBox13.Controls.Add(this.button49);
+            this.groupBox13.Location = new System.Drawing.Point(777, 208);
+            this.groupBox13.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.groupBox13.Name = "groupBox13";
+            this.groupBox13.Padding = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.groupBox13.Size = new System.Drawing.Size(185, 140);
+            this.groupBox13.TabIndex = 28;
+            this.groupBox13.TabStop = false;
+            this.groupBox13.Text = "Keyence(基恩士 PLC)";
+            // 
+            // button49
+            // 
+            this.button49.Location = new System.Drawing.Point(18, 24);
+            this.button49.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.button49.Name = "button49";
+            this.button49.Size = new System.Drawing.Size(150, 32);
+            this.button49.TabIndex = 2;
+            this.button49.Text = "MC-3E (Binary)";
+            this.button49.UseVisualStyleBackColor = true;
+            this.button49.Click += new System.EventHandler(this.button49_Click);
+            // 
+            // button50
+            // 
+            this.button50.Location = new System.Drawing.Point(18, 64);
+            this.button50.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.button50.Name = "button50";
+            this.button50.Size = new System.Drawing.Size(150, 32);
+            this.button50.TabIndex = 3;
+            this.button50.Text = "MC-3E (ASCII)";
+            this.button50.UseVisualStyleBackColor = true;
+            this.button50.Click += new System.EventHandler(this.button50_Click);
             // 
             // FormLoad
             // 
@@ -959,6 +998,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.AliceBlue;
             this.ClientSize = new System.Drawing.Size(980, 684);
+            this.Controls.Add(this.groupBox13);
             this.Controls.Add(this.groupBox12);
             this.Controls.Add(this.groupBox11);
             this.Controls.Add(this.groupBox10);
@@ -995,6 +1035,7 @@
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.groupBox12.ResumeLayout(false);
+            this.groupBox13.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1077,6 +1118,9 @@
         private System.Windows.Forms.Button button46;
         private System.Windows.Forms.Button button47;
         private System.Windows.Forms.Button button48;
+        private System.Windows.Forms.GroupBox groupBox13;
+        private System.Windows.Forms.Button button50;
+        private System.Windows.Forms.Button button49;
     }
 }
 
