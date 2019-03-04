@@ -620,6 +620,25 @@ namespace HslCommunication
     ///             <item>VIP群将免费使用全新的控件库，谢谢支持。地址：https://github.com/dathlin/HslControlsDemo </item>
     ///         </list>
     ///     </revision>
+    ///     <revision date="2019-3-4" version="6.0.0" author="Richard.Hu">
+    ///         <list type="bullet">
+    ///             <item>西门子虚拟PLC的ToString()方法重新实现。</item>
+    ///             <item>埃夫特机器人的json格式化修正换行符。</item>
+    ///             <item>IReadWriteNet接口添加Write(address, bytes)的方法。</item>
+    ///             <item>Modbus虚拟服务器修复写入位操作时影响后面3个位的bug。</item>
+    ///             <item>SoftBuffer内存数据池类的SetValue(byte,index)的bug修复。</item>
+    ///             <item>西门子虚拟PLC和Modbus服务器新增客户端管理，关闭时也即断开所有连接。</item>
+    ///             <item>三菱编程口协议的读取结果添加错误说明，显示原始返回信号，便于分析。</item>
+    ///             <item>三菱MC协议新增远程启动，停止，读取PLC型号的接口。</item>
+    ///             <item>新增三菱MC协议的串口的A-3C协议支持，允许读写三菱PLC的数据。</item>
+    ///             <item>新增欧姆龙HostLink协议支持，允许读写PLC数据。</item>
+    ///             <item>新增基恩士PLC的MC协议支持，包括二进制和ASCII格式，支持读写PLC的数据。</item>
+    ///             <item>所有PLC的地址说明重新规划，统一在API文档中查询。</item>
+    ///             <item>注意：三菱PLC的地址升级，有一些地址格式进行了更改，比如定时器和计数器，谨慎更新，详细地址参考最新文档。</item>
+    ///             <item>如果有公司使用了本库并愿意公开logo的，将在官网及git上进行统一显示，有意愿的联系作者。</item>
+    ///             <item>VIP群将免费使用全新的控件库，谢谢支持。地址：https://github.com/dathlin/HslControlsDemo </item>
+    ///         </list>
+    ///     </revision>
     /// </revisionHistory>
     [System.Runtime.CompilerServices.CompilerGeneratedAttribute( )]
     public class NamespaceDoc

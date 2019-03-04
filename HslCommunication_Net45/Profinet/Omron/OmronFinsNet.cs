@@ -373,7 +373,6 @@ namespace HslCommunication.Profinet.Omron
         /// <param name="address">初始地址</param>
         /// <param name="value">原始的字节数据</param>
         /// <returns>结果</returns>
-        /// </remarks>
         /// <example>
         /// 假设起始地址为D100，D100存储了温度，100.6℃值为1006，D101存储了压力，1.23Mpa值为123，D102,D103存储了产量计数，读取如下：
         /// <code lang="cs" source="HslCommunication_Net45.Test\Documentation\Samples\Profinet\OmronFinsNet.cs" region="WriteExample2" title="Write示例" />

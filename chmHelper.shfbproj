@@ -22,12 +22,12 @@
       <DocumentationSource sourceFile="HslCommunication_Net45\bin\Debug\HslCommunication.dll" />
     </DocumentationSources>
     <HelpTitle>HslCommunication Library Document</HelpTitle>
-    <HelpFileVersion>5.2.0</HelpFileVersion>
+    <HelpFileVersion>6.0.0</HelpFileVersion>
     <RootNamespaceContainer>False</RootNamespaceContainer>
     <NamespaceGrouping>False</NamespaceGrouping>
     <Preliminary>False</Preliminary>
     <SdkLinkTarget>Blank</SdkLinkTarget>
-    <FooterText>%28C%29 2018 Richard.Hu, All Rights Reserved</FooterText>
+    <FooterText>%28C%29 2017-2019 Richard.Hu, All Rights Reserved</FooterText>
     <FeedbackEMailAddress>hsl200909%40163.com</FeedbackEMailAddress>
     <FeedbackEMailLinkText>hsl200909%40163.com</FeedbackEMailLinkText>
     <HelpFileFormat>HtmlHelp1</HelpFileFormat>

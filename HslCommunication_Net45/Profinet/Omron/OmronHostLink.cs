@@ -189,7 +189,6 @@ namespace HslCommunication.Profinet.Omron
         /// <param name="address">读取地址，具体的地址参考文档</param>
         /// <param name="length">读取的长度</param>
         /// <returns>带成功标志的结果数据对象</returns>
-        /// </remarks>
         /// <example>
         /// <code lang="cs" source="HslCommunication_Net45.Test\Documentation\Samples\Profinet\OmronFinsNet.cs" region="ReadBool" title="ReadBool示例" />
         /// </example>
