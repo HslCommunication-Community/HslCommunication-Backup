@@ -59,6 +59,7 @@
     <Compile Include="..\HslCommunication_Net45\Core\IMessage\FinsMessage.cs" Link="Core\IMessage\FinsMessage.cs" />
     <Compile Include="..\HslCommunication_Net45\Core\IMessage\HslMessage.cs" Link="Core\IMessage\HslMessage.cs" />
     <Compile Include="..\HslCommunication_Net45\Core\IMessage\INetMessage.cs" Link="Core\IMessage\INetMessage.cs" />
+    <Compile Include="..\HslCommunication_Net45\Core\IMessage\KukaVarProxyMessage.cs" Link="Core\IMessage\KukaVarProxyMessage.cs" />
     <Compile Include="..\HslCommunication_Net45\Core\IMessage\MelsecA1EBinaryMessage.cs" Link="Core\IMessage\MelsecA1EBinaryMessage.cs" />
     <Compile Include="..\HslCommunication_Net45\Core\IMessage\MelsecQnA3EAsciiMessage.cs" Link="Core\IMessage\MelsecQnA3EAsciiMessage.cs" />
     <Compile Include="..\HslCommunication_Net45\Core\IMessage\MelsecQnA3EBinaryMessage.cs" Link="Core\IMessage\MelsecQnA3EBinaryMessage.cs" />
@@ -202,6 +203,7 @@
     <Folder Include="Robot\EFORT\" />
     <Folder Include="Language\" />
     <Folder Include="Instrument\" />
+    <Folder Include="Robot\KUKA\" />
   </ItemGroup>
 
 </Project>

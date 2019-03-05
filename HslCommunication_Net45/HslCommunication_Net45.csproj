@@ -182,6 +182,7 @@
     <Compile Include="Core\IMessage\FinsMessage.cs" />
     <Compile Include="Core\IMessage\HslMessage.cs" />
     <Compile Include="Core\IMessage\INetMessage.cs" />
+    <Compile Include="Core\IMessage\KukaVarProxyMessage.cs" />
     <Compile Include="Core\IMessage\MelsecA1EBinaryMessage.cs" />
     <Compile Include="Core\IMessage\MelsecQnA3EAsciiMessage.cs" />
     <Compile Include="Core\IMessage\MelsecQnA3EBinaryMessage.cs" />
@@ -418,6 +419,8 @@
     <None Include="imgaes\abstr1.png" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Robot\KUKA\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
