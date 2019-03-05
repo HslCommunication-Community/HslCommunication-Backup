@@ -222,7 +222,7 @@ namespace HslCommunication.Profinet.Melsec
     ///     <term></term>
     ///   </item>
     ///   <item>
-    ///     <term>计数器的当前</term>
+    ///     <term>计数器的当前值</term>
     ///     <term>CN</term>
     ///     <term>CN100,CN200</term>
     ///     <term>10</term>
