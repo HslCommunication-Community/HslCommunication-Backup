@@ -1,4 +1,5 @@
-﻿using HslCommunication.Core;
+﻿using HslCommunication.BasicFramework;
+using HslCommunication.Core;
 using HslCommunication.Core.IMessage;
 using HslCommunication.Core.Net;
 using System;
@@ -25,7 +26,7 @@ namespace HslCommunication.Robot.EFORT
             IpAddress = ipAddress;
             Port = port;
 
-            hybirdLock = new SimpleHybirdLock( );                                 // 实例化一个数据锁
+            softIncrementCount = new SoftIncrementCount( ushort.MaxValue );
         }
 
         #endregion
@@ -43,28 +44,12 @@ namespace HslCommunication.Robot.EFORT
             Encoding.ASCII.GetBytes( "MessageHead" ).CopyTo( command, 0 );
             BitConverter.GetBytes( (ushort)command.Length ).CopyTo( command, 15 );
             BitConverter.GetBytes( (ushort)1001 ).CopyTo( command, 17 );
-            BitConverter.GetBytes( GetHeartBeat( ) ).CopyTo( command, 19 );
+            BitConverter.GetBytes( (ushort)softIncrementCount.GetCurrentValue( ) ).CopyTo( command, 19 );
             Encoding.ASCII.GetBytes( "MessageTail" ).CopyTo( command, 21 );
 
             return command;
         }
-
-        private ushort GetHeartBeat( )
-        {
-            ushort result = 0;
-            hybirdLock.Enter( );
-
-            result = (ushort)heartbeat;
-            heartbeat++;
-            if (heartbeat > ushort.MaxValue)
-            {
-                heartbeat = 0;
-            }
-
-            hybirdLock.Leave( );
-            return result;
-        }
-
+        
         #endregion
 
         #region Read Support
@@ -109,7 +94,7 @@ namespace HslCommunication.Robot.EFORT
         #region Private Member
 
         private int heartbeat = 0;
-        private SimpleHybirdLock hybirdLock;             // 心跳值的锁
+        private SoftIncrementCount softIncrementCount;              // 自增消息的对象
 
         #endregion
 
