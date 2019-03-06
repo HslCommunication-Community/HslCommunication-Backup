@@ -33,7 +33,6 @@ namespace HslCommunication.BasicFramework
     /// </example>
     public sealed class SoftNumericalOrder : SoftFileSaveBase
     {
-
         #region Constructor
 
         /// <summary>
@@ -89,8 +88,7 @@ namespace HslCommunication.BasicFramework
         #endregion
 
         #region Public Method
-
-
+        
         /// <summary>
         /// 获取流水号的值
         /// </summary>
@@ -99,8 +97,7 @@ namespace HslCommunication.BasicFramework
         {
             return CurrentIndex.ToString( );
         }
-
-
+        
         /// <summary>
         /// 加载流水号
         /// </summary>
@@ -179,13 +176,11 @@ namespace HslCommunication.BasicFramework
 
 
         #endregion
-
-
     }
 
 
     /// <summary>
-    /// 一个简单的不持久化的序号自增类，采用线程安全实现，并允许指定最大数字，到达后清空从指定数开始
+    /// 一个简单的不持久化的序号自增类，采用线程安全实现，并允许指定最大数字，将包含该最大值，到达后清空从指定数开始
     /// </summary>
     public sealed class SoftIncrementCount : IDisposable
     {
@@ -230,7 +225,7 @@ namespace HslCommunication.BasicFramework
             current++;
             if (current > max)
             {
-                current = 0;
+                current = start;
             }
 
             hybirdLock.Leave( );
@@ -239,7 +234,20 @@ namespace HslCommunication.BasicFramework
 
 
         #endregion
-        
+
+        #region Object Override
+
+        /// <summary>
+        /// 返回表示当前对象的字符串
+        /// </summary>
+        /// <returns>返回具体的值信息</returns>
+        public override string ToString( )
+        {
+            return $"SoftIncrementCount[{this.current}]";
+        }
+
+        #endregion
+
         #region IDisposable Support
 
         private bool disposedValue = false; // 要检测冗余调用
