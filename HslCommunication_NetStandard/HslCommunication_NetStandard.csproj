@@ -157,6 +157,7 @@
     <Compile Include="..\HslCommunication_Net45\Robot\EFORT\EfortData.cs" Link="Robot\EFORT\EfortData.cs" />
     <Compile Include="..\HslCommunication_Net45\Robot\EFORT\ER7BC10.cs" Link="Robot\EFORT\ER7BC10.cs" />
     <Compile Include="..\HslCommunication_Net45\Robot\EFORT\ER7BC10Previous.cs" Link="Robot\EFORT\ER7BC10Previous.cs" />
+    <Compile Include="..\HslCommunication_Net45\Robot\KUKA\KukaAvarProxyNet.cs" Link="Robot\KUKA\KukaAvarProxyNet.cs" />
     <Compile Include="..\HslCommunication_Net45\StringResources.cs" Link="StringResources.cs" />
   </ItemGroup>
 
