@@ -104,8 +104,9 @@
             this.button42 = new System.Windows.Forms.Button();
             this.button40 = new System.Windows.Forms.Button();
             this.groupBox13 = new System.Windows.Forms.GroupBox();
-            this.button49 = new System.Windows.Forms.Button();
             this.button50 = new System.Windows.Forms.Button();
+            this.button49 = new System.Windows.Forms.Button();
+            this.button51 = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -608,13 +609,14 @@
             // 
             // groupBox7
             // 
+            this.groupBox7.Controls.Add(this.button51);
             this.groupBox7.Controls.Add(this.button44);
             this.groupBox7.Controls.Add(this.button23);
             this.groupBox7.Location = new System.Drawing.Point(395, 356);
             this.groupBox7.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.groupBox7.Name = "groupBox7";
             this.groupBox7.Padding = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.groupBox7.Size = new System.Drawing.Size(185, 156);
+            this.groupBox7.Size = new System.Drawing.Size(185, 315);
             this.groupBox7.TabIndex = 14;
             this.groupBox7.TabStop = false;
             this.groupBox7.Text = "Robot(机器人)";
@@ -789,7 +791,7 @@
             this.groupBox11.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.groupBox11.Name = "groupBox11";
             this.groupBox11.Padding = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.groupBox11.Size = new System.Drawing.Size(185, 315);
+            this.groupBox11.Size = new System.Drawing.Size(185, 156);
             this.groupBox11.TabIndex = 22;
             this.groupBox11.TabStop = false;
             this.groupBox11.Text = "Instrument(仪器仪表)";
@@ -915,7 +917,7 @@
             this.groupBox12.Controls.Add(this.button43);
             this.groupBox12.Controls.Add(this.button42);
             this.groupBox12.Controls.Add(this.button40);
-            this.groupBox12.Location = new System.Drawing.Point(395, 520);
+            this.groupBox12.Location = new System.Drawing.Point(586, 520);
             this.groupBox12.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.groupBox12.Name = "groupBox12";
             this.groupBox12.Padding = new System.Windows.Forms.Padding(3, 4, 3, 4);
@@ -970,6 +972,17 @@
             this.groupBox13.TabStop = false;
             this.groupBox13.Text = "Keyence(基恩士 PLC)";
             // 
+            // button50
+            // 
+            this.button50.Location = new System.Drawing.Point(18, 64);
+            this.button50.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.button50.Name = "button50";
+            this.button50.Size = new System.Drawing.Size(150, 32);
+            this.button50.TabIndex = 3;
+            this.button50.Text = "MC-3E (ASCII)";
+            this.button50.UseVisualStyleBackColor = true;
+            this.button50.Click += new System.EventHandler(this.button50_Click);
+            // 
             // button49
             // 
             this.button49.Location = new System.Drawing.Point(18, 24);
@@ -981,16 +994,16 @@
             this.button49.UseVisualStyleBackColor = true;
             this.button49.Click += new System.EventHandler(this.button49_Click);
             // 
-            // button50
+            // button51
             // 
-            this.button50.Location = new System.Drawing.Point(18, 64);
-            this.button50.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.button50.Name = "button50";
-            this.button50.Size = new System.Drawing.Size(150, 32);
-            this.button50.TabIndex = 3;
-            this.button50.Text = "MC-3E (ASCII)";
-            this.button50.UseVisualStyleBackColor = true;
-            this.button50.Click += new System.EventHandler(this.button50_Click);
+            this.button51.Location = new System.Drawing.Point(19, 103);
+            this.button51.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.button51.Name = "button51";
+            this.button51.Size = new System.Drawing.Size(150, 32);
+            this.button51.TabIndex = 2;
+            this.button51.Text = "KUKA";
+            this.button51.UseVisualStyleBackColor = true;
+            this.button51.Click += new System.EventHandler(this.button51_Click);
             // 
             // FormLoad
             // 
@@ -1121,6 +1134,7 @@
         private System.Windows.Forms.GroupBox groupBox13;
         private System.Windows.Forms.Button button50;
         private System.Windows.Forms.Button button49;
+        private System.Windows.Forms.Button button51;
     }
 }
 

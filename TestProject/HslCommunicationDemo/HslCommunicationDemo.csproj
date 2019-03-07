@@ -373,6 +373,12 @@
     <Compile Include="Robot\FormEfort.Designer.cs">
       <DependentUpon>FormEfort.cs</DependentUpon>
     </Compile>
+    <Compile Include="Robot\FormKuka.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Robot\FormKuka.Designer.cs">
+      <DependentUpon>FormKuka.cs</DependentUpon>
+    </Compile>
     <Compile Include="Settings1.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
@@ -546,6 +552,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Robot\FormEfort.resx">
       <DependentUpon>FormEfort.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Robot\FormKuka.resx">
+      <DependentUpon>FormKuka.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="app.config" />
     <None Include="Properties\Settings.settings">

@@ -841,5 +841,17 @@ namespace HslCommunicationDemo
             System.Threading.Thread.Sleep( 200 );
             Show( );
         }
+
+        private void button51_Click( object sender, EventArgs e )
+        {
+            Hide( );
+            System.Threading.Thread.Sleep( 200 );
+            using (FormKuka form = new FormKuka( ))
+            {
+                form.ShowDialog( );
+            }
+            System.Threading.Thread.Sleep( 200 );
+            Show( );
+        }
     }
 }

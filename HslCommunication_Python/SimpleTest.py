@@ -1,5 +1,9 @@
-value = "12354213\r\n"
-print(value)
-print(value.strip('\r\n'))
-value = "12354213\n"
-print(value.strip('\r\n'))
+
+import struct
+from HslCommunication import ByteTransform
+
+byteTransform = ByteTransform()
+values = [1234, 51235, 2314, 5]
+print(byteTransform.UInt16ArrayTransByte(values))
+
+print(struct.pack('<H',values))

@@ -308,6 +308,7 @@
     <Compile Include="Robot\EFORT\EfortData.cs" />
     <Compile Include="Robot\EFORT\ER7BC10.cs" />
     <Compile Include="Robot\EFORT\ER7BC10Previous.cs" />
+    <Compile Include="Robot\KUKA\KukaAvarProxyNet.cs" />
     <Compile Include="Serial\CRCSupport.cs" />
     <Compile Include="Serial\FP1_C72.cs" />
     <Compile Include="Serial\SerialBase.cs" />
@@ -419,8 +420,6 @@
     <None Include="imgaes\abstr1.png" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Robot\KUKA\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

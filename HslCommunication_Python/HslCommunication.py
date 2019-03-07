@@ -584,6 +584,15 @@ class StringResources:
 class OperateResult:
 	'''结果对象类，可以携带额外的数据信息'''
 	def __init__(self, err = 0, msg = ""):
+		'''
+		实例化一个IsSuccess为False的默认对象，可以指定错误码和错误信息 -> OperateResult
+
+		Parameter
+		  err: int 错误码
+		  msg: str 错误信息
+		Return
+		  OperateResult: 结果对象
+		'''
 		self.ErrorCode = err
 		self.Message = msg
 	# 是否成功的标志
@@ -603,14 +612,25 @@ class OperateResult:
 			self.Message = result.Message
 	@staticmethod
 	def CreateFailedResult( result ):
-		'''创建一个失败的结果对象'''
+		'''
+		创建一个失败的结果对象，将会复制拷贝result的值 -> OperateResult
+
+		Parameter
+		  result: OperateResult 继承自该类型的其他任何数据对象
+		Return
+		  OperateResult: 新的一个IsSuccess为False的对象
+		'''
 		failed = OperateResult()
 		failed.ErrorCode = result.ErrorCode
 		failed.Message = result.Message
 		return failed
 	@staticmethod
 	def CreateSuccessResult( Content1 = None, Content2 = None, Content3 = None, Content4 = None, Content5 = None, Content6 = None, Content7 = None, Content8 = None, Content9 = None, Content10 = None):
-		'''创建一个成功的对象'''
+		'''
+		创建一个成功的对象
+
+		可以指定内容信息，当然也可以不去指定，就是单纯的一个成功的对象
+		'''
 		success = OperateResult()
 		success.IsSuccess = True
 		success.Message = StringResources.Language.SuccessText
@@ -639,6 +659,11 @@ class SoftIncrementCount:
 		'''实例化一个自增信息的对象，包括最大值'''
 		self.maxValue = maxValue
 		self.start = start
+	def __str__(self):
+		'''
+		返回表示当前对象的字符串 -> string 当前的数值
+		'''
+		return str(self.current)
 	def GetCurrentValue( self ):
 		'''获取自增信息'''
 		value = 0
@@ -646,7 +671,7 @@ class SoftIncrementCount:
 		value = self.current
 		self.current = self.current + 1
 		if self.current > self.maxValue:
-			self.current = 0
+			self.current = self.start
 		self.hybirdLock.release()
 		return value
 	
@@ -4455,6 +4480,105 @@ class OmronFinsNet(NetworkDoubleBase):
 		else:
 			return self.WriteBool( address, [values] )
 
+class AllenBradleyHelper:
+	CIP_READ_DATA = 0x4C
+	CIP_WRITE_DATA = 0x4D
+	CIP_READ_FRAGMENT = 0x52
+	CIP_WRITE_FRAGMENT = 0x53
+	CIP_MULTIREAD_DATA = 0x1000
+	CIP_Type_Bool = 0xC1
+	CIP_Type_Byte = 0xC2
+	CIP_Type_Word = 0xC3
+	CIP_Type_DWord = 0xC4
+	CIP_Type_Real = 0xCA
+	CIP_Type_BitArray = 0xD3
+	@staticmethod
+	def PackRequestHeader( command, session, commandSpecificData ):
+		'''
+		将CommandSpecificData的命令，打包成可发送的数据指令 -> bytes
+
+		Prarameter
+		  command: ushort 实际的命令暗号
+		  session: uint 当前会话的id
+		  commandSpecificData: byteArray CommandSpecificData命令
+		Return
+		  bytes: 最终可发送的数据命令
+		'''
+		buffer = bytearray(len(commandSpecificData) + 24)
+		buffer[ 24 : 24 + len(commandSpecificData) ] = commandSpecificData
+		buffer[ 0:2 ] = struct.pack('<H',command)
+		buffer[ 2:4 ] = struct.pack('<H',len(commandSpecificData))
+		buffer[ 4:8 ] = struct.pack('<I',session)
+		return buffer
+	@staticmethod
+	def PackRequsetRead( address, length ):
+		'''
+		打包生成一个请求读取数据的节点信息，CIP指令信息 -> bytes
+
+		Prarameter
+		  address: string 地址
+		  length: ushort 指代数组的长度
+		Return 
+		  bytes: CIP的指令信息
+		'''
+		buffer = bytearray(1024)
+		offect = 0
+		tagNames = address.split( "." )
+		buffer[offect] = AllenBradleyHelper.CIP_READ_DATA
+		offect += 1
+		offect += 1
+		for i in range(len(tagNames)):
+			buffer[offect] = 0x91  # fixed
+			offect += 1
+			buffer[offect] = len(tagNames[i])
+			offect += 1
+			nameBytes = tagNames[i].encode("encoding='utf-8'")
+			buffer[offect: offect + len(nameBytes)] = nameBytes
+			offect += len(nameBytes)
+			if len(nameBytes) % 2 == 1 : offect += 1
+		buffer[1] = (offect - 2) // 2
+		buffer[offect:offect+2] = struct.pack('<H',length)
+		offect += 2
+
+		return buffer[0:len(offect)]
+	@staticmethod
+	def PackRequestWrite( address, typeCode,value, length = 1 ):
+		'''
+		根据指定的数据和类型，生成对应的数据 -> bytes
+
+		Prarameter
+		  address: string 地址
+		  typeCode: ushort 数据类型
+		  value: bytes 字节值
+		  length: ushort 如果节点为数组，就是数组长度
+		Return
+		  bytes: CIP的指令信息
+		'''
+		buffer = bytearray(1024)
+		offect = 0
+		tagNames = address.split( "." )
+		buffer[offect] = AllenBradleyHelper.CIP_WRITE_DATA
+		offect += 1
+		offect += 1
+		for i in range(len(tagNames)):
+			buffer[offect] = 0x91  # fixed
+			offect += 1
+			buffer[offect] = len(tagNames[i])
+			offect += 1
+			nameBytes = tagNames[i].encode("encoding='utf-8'")
+			buffer[offect: offect + len(nameBytes)] = nameBytes
+			offect += len(nameBytes)
+			if len(nameBytes) % 2 == 1 : offect += 1
+		buffer[1] = (offect - 2) // 2
+		buffer[offect:offect+2] = struct.pack('<H',typeCode)
+		offect += 2
+		buffer[offect:offect+2] = struct.pack('<H',length)
+		offect += 2
+		buffer[offect:offect+len(value)] = value
+		offect += len(value)
+
+		return buffer[0:len(offect)]
+	
 # NetSimplifyClient类
 class NetSimplifyClient(NetworkDoubleBase):
 	'''异步访问数据的客户端类，用于向服务器请求一些确定的数据信息'''

@@ -348,7 +348,7 @@ namespace HslCommunicationDemo.Robot
         private void button_read_short_Click( object sender, EventArgs e )
         {
             // 刷新数据
-            OperateResult<EfortData> read = efortRobot.Read( );
+            OperateResult<EfortData> read = efortRobot.ReadEfortData( );
             if(!read.IsSuccess)
             {
                 MessageBox.Show( "读取失败！" + read.Message );
@@ -367,7 +367,7 @@ namespace HslCommunicationDemo.Robot
                 System.Threading.Thread.Sleep( timeSpeep );
                 if (isReadPlc)
                 {
-                    OperateResult<EfortData> read = efortRobot.Read( );
+                    OperateResult<EfortData> read = efortRobot.ReadEfortData( );
                     if (read.IsSuccess)
                     {
                         RenderRobotData( read.Content );
@@ -403,7 +403,7 @@ namespace HslCommunicationDemo.Robot
 
         private void Timer_Tick( object sender, EventArgs e )
         {
-            OperateResult<EfortData> read = efortRobot.Read( );
+            OperateResult<EfortData> read = efortRobot.ReadEfortData( );
             if(read.IsSuccess)
             {
                 RenderRobotData( read.Content );

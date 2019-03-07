@@ -604,6 +604,9 @@
     <Compile Include="..\HslCommunication_Net45\Robot\EFORT\ER7BC10Previous.cs">
       <Link>Robot\EFORT\ER7BC10Previous.cs</Link>
     </Compile>
+    <Compile Include="..\HslCommunication_Net45\Robot\KUKA\KukaAvarProxyNet.cs">
+      <Link>Robot\KUKA\KukaAvarProxyNet.cs</Link>
+    </Compile>
     <Compile Include="..\HslCommunication_Net45\Serial\CRCSupport.cs">
       <Link>Serial\CRCSupport.cs</Link>
     </Compile>
@@ -826,8 +829,6 @@
       <Link>Doc.txt</Link>
     </Content>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Robot\KUKA\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
