@@ -54,10 +54,15 @@ namespace HslCommunication.Enthernet.Redis
         {
             if (!string.IsNullOrEmpty( this.password ))
             {
-                OperateResult checkResult = OperateStatusFromServer( new string[] { "AUTH", this.password } );
-                if (!checkResult.IsSuccess) return checkResult;
+                byte[] command = RedisHelper.PackStringCommand( new string[] { "AUTH", this.password } );
 
-                return OperateResult.CreateSuccessResult( );
+                OperateResult<byte[]> read = ReadFromCoreServer(socket,  command );
+                if (!read.IsSuccess) return OperateResult.CreateFailedResult<string>( read );
+
+                string msg = Encoding.UTF8.GetString( read.Content );
+                if (!msg.StartsWith( "+" )) return new OperateResult<string>( msg );
+
+                return OperateResult.CreateSuccessResult( msg.Substring( 1 ).TrimEnd( '\r', '\n' ) );
             }
             return base.InitializationOnConnect( socket );
         }
