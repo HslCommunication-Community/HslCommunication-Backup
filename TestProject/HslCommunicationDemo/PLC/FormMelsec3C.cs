@@ -41,7 +41,6 @@ namespace HslCommunicationDemo
         private void FormSiemens_Load( object sender, EventArgs e )
         {
             panel2.Enabled = false;
-            userCurve1.SetLeftCurve( "A", new float[0], Color.Tomato );
             comboBox1.SelectedIndex = 0;
 
             Language( Program.Language );
@@ -116,13 +115,8 @@ namespace HslCommunicationDemo
                 groupBox2.Text = "Single Data Write test";
                 groupBox3.Text = "Bulk Read test";
                 groupBox4.Text = "Message reading test, hex string needs to be filled in";
-                groupBox5.Text = "Timed reading, curve display";
 
                 button3.Text = "Pressure test, r/w 3,000s";
-                label15.Text = "Address:";
-                label18.Text = "Interval";
-                button27.Text = "Start";
-                label17.Text = "This assumes that the type of data is determined for short:";
                 label24.Text = "X,Y,M,L,V,B";
                 comboBox1.DataSource = new string[] { "None", "Odd", "Even" };
             }
@@ -130,67 +124,30 @@ namespace HslCommunicationDemo
 
         private void FormSiemens_FormClosing( object sender, FormClosingEventArgs e )
         {
-            isThreadRun = false;
-        }
 
-        /// <summary>
-        /// 统一的读取结果的数据解析，显示
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="result"></param>
-        /// <param name="address"></param>
-        /// <param name="textBox"></param>
-        private void readResultRender<T>( OperateResult<T> result, string address, TextBox textBox )
-        {
-            if (result.IsSuccess)
-            {
-                textBox.AppendText( DateTime.Now.ToString( "[HH:mm:ss] " ) + $"[{address}] {result.Content}{Environment.NewLine}" );
-            }
-            else
-            {
-                MessageBox.Show( DateTime.Now.ToString( "[HH:mm:ss] " ) + $"[{address}] Read Failed {Environment.NewLine} Reason：{result.ToMessageShowString( )}" );
-            }
         }
-
-        /// <summary>
-        /// 统一的数据写入的结果显示
-        /// </summary>
-        /// <param name="result"></param>
-        /// <param name="address"></param>
-        private void writeResultRender( OperateResult result, string address )
-        {
-            if (result.IsSuccess)
-            {
-                MessageBox.Show( DateTime.Now.ToString( "[HH:mm:ss] " ) + $"[{address}] Write Success" );
-            }
-            else
-            {
-                MessageBox.Show( DateTime.Now.ToString( "[HH:mm:ss] " ) + $"[{address}] Write Failed {Environment.NewLine} Reason：{result.ToMessageShowString( )}" );
-            }
-        }
-
+        
 
         #region Connect And Close
 
-
-
+        
         private void button1_Click( object sender, EventArgs e )
         {
             if (!int.TryParse( textBox2.Text, out int baudRate ))
             {
-                MessageBox.Show( "波特率输入错误！" );
+                MessageBox.Show( DemoUtils.BaudRateInputWrong );
                 return;
             }
 
             if (!int.TryParse( textBox16.Text, out int dataBits ))
             {
-                MessageBox.Show( "数据位输入错误！" );
+                MessageBox.Show( DemoUtils.DataBitsInputWrong );
                 return;
             }
 
             if (!int.TryParse( textBox17.Text, out int stopBits ))
             {
-                MessageBox.Show( "停止位输入错误！" );
+                MessageBox.Show( DemoUtils.StopBitInputWrong );
                 return;
             }
             
@@ -215,6 +172,7 @@ namespace HslCommunicationDemo
                 button2.Enabled = true;
                 button1.Enabled = false;
                 panel2.Enabled = true;
+                userControlCurve1.ReadWriteNet = melsecA3C;
             }
             catch (Exception ex)
             {
@@ -241,226 +199,137 @@ namespace HslCommunicationDemo
         private void button_read_bool_Click( object sender, EventArgs e )
         {
             // 读取bool变量
-            readResultRender( melsecA3C.ReadBool( textBox3.Text ), textBox3.Text, textBox4 );
+            DemoUtils.ReadResultRender( melsecA3C.ReadBool( textBox3.Text ), textBox3.Text, textBox4 );
         }
 
         private void button_read_short_Click( object sender, EventArgs e )
         {
             // 读取short变量
-            readResultRender( melsecA3C.ReadInt16( textBox3.Text ), textBox3.Text, textBox4 );
+            DemoUtils.ReadResultRender( melsecA3C.ReadInt16( textBox3.Text ), textBox3.Text, textBox4 );
         }
 
         private void button_read_ushort_Click( object sender, EventArgs e )
         {
             // 读取ushort变量
-            readResultRender( melsecA3C.ReadUInt16( textBox3.Text ), textBox3.Text, textBox4 );
+            DemoUtils.ReadResultRender( melsecA3C.ReadUInt16( textBox3.Text ), textBox3.Text, textBox4 );
         }
 
         private void button_read_int_Click( object sender, EventArgs e )
         {
             // 读取int变量
-            readResultRender( melsecA3C.ReadInt32( textBox3.Text ), textBox3.Text, textBox4 );
+            DemoUtils.ReadResultRender( melsecA3C.ReadInt32( textBox3.Text ), textBox3.Text, textBox4 );
         }
         private void button_read_uint_Click( object sender, EventArgs e )
         {
             // 读取uint变量
-            readResultRender( melsecA3C.ReadUInt32( textBox3.Text ), textBox3.Text, textBox4 );
+            DemoUtils.ReadResultRender( melsecA3C.ReadUInt32( textBox3.Text ), textBox3.Text, textBox4 );
         }
         private void button_read_long_Click( object sender, EventArgs e )
         {
             // 读取long变量
-            readResultRender( melsecA3C.ReadInt64( textBox3.Text ), textBox3.Text, textBox4 );
+            DemoUtils.ReadResultRender( melsecA3C.ReadInt64( textBox3.Text ), textBox3.Text, textBox4 );
         }
 
         private void button_read_ulong_Click( object sender, EventArgs e )
         {
             // 读取ulong变量
-            readResultRender( melsecA3C.ReadUInt64( textBox3.Text ), textBox3.Text, textBox4 );
+            DemoUtils.ReadResultRender( melsecA3C.ReadUInt64( textBox3.Text ), textBox3.Text, textBox4 );
         }
 
         private void button_read_float_Click( object sender, EventArgs e )
         {
             // 读取float变量
-            readResultRender( melsecA3C.ReadFloat( textBox3.Text ), textBox3.Text, textBox4 );
+            DemoUtils.ReadResultRender( melsecA3C.ReadFloat( textBox3.Text ), textBox3.Text, textBox4 );
         }
 
         private void button_read_double_Click( object sender, EventArgs e )
         {
             // 读取double变量
-            readResultRender( melsecA3C.ReadDouble( textBox3.Text ), textBox3.Text, textBox4 );
+            DemoUtils.ReadResultRender( melsecA3C.ReadDouble( textBox3.Text ), textBox3.Text, textBox4 );
         }
 
         private void button_read_string_Click( object sender, EventArgs e )
         {
             // 读取字符串
-            readResultRender( melsecA3C.ReadString( textBox3.Text, ushort.Parse( textBox5.Text ) ), textBox3.Text, textBox4 );
+            DemoUtils.ReadResultRender( melsecA3C.ReadString( textBox3.Text, ushort.Parse( textBox5.Text ) ), textBox3.Text, textBox4 );
         }
 
 
         #endregion
 
         #region 单数据写入测试
-
-
+        
         private void button24_Click( object sender, EventArgs e )
         {
             // bool写入
-            try
-            {
-                writeResultRender( melsecA3C.Write( textBox8.Text,bool.Parse( textBox7.Text )), textBox8.Text );
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show( ex.Message );
-            }
+            DemoUtils.WriteResultRender( () => melsecA3C.Write( textBox8.Text,bool.Parse( textBox7.Text )), textBox8.Text );
         }
 
         private void button22_Click( object sender, EventArgs e )
         {
             // short写入
-            try
-            {
-                writeResultRender( melsecA3C.Write( textBox8.Text, short.Parse( textBox7.Text ) ), textBox8.Text );
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show( ex.Message );
-            }
+            DemoUtils.WriteResultRender( () => melsecA3C.Write( textBox8.Text, short.Parse( textBox7.Text ) ), textBox8.Text );
         }
 
         private void button21_Click( object sender, EventArgs e )
         {
             // ushort写入
-            try
-            {
-                writeResultRender( melsecA3C.Write( textBox8.Text, ushort.Parse( textBox7.Text ) ), textBox8.Text );
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show( ex.Message );
-            }
+            DemoUtils.WriteResultRender( () => melsecA3C.Write( textBox8.Text, ushort.Parse( textBox7.Text ) ), textBox8.Text );
         }
 
 
         private void button20_Click( object sender, EventArgs e )
         {
             // int写入
-            try
-            {
-                writeResultRender( melsecA3C.Write( textBox8.Text, int.Parse( textBox7.Text ) ), textBox8.Text );
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show( ex.Message );
-            }
+            DemoUtils.WriteResultRender( () => melsecA3C.Write( textBox8.Text, int.Parse( textBox7.Text ) ), textBox8.Text );
         }
 
         private void button19_Click( object sender, EventArgs e )
         {
             // uint写入
-            try
-            {
-                writeResultRender( melsecA3C.Write( textBox8.Text, uint.Parse( textBox7.Text ) ), textBox8.Text );
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show( ex.Message );
-            }
+            DemoUtils.WriteResultRender( () => melsecA3C.Write( textBox8.Text, uint.Parse( textBox7.Text ) ), textBox8.Text );
         }
 
         private void button18_Click( object sender, EventArgs e )
         {
             // long写入
-            try
-            {
-                writeResultRender( melsecA3C.Write( textBox8.Text, long.Parse( textBox7.Text ) ), textBox8.Text );
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show( ex.Message );
-            }
+            DemoUtils.WriteResultRender( () => melsecA3C.Write( textBox8.Text, long.Parse( textBox7.Text ) ), textBox8.Text );
         }
 
         private void button17_Click( object sender, EventArgs e )
         {
             // ulong写入
-            try
-            {
-                writeResultRender( melsecA3C.Write( textBox8.Text, ulong.Parse( textBox7.Text ) ), textBox8.Text );
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show( ex.Message );
-            }
+            DemoUtils.WriteResultRender( () => melsecA3C.Write( textBox8.Text, ulong.Parse( textBox7.Text ) ), textBox8.Text );
         }
 
         private void button16_Click( object sender, EventArgs e )
         {
             // float写入
-            try
-            {
-                writeResultRender( melsecA3C.Write( textBox8.Text, float.Parse( textBox7.Text ) ), textBox8.Text );
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show( ex.Message );
-            }
+            DemoUtils.WriteResultRender( () => melsecA3C.Write( textBox8.Text, float.Parse( textBox7.Text ) ), textBox8.Text );
         }
 
         private void button15_Click( object sender, EventArgs e )
         {
             // double写入
-            try
-            {
-                writeResultRender( melsecA3C.Write( textBox8.Text, double.Parse( textBox7.Text ) ), textBox8.Text );
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show( ex.Message );
-            }
+            DemoUtils.WriteResultRender( () => melsecA3C.Write( textBox8.Text, double.Parse( textBox7.Text ) ), textBox8.Text );
         }
 
 
         private void button14_Click( object sender, EventArgs e )
         {
             // string写入
-            try
-            {
-                writeResultRender( melsecA3C.Write( textBox8.Text, textBox7.Text ), textBox8.Text );
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show( ex.Message );
-            }
+            DemoUtils.WriteResultRender( () => melsecA3C.Write( textBox8.Text, textBox7.Text ), textBox8.Text );
         }
 
-
-
-
+        
         #endregion
 
         #region 批量读取测试
 
         private void button25_Click( object sender, EventArgs e )
         {
-            try
-            {
-                OperateResult<byte[]> read = melsecA3C.Read( textBox6.Text, ushort.Parse( textBox9.Text ) );
-                if (read.IsSuccess)
-                {
-                    textBox10.Text = "结果：" + HslCommunication.BasicFramework.SoftBasic.ByteToHexString( read.Content );
-                }
-                else
-                {
-                    MessageBox.Show( "读取失败：" + read.ToMessageShowString( ) );
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show( "读取失败：" + ex.Message );
-            }
+            DemoUtils.BulkReadRenderResult( melsecA3C, textBox6, textBox9, textBox10 );
         }
-
 
 
         #endregion
@@ -470,110 +339,62 @@ namespace HslCommunicationDemo
 
         private void button26_Click( object sender, EventArgs e )
         {
-            try
+            OperateResult<byte[]> read = melsecA3C.ReadBase( HslCommunication.BasicFramework.SoftBasic.HexStringToBytes( textBox13.Text ) );
+            if (read.IsSuccess)
             {
-                OperateResult<byte[]> read = melsecA3C.ReadBase( HslCommunication.BasicFramework.SoftBasic.HexStringToBytes( textBox13.Text ) );
-                if (read.IsSuccess)
-                {
-                    textBox11.Text = "结果：" + HslCommunication.BasicFramework.SoftBasic.ByteToHexString( read.Content );
-                }
-                else
-                {
-                    MessageBox.Show( "读取失败：" + read.ToMessageShowString( ) );
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show( "读取失败：" + ex.Message );
-            }
-        }
-
-
-        #endregion
-
-        #region 定时器读取测试
-
-        // 外加曲线显示
-
-        private Thread thread = null;              // 后台读取的线程
-        private int timeSleep = 300;               // 读取的间隔
-        private bool isThreadRun = false;          // 用来标记线程的运行状态
-
-        private void button27_Click( object sender, EventArgs e )
-        {
-            // 启动后台线程，定时读取PLC中的数据，然后在曲线控件中显示
-
-            if (!isThreadRun)
-            {
-                if (!int.TryParse( textBox14.Text, out timeSleep ))
-                {
-                    MessageBox.Show( "间隔时间格式输入错误！" );
-                    return;
-                }
-                button27.Text = "停止";
-                isThreadRun = true;
-                thread = new Thread( ThreadReadServer );
-                thread.IsBackground = true;
-                thread.Start( );
+                textBox11.Text = "Result：" + HslCommunication.BasicFramework.SoftBasic.ByteToHexString( read.Content );
             }
             else
             {
-                button27.Text = "启动";
-                isThreadRun = false;
+                MessageBox.Show( "Read Failed：" + read.ToMessageShowString( ) );
             }
         }
 
-        private void ThreadReadServer()
-        {
-            while (isThreadRun)
-            {
-                Thread.Sleep( timeSleep );
-
-                try
-                {
-                    OperateResult<short> read = melsecA3C.ReadInt16( textBox12.Text );
-                    if (read.IsSuccess)
-                    {
-                        // 显示曲线
-                        if (isThreadRun) Invoke( new Action<short>( AddDataCurve ), read.Content );
-                    }
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show( "读取失败：" + ex.Message );
-                }
-
-            }
-        }
-
-
-        private void AddDataCurve( short data )
-        {
-            userCurve1.AddCurveData( "A", data );
-        }
 
         #endregion
-
-        #region 测试使用
+        
+        #region Use Exmaple
 
         private void test1()
         {
+            // 如果我们想要读取M100-M109，我们可以按照如下的代码进行操作
+
+            // if we want read M100-M109, so we can do like this
             OperateResult<bool[]> read = melsecA3C.ReadBool( "M100", 10 );
-            if(read.IsSuccess)
+            if (read.IsSuccess)
             {
                 bool m100 = read.Content[0];
                 // and so on
+                // ...
+                // then
                 bool m109 = read.Content[9];
+            }
+            else
+            {
+                // failed, the follow operation is output the wrong msg
+                Console.WriteLine( "Read failed: " + read.ToMessageShowString( ) );
+            }
+        }
+
+        private void test2()
+        {
+            // the next we want write data
+            bool[] values = new bool[] { true, false, true, true, false, true, false, true, true, false };
+            OperateResult read = melsecA3C.Write( "M100", values );
+            if (read.IsSuccess)
+            {
+                // success
             }
             else
             {
                 // failed
             }
         }
-        
 
-        private void test3( )
+
+        private void test3()
         {
+            // These are the underlying operations that ignore validation of success
             short d100_short = melsecA3C.ReadInt16( "D100" ).Content;
             ushort d100_ushort = melsecA3C.ReadUInt16( "D100" ).Content;
             int d100_int = melsecA3C.ReadInt32( "D100" ).Content;
@@ -585,8 +406,9 @@ namespace HslCommunicationDemo
             // need to specify the text length
             string d100_string = melsecA3C.ReadString( "D100", 10 ).Content;
         }
-        private void test4( )
+        private void test4()
         {
+            // These are the underlying operations that ignore validation of success
             melsecA3C.Write( "D100", (short)5 );
             melsecA3C.Write( "D100", (ushort)5 );
             melsecA3C.Write( "D100", 5 );
@@ -600,10 +422,12 @@ namespace HslCommunicationDemo
         }
 
 
-        private void test5( )
+        private void test5()
         {
+            // The complex situation is that you need to parse the byte array yourself.
+            // Here's just one example.
             OperateResult<byte[]> read = melsecA3C.Read( "D100", 10 );
-            if(read.IsSuccess)
+            if (read.IsSuccess)
             {
                 int count = melsecA3C.ByteTransform.TransInt32( read.Content, 0 );
                 float temp = melsecA3C.ByteTransform.TransSingle( read.Content, 4 );
@@ -612,8 +436,11 @@ namespace HslCommunicationDemo
             }
         }
 
-        private void test6( )
+        private void test6()
         {
+            // Custom types of Read and write situations in which type usertype need to be implemented in advance.
+            // 自定义类型的读写的示例，前提是需要提前实现UserType类，做好相应的序列化，反序列化的操作
+
             OperateResult<UserType> read = melsecA3C.ReadCustomer<UserType>( "D100" );
             if (read.IsSuccess)
             {
@@ -622,11 +449,9 @@ namespace HslCommunicationDemo
             // write value
             melsecA3C.WriteCustomer( "D100", new UserType( ) );
 
+            // Sets an instance operation for the log.
             melsecA3C.LogNet = new HslCommunication.LogNet.LogNetSingle( Application.StartupPath + "\\Logs.txt" );
-
         }
-
-        // private MelsecMcAsciiNet melsec_ascii_net = null;
 
         #endregion
 

@@ -18,6 +18,7 @@ namespace HslCommunication.Language
          ************************************************************************************/
 
         public override string ConnectedFailed => "Connected Failed: ";
+        public override string ConnectedSuccess => "Connect Success !";
         public override string UnknownError => "Unknown Error";
         public override string ErrorCode => "Error Code: ";
         public override string TextDescription => "Description: ";

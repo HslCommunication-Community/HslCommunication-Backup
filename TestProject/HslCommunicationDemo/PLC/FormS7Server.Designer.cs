@@ -110,11 +110,10 @@
             // 
             // label11
             // 
-            this.label11.AutoSize = true;
             this.label11.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(0)))), ((int)(((byte)(192)))));
-            this.label11.Location = new System.Drawing.Point(342, 17);
+            this.label11.Location = new System.Drawing.Point(343, 7);
             this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(319, 17);
+            this.label11.Size = new System.Drawing.Size(447, 41);
             this.label11.TabIndex = 29;
             this.label11.Text = "本服务器不是严格的s7协议，仅支持和HSL组件完美通信。";
             // 
@@ -132,9 +131,9 @@
             // button4
             // 
             this.button4.Enabled = false;
-            this.button4.Location = new System.Drawing.Point(832, 11);
+            this.button4.Location = new System.Drawing.Point(796, 11);
             this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(136, 28);
+            this.button4.Size = new System.Drawing.Size(172, 28);
             this.button4.TabIndex = 6;
             this.button4.Text = "连接异形客户端";
             this.button4.UseVisualStyleBackColor = true;
@@ -271,7 +270,7 @@
             // 
             this.button10.Location = new System.Drawing.Point(144, 207);
             this.button10.Name = "button10";
-            this.button10.Size = new System.Drawing.Size(60, 28);
+            this.button10.Size = new System.Drawing.Size(100, 28);
             this.button10.TabIndex = 21;
             this.button10.Text = "定时写";
             this.button10.UseVisualStyleBackColor = true;
@@ -312,7 +311,7 @@
             this.label19.ForeColor = System.Drawing.Color.Red;
             this.label19.Location = new System.Drawing.Point(61, 82);
             this.label19.Name = "label19";
-            this.label19.Size = new System.Drawing.Size(147, 41);
+            this.label19.Size = new System.Drawing.Size(148, 88);
             this.label19.TabIndex = 17;
             this.label19.Text = "注意：值的字符串需要能转化成对应的数据类型";
             // 
@@ -412,7 +411,7 @@
             this.button24.Name = "button24";
             this.button24.Size = new System.Drawing.Size(82, 28);
             this.button24.TabIndex = 6;
-            this.button24.Text = "线圈写入";
+            this.button24.Text = "位写入";
             this.button24.UseVisualStyleBackColor = true;
             this.button24.Click += new System.EventHandler(this.button24_Click);
             // 
@@ -591,7 +590,7 @@
             this.button_read_bool.Name = "button_read_bool";
             this.button_read_bool.Size = new System.Drawing.Size(82, 28);
             this.button_read_bool.TabIndex = 6;
-            this.button_read_bool.Text = "线圈读取";
+            this.button_read_bool.Text = "位读取";
             this.button_read_bool.UseVisualStyleBackColor = true;
             this.button_read_bool.Click += new System.EventHandler(this.button_read_bool_Click);
             // 

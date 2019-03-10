@@ -39,7 +39,6 @@ namespace HslCommunicationDemo
         private void FormSiemens_Load( object sender, EventArgs e )
         {
             panel2.Enabled = false;
-            userCurve1.SetLeftCurve( "A", new float[0], Color.Tomato );
 
             Language( Program.Language );
 
@@ -106,58 +105,16 @@ namespace HslCommunicationDemo
                 groupBox2.Text = "Single Data Write test";
                 groupBox3.Text = "Bulk Read test";
                 groupBox4.Text = "Message reading test, hex string needs to be filled in";
-                groupBox5.Text = "Timed reading, curve display";
-                
-                label15.Text = "Address:";
-                label18.Text = "Interval";
-                button27.Text = "Start";
-                label17.Text = "This assumes that the type of data is determined for short:";
+
                 button23.Text = "w-byte";
             }
         }
 
         private void FormSiemens_FormClosing( object sender, FormClosingEventArgs e )
         {
-            isThreadRun = false;
+
         }
-
-        /// <summary>
-        /// 统一的读取结果的数据解析，显示
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="result"></param>
-        /// <param name="address"></param>
-        /// <param name="textBox"></param>
-        private void readResultRender<T>( OperateResult<T> result, string address, TextBox textBox )
-        {
-            if (result.IsSuccess)
-            {
-                textBox.AppendText( DateTime.Now.ToString( "[HH:mm:ss] " ) + $"[{address}] {result.Content}{Environment.NewLine}" );
-            }
-            else
-            {
-                MessageBox.Show( DateTime.Now.ToString( "[HH:mm:ss] " ) + $"[{address}] 读取失败{Environment.NewLine}原因：{result.ToMessageShowString( )}" );
-            }
-        }
-
-        /// <summary>
-        /// 统一的数据写入的结果显示
-        /// </summary>
-        /// <param name="result"></param>
-        /// <param name="address"></param>
-        private void writeResultRender( OperateResult result, string address )
-        {
-            if (result.IsSuccess)
-            {
-                MessageBox.Show( DateTime.Now.ToString( "[HH:mm:ss] " ) + $"[{address}] 写入成功" );
-            }
-            else
-            {
-                MessageBox.Show( DateTime.Now.ToString( "[HH:mm:ss] " ) + $"[{address}] 写入失败{Environment.NewLine}原因：{result.ToMessageShowString( )}" );
-            }
-        }
-
-
+        
         #region Connect And Close
 
 
@@ -167,13 +124,13 @@ namespace HslCommunicationDemo
             // 连接
             if (!System.Net.IPAddress.TryParse( textBox1.Text, out System.Net.IPAddress address ))
             {
-                MessageBox.Show( "Ip地址输入不正确！" );
+                MessageBox.Show( DemoUtils.IpAddressInputWrong );
                 return;
             }
 
             if (!int.TryParse( textBox2.Text, out int port ))
             {
-                MessageBox.Show( "端口输入不正确！" );
+                MessageBox.Show( DemoUtils.PortInputWrong );
                 return;
             }
 
@@ -185,14 +142,16 @@ namespace HslCommunicationDemo
                 OperateResult connect = siemensFWNet.ConnectServer( );
                 if (connect.IsSuccess)
                 {
-                    MessageBox.Show( "连接成功！" );
+                    MessageBox.Show( HslCommunication.StringResources.Language.ConnectedSuccess );
                     button2.Enabled = true;
                     button1.Enabled = false;
                     panel2.Enabled = true;
+
+                    userControlCurve1.ReadWriteNet = siemensFWNet;
                 }
                 else
                 {
-                    MessageBox.Show( "连接失败！" );
+                    MessageBox.Show( HslCommunication.StringResources.Language.ConnectedFailed );
                 }
             }
             catch (Exception ex)
@@ -209,13 +168,7 @@ namespace HslCommunicationDemo
             button1.Enabled = true;
             panel2.Enabled = false;
         }
-
-
-
-
-
-
-
+        
         #endregion
 
         #region 单数据读取测试
@@ -224,58 +177,58 @@ namespace HslCommunicationDemo
         private void button_read_byte_Click( object sender, EventArgs e )
         {
             // 读取byte变量
-            readResultRender( siemensFWNet.ReadByte( textBox3.Text ), textBox3.Text, textBox4 );
+            DemoUtils.ReadResultRender( siemensFWNet.ReadByte( textBox3.Text ), textBox3.Text, textBox4 );
         }
         private void button_read_short_Click( object sender, EventArgs e )
         {
             // 读取short变量
-            readResultRender( siemensFWNet.ReadInt16( textBox3.Text ), textBox3.Text, textBox4 );
+            DemoUtils.ReadResultRender( siemensFWNet.ReadInt16( textBox3.Text ), textBox3.Text, textBox4 );
         }
 
         private void button_read_ushort_Click( object sender, EventArgs e )
         {
             // 读取ushort变量
-            readResultRender( siemensFWNet.ReadUInt16( textBox3.Text ), textBox3.Text, textBox4 );
+            DemoUtils.ReadResultRender( siemensFWNet.ReadUInt16( textBox3.Text ), textBox3.Text, textBox4 );
         }
 
         private void button_read_int_Click( object sender, EventArgs e )
         {
             // 读取int变量
-            readResultRender( siemensFWNet.ReadInt32( textBox3.Text ), textBox3.Text, textBox4 );
+            DemoUtils.ReadResultRender( siemensFWNet.ReadInt32( textBox3.Text ), textBox3.Text, textBox4 );
         }
         private void button_read_uint_Click( object sender, EventArgs e )
         {
             // 读取uint变量
-            readResultRender( siemensFWNet.ReadUInt32( textBox3.Text ), textBox3.Text, textBox4 );
+            DemoUtils.ReadResultRender( siemensFWNet.ReadUInt32( textBox3.Text ), textBox3.Text, textBox4 );
         }
         private void button_read_long_Click( object sender, EventArgs e )
         {
             // 读取long变量
-            readResultRender( siemensFWNet.ReadInt64( textBox3.Text ), textBox3.Text, textBox4 );
+            DemoUtils.ReadResultRender( siemensFWNet.ReadInt64( textBox3.Text ), textBox3.Text, textBox4 );
         }
 
         private void button_read_ulong_Click( object sender, EventArgs e )
         {
             // 读取ulong变量
-            readResultRender( siemensFWNet.ReadUInt64( textBox3.Text ), textBox3.Text, textBox4 );
+            DemoUtils.ReadResultRender( siemensFWNet.ReadUInt64( textBox3.Text ), textBox3.Text, textBox4 );
         }
 
         private void button_read_float_Click( object sender, EventArgs e )
         {
             // 读取float变量
-            readResultRender( siemensFWNet.ReadFloat( textBox3.Text ), textBox3.Text, textBox4 );
+            DemoUtils.ReadResultRender( siemensFWNet.ReadFloat( textBox3.Text ), textBox3.Text, textBox4 );
         }
 
         private void button_read_double_Click( object sender, EventArgs e )
         {
             // 读取double变量
-            readResultRender( siemensFWNet.ReadDouble( textBox3.Text ), textBox3.Text, textBox4 );
+            DemoUtils.ReadResultRender( siemensFWNet.ReadDouble( textBox3.Text ), textBox3.Text, textBox4 );
         }
 
         private void button_read_string_Click( object sender, EventArgs e )
         {
             // 读取字符串
-            readResultRender( siemensFWNet.ReadString( textBox3.Text, ushort.Parse( textBox5.Text ) ), textBox3.Text, textBox4 );
+            DemoUtils.ReadResultRender( siemensFWNet.ReadString( textBox3.Text, ushort.Parse( textBox5.Text ) ), textBox3.Text, textBox4 );
         }
 
 
@@ -290,7 +243,7 @@ namespace HslCommunicationDemo
             // byte写入
             try
             {
-                writeResultRender( siemensFWNet.Write( textBox8.Text, byte.Parse( textBox7.Text ) ), textBox8.Text );
+                DemoUtils.WriteResultRender( siemensFWNet.Write( textBox8.Text, byte.Parse( textBox7.Text ) ), textBox8.Text );
             }
             catch (Exception ex)
             {
@@ -303,7 +256,7 @@ namespace HslCommunicationDemo
             // short写入
             try
             {
-                writeResultRender( siemensFWNet.Write( textBox8.Text, short.Parse( textBox7.Text ) ), textBox8.Text );
+                DemoUtils.WriteResultRender( siemensFWNet.Write( textBox8.Text, short.Parse( textBox7.Text ) ), textBox8.Text );
             }
             catch (Exception ex)
             {
@@ -316,7 +269,7 @@ namespace HslCommunicationDemo
             // ushort写入
             try
             {
-                writeResultRender( siemensFWNet.Write( textBox8.Text, ushort.Parse( textBox7.Text ) ), textBox8.Text );
+                DemoUtils.WriteResultRender( siemensFWNet.Write( textBox8.Text, ushort.Parse( textBox7.Text ) ), textBox8.Text );
             }
             catch (Exception ex)
             {
@@ -330,7 +283,7 @@ namespace HslCommunicationDemo
             // int写入
             try
             {
-                writeResultRender( siemensFWNet.Write( textBox8.Text, int.Parse( textBox7.Text ) ), textBox8.Text );
+                DemoUtils.WriteResultRender( siemensFWNet.Write( textBox8.Text, int.Parse( textBox7.Text ) ), textBox8.Text );
             }
             catch (Exception ex)
             {
@@ -343,7 +296,7 @@ namespace HslCommunicationDemo
             // uint写入
             try
             {
-                writeResultRender( siemensFWNet.Write( textBox8.Text, uint.Parse( textBox7.Text ) ), textBox8.Text );
+                DemoUtils.WriteResultRender( siemensFWNet.Write( textBox8.Text, uint.Parse( textBox7.Text ) ), textBox8.Text );
             }
             catch (Exception ex)
             {
@@ -356,7 +309,7 @@ namespace HslCommunicationDemo
             // long写入
             try
             {
-                writeResultRender( siemensFWNet.Write( textBox8.Text, long.Parse( textBox7.Text ) ), textBox8.Text );
+                DemoUtils.WriteResultRender( siemensFWNet.Write( textBox8.Text, long.Parse( textBox7.Text ) ), textBox8.Text );
             }
             catch (Exception ex)
             {
@@ -369,7 +322,7 @@ namespace HslCommunicationDemo
             // ulong写入
             try
             {
-                writeResultRender( siemensFWNet.Write( textBox8.Text, ulong.Parse( textBox7.Text ) ), textBox8.Text );
+                DemoUtils.WriteResultRender( siemensFWNet.Write( textBox8.Text, ulong.Parse( textBox7.Text ) ), textBox8.Text );
             }
             catch (Exception ex)
             {
@@ -382,7 +335,7 @@ namespace HslCommunicationDemo
             // float写入
             try
             {
-                writeResultRender( siemensFWNet.Write( textBox8.Text, float.Parse( textBox7.Text ) ), textBox8.Text );
+                DemoUtils.WriteResultRender( siemensFWNet.Write( textBox8.Text, float.Parse( textBox7.Text ) ), textBox8.Text );
             }
             catch (Exception ex)
             {
@@ -395,7 +348,7 @@ namespace HslCommunicationDemo
             // double写入
             try
             {
-                writeResultRender( siemensFWNet.Write( textBox8.Text, double.Parse( textBox7.Text ) ), textBox8.Text );
+                DemoUtils.WriteResultRender( siemensFWNet.Write( textBox8.Text, double.Parse( textBox7.Text ) ), textBox8.Text );
             }
             catch (Exception ex)
             {
@@ -409,7 +362,7 @@ namespace HslCommunicationDemo
             // string写入
             try
             {
-                writeResultRender( siemensFWNet.Write( textBox8.Text, textBox7.Text ), textBox8.Text );
+                DemoUtils.WriteResultRender( siemensFWNet.Write( textBox8.Text, textBox7.Text ), textBox8.Text );
             }
             catch (Exception ex)
             {
@@ -426,22 +379,7 @@ namespace HslCommunicationDemo
 
         private void button25_Click( object sender, EventArgs e )
         {
-            try
-            {
-                OperateResult<byte[]> read = siemensFWNet.Read( textBox6.Text, ushort.Parse( textBox9.Text ) );
-                if (read.IsSuccess)
-                {
-                    textBox10.Text = "结果：" + HslCommunication.BasicFramework.SoftBasic.ByteToHexString( read.Content );
-                }
-                else
-                {
-                    MessageBox.Show( "读取失败：" + read.ToMessageShowString( ) );
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show( "读取失败：" + ex.Message );
-            }
+            DemoUtils.BulkReadRenderResult( siemensFWNet, textBox6, textBox9, textBox10 );
         }
 
 
@@ -453,90 +391,19 @@ namespace HslCommunicationDemo
 
         private void button26_Click( object sender, EventArgs e )
         {
-            try
-            {
                 OperateResult<byte[]> read = siemensFWNet.ReadFromCoreServer( HslCommunication.BasicFramework.SoftBasic.HexStringToBytes( textBox13.Text ) );
                 if (read.IsSuccess)
                 {
-                    textBox11.Text = "结果：" + HslCommunication.BasicFramework.SoftBasic.ByteToHexString( read.Content );
+                    textBox11.Text = "Result：" + HslCommunication.BasicFramework.SoftBasic.ByteToHexString( read.Content );
                 }
                 else
                 {
-                    MessageBox.Show( "读取失败：" + read.ToMessageShowString( ) );
+                    MessageBox.Show( "Read Failed：" + read.ToMessageShowString( ) );
                 }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show( "读取失败：" + ex.Message );
-            }
         }
 
 
         #endregion
-
-        #region 定时器读取测试
-
-        // 外加曲线显示
-
-        private Thread thread = null;              // 后台读取的线程
-        private int timeSleep = 300;               // 读取的间隔
-        private bool isThreadRun = false;          // 用来标记线程的运行状态
-
-        private void button27_Click( object sender, EventArgs e )
-        {
-            // 启动后台线程，定时读取PLC中的数据，然后在曲线控件中显示
-
-            if (!isThreadRun)
-            {
-                if (!int.TryParse( textBox14.Text, out timeSleep ))
-                {
-                    MessageBox.Show( "间隔时间格式输入错误！" );
-                    return;
-                }
-                button27.Text = "停止";
-                isThreadRun = true;
-                thread = new Thread( ThreadReadServer );
-                thread.IsBackground = true;
-                thread.Start( );
-            }
-            else
-            {
-                button27.Text = "启动";
-                isThreadRun = false;
-            }
-        }
-
-        private void ThreadReadServer()
-        {
-            while (isThreadRun)
-            {
-                Thread.Sleep( timeSleep );
-
-                try
-                {
-                    OperateResult<short> read = siemensFWNet.ReadInt16( textBox12.Text );
-                    if (read.IsSuccess)
-                    {
-                        // 显示曲线
-                        if (isThreadRun) Invoke( new Action<short>( AddDataCurve ), read.Content );
-                    }
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show( "读取失败：" + ex.Message );
-                }
-
-            }
-        }
-
-
-        private void AddDataCurve( short data )
-        {
-            userCurve1.AddCurveData( "A", data );
-        }
-
-        #endregion
-
         
     }
 }

@@ -18,6 +18,7 @@ namespace HslCommunication.Language
          ************************************************************************************/
 
         public virtual string ConnectedFailed => "连接失败：";
+        public virtual string ConnectedSuccess => "连接成功！";
         public virtual string UnknownError => "未知错误";
         public virtual string ErrorCode => "错误代号";
         public virtual string TextDescription => "文本描述";

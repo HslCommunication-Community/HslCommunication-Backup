@@ -37,6 +37,59 @@ namespace HslCommunicationDemo
         private void FormSiemens_Load( object sender, EventArgs e )
         {
             panel2.Enabled = false;
+
+
+            if(Program.Language == 2)
+            {
+                Text = "S7 Virtual Server [data support i,q,m,db block read and write, db block only one, whether it is DB1.1 or DB100.1 refers to the same]";
+                label2.Text = "blogs:";
+                label4.Text = "Agreement";
+                linkLabel2.Text = "thanks for the reward";
+                label20.Text = "Author:Hsl";
+                label3.Text = "port:";
+                button1.Text = "Start Server";
+                button11.Text = "Close Server";
+                label11.Text = "This server is not a strict S7 protocol and only supports perfect communication with HSL components.";
+                label19.Text = "Note: The string of values needs to be converted to the corresponding data type";
+                button4.Text = "Connecting Alien client";
+                groupBox1.Text = "Single Data Read test";
+                label6.Text = "Adderss:";
+                label7.Text = "Result";
+                button_read_bool.Text = "Read Bit";
+                button6.Text = "r-byte";
+                button_read_short.Text = "r-short";
+                button_read_ushort.Text = "r-ushort";
+                button_read_int.Text = "r-int";
+                button_read_uint.Text = "r-uint";
+                button_read_long.Text = "r-long";
+                button_read_ulong.Text = "r-ulong";
+                button_read_float.Text = "r-float";
+                button_read_double.Text = "r-double";
+                button_read_string.Text = "r-string";
+                label8.Text = "length";
+
+                label10.Text = "Address:";
+                label9.Text = "Value";
+                groupBox2.Text = "Single Data Write test";
+                button24.Text = "w-Bit";
+                button7.Text = "w-byte";
+                button22.Text = "w-short";
+                button21.Text = "w-ushort";
+                button20.Text = "w-int";
+                button19.Text = "w-uint";
+                button18.Text = "w-long";
+                button17.Text = "w-ulong";
+                button16.Text = "w-float";
+                button15.Text = "w-double";
+                button14.Text = "w-string";
+
+                button8.Text = "Load";
+                button9.Text = "Save";
+                button10.Text = "Timed writing";
+                label1.Text = "log:";
+                checkBox1.Text = "Display received data";
+                label16.Text = "Client-Online:";
+            }
         }
         
         
@@ -74,7 +127,7 @@ namespace HslCommunicationDemo
         /// <param name="address"></param>
         private void writeResultRender( string address )
         {
-            MessageBox.Show( DateTime.Now.ToString( "[HH:mm:ss] " ) + $"[{address}] 写入成功" );
+            MessageBox.Show( DateTime.Now.ToString( "[HH:mm:ss] " ) + $"[{address}] Write Success" );
         }
 
 
@@ -87,7 +140,7 @@ namespace HslCommunicationDemo
         {
             if (!int.TryParse( textBox2.Text, out int port ))
             {
-                MessageBox.Show( "端口输入不正确！" );
+                MessageBox.Show( DemoUtils.PortInputWrong );
                 return;
             }
 
@@ -143,7 +196,7 @@ namespace HslCommunicationDemo
                 return;
             }
 
-            textBox1.AppendText( "接收数据：" + HslCommunication.BasicFramework.SoftBasic.ByteToHexString( receive, ' ' ) + Environment.NewLine );
+            textBox1.AppendText( "Received：" + HslCommunication.BasicFramework.SoftBasic.ByteToHexString( receive, ' ' ) + Environment.NewLine );
         }
 
         /// <summary>
@@ -446,11 +499,11 @@ namespace HslCommunicationDemo
                     OperateResult connect = s7NetServer.ConnectHslAlientClient( form.IpAddress, form.Port, form.DTU );
                     if (connect.IsSuccess)
                     {
-                        MessageBox.Show( "连接成功！" );
+                        MessageBox.Show( HslCommunication.StringResources.Language.ConnectedSuccess );
                     }
                     else
                     {
-                        MessageBox.Show( "连接失败！原因：" + connect.Message );
+                        MessageBox.Show( HslCommunication.StringResources.Language.ConnectedFailed + connect.Message );
                     }
                 }
             }
@@ -463,7 +516,7 @@ namespace HslCommunicationDemo
             if (s7NetServer != null)
             {
                 s7NetServer.SaveDataPool( "123.txt" );
-                MessageBox.Show( "存储完成" );
+                MessageBox.Show( "Save file finish" );
             }
         }
 
@@ -475,11 +528,11 @@ namespace HslCommunicationDemo
                 if (System.IO.File.Exists( "123.txt" ))
                 {
                     s7NetServer.LoadDataPool( "123.txt" );
-                    MessageBox.Show( "加载完成" );
+                    MessageBox.Show( "Load data finish" );
                 }
                 else
                 {
-                    MessageBox.Show( "文件不存在！" );
+                    MessageBox.Show( "File is not exist！" );
                 }
             }
         }
