@@ -281,7 +281,8 @@ namespace HslCommunication.ModBus
             if (result.Content.Length < 5) return new OperateResult<byte[]>( StringResources.Language.ReceiveDataLengthTooShort + "5" );
 
             // 检查crc
-            if (!SoftCRC16.CheckCRC16( result.Content )) return new OperateResult<byte[]>( StringResources.Language.ModbusCRCCheckFailed );
+            if (!SoftCRC16.CheckCRC16( result.Content )) return new OperateResult<byte[]>( StringResources.Language.ModbusCRCCheckFailed +
+                SoftBasic.ByteToHexString( result.Content, ' ' ) );
 
             // 发生了错误
             if ((send[1] + 0x80) == result.Content[1]) return new OperateResult<byte[]>( result.Content[2], ModbusInfo.GetDescriptionByErrorCode( result.Content[2] ) );

@@ -639,6 +639,19 @@ namespace HslCommunication
     ///             <item>VIP群将免费使用全新的控件库，谢谢支持。地址：https://github.com/dathlin/HslControlsDemo </item>
     ///         </list>
     ///     </revision>
+    ///     <revision date="2019-3-10" version="6.0.1" author="Richard.Hu">
+    ///         <list type="bullet">
+    ///             <item>修复代码注释上的一些bug，三菱的注释修复。</item>
+    ///             <item>调整三菱和基恩士D区数据和W区数据的地址范围，原来只支持到65535。</item>
+    ///             <item>SoftIncrementCount: 修复不持久化的序号自增类的数据复原的bug，并添加totring方法。</item>
+    ///             <item>IRobot接口更改。针对埃夫特机器人进行重新实现。</item>
+    ///             <item>RedisClient: 修复redis类在带有密码的情况下锁死的bug。</item>
+    ///             <item>初步添加Kuka机器人的通讯类，等待测试。</item>
+    ///             <item>西门子的s7协议读写字符串重新实现，根据西门子的底层存储规则来操作。</item>
+    ///             <item>Demo的绝大多的界面进行重构。更友好的支持英文版的显示风格。</item>
+    ///             <item>如果有公司使用了本库并愿意公开logo的，将在官网及git上进行统一显示，有意愿的联系作者。</item>
+    ///         </list>
+    ///     </revision>
     /// </revisionHistory>
     [System.Runtime.CompilerServices.CompilerGeneratedAttribute( )]
     public class NamespaceDoc
@@ -653,7 +666,7 @@ namespace HslCommunication
     // 3. python新增对串口的支持并测试。
     // 4. python新增对ab plc的支持。
     // 5. .net端对安川机器人的支持，已经有协议文档。
-    // 6. .net端对库卡机器人的支持，http://blog.davidrobot.com/2014/09/kukavarproxy_index.html?tdsourcetag=s_pctim_aiomsg
+    // 6. .net端对库卡机器人的支持，http://blog.davidrobot.com/2014/09/kukavarproxy_index.html?tdsourcetag=s_pctim_aiomsg   ===== 已实现，等待测试。
     // 7. .net端对三菱Qna兼容3C帧协议的支持。                                         ===================== 已实现，通过基本的测试
     // 8. .net端对欧姆龙的Fins串口协议的支持                                           ==================== 已实现，正在最后的测试
     // 9. .net端对基恩士PLC的串口支持 https://china.keyence.com/support/user/plc/sample-program/index.jsp            ============== 已实现，基本测试通过
