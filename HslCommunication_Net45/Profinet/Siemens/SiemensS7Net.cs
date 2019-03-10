@@ -616,7 +616,14 @@ namespace HslCommunication.Profinet.Siemens
             if (value == null) value = string.Empty;
 
             byte[] buffer = Encoding.ASCII.GetBytes( value );
-            return Write( address, BasicFramework.SoftBasic.SpliceTwoByteArray( new byte[] { 254, (byte)buffer.Length }, buffer ) );
+            if (CurrentPlc != SiemensPLCS.S200Smart)
+            {
+                return Write( address, BasicFramework.SoftBasic.SpliceTwoByteArray( new byte[] { 254, (byte)buffer.Length }, buffer ) );
+            }
+            else
+            {
+                return Write( address, BasicFramework.SoftBasic.SpliceTwoByteArray( new byte[] { (byte)buffer.Length }, buffer ) );
+            }
         }
 
         /// <summary>
@@ -626,15 +633,28 @@ namespace HslCommunication.Profinet.Siemens
         /// <returns>带有是否成功的字符串结果类对象</returns>
         public OperateResult<string> ReadString( string address )
         {
-            var read = Read( address, 2 );
-            if (!read.IsSuccess) return OperateResult.CreateFailedResult<string>( read );
+            if (CurrentPlc != SiemensPLCS.S200Smart)
+            {
+                var read = Read( address, 2 );
+                if (!read.IsSuccess) return OperateResult.CreateFailedResult<string>( read );
 
-            if (read.Content[0] != 254) return new OperateResult<string>( "Value in plc is not string type" );
+                if (read.Content[0] != 254) return new OperateResult<string>( "Value in plc is not string type" );
 
-            var readString = Read( address, (ushort)(2 + read.Content[1]) );
-            if (!readString.IsSuccess) return OperateResult.CreateFailedResult<string>( readString );
+                var readString = Read( address, (ushort)(2 + read.Content[1]) );
+                if (!readString.IsSuccess) return OperateResult.CreateFailedResult<string>( readString );
 
-            return OperateResult.CreateSuccessResult( Encoding.ASCII.GetString( readString.Content, 2, readString.Content.Length - 2 ) );
+                return OperateResult.CreateSuccessResult( Encoding.ASCII.GetString( readString.Content, 2, readString.Content.Length - 2 ) );
+            }
+            else
+            {
+                var read = Read( address, 1 );
+                if (!read.IsSuccess) return OperateResult.CreateFailedResult<string>( read );
+
+                var readString = Read( address, (ushort)(1 + read.Content[1]) );
+                if (!readString.IsSuccess) return OperateResult.CreateFailedResult<string>( readString );
+
+                return OperateResult.CreateSuccessResult( Encoding.ASCII.GetString( readString.Content, 1, readString.Content.Length - 1 ) );
+            }
         }
 
         #endregion
