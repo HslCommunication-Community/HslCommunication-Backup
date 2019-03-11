@@ -51,8 +51,10 @@ or B/S system, or C-B-S-A (Integrated desktop client, browser, Android) hybrid s
 
 As long as you have the primary data of the industrial field, that is, can build a powerful real-time monitoring function of the software,
 production reports and automated scheduling software, a variety of process parameters history tracking software, data based on the experience of machine learning software, 
-as well as full-featured MES system and so on. ** By the way **, the traditional industrial model is the procurement of off-the-shelf industrial software, 
-including the host computer software and MES system, while ignoring their own R & amp; D capabilities.
+as well as full-featured MES system and so on. 
+
+**By the way**, the traditional industrial model is the procurement of off-the-shelf industrial software, 
+including the host computer software and MES system, while ignoring their own system.
 For some industry-standard functional software, such as ERP systems, financial software, these can be purchased directly,
 However, for the host computer and MES system, the actual needs of each enterprise are very different, it is difficult to have a common scene, 
 and the current situation is to spend a lot of money to do small things, so here, give a future-oriented model to achieve: for the production enterprise, 
@@ -158,8 +160,9 @@ Warmly welcome suggestions for improvement of the Code of this project, you can 
 ## Thanks
 * Hybrid locks and serializable exception classes, read and write locks, concurrent model parts code and ideas refer to "CLR Via C #", thanks to the author Jeffrey Richter
 
-# Working Company
-![Picture](https://raw.githubusercontent.com/dathlin/HslCommunication/master/imgs/partner/woody.png)
+## Working Company
+![Picture](https://raw.githubusercontent.com/dathlin/HslCommunication/master/imgs/partner/woody.png) ![Picture](https://raw.githubusercontent.com/dathlin/HslCommunication/master/imgs/partner/均达电气.png)
+![Picture](https://raw.githubusercontent.com/dathlin/HslCommunication/master/imgs/partner/Pia.png)
 
 ## Creative is not easy, thanks for the reward
 If this library really helps you, you can support me by AliPay. Please choose the amount according to your actual ability.
