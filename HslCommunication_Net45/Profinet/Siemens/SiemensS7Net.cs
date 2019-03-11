@@ -650,7 +650,7 @@ namespace HslCommunication.Profinet.Siemens
                 var read = Read( address, 1 );
                 if (!read.IsSuccess) return OperateResult.CreateFailedResult<string>( read );
 
-                var readString = Read( address, (ushort)(1 + read.Content[1]) );
+                var readString = Read( address, (ushort)(1 + read.Content[0]) );
                 if (!readString.IsSuccess) return OperateResult.CreateFailedResult<string>( readString );
 
                 return OperateResult.CreateSuccessResult( Encoding.ASCII.GetString( readString.Content, 1, readString.Content.Length - 1 ) );
