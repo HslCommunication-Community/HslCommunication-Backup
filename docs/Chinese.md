@@ -1,4 +1,3 @@
-[жпнд](https://github.com/dathlin/HslCommunication/blob/master/docs/Chinese.md)
 <pre>
              ///\      ///\             /////////\              ///\
             //\\/      //\/           //\\\\\\\\//\            //\\/
