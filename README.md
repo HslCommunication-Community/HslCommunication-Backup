@@ -160,9 +160,9 @@ Warmly welcome suggestions for improvement of the Code of this project, you can 
 ## Thanks
 * Hybrid locks and serializable exception classes, read and write locks, concurrent model parts code and ideas refer to "CLR Via C #", thanks to the author Jeffrey Richter
 
-## Working Company
-![Picture](https://raw.githubusercontent.com/dathlin/HslCommunication/master/imgs/partner/woody.png) ![Picture](https://raw.githubusercontent.com/dathlin/HslCommunication/master/imgs/partner/均达电气.png)
-![Picture](https://raw.githubusercontent.com/dathlin/HslCommunication/master/imgs/partner/Pia.png)
+## Cooperation Company
+![Picture](https://raw.githubusercontent.com/dathlin/HslCommunication/master/imgs/partner/woody.png) [![Picture](https://raw.githubusercontent.com/dathlin/HslCommunication/master/imgs/partner/均达电气.png)](http://junda-jy.com.cn/)
+[![Picture](https://raw.githubusercontent.com/dathlin/HslCommunication/master/imgs/partner/Pia.jpg)](http://www.piagroup.com) [![Picture](https://raw.githubusercontent.com/dathlin/HslCommunication/master/imgs/partner/堤摩讯.png)](https://www.timotion.com)
 
 ## Creative is not easy, thanks for the reward
 If this library really helps you, you can support me by AliPay. Please choose the amount according to your actual ability.
