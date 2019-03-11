@@ -131,6 +131,9 @@ namespace HslCommunicationDemo
 
                 button3.Text = "Order";
                 button23.Text = "w-byte";
+                button4.Text = "hot-start";
+                button5.Text = "cold-start";
+                button6.Text = "stop";
             }
         }
         private void FormSiemens_FormClosing( object sender, FormClosingEventArgs e )
