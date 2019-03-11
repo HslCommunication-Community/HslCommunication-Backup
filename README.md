@@ -103,11 +103,37 @@ else
 	Consolo.WriteLine(read.Message);
 }
 ```
+The above operation we have read the data, but is based on a short connection, 
+when the reading of the data finished, automatically shut down the network, 
+if you want to open a long connection, follow the following actions.
+
+```
+SiemensS7Net siemens = new SiemensS7Net( SiemensPLCS.S1200, " 192.168.1.110" );
+siemens.SetPersistentConnection( );
+OperateResult<short> read = siemens.ReadInt16("M100");
+
+if(read.IsSuccess)
+{
+	// you get the right value
+	short value = read.Content;
+}
+else
+{
+	// failed , but you still can know the failed detail
+	Consolo.WriteLine(read.Message);
+}
+
+// when you don't want read data, you should call close method
+siemens.ConnectClose( );
+
+```
+
 So we can see that all the other modes of communication are similar to this, including Mitsubishi PLC, Siemens PLC,AB PLC, OMRON PLC, Keane plc, Panasonic Plc,
 redis Communications, EFT Robots, Kuka robots and so on, including its own support for the HSL protocol.
 
 The goal is to reduce the cost of learning for developers, and usually you have to learn how to use several different libraries and learn the basics of PLC. Now, 
 all you need to know is how the basic PLC address is represented, and you can read and write PLC data.
+
 
 **Note**: In the source code, still contains a lot of Chinese annotation, in the future for a short period of time, 
 ill be used in English and Chinese double annotation, thank you for your understanding.
