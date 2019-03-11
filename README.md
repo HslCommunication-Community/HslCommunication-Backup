@@ -29,7 +29,7 @@ HslCommunication.py
 (C) 2017 - 2019 Richard.Hu, All Rights Reserved
 
 ## Official Website
-Webside[http://www.hslcommunication.cn/](http://www.hslcommunication.cn/)
+Webside: [http://www.hslcommunication.cn/](http://www.hslcommunication.cn/)
 
 ## License LGPL3.0
 
@@ -103,6 +103,14 @@ else
 	Consolo.WriteLine(read.Message);
 }
 ```
+So we can see that all the other modes of communication are similar to this, including Mitsubishi PLC, Siemens PLC,AB PLC, OMRON PLC, Keane plc, Panasonic Plc,
+redis Communications, EFT Robots, Kuka robots and so on, including its own support for the HSL protocol.
+
+The goal is to reduce the cost of learning for developers, and usually you have to learn how to use several different libraries and learn the basics of PLC. Now, 
+all you need to know is how the basic PLC address is represented, and you can read and write PLC data.
+
+**Note**: In the source code, still contains a lot of Chinese annotation, in the future for a short period of time, 
+ill be used in English and Chinese double annotation, thank you for your understanding.
 
 **HslCommunicationDemo** The features supported by this project can be roughly clear through the demo interface below:
 ![Picture](https://raw.githubusercontent.com/dathlin/HslCommunication/master/imgs/demo.png)
@@ -126,7 +134,7 @@ Warmly welcome suggestions for improvement of the Code of this project, you can 
 
 ## Creative is not easy, thanks for the reward
 If this library really helps you, you can support me by AliPay. Please choose the amount according to your actual ability.
-![打赏](https://raw.githubusercontent.com/dathlin/HslCommunication/master/imgs/support.png)
+![reward](https://raw.githubusercontent.com/dathlin/HslCommunication/master/imgs/support.png)
 
 ## Controls
 This library include some controls render upside picture. u can easily use them
