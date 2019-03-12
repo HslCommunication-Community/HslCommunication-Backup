@@ -31,8 +31,6 @@ HslCommunication.py
 ## Official Website
 Webside: [http://www.hslcommunication.cn/](http://www.hslcommunication.cn/)
 
-## License LGPL3.0
-
 ## What is HSL
 This is an industrial IoT based, computer communications architecture implementation, integrated with most of the basic functional implementation of industrial software development, 
 such as Mitsubishi PLC Communications, Siemens PLC Communications, OMRON PLC Communications, Modbus Communications,
@@ -74,7 +72,7 @@ Install-Package HslCommunication
 * python: **Visual Studio Code**
 
 ## Contact
-* QQ Group1：[592132877](http://shang.qq.com/wpa/qunwpa?idkey=2278cb9c2e0c04fc305c43e41acff940499a34007dfca9e83a7291e726f9c4e8)   Group2：948305931
+* QQ Group1：[592132877](http://shang.qq.com/wpa/qunwpa?idkey=2278cb9c2e0c04fc305c43e41acff940499a34007dfca9e83a7291e726f9c4e8)(full)   Group2：948305931
 * Email: hsl200909@163.com
 * VIP Group (Reward more than 200RMB to join): [838185568](http://shang.qq.com/wpa/qunwpa?idkey=eee02ce1acde63c6316cbb380a80e033a14170ab7ca981f1cac83e0b657c8860)
 
@@ -105,6 +103,12 @@ else
 	Consolo.WriteLine(read.Message);
 }
 ```
+Of course, you can also write very concise, because the judgment of success is ignored, so the following operation is risky.
+```
+SiemensS7Net siemens = new SiemensS7Net( SiemensPLCS.S1200, " 192.168.1.110" );
+short value = siemens.ReadInt16("M100").Content;   // Look at this code, isn't it very succinct.
+```
+
 The above operation we have read the data, but is based on a short connection, 
 when the reading of the data finished, automatically shut down the network, 
 if you want to open a long connection, follow the following actions.
@@ -137,8 +141,64 @@ The goal is to reduce the cost of learning for developers, and usually you have 
 all you need to know is how the basic PLC address is represented, and you can read and write PLC data.
 
 
+Another feature of this project is support for cross-language communication support. You can build a C # background server that supports Windows desktop application 
+and Web background, and Android phone-side, Python programs, Java programs to communicate. server side code:
+```
+class Program
+{
+    static void Main(string[] args)
+    {
+		NetSimplifyServer simplifyServer;
+		try
+		{
+			simplifyServer = new NetSimplifyServer( );                                          // Instantiation
+			simplifyServer.ReceiveStringEvent += SimplifyServer_ReceiveStringEvent;             // Triggered when a string is received
+			simplifyServer.ServerStart( 12345 );                                                // Start the service
+		}
+		catch(Exception ex )
+		{
+			Console.WriteLine( "Create failed: " + ex.Message );
+			Return;
+		}
+
+		Console.ReadLine();
+	}
+
+	private static void SimplifyServer_ReceiveStringEvent( AppSession session, NetHandle handle, string value )
+	{
+		if (handle == 1)
+		{
+			// Message to operate when a signal from the client is received 1
+			simplifyServer.SendMessage( session, handle, "This is test single：" + value );
+		}
+		else
+		{
+			simplifyServer.SendMessage( session, handle, "not supported msg" );
+		}
+	
+		// Show out, who sent it, what did it send?
+		Console.WriteLine($"{session} [{handle}] {value}");
+	}
+}
+```
+C# Client Side (Also asp.net mvc, asp.net core mvc)
+```
+NetSimplifyClient simplifyClient = new NetSimplifyClient( "127.0.0.1", 12345 );
+string value = simplifyClient.ReadFromServer( 1, "test" ).Content;
+```
+Java Client Side
+```
+NetSimplifyClient simplifyClient = new NetSimplifyClient( "127.0.0.1", 12345 );
+string value = simplifyClient.ReadFromServer( 1, "test" ).Content;
+```
+Python Client Side
+```
+netSimplifyClient = NetSimplifyClient("127.0.0.1",12345)
+value = netSimplifyClient.ReadFromServer(1,'123').Content
+```
+
 **Note**: In the source code, still contains a lot of Chinese annotation, in the future for a short period of time, 
-ill be used in English and Chinese double annotation, thank you for your understanding.
+will be used in English and Chinese double annotation, thank you for your understanding.
 
 **HslCommunicationDemo** The features supported by this project can be roughly clear through the demo interface below:
 ![Picture](https://raw.githubusercontent.com/dathlin/HslCommunication/master/imgs/demo.png)
