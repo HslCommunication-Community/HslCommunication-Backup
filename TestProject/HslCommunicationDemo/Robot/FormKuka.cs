@@ -77,6 +77,7 @@ namespace HslCommunicationDemo
 
                 groupBox1.Text = "Single Data Read test";
                 groupBox2.Text = "Single Data Write test";
+                label22.Text = "Parameter name of robot";
             }
         }
 

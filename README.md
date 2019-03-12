@@ -151,9 +151,9 @@ class Program
 		NetSimplifyServer simplifyServer;
 		try
 		{
-			simplifyServer = new NetSimplifyServer( );                                          // Instantiation
-			simplifyServer.ReceiveStringEvent += SimplifyServer_ReceiveStringEvent;             // Triggered when a string is received
-			simplifyServer.ServerStart( 12345 );                                                // Start the service
+			simplifyServer = new NetSimplifyServer( );
+			simplifyServer.ReceiveStringEvent += SimplifyServer_ReceiveStringEvent;
+			simplifyServer.ServerStart( 12345 );
 		}
 		catch(Exception ex )
 		{

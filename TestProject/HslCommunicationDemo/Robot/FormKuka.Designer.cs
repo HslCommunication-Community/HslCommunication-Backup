@@ -86,7 +86,7 @@
             this.label22.Name = "label22";
             this.label22.Size = new System.Drawing.Size(197, 45);
             this.label22.TabIndex = 7;
-            this.label22.Text = "M100 D100 X1A0 Y1A0 详细说明参照博客";
+            this.label22.Text = "机器人的参数名称";
             // 
             // label21
             // 
