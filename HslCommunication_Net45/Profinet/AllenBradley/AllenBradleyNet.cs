@@ -19,7 +19,6 @@ using System.Text;
 namespace HslCommunication.Profinet.AllenBradley
 {
     /// <summary>
-    /// AB PLC的数据通讯类，支持读写PLC的节点数据，支持单个节点的读写，以及数组节点的读写操作。 ->
     /// AB PLC Data communication class, support read and write PLC node data
     /// </summary>
     public class AllenBradleyNet : NetworkDeviceBase<AllenBradleyMessage, RegularByteTransform>
@@ -27,7 +26,6 @@ namespace HslCommunication.Profinet.AllenBradley
         #region Constructor
 
         /// <summary>
-        /// 实例化一个AllenBradley PLC协议的通讯对象 ->
         /// Instantiate a communication object for a Allenbradley PLC protocol
         /// </summary>
         public AllenBradleyNet( )
@@ -36,11 +34,10 @@ namespace HslCommunication.Profinet.AllenBradley
         }
 
         /// <summary>
-        /// 实例化一个AllenBradley PLC协议的通讯对象 ->
         /// Instantiate a communication object for a Allenbradley PLC protocol
         /// </summary>
-        /// <param name="ipAddress">PLCd的Ip地址</param>
-        /// <param name="port">PLC的端口</param>
+        /// <param name="ipAddress">PLC IpAddress</param>
+        /// <param name="port">PLC Port</param>
         public AllenBradleyNet( string ipAddress, int port = 44818 )
         {
             WordLength = 2;
@@ -53,12 +50,12 @@ namespace HslCommunication.Profinet.AllenBradley
         #region Public Properties
 
         /// <summary>
-        /// 当前的会话句柄，该值在和PLC握手通信时由PLC进行决定
+        /// The current session handle, which is determined by the PLC when communicating with the PLC handshake
         /// </summary>
         public uint SessionHandle { get; private set; }
 
         /// <summary>
-        /// 获取或设置当前PLC的槽号信息，应该在连接之间设定
+        /// Gets or sets the slot number information for the current plc, which should be set before connections
         /// </summary>
         public byte Slot { get; set; } = 0;
 
@@ -67,34 +64,34 @@ namespace HslCommunication.Profinet.AllenBradley
         #region Double Mode Override
 
         /// <summary>
-        /// 在连接上AllenBradley PLC后，需要进行一步握手协议
+        /// After connecting the Allenbradley plc, a next step handshake protocol is required
         /// </summary>
-        /// <param name="socket">连接的套接字</param>
-        /// <returns>初始化成功与否</returns>
+        /// <param name="socket">socket after connectting sucessful</param>
+        /// <returns>Success of initialization</returns>
         protected override OperateResult InitializationOnConnect( Socket socket )
         {
-            // 注册会话信息
+            // Registering Session Information
             OperateResult<byte[], byte[]> read1 = ReadFromCoreServerBase( socket, RegisterSessionHandle( ) );
             if (!read1.IsSuccess) return read1;
 
-            // 检查返回的状态
+            // Check the returned status
             OperateResult check1 = CheckResponse( read1.Content1 );
             if (!check1.IsSuccess) return check1;
 
-            // 提取会话ID
+            // Extract session ID
             SessionHandle = ByteTransform.TransUInt32( read1.Content1, 4 );
             
             return OperateResult.CreateSuccessResult( );
         }
 
         /// <summary>
-        /// 在断开AllenBradley PLC前，需要进行一步握手协议
+        /// A next step handshake agreement is required before disconnecting the Allenbradley plc
         /// </summary>
-        /// <param name="socket">网络套接字</param>
-        /// <returns>断开操作是否成功</returns>
+        /// <param name="socket">socket befor connection close </param>
+        /// <returns>Whether the disconnect operation was successful</returns>
         protected override OperateResult ExtraOnDisconnect( Socket socket )
         {
-            // 取消注册会话信息
+            // Unregister session Information
             OperateResult<byte[], byte[]> read1 = ReadFromCoreServerBase( socket, UnRegisterSessionHandle( ) );
             if (!read1.IsSuccess) return read1;
 
@@ -106,11 +103,11 @@ namespace HslCommunication.Profinet.AllenBradley
         #region Build Command
 
         /// <summary>
-        /// 创建一个读取的报文指令
+        /// Build a read command bytes
         /// </summary>
-        /// <param name="address">tag名的地址</param>
-        /// <param name="length">数组信息，如果不是数组，就都为1</param>
-        /// <returns>包含结果对象的报文信息</returns>
+        /// <param name="address">the address of the tag name</param>
+        /// <param name="length">Array information, if not arrays, is 1 </param>
+        /// <returns>Message information that contains the result object </returns>
         public OperateResult<byte[]> BuildReadCommand( string[] address, int[] length )
         {
             if (address == null || length == null) return new OperateResult<byte[]>( "address or length is null" );
@@ -127,10 +124,10 @@ namespace HslCommunication.Profinet.AllenBradley
         }
 
         /// <summary>
-        /// 创建一个读取的报文指令
+        /// Build a read command bytes
         /// </summary>
-        /// <param name="address">tag名的地址</param>
-        /// <returns>包含结果对象的报文信息</returns>
+        /// <param name="address">The address of the tag name </param>
+        /// <returns>Message information that contains the result object </returns>
         public OperateResult<byte[]> BuildReadCommand( string[] address )
         {
             if (address == null ) return new OperateResult<byte[]>( "address or length is null" );
@@ -145,13 +142,13 @@ namespace HslCommunication.Profinet.AllenBradley
         }
 
         /// <summary>
-        /// 创建一个写入的报文指令
+        /// Create a written message instruction
         /// </summary>
-        /// <param name="address">起始地址</param>
-        /// <param name="typeCode">类型数据</param>
-        /// <param name="data">数据</param>
-        /// <param name="length">如果是数组，就为数组长度</param>
-        /// <returns>包含结果对象的报文信息</returns>
+        /// <param name="address">The address of the tag name </param>
+        /// <param name="typeCode">Data type</param>
+        /// <param name="data">Source Data </param>
+        /// <param name="length">In the case of arrays, the length of the array </param>
+        /// <returns>Message information that contains the result object</returns>
         public OperateResult<byte[]> BuildWriteCommand( string address, ushort typeCode, byte[] data, int length = 1 )
         {
             byte[] cip = AllenBradleyHelper.PackRequestWrite( address, typeCode, data, length );
@@ -165,21 +162,21 @@ namespace HslCommunication.Profinet.AllenBradley
         #region Override Read
 
         /// <summary>
-        /// 读取数据信息，数据长度无效
+        /// 读取数据信息，数据长度为读取的数组长度信息 -> Read data information, data length for read array length information
         /// </summary>
-        /// <param name="address">节点的地址格式</param>
-        /// <param name="length">无效的参数</param>
-        /// <returns>带有结果对象的结果数据</returns>
+        /// <param name="address">节点的地址格式 -> Address format of the node</param>
+        /// <param name="length">如果是数组，就为数组长度 -> In the case of arrays, the length of the array </param>
+        /// <returns>带有结果对象的结果数据 -> Result data with result object </returns>
         public override OperateResult<byte[]> Read( string address, ushort length )
         {
             return Read( new string[] { address }, new int[] { length } );
         }
 
         /// <summary>
-        /// 批量读取数据信息，数据长度无效
+        /// 批量读取数据信息 -> Bulk read Data information
         /// </summary>
-        /// <param name="address">节点的地址格式</param>
-        /// <returns>带有结果对象的结果数据</returns>
+        /// <param name="address">节点的名称 -> Name of the node </param>
+        /// <returns>带有结果对象的结果数据 -> Result data with result object </returns>
         public OperateResult<byte[]> Read( string[] address )
         {
             if (address == null) return new OperateResult<byte[]>( "address can not be null" );
@@ -194,35 +191,35 @@ namespace HslCommunication.Profinet.AllenBradley
         }
 
         /// <summary>
-        /// 批量读取数据信息，数据长度无效
+        /// 批量读取数据信息，数据长度为读取的数组长度信息 -> Bulk read data information, data length for read array length information
         /// </summary>
-        /// <param name="address">节点的地址格式</param>
-        /// <param name="length">每个地址的数组长度</param>
-        /// <returns>带有结果对象的结果数据</returns>
+        /// <param name="address">节点的名称 -> Name of the node </param>
+        /// <param name="length">如果是数组，就为数组长度 -> In the case of arrays, the length of the array </param>
+        /// <returns>带有结果对象的结果数据 -> Result data with result object </returns>
         public OperateResult<byte[]> Read( string[] address, int[] length )
         {
-            // 指令生成
+            // 指令生成 -> Instruction Generation
             OperateResult<byte[]> command = BuildReadCommand( address, length );
             if (!command.IsSuccess) return command;
 
-            // 核心交互
+            // 核心交互 -> Core Interactions
             OperateResult<byte[]> read = ReadFromCoreServer( command.Content );
             if (!read.IsSuccess) return read;
 
-            // 检查反馈
+            // 检查反馈 -> Check Feedback
             OperateResult check = CheckResponse( read.Content );
             if (!check.IsSuccess) return OperateResult.CreateFailedResult<byte[]>( check );
 
-            // 提取数据
+            // 提取数据 -> Extracting data
             return AllenBradleyHelper.ExtractActualData( read.Content, true );
         }
 
 
         /// <summary>
-        /// 读取单个的bool数据信息
+        /// 读取单个的bool数据信息 -> Read a single BOOL data information
         /// </summary>
-        /// <param name="address">节点数据信息</param>
-        /// <returns>带有结果对象的结果数据</returns>
+        /// <param name="address">节点的名称 -> Name of the node </param>
+        /// <returns>带有结果对象的结果数据 -> Result data with result info </returns>
         public OperateResult<bool> ReadBool( string address )
         {
             OperateResult<byte[]> read = Read( address, 0 );
@@ -232,10 +229,10 @@ namespace HslCommunication.Profinet.AllenBradley
         }
 
         /// <summary>
-        /// 批量读取的bool数据信息
+        /// 批量读取的bool数组信息 -> Bulk read of bool array information
         /// </summary>
-        /// <param name="address">节点数据信息</param>
-        /// <returns>带有结果对象的结果数据</returns>
+        /// <param name="address">节点的名称 -> Name of the node </param>
+        /// <returns>带有结果对象的结果数据 -> Result data with result info </returns>
         public OperateResult<bool[]> ReadBoolArray( string address )
         {
             OperateResult<byte[]> read = Read( address, 0 );
@@ -245,10 +242,10 @@ namespace HslCommunication.Profinet.AllenBradley
         }
 
         /// <summary>
-        /// 读取设备的byte类型的数据
+        /// 读取PLC的byte类型的数据 -> Read the byte type of PLC data
         /// </summary>
-        /// <param name="address">起始地址</param>
-        /// <returns>带成功标志的结果数据对象</returns>
+        /// <param name="address">节点的名称 -> Name of the node </param>
+        /// <returns>带有结果对象的结果数据 -> Result data with result info </returns>
         public OperateResult<byte> ReadByte( string address )
         {
             OperateResult<byte[]> read = Read( address, 0 );
@@ -262,11 +259,11 @@ namespace HslCommunication.Profinet.AllenBradley
         #region Device Override
 
         /// <summary>
-        /// 读取设备的short类型的数组
+        /// 读取PLC的short类型的数组 -> Read an array of the short type of the PLC
         /// </summary>
-        /// <param name="address">起始地址</param>
-        /// <param name="length">数组长度</param>
-        /// <returns>带成功标志的结果数据对象</returns>
+        /// <param name="address">节点的名称 -> Name of the node </param>
+        /// <param name="length">数组长度 -> Array length </param>
+        /// <returns>带有结果对象的结果数据 -> Result data with result info </returns>
         /// <example>
         /// 以下为三菱的连接对象示例，其他的设备读写情况参照下面的代码：
         /// <code lang="cs" source="HslCommunication_Net45.Test\Documentation\Samples\Core\NetworkDeviceBase.cs" region="ReadInt16Array" title="Int16类型示例" />
@@ -277,11 +274,11 @@ namespace HslCommunication.Profinet.AllenBradley
         }
 
         /// <summary>
-        /// 读取设备的ushort类型的数组
+        /// 读取PLC的ushort类型的数组 -> An array that reads the ushort type of the PLC
         /// </summary>
-        /// <param name="address">起始地址</param>
-        /// <param name="length">数组长度</param>
-        /// <returns>带成功标志的结果数据对象</returns>
+        /// <param name="address">节点的名称 -> Name of the node </param>
+        /// <param name="length">数组长度 -> Array length </param>
+        /// <returns>带有结果对象的结果数据 -> Result data with result info </returns>
         /// <example>
         /// 以下为三菱的连接对象示例，其他的设备读写情况参照下面的代码：
         /// <code lang="cs" source="HslCommunication_Net45.Test\Documentation\Samples\Core\NetworkDeviceBase.cs" region="ReadUInt16Array" title="UInt16类型示例" />
@@ -292,11 +289,11 @@ namespace HslCommunication.Profinet.AllenBradley
         }
 
         /// <summary>
-        /// 读取设备的int类型的数组
+        /// 读取PLC的int类型的数组 -> An array that reads the int type of the PLC
         /// </summary>
-        /// <param name="address">起始地址</param>
-        /// <param name="length">数组长度</param>
-        /// <returns>带成功标志的结果数据对象</returns>
+        /// <param name="address">节点的名称 -> Name of the node </param>
+        /// <param name="length">数组长度 -> Array length </param>
+        /// <returns>带有结果对象的结果数据 -> Result data with result info </returns>
         /// <example>
         /// 以下为三菱的连接对象示例，其他的设备读写情况参照下面的代码：
         /// <code lang="cs" source="HslCommunication_Net45.Test\Documentation\Samples\Core\NetworkDeviceBase.cs" region="ReadInt32Array" title="Int32类型示例" />
@@ -307,11 +304,11 @@ namespace HslCommunication.Profinet.AllenBradley
         }
 
         /// <summary>
-        /// 读取设备的uint类型的数组
+        /// 读取PLC的uint类型的数组 -> An array that reads the UINT type of the PLC
         /// </summary>
-        /// <param name="address">起始地址</param>
-        /// <param name="length">数组长度</param>
-        /// <returns>带成功标志的结果数据对象</returns>
+        /// <param name="address">节点的名称 -> Name of the node </param>
+        /// <param name="length">数组长度 -> Array length </param>
+        /// <returns>带有结果对象的结果数据 -> Result data with result info </returns>
         /// <example>
         /// 以下为三菱的连接对象示例，其他的设备读写情况参照下面的代码：
         /// <code lang="cs" source="HslCommunication_Net45.Test\Documentation\Samples\Core\NetworkDeviceBase.cs" region="ReadUInt32Array" title="UInt32类型示例" />
@@ -322,11 +319,11 @@ namespace HslCommunication.Profinet.AllenBradley
         }
 
         /// <summary>
-        /// 读取设备的float类型的数组
+        /// 读取PLC的float类型的数组 -> An array that reads the float type of the PLC
         /// </summary>
-        /// <param name="address">起始地址</param>
-        /// <param name="length">数组长度</param>
-        /// <returns>带成功标志的结果数据对象</returns>
+        /// <param name="address">节点的名称 -> Name of the node </param>
+        /// <param name="length">数组长度 -> Array length </param>
+        /// <returns>带有结果对象的结果数据 -> Result data with result info </returns>
         /// <example>
         /// 以下为三菱的连接对象示例，其他的设备读写情况参照下面的代码：
         /// <code lang="cs" source="HslCommunication_Net45.Test\Documentation\Samples\Core\NetworkDeviceBase.cs" region="ReadFloatArray" title="Float类型示例" />
@@ -337,11 +334,11 @@ namespace HslCommunication.Profinet.AllenBradley
         }
 
         /// <summary>
-        /// 读取设备的long类型的数组
+        /// 读取PLC的long类型的数组 -> An array that reads the long type of the PLC
         /// </summary>
-        /// <param name="address">起始地址</param>
-        /// <param name="length">数组长度</param>
-        /// <returns>带成功标志的结果数据对象</returns>
+        /// <param name="address">节点的名称 -> Name of the node </param>
+        /// <param name="length">数组长度 -> Array length </param>
+        /// <returns>带有结果对象的结果数据 -> Result data with result info </returns>
         /// <example>
         /// 以下为三菱的连接对象示例，其他的设备读写情况参照下面的代码：
         /// <code lang="cs" source="HslCommunication_Net45.Test\Documentation\Samples\Core\NetworkDeviceBase.cs" region="ReadInt64Array" title="Int64类型示例" />
@@ -352,11 +349,11 @@ namespace HslCommunication.Profinet.AllenBradley
         }
 
         /// <summary>
-        /// 读取设备的ulong类型的数组
+        /// 读取PLC的ulong类型的数组 -> An array that reads the ULONG type of the PLC
         /// </summary>
-        /// <param name="address">起始地址</param>
-        /// <param name="length">数组长度</param>
-        /// <returns>带成功标志的结果数据对象</returns>
+        /// <param name="address">节点的名称 -> Name of the node </param>
+        /// <param name="length">数组长度 -> Array length </param>
+        /// <returns>带有结果对象的结果数据 -> Result data with result info </returns>
         /// <example>
         /// 以下为三菱的连接对象示例，其他的设备读写情况参照下面的代码：
         /// <code lang="cs" source="HslCommunication_Net45.Test\Documentation\Samples\Core\NetworkDeviceBase.cs" region="ReadUInt64Array" title="UInt64类型示例" />
@@ -367,11 +364,11 @@ namespace HslCommunication.Profinet.AllenBradley
         }
 
         /// <summary>
-        /// 读取设备的double类型的数组
+        /// 读取PLC的double类型的数组 -> An array that reads the double type of the PLC
         /// </summary>
-        /// <param name="address">起始地址</param>
-        /// <param name="length">数组长度</param>
-        /// <returns>带成功标志的结果数据对象</returns>
+        /// <param name="address">节点的名称 -> Name of the node </param>
+        /// <param name="length">数组长度 -> Array length </param>
+        /// <returns>带有结果对象的结果数据 -> Result data with result info </returns>
         /// <example>
         /// 以下为三菱的连接对象示例，其他的设备读写情况参照下面的代码：
         /// <code lang="cs" source="HslCommunication_Net45.Test\Documentation\Samples\Core\NetworkDeviceBase.cs" region="ReadDoubleArray" title="Double类型示例" />
@@ -386,27 +383,24 @@ namespace HslCommunication.Profinet.AllenBradley
         #region Write Support
 
         /// <summary>
-        /// 使用指定的类型写入指定的节点数据
+        /// 使用指定的类型写入指定的节点数据 -> Writes the specified node data with the specified type
         /// </summary>
-        /// <param name="address">节点地址数据</param>
-        /// <param name="typeCode">类型代码，详细参见<see cref="AllenBradleyHelper"/>上的常用字段</param>
-        /// <param name="value">实际的数据值</param>
-        /// <param name="length">如果节点是数组，就是数组长度</param>
-        /// <returns>是否写入成功</returns>
+        /// <param name="address">节点的名称 -> Name of the node </param>
+        /// <param name="typeCode">类型代码，详细参见<see cref="AllenBradleyHelper"/>上的常用字段 ->  Type code, see the commonly used Fields section on the <see cref= "AllenBradleyHelper"/> in detail</param>
+        /// <param name="value">实际的数据值 -> The actual data value </param>
+        /// <param name="length">如果节点是数组，就是数组长度 -> If the node is an array, it is the array length </param>
+        /// <returns>是否写入成功 -> Whether to write successfully</returns>
         public OperateResult WriteTag( string address, ushort typeCode, byte[] value, int length = 1 )
         {
             OperateResult<byte[]> command = BuildWriteCommand( address, typeCode, value, length );
             if (!command.IsSuccess) return command;
-
-            // 核心交互
+            
             OperateResult<byte[]> read = ReadFromCoreServer( command.Content );
             if (!read.IsSuccess) return read;
-
-            // 检查反馈
+            
             OperateResult check = CheckResponse( read.Content );
             if (!check.IsSuccess) return OperateResult.CreateFailedResult<byte[]>( check );
-
-            // 提取写入结果
+            
             return AllenBradleyHelper.ExtractActualData( read.Content, false );
         }
 
@@ -415,11 +409,11 @@ namespace HslCommunication.Profinet.AllenBradley
         #region Write Override
 
         /// <summary>
-        /// 向设备中写入short数组，返回是否写入成功
+        /// 向PLC中写入short数组，返回是否写入成功 -> Writes a short array to the PLC to return whether the write was successful
         /// </summary>
-        /// <param name="address">数据地址</param>
-        /// <param name="values">实际数据</param>
-        /// <returns>是否写入成功的结果对象</returns>
+        /// <param name="address">节点的名称 -> Name of the node </param>
+        /// <param name="values">实际数据 -> Actual data </param>
+        /// <returns>是否写入成功 -> Whether to write successfully</returns>
         /// <example>
         /// 以下为三菱的连接对象示例，其他的设备读写情况参照下面的代码：
         /// <code lang="cs" source="HslCommunication_Net45.Test\Documentation\Samples\Core\NetworkDeviceBase.cs" region="WriteInt16Array" title="Int16类型示例" />
@@ -430,11 +424,11 @@ namespace HslCommunication.Profinet.AllenBradley
         }
 
         /// <summary>
-        /// 向设备中写入ushort数组，返回是否写入成功
+        /// 向PLC中写入ushort数组，返回是否写入成功 -> Writes an array of ushort to the PLC to return whether the write was successful
         /// </summary>
-        /// <param name="address">要写入的数据地址</param>
-        /// <param name="values">要写入的实际数据</param>
-        /// <returns>是否写入成功的结果对象</returns>
+        /// <param name="address">节点的名称 -> Name of the node </param>
+        /// <param name="values">实际数据 -> Actual data </param>
+        /// <returns>是否写入成功 -> Whether to write successfully</returns>
         /// <example>
         /// 以下为三菱的连接对象示例，其他的设备读写情况参照下面的代码：
         /// <code lang="cs" source="HslCommunication_Net45.Test\Documentation\Samples\Core\NetworkDeviceBase.cs" region="WriteUInt16Array" title="UInt16类型示例" />
@@ -443,13 +437,13 @@ namespace HslCommunication.Profinet.AllenBradley
         {
             return WriteTag( address, AllenBradleyHelper.CIP_Type_Word, ByteTransform.TransByte( values ), values.Length );
         }
-        
+
         /// <summary>
-        /// 向设备中写入int数组，返回是否写入成功
+        /// 向PLC中写入int数组，返回是否写入成功 -> Writes an int array to the PLC to return whether the write was successful
         /// </summary>
-        /// <param name="address">数据地址</param>
-        /// <param name="values">实际数据</param>
-        /// <returns>是否写入成功的结果对象</returns>
+        /// <param name="address">节点的名称 -> Name of the node </param>
+        /// <param name="values">实际数据 -> Actual data </param>
+        /// <returns>是否写入成功 -> Whether to write successfully</returns>
         /// <example>
         /// 以下为三菱的连接对象示例，其他的设备读写情况参照下面的代码：
         /// <code lang="cs" source="HslCommunication_Net45.Test\Documentation\Samples\Core\NetworkDeviceBase.cs" region="WriteInt32Array" title="Int32类型示例" />
@@ -460,11 +454,11 @@ namespace HslCommunication.Profinet.AllenBradley
         }
 
         /// <summary>
-        /// 向设备中写入uint数组，返回是否写入成功
+        /// Writes an array of UINT to the PLC to return whether the write was successful
         /// </summary>
-        /// <param name="address">数据地址</param>
-        /// <param name="values">实际数据</param>
-        /// <returns>是否写入成功的结果对象</returns>
+        /// <param name="address">节点的名称 -> Name of the node </param>
+        /// <param name="values">实际数据 -> Actual data </param>
+        /// <returns>是否写入成功 -> Whether to write successfully</returns>
         /// <example>
         /// 以下为三菱的连接对象示例，其他的设备读写情况参照下面的代码：
         /// <code lang="cs" source="HslCommunication_Net45.Test\Documentation\Samples\Core\NetworkDeviceBase.cs" region="WriteUInt32Array" title="UInt32类型示例" />
@@ -475,11 +469,11 @@ namespace HslCommunication.Profinet.AllenBradley
         }
 
         /// <summary>
-        /// 向设备中写入float数组，返回是否写入成功
+        /// Writes an array of float to the PLC to return whether the write was successful
         /// </summary>
-        /// <param name="address">数据地址</param>
-        /// <param name="values">实际数据</param>
-        /// <returns>返回写入结果</returns>
+        /// <param name="address">节点的名称 -> Name of the node </param>
+        /// <param name="values">实际数据 -> Actual data </param>
+        /// <returns>是否写入成功 -> Whether to write successfully</returns>
         /// <example>
         /// 以下为三菱的连接对象示例，其他的设备读写情况参照下面的代码：
         /// <code lang="cs" source="HslCommunication_Net45.Test\Documentation\Samples\Core\NetworkDeviceBase.cs" region="WriteFloatArray" title="Float类型示例" />
@@ -488,38 +482,36 @@ namespace HslCommunication.Profinet.AllenBradley
         {
             return WriteTag( address, AllenBradleyHelper.CIP_Type_Real, ByteTransform.TransByte( values ), values.Length );
         }
-        
+
 
         /// <summary>
-        /// 向设备中写入string数据，返回是否写入成功，该string类型是针对PLC的DINT类型，长度自动扩充到8
+        /// 向PLC中写入string数据，返回是否写入成功，该string类型是针对PLC的DINT类型，长度自动扩充到8
         /// </summary>
-        /// <param name="address">数据地址</param>
-        /// <param name="value">实际数据</param>
-        /// <returns>返回写入结果</returns>
+        /// <param name="address">节点的名称 -> Name of the node </param>
+        /// <param name="value">实际数据 -> Actual data </param>
+        /// <returns>是否写入成功 -> Whether to write successfully</returns>
         public override OperateResult Write( string address, string value )
         {
             return WriteTag( address, AllenBradleyHelper.CIP_Type_DWord, BasicFramework.SoftBasic.ArrayExpandToLength( ByteTransform.TransByte( value, Encoding.ASCII ), 8 ) );
         }
 
         /// <summary>
-        /// 向设备中写入bool数据，返回是否写入成功
+        /// 向PLC中写入bool数据，返回是否写入成功
         /// </summary>
-        /// <param name="address">数据地址</param>
-        /// <param name="value">实际数据</param>
-        /// <returns>返回写入结果</returns>
+        /// <param name="address">节点的名称 -> Name of the node </param>
+        /// <param name="value">实际数据 -> Actual data </param>
+        /// <returns>是否写入成功 -> Whether to write successfully</returns>
         public OperateResult Write( string address, bool value )
         {
             return WriteTag( address, AllenBradleyHelper.CIP_Type_Bool, value ? new byte[] { 0xFF, 0xFF } : new byte[] { 0x00, 0x00 } );
         }
 
-
-
         /// <summary>
-        /// 向设备中写入byte数据，返回是否写入成功
+        /// 向PLC中写入byte数据，返回是否写入成功
         /// </summary>
-        /// <param name="address">数据地址</param>
-        /// <param name="value">实际数据</param>
-        /// <returns>返回写入结果</returns>
+        /// <param name="address">节点的名称 -> Name of the node </param>
+        /// <param name="value">实际数据 -> Actual data </param>
+        /// <returns>是否写入成功 -> Whether to write successfully</returns>
         public OperateResult Write( string address, byte value )
         {
             return WriteTag( address, AllenBradleyHelper.CIP_Type_Byte, new byte[] { value, 0x00 } );
@@ -530,9 +522,10 @@ namespace HslCommunication.Profinet.AllenBradley
         #region Handle Single
 
         /// <summary>
-        /// 向PLC注册会话ID的报文
+        /// 向PLC注册会话ID的报文 ->
+        /// Register a message with the PLC for the session ID
         /// </summary>
-        /// <returns>报文信息</returns>
+        /// <returns>报文信息 -> Message information </returns>
         public byte[] RegisterSessionHandle( )
         {
             byte[] commandSpecificData = new byte[] { 0x01, 0x00, 0x00, 0x00, };
@@ -540,16 +533,15 @@ namespace HslCommunication.Profinet.AllenBradley
         }
 
         /// <summary>
-        /// 获取卸载一个已注册的会话的报文
+        /// 获取卸载一个已注册的会话的报文 ->
+        /// Get a message to uninstall a registered session
         /// </summary>
-        /// <returns>字节报文信息</returns>
+        /// <returns>字节报文信息 -> BYTE message information </returns>
         public byte[] UnRegisterSessionHandle( )
         {
             return AllenBradleyHelper.PackRequestHeader( 0x66, SessionHandle, new byte[0] );
         }
-
         
-
         private OperateResult CheckResponse( byte[] response )
         {
             try
@@ -578,6 +570,5 @@ namespace HslCommunication.Profinet.AllenBradley
         }
 
         #endregion
-        
     }
 }

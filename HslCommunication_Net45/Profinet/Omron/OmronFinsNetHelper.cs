@@ -180,10 +180,9 @@ namespace HslCommunication.Profinet.Omron
         /// <returns>带有是否成功的结果对象</returns>
         public static OperateResult<byte[]> ResponseValidAnalysis( byte[] response, bool isRead )
         {
-            // 数据有效性分析
             if (response.Length >= 16)
             {
-                // 提取错误码
+                // 提取错误码 -> Extracting error Codes
                 byte[] buffer = new byte[4];
                 buffer[0] = response[15];
                 buffer[1] = response[14];
@@ -196,7 +195,6 @@ namespace HslCommunication.Profinet.Omron
                 if (response.Length >= 30)
                 {
                     err = response[28] * 256 + response[29];
-                    // 暂时忽略所有的报警信息
                     // if (err > 0) return new OperateResult<byte[]>( err, StringResources.Language.OmronReceiveDataError );
 
                     if (!isRead)
@@ -208,11 +206,12 @@ namespace HslCommunication.Profinet.Omron
                     }
                     else
                     {
-                        // 读取操作
+                        // 读取操作 -> read operate
                         byte[] content = new byte[response.Length - 30];
                         if (content.Length > 0) Array.Copy( response, 30, content, 0, content.Length );
 
                         OperateResult<byte[]> success = OperateResult.CreateSuccessResult( content );
+                        if (content.Length == 0) success.IsSuccess = false;
                         success.ErrorCode = err;
                         success.Message = GetStatusDescription( err );
                         return success;
