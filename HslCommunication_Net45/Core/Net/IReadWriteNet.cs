@@ -18,7 +18,7 @@ namespace HslCommunication.Core
     public interface IReadWriteNet
     {
         #region Read Support
-
+        
         /// <summary>
         /// 批量读取底层的数据信息，需要指定地址和长度，具体的结果取决于实现
         /// </summary>
@@ -167,7 +167,7 @@ namespace HslCommunication.Core
         #endregion
 
         #region Write Support
-
+        
         /// <summary>
         /// 写入byte数组数据
         /// </summary>

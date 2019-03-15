@@ -215,10 +215,10 @@ namespace HslCommunication.Core.Net
             if (!send.IsSuccess) return send;
 
             // 接收数据
-            OperateResult<AlienMessage> receive = ReceiveMessage( connect.Content, 10000, new AlienMessage( ) );
+            OperateResult<byte[]> receive = ReceiveByMessage( connect.Content, 10000, new AlienMessage( ) );
             if (!receive.IsSuccess) return receive;
 
-            switch (receive.Content.ContentBytes[0])
+            switch (receive.Content[5])
             {
                 case 0x01:
                     {

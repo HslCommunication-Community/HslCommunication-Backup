@@ -259,21 +259,21 @@ namespace HslCommunication.Profinet.Omron
         protected override OperateResult InitializationOnConnect( Socket socket )
         {
             // 握手信号
-            OperateResult<byte[], byte[]> read = ReadFromCoreServerBase( socket, handSingle );
+            OperateResult<byte[]> read = ReadFromCoreServer( socket, handSingle );
             if (!read.IsSuccess) return read;
             
             // 检查返回的状态
             byte[] buffer = new byte[4];
-            buffer[0] = read.Content2[7];
-            buffer[1] = read.Content2[6];
-            buffer[2] = read.Content2[5];
-            buffer[3] = read.Content2[4];
+            buffer[0] = read.Content[15];
+            buffer[1] = read.Content[14];
+            buffer[2] = read.Content[13];
+            buffer[3] = read.Content[12];
 
             int status = BitConverter.ToInt32( buffer, 0 );
             if(status != 0) return new OperateResult( status, OmronFinsNetHelper.GetStatusDescription( status ) );
 
             // 提取PLC的节点地址
-            if (read.Content2.Length >= 16) DA1 = read.Content2[15];
+            if (read.Content.Length >= 24) DA1 = read.Content[23];
 
             return OperateResult.CreateSuccessResult( ) ;
         }

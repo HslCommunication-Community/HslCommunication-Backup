@@ -59,10 +59,10 @@ namespace HslCommunication.Core.Net
                 // 0x02: DTU禁止登录
                 // 0x03: 密码验证失败 
 
-                OperateResult<AlienMessage> check = ReceiveMessage( socket, 5000, new AlienMessage( ) );
+                OperateResult<byte[]> check = ReceiveByMessage( socket, 5000, new AlienMessage( ) );
                 if (!check.IsSuccess) return;
 
-                if (check.Content.HeadBytes[4] != 0x17 || check.Content.ContentBytes.Length != 0x17)
+                if (check.Content[4] != 0x17 || check.Content.Length != 0x1C)
                 {
                     socket?.Close( );
                     LogNet?.WriteWarn( ToString( ), "Length Check Failed" );
@@ -73,14 +73,14 @@ namespace HslCommunication.Core.Net
                 bool isPasswrodRight = true;
                 for (int i = 0; i < password.Length; i++)
                 {
-                    if (check.Content.ContentBytes[11 + i] != password[i])
+                    if (check.Content[16 + i] != password[i])
                     {
                         isPasswrodRight = false;
                         break;
                     }
                 }
 
-                string dtu = Encoding.ASCII.GetString( check.Content.ContentBytes, 0, 11 ).Trim( );
+                string dtu = Encoding.ASCII.GetString( check.Content, 5, 11 ).Trim( );
 
                 // 密码失败的情况
                 if (!isPasswrodRight)

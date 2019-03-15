@@ -9,13 +9,10 @@ using HslCommunication.Core.IMessage;
 
 namespace HslCommunication.Core.Net
 {
-
-
     /// <summary>
-    /// 支持长连接，短连接两个模式的通用客户端基类
+    /// 支持长连接，短连接两个模式的通用客户端基类 ->
+    /// Universal client base class that supports long connections and short connections to two modes
     /// </summary>
-    /// <typeparam name="TNetMessage">指定了消息的解析规则</typeparam>
-    /// <typeparam name="TTransform">指定了数据转换的规则</typeparam>
     /// <example>
     /// 无，请使用继承类实例化，然后进行数据交互。
     /// </example>
@@ -24,13 +21,13 @@ namespace HslCommunication.Core.Net
         #region Constructor
 
         /// <summary>
-        /// 默认的无参构造函数
+        /// 默认的无参构造函数 -> Default no-parameter constructor
         /// </summary>
         public NetworkDoubleBase( )
         {
-            InteractiveLock = new SimpleHybirdLock( );                    // 实例化数据访问锁
-            byteTransform = new TTransform( );                            // 实例化数据转换规则
-            connectionId = BasicFramework.SoftBasic.GetUniqueStringByGuidAndRandom( );
+            ByteTransform     = new TTransform( );                                           // 实例化变换类的对象
+            InteractiveLock   = new SimpleHybirdLock( );                                     // 实例化数据访问锁
+            connectionId      = BasicFramework.SoftBasic.GetUniqueStringByGuidAndRandom( );  // 设备的唯一的编号
         }
 
         #endregion
@@ -53,11 +50,12 @@ namespace HslCommunication.Core.Net
         #region Public Member
 
         /// <summary>
-        /// 当前客户端的数据变换机制，当你需要从字节数据转换类型数据的时候需要。
+        /// 当前客户端的数据变换机制，当你需要从字节数据转换类型数据的时候需要。->
+        /// The current client's data transformation mechanism is required when you need to convert type data from byte data.
         /// </summary>
         /// <example>
-        ///    主要是用来转换数据类型的，下面仅仅演示了2个方法，其他的类型转换，类似处理。
-        ///    <code lang="cs" source="HslCommunication_Net45.Test\Documentation\Samples\Core\NetworkDoubleBase.cs" region="ByteTransform" title="ByteTransform示例" />
+        /// 主要是用来转换数据类型的，下面仅仅演示了2个方法，其他的类型转换，类似处理。
+        /// <code lang="cs" source="HslCommunication_Net45.Test\Documentation\Samples\Core\NetworkDoubleBase.cs" region="ByteTransform" title="ByteTransform示例" />
         /// </example>
         public TTransform ByteTransform
         {
@@ -66,7 +64,7 @@ namespace HslCommunication.Core.Net
         }
 
         /// <summary>
-        /// 获取或设置连接的超时时间
+        /// 获取或设置连接的超时时间，单位是毫秒 -> Gets or sets the timeout for the connection, in milliseconds
         /// </summary>
         /// <example>
         /// 设置1秒的超时的示例
@@ -78,11 +76,12 @@ namespace HslCommunication.Core.Net
         public int ConnectTimeOut
         {
             get{return connectTimeOut;}
-            set { connectTimeOut = value;}
+            set { if (value >= 0) connectTimeOut = value; }
         }
 
         /// <summary>
-        /// 获取或设置接收服务器反馈的时间，如果为负数，则不接收反馈
+        /// 获取或设置接收服务器反馈的时间，如果为负数，则不接收反馈 -> 
+        /// Gets or sets the time to receive server feedback, and if it is a negative number, does not receive feedback
         /// </summary>
         /// <example>
         /// 设置1秒的接收超时的示例
@@ -122,6 +121,10 @@ namespace HslCommunication.Core.Net
                         throw new Exception( StringResources.Language.IpAddresError );
                     }
                     ipAddress = value;
+                }
+                else
+                {
+                    ipAddress = "127.0.0.1";
                 }
             }
         }
@@ -395,8 +398,7 @@ namespace HslCommunication.Core.Net
                 return CreateSocketAndInitialication( );
             }
         }
-
-
+        
         /// <summary>
         /// 连接并初始化网络套接字
         /// </summary>
@@ -418,7 +420,15 @@ namespace HslCommunication.Core.Net
             return result;
         }
 
-
+        /// <summary>
+        /// 指示如何创建一个新的消息对象
+        /// </summary>
+        /// <returns>消息对象</returns>
+        protected virtual INetMessage GetNewNetMessage()
+        {
+            return null;
+        }
+        
         /// <summary>
         /// 在其他指定的套接字上，使用报文来通讯，传入需要发送的消息，返回一条完整的数据指令
         /// </summary>
@@ -434,15 +444,40 @@ namespace HslCommunication.Core.Net
         /// <returns>接收的完整的报文信息</returns>
         public virtual OperateResult<byte[]> ReadFromCoreServer( Socket socket, byte[] send )
         {
-            OperateResult<byte[],byte[]> read = ReadFromCoreServerBase( socket, send );
-            if (!read.IsSuccess) return OperateResult.CreateFailedResult<byte[]>( read );
+            LogNet?.WriteDebug( ToString( ), StringResources.Language.Send + " : " + BasicFramework.SoftBasic.ByteToHexString( send, ' ' ) );
 
-            // 拼接结果数据
-            byte[] Content = new byte[read.Content1.Length + read.Content2.Length];
-            if (read.Content1.Length > 0) read.Content1.CopyTo( Content, 0 );
-            if (read.Content2.Length > 0) read.Content2.CopyTo( Content, read.Content1.Length );
+            TNetMessage netMessage = new TNetMessage( );
+            netMessage.SendBytes = send;
 
-            return OperateResult.CreateSuccessResult( Content );
+            // send
+            OperateResult sendResult = Send( socket, send );
+            if (!sendResult.IsSuccess)
+            {
+                socket?.Close( );
+                return OperateResult.CreateFailedResult<byte[]>( sendResult );
+            }
+
+            if (receiveTimeOut < 0) return OperateResult.CreateSuccessResult( new byte[0] );
+
+            // receive msg
+            OperateResult<byte[]> resultReceive = ReceiveByMessage( socket, receiveTimeOut, netMessage );
+            if (!resultReceive.IsSuccess)
+            {
+                socket?.Close( );
+                return new OperateResult<byte[]>( StringResources.Language.ReceiveDataTimeout + receiveTimeOut );
+            }
+
+            LogNet?.WriteDebug( ToString( ), StringResources.Language.Receive + " : " + BasicFramework.SoftBasic.ByteToHexString( resultReceive.Content, ' ' ) );
+
+            // check
+            if (!netMessage.CheckHeadBytesLegal( Token.ToByteArray( ) ))
+            {
+                socket?.Close( );
+                return new OperateResult<byte[]>( StringResources.Language.CommandHeadCodeCheckFailed );
+            }
+
+            // Success
+            return OperateResult.CreateSuccessResult( resultReceive.Content );
         }
 
 
@@ -495,59 +530,7 @@ namespace HslCommunication.Core.Net
             if (!isPersistentConn) resultSocket.Content?.Close( );
             return result;
         }
-
-        /// <summary>
-        /// 使用底层的数据报文来通讯，传入需要发送的消息，返回最终的数据结果，被拆分成了头子节和内容字节信息
-        /// </summary>
-        /// <param name="socket">网络套接字</param>
-        /// <param name="send">发送的数据</param>
-        /// <returns>结果对象</returns>
-        /// <remarks>
-        /// 当子类重写InitializationOnConnect方法和ExtraOnDisconnect方法时，需要和设备进行数据交互后，必须用本方法来数据交互，因为本方法是无锁的。
-        /// </remarks>
-        protected OperateResult<byte[], byte[]> ReadFromCoreServerBase(Socket socket, byte[] send )
-        {
-            LogNet?.WriteDebug( ToString( ), StringResources.Language.Send + " : " + BasicFramework.SoftBasic.ByteToHexString( send, ' ' ) );
-
-            TNetMessage netMsg = new TNetMessage
-            {
-                SendBytes = send
-            };
-
-            // 发送数据信息
-            OperateResult sendResult = Send( socket, send );
-            if (!sendResult.IsSuccess)
-            {
-                socket?.Close( );
-                return OperateResult.CreateFailedResult<byte[], byte[]>( sendResult );
-            }
-
-            // 接收超时时间大于0时才允许接收远程的数据
-            if (receiveTimeOut >= 0)
-            {
-                // 接收数据信息
-                OperateResult<TNetMessage> resultReceive = ReceiveMessage(socket, receiveTimeOut, netMsg);
-                if (!resultReceive.IsSuccess)
-                {
-                    socket?.Close( );
-                    return new OperateResult<byte[], byte[]>( StringResources.Language.ReceiveDataTimeout + receiveTimeOut );
-                }
-
-                LogNet?.WriteDebug( ToString( ), StringResources.Language.Receive + " : " +
-                    BasicFramework.SoftBasic.ByteToHexString( BasicFramework.SoftBasic.SpliceTwoByteArray( resultReceive.Content.HeadBytes,
-                    resultReceive.Content.ContentBytes ), ' ' ) );
-
-                // Success
-                return OperateResult.CreateSuccessResult( resultReceive.Content.HeadBytes, resultReceive.Content.ContentBytes );
-            }
-            else
-            {
-                // Not need receive
-                return OperateResult.CreateSuccessResult( new byte[0], new byte[0] );
-            }
-        }
-
-
+        
         #endregion
 
         #region Object Override
@@ -558,7 +541,7 @@ namespace HslCommunication.Core.Net
         /// <returns>字符串信息</returns>
         public override string ToString( )
         {
-            return $"NetworkDoubleBase<{typeof(TNetMessage)},{typeof(TTransform)}>";
+            return $"NetworkDoubleBase<{typeof( TNetMessage )}, {typeof( TTransform )}>";
         }
 
 

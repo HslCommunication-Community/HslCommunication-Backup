@@ -291,13 +291,13 @@ namespace HslCommunication.Profinet.Siemens
         {
             // 接收2次的握手协议
             S7Message s7Message = new S7Message( );
-            OperateResult<S7Message> read1 = ReceiveMessage( socket, 5000, s7Message );
+            OperateResult<byte[]> read1 = ReceiveByMessage( socket, 5000, s7Message );
             if (!read1.IsSuccess) return;
 
             OperateResult send1 = Send( socket, SoftBasic.HexStringToBytes( "03 00 00 16 11 D0 00 01 00 0C 00 C0 01 0A C1 02 01 02 C2 02 01 00" ) );
             if (!send1.IsSuccess) return;
 
-            OperateResult<S7Message> read2 = ReceiveMessage( socket, 5000, s7Message );
+            OperateResult<byte[]> read2 = ReceiveByMessage( socket, 5000, s7Message );
             if (!read1.IsSuccess) return;
 
             OperateResult send2 = Send( socket, SoftBasic.HexStringToBytes( "03 00 00 1B 02 F0 80 32 03 00 00 04 00 00 08 00 00 00 00 F0 00 00 01 00 01 00 F0" ) );
@@ -329,14 +329,14 @@ namespace HslCommunication.Profinet.Siemens
                     int receiveCount = session.WorkSocket.EndReceive( ar );
 
                     S7Message s7Message = new S7Message( );
-                    OperateResult<S7Message> read1 = ReceiveMessage( session.WorkSocket, 5000, s7Message );
+                    OperateResult<byte[]> read1 = ReceiveByMessage( session.WorkSocket, 5000, s7Message );
                     if (!read1.IsSuccess)
                     {
                         LogNet?.WriteDebug( ToString( ), string.Format( StringResources.Language.ClientOfflineInfo, session.IpEndPoint ) );
                         return;
                     };
 
-                    byte[] receive = SoftBasic.SpliceTwoByteArray( read1.Content.HeadBytes, read1.Content.ContentBytes );
+                    byte[] receive = read1.Content;
                     
                     if (receive[17] == 0x04)
                     {

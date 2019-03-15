@@ -71,15 +71,15 @@ namespace HslCommunication.Profinet.AllenBradley
         protected override OperateResult InitializationOnConnect( Socket socket )
         {
             // Registering Session Information
-            OperateResult<byte[], byte[]> read1 = ReadFromCoreServerBase( socket, RegisterSessionHandle( ) );
-            if (!read1.IsSuccess) return read1;
+            OperateResult<byte[]> read = ReadFromCoreServer( socket, RegisterSessionHandle( ) );
+            if (!read.IsSuccess) return read;
 
             // Check the returned status
-            OperateResult check1 = CheckResponse( read1.Content1 );
-            if (!check1.IsSuccess) return check1;
+            OperateResult check = CheckResponse( read.Content );
+            if (!check.IsSuccess) return check;
 
             // Extract session ID
-            SessionHandle = ByteTransform.TransUInt32( read1.Content1, 4 );
+            SessionHandle = ByteTransform.TransUInt32( read.Content, 4 );
             
             return OperateResult.CreateSuccessResult( );
         }
@@ -92,8 +92,8 @@ namespace HslCommunication.Profinet.AllenBradley
         protected override OperateResult ExtraOnDisconnect( Socket socket )
         {
             // Unregister session Information
-            OperateResult<byte[], byte[]> read1 = ReadFromCoreServerBase( socket, UnRegisterSessionHandle( ) );
-            if (!read1.IsSuccess) return read1;
+            OperateResult<byte[]> read = ReadFromCoreServer( socket, UnRegisterSessionHandle( ) );
+            if (!read.IsSuccess) return read;
 
             return OperateResult.CreateSuccessResult( );
         }

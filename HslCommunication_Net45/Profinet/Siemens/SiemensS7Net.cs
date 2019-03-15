@@ -201,11 +201,11 @@ namespace HslCommunication.Profinet.Siemens
         protected override OperateResult InitializationOnConnect( Socket socket )
         {
             // 第一次握手 -> First handshake
-            OperateResult<byte[], byte[]> read_first = ReadFromCoreServerBase( socket, plcHead1 );
+            OperateResult<byte[]> read_first = ReadFromCoreServer( socket, plcHead1 );
             if (!read_first.IsSuccess) return read_first;
 
             // 第二次握手 -> Second handshake
-            OperateResult<byte[], byte[]> read_second = ReadFromCoreServerBase( socket, plcHead2 );
+            OperateResult<byte[]> read_second = ReadFromCoreServer( socket, plcHead2 );
             if (!read_second.IsSuccess) return read_second;
 
             // 返回成功的信号 -> Return a successful signal

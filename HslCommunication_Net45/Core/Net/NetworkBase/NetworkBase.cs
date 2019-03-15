@@ -8,6 +8,7 @@ using System.IO;
 using System.Threading;
 using System.Net;
 using HslCommunication.Core.IMessage;
+using HslCommunication.BasicFramework;
 
 #if (NET45 || NETSTANDARD2_0)
 using System.Threading.Tasks;
@@ -287,19 +288,17 @@ namespace HslCommunication.Core.Net
         #endregion
 
         #region Receive Message
-        
-        /// <summary>
-        /// 接收一条完整的数据，使用异步接收完成，包含了指令头信息
-        /// </summary>
-        /// <param name="socket">已经打开的网络套接字</param>
-        /// <param name="timeOut">超时时间</param>
-        /// <param name="netMsg">消息规则</param>
-        /// <returns>数据的接收结果对象</returns>
-        protected OperateResult<TNetMessage> ReceiveMessage<TNetMessage>( Socket socket, int timeOut, TNetMessage netMsg ) where TNetMessage : INetMessage
-        {
-            OperateResult<TNetMessage> result = new OperateResult<TNetMessage>( );
 
-            // 超时接收的代码验证
+        /// <summary>
+        /// 接收一条完整的 <seealso cref="INetMessage"/> 数据内容 ->
+        /// Receive a complete <seealso cref="INetMessage"/> data content
+        /// </summary>
+        /// <param name="socket">网络的套接字</param>
+        /// <param name="timeOut">超时时间</param>
+        /// <param name="netMessage">消息的格式定义</param>
+        /// <returns>带有是否成功的byte数组对象</returns>
+        protected OperateResult<byte[]> ReceiveByMessage( Socket socket, int timeOut, INetMessage netMessage )
+        {
             HslTimeOut hslTimeOut = new HslTimeOut( )
             {
                 DelayTime = timeOut,
@@ -308,53 +307,34 @@ namespace HslCommunication.Core.Net
             if (timeOut > 0) ThreadPool.QueueUserWorkItem( new WaitCallback( ThreadPoolCheckTimeOut ), hslTimeOut );
 
             // 接收指令头
-            OperateResult<byte[]> headResult = Receive( socket, netMsg.ProtocolHeadBytesLength );
+            OperateResult<byte[]> headResult = Receive( socket, netMessage.ProtocolHeadBytesLength );
             if (!headResult.IsSuccess)
             {
                 hslTimeOut.IsSuccessful = true;
-                result.CopyErrorFromOther( headResult );
-                return result;
+                return headResult;
             }
 
-            netMsg.HeadBytes = headResult.Content;
-            if (!netMsg.CheckHeadBytesLegal( Token.ToByteArray( ) ))
+            netMessage.HeadBytes = headResult.Content;
+            int contentLength = netMessage.GetContentLengthByHeadBytes( );
+            if (contentLength <= 0)
             {
-                // 令牌校验失败
                 hslTimeOut.IsSuccessful = true;
-                socket?.Close( );
-                LogNet?.WriteError( ToString( ), StringResources.Language.TokenCheckFailed );
-                result.Message = StringResources.Language.TokenCheckFailed;
-                return result;
+                return headResult;
             }
 
-
-            int contentLength = netMsg.GetContentLengthByHeadBytes( );
-            if (contentLength == 0)
+            OperateResult<byte[]> contentResult = Receive( socket, contentLength );
+            if (!contentResult.IsSuccess)
             {
-                netMsg.ContentBytes = new byte[0];
-            }
-            else
-            {
-                OperateResult<byte[]> contentResult = Receive( socket, contentLength );
-                if (!contentResult.IsSuccess)
-                {
-                    hslTimeOut.IsSuccessful = true;
-                    result.CopyErrorFromOther( contentResult );
-                    return result;
-                }
-
-                netMsg.ContentBytes = contentResult.Content;
+                hslTimeOut.IsSuccessful = true;
+                return contentResult;
             }
 
             // 防止没有实例化造成后续的操作失败
-            if (netMsg.ContentBytes == null) netMsg.ContentBytes = new byte[0];
             hslTimeOut.IsSuccessful = true;
-            result.Content = netMsg;
-            result.IsSuccess = true;
-            return result;
+            netMessage.ContentBytes = contentResult.Content;
+            return OperateResult.CreateSuccessResult( SoftBasic.SpliceTwoByteArray( headResult.Content, contentResult.Content ) );
         }
         
-
         #endregion
 
         #region Send Content
