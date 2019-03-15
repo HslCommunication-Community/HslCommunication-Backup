@@ -140,6 +140,37 @@ redis Communications, EFT Robots, Kuka robots and so on, including its own suppo
 The goal is to reduce the cost of learning for developers, and usually you have to learn how to use several different libraries and learn the basics of PLC. Now, 
 all you need to know is how the basic PLC address is represented, and you can read and write PLC data.
 
+Called from Visual C++ project
+cppProject -> Properties -> Configuration Properties -> General -> CLR Support
+Add HslCommunication.dll(net35) reference
+```
+#include "pch.h"
+#include <iostream>
+using namespace HslCommunication;
+using namespace ModBus;
+
+int main()
+{
+    std::cout << "Hello World!\n";
+
+
+	// This is the demo , called C# ModbusTcpNet
+	System::String ^ipAddress = gcnew System::String("127.0.0.1");
+	ModbusTcpNet ^modbus = gcnew ModbusTcpNet(ipAddress, 502, 1);
+
+	System::String ^dataAddress = gcnew System::String("100");
+	OperateResult<short> ^readValue = modbus->ReadInt16(dataAddress);
+	if (readValue->IsSuccess) {
+		short value = readValue->Content;
+		printf("Read Value：%d \n", value);
+	}
+	else
+	{
+		printf("Read Failed");
+	}
+}
+```
+
 
 Another feature of this project is support for cross-language communication support. You can build a C # background server that supports Windows desktop application 
 and Web background, and Android phone-side, Python programs, Java programs to communicate. server side code:
