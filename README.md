@@ -140,8 +140,11 @@ redis Communications, EFT Robots, Kuka robots and so on, including its own suppo
 The goal is to reduce the cost of learning for developers, and usually you have to learn how to use several different libraries and learn the basics of PLC. Now, 
 all you need to know is how the basic PLC address is represented, and you can read and write PLC data.
 
+
 Called from Visual C++ project
+
 cppProject -> Properties -> Configuration Properties -> General -> CLR Support
+
 Add HslCommunication.dll(net35) reference
 ```
 #include "pch.h"
