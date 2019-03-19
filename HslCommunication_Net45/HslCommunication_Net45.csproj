@@ -200,6 +200,7 @@
     <Compile Include="Core\Net\NetworkBase\NetworkDoubleBase.cs" />
     <Compile Include="Core\Net\NetworkBase\NetworkFileServerBase.cs" />
     <Compile Include="Core\Net\NetworkBase\NetworkServerBase.cs" />
+    <Compile Include="Core\Net\NetworkBase\NetworkUdpBase.cs" />
     <Compile Include="Core\Net\NetworkBase\NetworkXBase.cs" />
     <Compile Include="Core\Net\StateOne\AlienSession.cs" />
     <Compile Include="Core\Net\StateOne\AppSession.cs" />
@@ -291,6 +292,7 @@
     <Compile Include="Profinet\Omron\OmronFinsDataType.cs" />
     <Compile Include="Profinet\Omron\OmronFinsNet.cs" />
     <Compile Include="Profinet\Omron\OmronFinsNetHelper.cs" />
+    <Compile Include="Profinet\Omron\OmronFinsUdp.cs" />
     <Compile Include="Profinet\Omron\OmronHostLink.cs" />
     <Compile Include="Profinet\Panasonic\PanasonicMewtocol.cs" />
     <Compile Include="Profinet\Siemens\SiemensFetchWriteNet.cs" />

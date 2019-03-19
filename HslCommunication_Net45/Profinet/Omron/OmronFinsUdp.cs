@@ -2,111 +2,29 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using HslCommunication.Core.IMessage;
 using HslCommunication.Core.Net;
 using HslCommunication.Core;
-using System.Net.Sockets;
-using HslCommunication.BasicFramework;
+using System.Net;
 
 namespace HslCommunication.Profinet.Omron
 {
     /// <summary>
-    /// 欧姆龙PLC通讯类，采用Fins-Tcp通信协议实现
+    /// 欧姆龙的Udp的数据对象
     /// </summary>
-    /// <remarks>
-    /// <note type="important">实例化之后，使用之前，需要初始化三个参数信息，具体见三个参数的说明：<see cref="SA1"/>，<see cref="DA1"/>，<see cref="DA2"/></note>
-    /// <br />
-    /// <note type="warning">如果在测试的时候报错误码64，经网友 上海-Lex 指点，是因为PLC中产生了报警，如伺服报警，模块错误等产生的，但是数据还是能正常读到的，屏蔽64报警或清除plc错误可解决</note>
-    /// 地址支持的列表如下：
-    /// <list type="table">
-    ///   <listheader>
-    ///     <term>地址名称</term>
-    ///     <term>地址代号</term>
-    ///     <term>示例</term>
-    ///     <term>地址进制</term>
-    ///     <term>字操作</term>
-    ///     <term>位操作</term>
-    ///     <term>备注</term>
-    ///   </listheader>
-    ///   <item>
-    ///     <term>DM Area</term>
-    ///     <term>D</term>
-    ///     <term>D100,D200</term>
-    ///     <term>10</term>
-    ///     <term>√</term>
-    ///     <term>√</term>
-    ///     <term></term>
-    ///   </item>
-    ///   <item>
-    ///     <term>CIO Area</term>
-    ///     <term>C</term>
-    ///     <term>C100,C200</term>
-    ///     <term>10</term>
-    ///     <term>√</term>
-    ///     <term>√</term>
-    ///     <term></term>
-    ///   </item>
-    ///   <item>
-    ///     <term>Work Area</term>
-    ///     <term>W</term>
-    ///     <term>W100,W200</term>
-    ///     <term>10</term>
-    ///     <term>√</term>
-    ///     <term>√</term>
-    ///     <term></term>
-    ///   </item>
-    ///   <item>
-    ///     <term>Holding Bit Area</term>
-    ///     <term>H</term>
-    ///     <term>H100,H200</term>
-    ///     <term>10</term>
-    ///     <term>√</term>
-    ///     <term>√</term>
-    ///     <term></term>
-    ///   </item>
-    ///   <item>
-    ///     <term>Auxiliary Bit Area</term>
-    ///     <term>A</term>
-    ///     <term>A100,A200</term>
-    ///     <term>10</term>
-    ///     <term>√</term>
-    ///     <term>√</term>
-    ///     <term></term>
-    ///   </item>
-    /// </list>
-    /// </remarks>
-    /// <example>
-    /// <code lang="cs" source="HslCommunication_Net45.Test\Documentation\Samples\Profinet\OmronFinsNet.cs" region="Usage" title="简单的短连接使用" />
-    /// <code lang="cs" source="HslCommunication_Net45.Test\Documentation\Samples\Profinet\OmronFinsNet.cs" region="Usage2" title="简单的长连接使用" />
-    /// </example>
-    public class OmronFinsNet : NetworkDeviceBase<FinsMessage,ReverseWordTransform>
+    public class OmronFinsUdp : NetworkUdpBase<ReverseWordTransform>
     {
-        #region Constructor
-
         /// <summary>
-        /// 实例化一个欧姆龙PLC Fins帧协议的通讯对象
+        /// 实例化一个默认的欧姆龙Udp的对象
         /// </summary>
-        public OmronFinsNet( )
+        /// <param name="ipAddress">Ip地址</param>
+        /// <param name="port">端口号</param>
+        public OmronFinsUdp(string ipAddress, int port )
         {
-            WordLength = 1;
-            ByteTransform.DataFormat = DataFormat.CDAB;
+            IPAddress ip = IPAddress.Parse( ipAddress );
+            ServerEndPoint = new IPEndPoint( ip, port );
+            DA1 = Convert.ToByte( ipAddress.Substring( ipAddress.LastIndexOf( "." ) ) );
         }
-
-        /// <summary>
-        /// 实例化一个欧姆龙PLC Fins帧协议的通讯对象
-        /// </summary>
-        /// <param name="ipAddress">PLCd的Ip地址</param>
-        /// <param name="port">PLC的端口</param>
-        public OmronFinsNet( string ipAddress, int port )
-        {
-            WordLength = 1;
-            IpAddress = ipAddress;
-            Port = port;
-            ByteTransform.DataFormat = DataFormat.CDAB;
-        }
-
-        #endregion
-
+        
         #region Public Member
 
         /// <summary>
@@ -127,7 +45,7 @@ namespace HslCommunication.Profinet.Omron
         /// PLC的网络号地址，默认0x00
         /// </summary>
         public byte DNA { get; set; } = 0x00;
-        
+
         /// <summary>
         /// PLC的节点地址，这个值在配置了ip地址之后是默认赋值的，默认为Ip地址的最后一位
         /// </summary>
@@ -148,8 +66,6 @@ namespace HslCommunication.Profinet.Omron
         /// 上位机的网络号地址
         /// </summary>
         public byte SNA { get; set; } = 0x00;
-        
-        private byte computerSA1 = 0x0B;
 
         /// <summary>
         /// 上位机的节点地址，假如你的电脑的Ip地址为192.168.0.13，那么这个值就是13
@@ -157,15 +73,7 @@ namespace HslCommunication.Profinet.Omron
         /// <remarks>
         /// <note type="important">假如你的电脑的Ip地址为192.168.0.13，那么这个值就是13</note>
         /// </remarks>
-        public byte SA1
-        {
-            get { return computerSA1; }
-            set
-            {
-                computerSA1 = value;
-                handSingle[19] = value;
-            }
-        }
+        public byte SA1 { get; set; } = 13;
 
         /// <summary>
         /// 上位机的单元号地址
@@ -176,40 +84,34 @@ namespace HslCommunication.Profinet.Omron
         /// 设备的标识号
         /// </summary>
         public byte SID { get; set; } = 0x00;
-        
+
         #endregion
-        
+
         #region Build Command
-        
+
         /// <summary>
         /// 将普通的指令打包成完整的指令
         /// </summary>
         /// <param name="cmd"></param>
         /// <returns></returns>
-        private byte[] PackCommand(byte[] cmd)
+        private byte[] PackCommand( byte[] cmd )
         {
-            byte[] buffer = new byte[26 + cmd.Length];
-            Array.Copy( handSingle, 0, buffer, 0, 4 );
-            byte[] tmp = BitConverter.GetBytes( buffer.Length - 8 );
-            Array.Reverse( tmp );
-            tmp.CopyTo( buffer, 4 );
-            buffer[11] = 0x02;
-
-            buffer[16] = ICF;
-            buffer[17] = RSV;
-            buffer[18] = GCT;
-            buffer[19] = DNA;
-            buffer[20] = DA1;
-            buffer[21] = DA2;
-            buffer[22] = SNA;
-            buffer[23] = SA1;
-            buffer[24] = SA2;
-            buffer[25] = SID;
-            cmd.CopyTo( buffer, 26 );
+            byte[] buffer = new byte[10 + cmd.Length];
+            buffer[0] = ICF;
+            buffer[1] = RSV;
+            buffer[2] = GCT;
+            buffer[3] = DNA;
+            buffer[4] = DA1;
+            buffer[5] = DA2;
+            buffer[6] = SNA;
+            buffer[7] = SA1;
+            buffer[8] = SA2;
+            buffer[9] = SID;
+            cmd.CopyTo( buffer, 10 );
 
             return buffer;
         }
-        
+
         /// <summary>
         /// 根据类型地址长度确认需要读取的指令头
         /// </summary>
@@ -217,14 +119,14 @@ namespace HslCommunication.Profinet.Omron
         /// <param name="length">长度</param>
         /// <param name="isBit">是否是位读取</param>
         /// <returns>带有成功标志的报文数据</returns>
-        public OperateResult<byte[]> BuildReadCommand( string address, ushort length ,bool isBit)
+        public OperateResult<byte[]> BuildReadCommand( string address, ushort length, bool isBit )
         {
             var command = OmronFinsNetHelper.BuildReadCommand( address, length, isBit );
             if (!command.IsSuccess) return command;
 
             return OperateResult.CreateSuccessResult( PackCommand( command.Content ) );
         }
-        
+
         /// <summary>
         /// 根据类型地址以及需要写入的数据来生成指令头
         /// </summary>
@@ -236,42 +138,12 @@ namespace HslCommunication.Profinet.Omron
         {
             var command = OmronFinsNetHelper.BuildWriteWordCommand( address, value, isBit );
             if (!command.IsSuccess) return command;
-            
+
             return OperateResult.CreateSuccessResult( PackCommand( command.Content ) );
         }
-        
-        #endregion
-
-        #region Double Mode Override
-
-        /// <summary>
-        /// 在连接上欧姆龙PLC后，需要进行一步握手协议
-        /// </summary>
-        /// <param name="socket">连接的套接字</param>
-        /// <returns>初始化成功与否</returns>
-        protected override OperateResult InitializationOnConnect( Socket socket )
-        {
-            // 握手信号
-            OperateResult<byte[]> read = ReadFromCoreServer( socket, handSingle );
-            if (!read.IsSuccess) return read;
-            
-            // 检查返回的状态
-            byte[] buffer = new byte[4];
-            buffer[0] = read.Content[15];
-            buffer[1] = read.Content[14];
-            buffer[2] = read.Content[13];
-            buffer[3] = read.Content[12];
-
-            int status = BitConverter.ToInt32( buffer, 0 );
-            if(status != 0) return new OperateResult( status, OmronFinsNetHelper.GetStatusDescription( status ) );
-
-            // 提取PLC的节点地址
-            if (read.Content.Length >= 24) DA1 = read.Content[23];
-
-            return OperateResult.CreateSuccessResult( ) ;
-        }
 
         #endregion
+
 
         #region Read Support
 
@@ -295,11 +167,11 @@ namespace HslCommunication.Profinet.Omron
 
             // 核心数据交互
             OperateResult<byte[]> read = ReadFromCoreServer( command.Content );
-            if(!read.IsSuccess) return OperateResult.CreateFailedResult<byte[]>( read );
+            if (!read.IsSuccess) return OperateResult.CreateFailedResult<byte[]>( read );
 
             // 数据有效性分析
-            OperateResult<byte[]> valid = OmronFinsNetHelper.ResponseValidAnalysis( read.Content, true );
-            if(!valid.IsSuccess) return OperateResult.CreateFailedResult<byte[]>( valid );
+            OperateResult<byte[]> valid = OmronFinsNetHelper.UdpResponseValidAnalysis( read.Content, true );
+            if (!valid.IsSuccess) return OperateResult.CreateFailedResult<byte[]>( valid );
 
             // 读取到了正确的数据
             return OperateResult.CreateSuccessResult( valid.Content );
@@ -327,7 +199,7 @@ namespace HslCommunication.Profinet.Omron
             if (!read.IsSuccess) return OperateResult.CreateFailedResult<bool[]>( read );
 
             // 数据有效性分析
-            OperateResult<byte[]> valid = OmronFinsNetHelper.ResponseValidAnalysis( read.Content, true );
+            OperateResult<byte[]> valid = OmronFinsNetHelper.UdpResponseValidAnalysis( read.Content, true );
             if (!valid.IsSuccess) return OperateResult.CreateFailedResult<bool[]>( valid );
 
             // 返回正确的数据信息
@@ -383,18 +255,18 @@ namespace HslCommunication.Profinet.Omron
             if (!read.IsSuccess) return read;
 
             // 数据有效性分析
-            OperateResult<byte[]> valid = OmronFinsNetHelper.ResponseValidAnalysis( read.Content, false );
+            OperateResult<byte[]> valid = OmronFinsNetHelper.UdpResponseValidAnalysis( read.Content, false );
             if (!valid.IsSuccess) return valid;
 
             // 成功
-            return OperateResult.CreateSuccessResult( ) ;
+            return OperateResult.CreateSuccessResult( );
         }
-        
+
 
         #endregion
-        
+
         #region Write bool[]
-        
+
         /// <summary>
         /// 向PLC中位软元件写入bool数组，返回值说明，比如你写入D100,values[0]对应D100.0
         /// </summary>
@@ -430,7 +302,7 @@ namespace HslCommunication.Profinet.Omron
             if (!read.IsSuccess) return read;
 
             // 数据有效性分析
-            OperateResult<byte[]> valid = OmronFinsNetHelper.ResponseValidAnalysis( read.Content, false );
+            OperateResult<byte[]> valid = OmronFinsNetHelper.UdpResponseValidAnalysis( read.Content, false );
             if (!valid.IsSuccess) return valid;
 
             // 写入成功
@@ -439,23 +311,8 @@ namespace HslCommunication.Profinet.Omron
 
 
         #endregion
+
         
-        #region Hand Single
-
-        // 握手信号
-        // 46494E530000000C0000000000000000000000D6 
-        private readonly byte[] handSingle = new byte[]
-        {
-            0x46, 0x49, 0x4E, 0x53, // FINS
-            0x00, 0x00, 0x00, 0x0C, // 后面的命令长度
-            0x00, 0x00, 0x00, 0x00, // 命令码
-            0x00, 0x00, 0x00, 0x00, // 错误码
-            0x00, 0x00, 0x00, 0x01  // 节点号
-        };
-
-
-        #endregion
-
         #region Object Override
 
         /// <summary>
@@ -464,7 +321,7 @@ namespace HslCommunication.Profinet.Omron
         /// <returns>字符串</returns>
         public override string ToString( )
         {
-            return $"OmronFinsNet[{IpAddress}:{Port}]";
+            return $"OmronFinsUdp[{ServerEndPoint}]";
         }
 
         #endregion

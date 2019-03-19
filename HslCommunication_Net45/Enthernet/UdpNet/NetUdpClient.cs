@@ -19,7 +19,7 @@ namespace HslCommunication.Enthernet
         /// <summary>
         /// 实例化对象，
         /// </summary>
-        /// <param name="endpoint"></param>
+        /// <param name="endpoint">服务器的基本信息</param>
         public NetUdpClient( IPEndPoint endpoint )
         {
             ServerEndPoint = endpoint;
@@ -72,7 +72,7 @@ namespace HslCommunication.Enthernet
         /// <summary>
         /// 获取本对象的字符串表示形式
         /// </summary>
-        /// <returns></returns>
+        /// <returns>字符串信息</returns>
         public override string ToString( )
         {
             return "NetUdpClient";

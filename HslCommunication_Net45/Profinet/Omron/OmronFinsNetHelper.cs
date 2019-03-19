@@ -192,30 +192,69 @@ namespace HslCommunication.Profinet.Omron
                 int err = BitConverter.ToInt32( buffer, 0 );
                 if (err > 0) return new OperateResult<byte[]>( err, GetStatusDescription( err ) );
 
-                if (response.Length >= 30)
+                return UdpResponseValidAnalysis( response.Take( 16 ).ToArray( ), isRead );
+                //if (response.Length >= 30)
+                //{
+                //    err = response[28] * 256 + response[29];
+                //    // if (err > 0) return new OperateResult<byte[]>( err, StringResources.Language.OmronReceiveDataError );
+
+                //    if (!isRead)
+                //    {
+                //        OperateResult<byte[]> success = OperateResult.CreateSuccessResult( new byte[0] );
+                //        success.ErrorCode = err;
+                //        success.Message = GetStatusDescription( err );
+                //        return success;
+                //    }
+                //    else
+                //    {
+                //        // 读取操作 -> read operate
+                //        byte[] content = new byte[response.Length - 30];
+                //        if (content.Length > 0) Array.Copy( response, 30, content, 0, content.Length );
+
+                //        OperateResult<byte[]> success = OperateResult.CreateSuccessResult( content );
+                //        if (content.Length == 0) success.IsSuccess = false;
+                //        success.ErrorCode = err;
+                //        success.Message = GetStatusDescription( err );
+                //        return success;
+                //    }
+                //}
+            }
+
+            return new OperateResult<byte[]>( StringResources.Language.OmronReceiveDataError );
+        }
+
+
+        /// <summary>
+        /// 验证欧姆龙的Fins-Udp返回的数据是否正确的数据，如果正确的话，并返回所有的数据内容
+        /// </summary>
+        /// <param name="response">来自欧姆龙返回的数据内容</param>
+        /// <param name="isRead">是否读取</param>
+        /// <returns>带有是否成功的结果对象</returns>
+        public static OperateResult<byte[]> UdpResponseValidAnalysis( byte[] response, bool isRead )
+        {
+            if (response.Length >= 14)
+            {
+                int err = response[12] * 256 + response[13];
+                // if (err > 0) return new OperateResult<byte[]>( err, StringResources.Language.OmronReceiveDataError );
+
+                if (!isRead)
                 {
-                    err = response[28] * 256 + response[29];
-                    // if (err > 0) return new OperateResult<byte[]>( err, StringResources.Language.OmronReceiveDataError );
+                    OperateResult<byte[]> success = OperateResult.CreateSuccessResult( new byte[0] );
+                    success.ErrorCode = err;
+                    success.Message = GetStatusDescription( err );
+                    return success;
+                }
+                else
+                {
+                    // 读取操作 -> read operate
+                    byte[] content = new byte[response.Length - 14];
+                    if (content.Length > 0) Array.Copy( response, 14, content, 0, content.Length );
 
-                    if (!isRead)
-                    {
-                        OperateResult<byte[]> success = OperateResult.CreateSuccessResult( new byte[0] );
-                        success.ErrorCode = err;
-                        success.Message = GetStatusDescription( err );
-                        return success;
-                    }
-                    else
-                    {
-                        // 读取操作 -> read operate
-                        byte[] content = new byte[response.Length - 30];
-                        if (content.Length > 0) Array.Copy( response, 30, content, 0, content.Length );
-
-                        OperateResult<byte[]> success = OperateResult.CreateSuccessResult( content );
-                        if (content.Length == 0) success.IsSuccess = false;
-                        success.ErrorCode = err;
-                        success.Message = GetStatusDescription( err );
-                        return success;
-                    }
+                    OperateResult<byte[]> success = OperateResult.CreateSuccessResult( content );
+                    if (content.Length == 0) success.IsSuccess = false;
+                    success.ErrorCode = err;
+                    success.Message = GetStatusDescription( err );
+                    return success;
                 }
             }
 

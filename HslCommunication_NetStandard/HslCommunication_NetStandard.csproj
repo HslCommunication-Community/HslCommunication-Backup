@@ -77,6 +77,7 @@
     <Compile Include="..\HslCommunication_Net45\Core\Net\NetworkBase\NetworkDoubleBase.cs" Link="Core\Net\NetworkBase\NetworkDoubleBase.cs" />
     <Compile Include="..\HslCommunication_Net45\Core\Net\NetworkBase\NetworkFileServerBase.cs" Link="Core\Net\NetworkBase\NetworkFileServerBase.cs" />
     <Compile Include="..\HslCommunication_Net45\Core\Net\NetworkBase\NetworkServerBase.cs" Link="Core\Net\NetworkBase\NetworkServerBase.cs" />
+    <Compile Include="..\HslCommunication_Net45\Core\Net\NetworkBase\NetworkUdpBase.cs" Link="Core\Net\NetworkBase\NetworkUdpBase.cs" />
     <Compile Include="..\HslCommunication_Net45\Core\Net\NetworkBase\NetworkXBase.cs" Link="Core\Net\NetworkBase\NetworkXBase.cs" />
     <Compile Include="..\HslCommunication_Net45\Core\Net\StateOne\AlienSession.cs" Link="Core\Net\StateOne\AlienSession.cs" />
     <Compile Include="..\HslCommunication_Net45\Core\Net\StateOne\AppSession.cs" Link="Core\Net\StateOne\AppSession.cs" />
@@ -150,6 +151,7 @@
     <Compile Include="..\HslCommunication_Net45\Profinet\Omron\OmronFinsDataType.cs" Link="Profinet\Omron\OmronFinsDataType.cs" />
     <Compile Include="..\HslCommunication_Net45\Profinet\Omron\OmronFinsNet.cs" Link="Profinet\Omron\OmronFinsNet.cs" />
     <Compile Include="..\HslCommunication_Net45\Profinet\Omron\OmronFinsNetHelper.cs" Link="Profinet\Omron\OmronFinsNetHelper.cs" />
+    <Compile Include="..\HslCommunication_Net45\Profinet\Omron\OmronFinsUdp.cs" Link="Profinet\Omron\OmronFinsUdp.cs" />
     <Compile Include="..\HslCommunication_Net45\Profinet\Siemens\SiemensFetchWriteNet.cs" Link="Profinet\Siemens\SiemensFetchWriteNet.cs" />
     <Compile Include="..\HslCommunication_Net45\Profinet\Siemens\SiemensPLCS.cs" Link="Profinet\Siemens\SiemensPLCS.cs" />
     <Compile Include="..\HslCommunication_Net45\Profinet\Siemens\SiemensS7Net.cs" Link="Profinet\Siemens\SiemensS7Net.cs" />

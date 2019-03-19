@@ -70,6 +70,7 @@
             this.button17 = new System.Windows.Forms.Button();
             this.button16 = new System.Windows.Forms.Button();
             this.groupBox7 = new System.Windows.Forms.GroupBox();
+            this.button51 = new System.Windows.Forms.Button();
             this.button44 = new System.Windows.Forms.Button();
             this.button23 = new System.Windows.Forms.Button();
             this.groupBox8 = new System.Windows.Forms.GroupBox();
@@ -106,7 +107,7 @@
             this.groupBox13 = new System.Windows.Forms.GroupBox();
             this.button50 = new System.Windows.Forms.Button();
             this.button49 = new System.Windows.Forms.Button();
-            this.button51 = new System.Windows.Forms.Button();
+            this.button52 = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -481,6 +482,7 @@
             // 
             // groupBox5
             // 
+            this.groupBox5.Controls.Add(this.button52);
             this.groupBox5.Controls.Add(this.button48);
             this.groupBox5.Controls.Add(this.button11);
             this.groupBox5.Location = new System.Drawing.Point(586, 29);
@@ -620,6 +622,17 @@
             this.groupBox7.TabIndex = 14;
             this.groupBox7.TabStop = false;
             this.groupBox7.Text = "Robot(机器人)";
+            // 
+            // button51
+            // 
+            this.button51.Location = new System.Drawing.Point(19, 103);
+            this.button51.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.button51.Name = "button51";
+            this.button51.Size = new System.Drawing.Size(150, 32);
+            this.button51.TabIndex = 2;
+            this.button51.Text = "KUKA";
+            this.button51.UseVisualStyleBackColor = true;
+            this.button51.Click += new System.EventHandler(this.button51_Click);
             // 
             // button44
             // 
@@ -994,16 +1007,16 @@
             this.button49.UseVisualStyleBackColor = true;
             this.button49.Click += new System.EventHandler(this.button49_Click);
             // 
-            // button51
+            // button52
             // 
-            this.button51.Location = new System.Drawing.Point(19, 103);
-            this.button51.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.button51.Name = "button51";
-            this.button51.Size = new System.Drawing.Size(150, 32);
-            this.button51.TabIndex = 2;
-            this.button51.Text = "KUKA";
-            this.button51.UseVisualStyleBackColor = true;
-            this.button51.Click += new System.EventHandler(this.button51_Click);
+            this.button52.Location = new System.Drawing.Point(19, 104);
+            this.button52.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.button52.Name = "button52";
+            this.button52.Size = new System.Drawing.Size(150, 32);
+            this.button52.TabIndex = 2;
+            this.button52.Text = "Fins Udp";
+            this.button52.UseVisualStyleBackColor = true;
+            this.button52.Click += new System.EventHandler(this.button52_Click);
             // 
             // FormLoad
             // 
@@ -1135,6 +1148,7 @@
         private System.Windows.Forms.Button button50;
         private System.Windows.Forms.Button button49;
         private System.Windows.Forms.Button button51;
+        private System.Windows.Forms.Button button52;
     }
 }
 

@@ -547,6 +547,4 @@ namespace HslCommunication.Core.Net
 
         #endregion
     }
-
-
 }
