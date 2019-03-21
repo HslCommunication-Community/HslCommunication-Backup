@@ -201,6 +201,7 @@
     <Compile Include="Core\Net\NetworkBase\NetworkFileServerBase.cs" />
     <Compile Include="Core\Net\NetworkBase\NetworkServerBase.cs" />
     <Compile Include="Core\Net\NetworkBase\NetworkUdpBase.cs" />
+    <Compile Include="Core\Net\NetworkBase\NetworkUdpDeviceBase.cs" />
     <Compile Include="Core\Net\NetworkBase\NetworkXBase.cs" />
     <Compile Include="Core\Net\StateOne\AlienSession.cs" />
     <Compile Include="Core\Net\StateOne\AppSession.cs" />

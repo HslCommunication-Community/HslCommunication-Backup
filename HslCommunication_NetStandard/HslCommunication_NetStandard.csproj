@@ -78,6 +78,7 @@
     <Compile Include="..\HslCommunication_Net45\Core\Net\NetworkBase\NetworkFileServerBase.cs" Link="Core\Net\NetworkBase\NetworkFileServerBase.cs" />
     <Compile Include="..\HslCommunication_Net45\Core\Net\NetworkBase\NetworkServerBase.cs" Link="Core\Net\NetworkBase\NetworkServerBase.cs" />
     <Compile Include="..\HslCommunication_Net45\Core\Net\NetworkBase\NetworkUdpBase.cs" Link="Core\Net\NetworkBase\NetworkUdpBase.cs" />
+    <Compile Include="..\HslCommunication_Net45\Core\Net\NetworkBase\NetworkUdpDeviceBase.cs" Link="Core\Net\NetworkBase\NetworkUdpDeviceBase.cs" />
     <Compile Include="..\HslCommunication_Net45\Core\Net\NetworkBase\NetworkXBase.cs" Link="Core\Net\NetworkBase\NetworkXBase.cs" />
     <Compile Include="..\HslCommunication_Net45\Core\Net\StateOne\AlienSession.cs" Link="Core\Net\StateOne\AlienSession.cs" />
     <Compile Include="..\HslCommunication_Net45\Core\Net\StateOne\AppSession.cs" Link="Core\Net\StateOne\AppSession.cs" />

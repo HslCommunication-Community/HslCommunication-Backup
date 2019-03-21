@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using HslCommunication.BasicFramework;
 
 namespace HslCommunication.Profinet.Omron
 {
@@ -192,7 +193,9 @@ namespace HslCommunication.Profinet.Omron
                 int err = BitConverter.ToInt32( buffer, 0 );
                 if (err > 0) return new OperateResult<byte[]>( err, GetStatusDescription( err ) );
 
-                return UdpResponseValidAnalysis( response.Take( 16 ).ToArray( ), isRead );
+                byte[] result = new byte[response.Length - 16];
+                Array.Copy( response, 16, result, 0, result.Length );
+                return UdpResponseValidAnalysis( result, isRead );
                 //if (response.Length >= 30)
                 //{
                 //    err = response[28] * 256 + response[29];
@@ -241,7 +244,7 @@ namespace HslCommunication.Profinet.Omron
                 {
                     OperateResult<byte[]> success = OperateResult.CreateSuccessResult( new byte[0] );
                     success.ErrorCode = err;
-                    success.Message = GetStatusDescription( err );
+                    success.Message = GetStatusDescription( err ) + " Received:" + SoftBasic.ByteToHexString( response, ' ' );
                     return success;
                 }
                 else
@@ -253,7 +256,7 @@ namespace HslCommunication.Profinet.Omron
                     OperateResult<byte[]> success = OperateResult.CreateSuccessResult( content );
                     if (content.Length == 0) success.IsSuccess = false;
                     success.ErrorCode = err;
-                    success.Message = GetStatusDescription( err );
+                    success.Message = GetStatusDescription( err ) + " Received:" + SoftBasic.ByteToHexString( response, ' ' );
                     return success;
                 }
             }

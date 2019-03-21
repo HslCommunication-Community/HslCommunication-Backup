@@ -11,8 +11,70 @@ namespace HslCommunication.Profinet.Omron
     /// <summary>
     /// 欧姆龙的Udp的数据对象
     /// </summary>
-    public class OmronFinsUdp : NetworkUdpBase<ReverseWordTransform>
+    /// <remarks>
+    /// <note type="warning">如果在测试的时候报错误码64，经网友 上海-Lex 指点，是因为PLC中产生了报警，如伺服报警，模块错误等产生的，但是数据还是能正常读到的，屏蔽64报警或清除plc错误可解决</note>
+    /// 地址支持的列表如下：
+    /// <list type="table">
+    ///   <listheader>
+    ///     <term>地址名称</term>
+    ///     <term>地址代号</term>
+    ///     <term>示例</term>
+    ///     <term>地址进制</term>
+    ///     <term>字操作</term>
+    ///     <term>位操作</term>
+    ///     <term>备注</term>
+    ///   </listheader>
+    ///   <item>
+    ///     <term>DM Area</term>
+    ///     <term>D</term>
+    ///     <term>D100,D200</term>
+    ///     <term>10</term>
+    ///     <term>√</term>
+    ///     <term>√</term>
+    ///     <term></term>
+    ///   </item>
+    ///   <item>
+    ///     <term>CIO Area</term>
+    ///     <term>C</term>
+    ///     <term>C100,C200</term>
+    ///     <term>10</term>
+    ///     <term>√</term>
+    ///     <term>√</term>
+    ///     <term></term>
+    ///   </item>
+    ///   <item>
+    ///     <term>Work Area</term>
+    ///     <term>W</term>
+    ///     <term>W100,W200</term>
+    ///     <term>10</term>
+    ///     <term>√</term>
+    ///     <term>√</term>
+    ///     <term></term>
+    ///   </item>
+    ///   <item>
+    ///     <term>Holding Bit Area</term>
+    ///     <term>H</term>
+    ///     <term>H100,H200</term>
+    ///     <term>10</term>
+    ///     <term>√</term>
+    ///     <term>√</term>
+    ///     <term></term>
+    ///   </item>
+    ///   <item>
+    ///     <term>Auxiliary Bit Area</term>
+    ///     <term>A</term>
+    ///     <term>A100,A200</term>
+    ///     <term>10</term>
+    ///     <term>√</term>
+    ///     <term>√</term>
+    ///     <term></term>
+    ///   </item>
+    /// </list>
+    /// </remarks>
+    public class OmronFinsUdp : NetworkUdpDeviceBase<ReverseWordTransform>
     {
+        #region Constructor
+
         /// <summary>
         /// 实例化一个默认的欧姆龙Udp的对象
         /// </summary>
@@ -20,17 +82,46 @@ namespace HslCommunication.Profinet.Omron
         /// <param name="port">端口号</param>
         public OmronFinsUdp(string ipAddress, int port )
         {
-            IPAddress ip = IPAddress.Parse( ipAddress );
-            ServerEndPoint = new IPEndPoint( ip, port );
-            DA1 = Convert.ToByte( ipAddress.Substring( ipAddress.LastIndexOf( "." ) ) );
+            WordLength = 1;
+            IpAddress = ipAddress;
+            Port = port;
+            ByteTransform.DataFormat = DataFormat.CDAB;
         }
-        
+
+        /// <summary>
+        /// 实例化一个默认的欧姆龙Udp的对象
+        /// </summary>
+        public OmronFinsUdp( )
+        {
+            WordLength = 1;
+            ByteTransform.DataFormat = DataFormat.CDAB;
+        }
+
+        #endregion
+
+        #region IpAddress Override
+
+        /// <summary>
+        /// 设备的Ip地址信息
+        /// </summary>
+        public override string IpAddress {
+            get => base.IpAddress;
+            set
+            {
+                DA1 = Convert.ToByte( value.Substring( value.LastIndexOf( "." ) + 1 ) );
+                base.IpAddress = value;
+            }
+        }
+
+        #endregion
+
         #region Public Member
 
         /// <summary>
         /// 信息控制字段，默认0x80
         /// </summary>
         public byte ICF { get; set; } = 0x80;
+
         /// <summary>
         /// 系统使用的内部信息
         /// </summary>
@@ -143,8 +234,7 @@ namespace HslCommunication.Profinet.Omron
         }
 
         #endregion
-
-
+        
         #region Read Support
 
         /// <summary>
@@ -176,9 +266,7 @@ namespace HslCommunication.Profinet.Omron
             // 读取到了正确的数据
             return OperateResult.CreateSuccessResult( valid.Content );
         }
-
-
-
+        
         /// <summary>
         /// 从欧姆龙PLC中批量读取位软元件，返回读取结果
         /// </summary>
@@ -205,8 +293,7 @@ namespace HslCommunication.Profinet.Omron
             // 返回正确的数据信息
             return OperateResult.CreateSuccessResult( valid.Content.Select( m => m != 0x00 ? true : false ).ToArray( ) );
         }
-
-
+        
         /// <summary>
         /// 从欧姆龙PLC中批量读取位软元件，返回读取结果
         /// </summary>
@@ -225,13 +312,11 @@ namespace HslCommunication.Profinet.Omron
 
             return OperateResult.CreateSuccessResult( read.Content[0] );
         }
-
-
+        
         #endregion
 
         #region Write Base
-
-
+        
         /// <summary>
         /// 向PLC写入数据，数据格式为原始的字节类型
         /// </summary>
@@ -311,7 +396,6 @@ namespace HslCommunication.Profinet.Omron
 
 
         #endregion
-
         
         #region Object Override
 
@@ -321,10 +405,9 @@ namespace HslCommunication.Profinet.Omron
         /// <returns>字符串</returns>
         public override string ToString( )
         {
-            return $"OmronFinsUdp[{ServerEndPoint}]";
+            return $"OmronFinsUdp[{IpAddress}:{Port}]";
         }
 
         #endregion
-
     }
 }

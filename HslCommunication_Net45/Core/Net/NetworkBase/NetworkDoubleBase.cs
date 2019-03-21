@@ -106,7 +106,7 @@ namespace HslCommunication.Core.Net
         /// 以下举例modbus-tcp的短连接及动态更改ip地址的示例
         /// <code lang="cs" source="HslCommunication_Net45.Test\Documentation\Samples\Core\NetworkDoubleBase.cs" region="IpAddressExample" title="IpAddress示例" />
         /// </example>
-        public string IpAddress
+        public virtual string IpAddress
         {
             get
             {
@@ -138,7 +138,7 @@ namespace HslCommunication.Core.Net
         /// <example>
         /// 动态更改请参照IpAddress属性的更改。
         /// </example>
-        public int Port
+        public virtual int Port
         {
             get
             {

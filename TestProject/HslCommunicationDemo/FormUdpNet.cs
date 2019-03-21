@@ -73,7 +73,15 @@ namespace HslCommunicationDemo
             DateTime start = DateTime.Now;
             for (int i = 0; i < count; i++)
             {
-                udpClient.SendMessage( handle, textBox4.Text );
+                OperateResult<string> read = udpClient.ReadFromServer( handle, textBox4.Text );
+                if (read.IsSuccess)
+                {
+                    textBox8.AppendText( read.Content + Environment.NewLine );
+                }
+                else
+                {
+                    textBox8.AppendText( "Read Failed：" + read.Message + Environment.NewLine );
+                }
             }
             
 

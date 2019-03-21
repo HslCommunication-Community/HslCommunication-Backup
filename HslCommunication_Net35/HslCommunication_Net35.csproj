@@ -324,6 +324,9 @@
     <Compile Include="..\HslCommunication_Net45\Core\Net\NetworkBase\NetworkUdpBase.cs">
       <Link>Core\Net\NetworkBase\NetworkUdpBase.cs</Link>
     </Compile>
+    <Compile Include="..\HslCommunication_Net45\Core\Net\NetworkBase\NetworkUdpDeviceBase.cs">
+      <Link>Core\Net\NetworkUdpDeviceBase.cs</Link>
+    </Compile>
     <Compile Include="..\HslCommunication_Net45\Core\Net\NetworkBase\NetworkXBase.cs">
       <Link>Core\Net\NetworkBase\NetworkXBase.cs</Link>
     </Compile>

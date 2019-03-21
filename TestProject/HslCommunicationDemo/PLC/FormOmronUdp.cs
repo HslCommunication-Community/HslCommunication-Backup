@@ -143,6 +143,11 @@ namespace HslCommunicationDemo
             
 
             omronFinsUdp = new OmronFinsUdp( textBox1.Text, port );
+            panel2.Enabled = true;
+            omronFinsUdp.SA1 = SA1;
+            omronFinsUdp.ByteTransform.DataFormat = (HslCommunication.Core.DataFormat)comboBox1.SelectedItem;
+
+            userControlCurve1.ReadWriteNet = omronFinsUdp;
 
         }
         

@@ -52,6 +52,7 @@ namespace UdpNetServer
         {
             if (InvokeRequired)
             {
+                udpNetServer.SendMessage( session, handle, "Received:" + value );
                 BeginInvoke( new Action<AppSession, NetHandle, string>( UdpNetServer_AcceptString ), session, handle, value );
                 return;
             }

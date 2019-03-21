@@ -51,6 +51,8 @@
             this.label8 = new System.Windows.Forms.Label();
             this.textBox5 = new System.Windows.Forms.TextBox();
             this.label7 = new System.Windows.Forms.Label();
+            this.textBox8 = new System.Windows.Forms.TextBox();
+            this.label12 = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.SuspendLayout();
@@ -185,6 +187,8 @@
             // panel2
             // 
             this.panel2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel2.Controls.Add(this.textBox8);
+            this.panel2.Controls.Add(this.label12);
             this.panel2.Controls.Add(this.button4);
             this.panel2.Controls.Add(this.textBox6);
             this.panel2.Controls.Add(this.label10);
@@ -201,7 +205,7 @@
             // 
             // button4
             // 
-            this.button4.Location = new System.Drawing.Point(875, 482);
+            this.button4.Location = new System.Drawing.Point(875, 206);
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(91, 28);
             this.button4.TabIndex = 17;
@@ -211,7 +215,7 @@
             // 
             // textBox6
             // 
-            this.textBox6.Location = new System.Drawing.Point(253, 485);
+            this.textBox6.Location = new System.Drawing.Point(253, 209);
             this.textBox6.Name = "textBox6";
             this.textBox6.Size = new System.Drawing.Size(141, 23);
             this.textBox6.TabIndex = 14;
@@ -220,7 +224,7 @@
             // label10
             // 
             this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(199, 488);
+            this.label10.Location = new System.Drawing.Point(199, 212);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(44, 17);
             this.label10.TabIndex = 13;
@@ -228,7 +232,7 @@
             // 
             // button3
             // 
-            this.button3.Location = new System.Drawing.Point(62, 482);
+            this.button3.Location = new System.Drawing.Point(62, 206);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(91, 28);
             this.button3.TabIndex = 12;
@@ -241,7 +245,7 @@
             this.textBox4.Location = new System.Drawing.Point(62, 36);
             this.textBox4.Multiline = true;
             this.textBox4.Name = "textBox4";
-            this.textBox4.Size = new System.Drawing.Size(892, 440);
+            this.textBox4.Size = new System.Drawing.Size(892, 164);
             this.textBox4.TabIndex = 8;
             // 
             // label9
@@ -278,6 +282,24 @@
             this.label7.Size = new System.Drawing.Size(56, 17);
             this.label7.TabIndex = 7;
             this.label7.Text = "指令头：";
+            // 
+            // textBox8
+            // 
+            this.textBox8.Location = new System.Drawing.Point(62, 241);
+            this.textBox8.Multiline = true;
+            this.textBox8.Name = "textBox8";
+            this.textBox8.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.textBox8.Size = new System.Drawing.Size(892, 269);
+            this.textBox8.TabIndex = 20;
+            // 
+            // label12
+            // 
+            this.label12.AutoSize = true;
+            this.label12.Location = new System.Drawing.Point(8, 244);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(44, 17);
+            this.label12.TabIndex = 21;
+            this.label12.Text = "接收：";
             // 
             // FormUdpNet
             // 
@@ -331,5 +353,7 @@
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.TextBox textBox5;
         private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.TextBox textBox8;
+        private System.Windows.Forms.Label label12;
     }
 }

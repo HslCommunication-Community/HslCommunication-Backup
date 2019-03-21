@@ -71,7 +71,7 @@ namespace HslCommunication.Enthernet
                 {
                     int received = session.WorkSocket.EndReceiveFrom( ar, ref session.UdpEndPoint );
                     // 释放连接关联
-                    session.WorkSocket = null;
+                    // session.WorkSocket = null;
                     // 马上开始重新接收，提供性能保障
                     RefreshReceive( );
                     // 处理数据
@@ -232,6 +232,39 @@ namespace HslCommunication.Enthernet
                 // 接收到文本数据
                 string str = Encoding.Unicode.GetString( content );
                 AcceptString?.Invoke( receive, customer, str );
+            }
+        }
+
+        /// <summary>
+        /// 向指定的通信对象发送字符串数据
+        /// </summary>
+        /// <param name="session">通信对象</param>
+        /// <param name="customer">用户的指令头</param>
+        /// <param name="str">实际发送的字符串数据</param>
+        public void SendMessage( AppSession session, int customer, string str )
+        {
+            SendBytesAsync( session, HslProtocol.CommandBytes( customer, Token, str ) );
+        }
+        /// <summary>
+        /// 向指定的通信对象发送字节数据
+        /// </summary>
+        /// <param name="session">连接对象</param>
+        /// <param name="customer">用户的指令头</param>
+        /// <param name="bytes">实际的数据</param>
+        public void SendMessage( AppSession session, int customer, byte[] bytes )
+        {
+            SendBytesAsync( session, HslProtocol.CommandBytes( customer, Token, bytes ) );
+        }
+
+        private new void SendBytesAsync( AppSession session, byte[] data )
+        {
+            try
+            {
+                session.WorkSocket.SendTo( data, data.Length, SocketFlags.None, session.UdpEndPoint );
+            }
+            catch(Exception ex)
+            {
+                LogNet?.WriteException( "SendMessage", ex );
             }
         }
 
