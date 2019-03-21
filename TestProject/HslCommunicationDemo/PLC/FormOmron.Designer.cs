@@ -30,8 +30,6 @@
         {
             this.panel1 = new System.Windows.Forms.Panel();
             this.comboBox1 = new System.Windows.Forms.ComboBox();
-            this.textBox17 = new System.Windows.Forms.TextBox();
-            this.label25 = new System.Windows.Forms.Label();
             this.textBox16 = new System.Windows.Forms.TextBox();
             this.label24 = new System.Windows.Forms.Label();
             this.textBox15 = new System.Windows.Forms.TextBox();
@@ -45,6 +43,7 @@
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.panel2 = new System.Windows.Forms.Panel();
+            this.userControlCurve1 = new HslCommunicationDemo.DemoControl.UserControlCurve();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.textBox11 = new System.Windows.Forms.TextBox();
             this.label14 = new System.Windows.Forms.Label();
@@ -97,7 +96,6 @@
             this.label4 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.label20 = new System.Windows.Forms.Label();
-            this.userControlCurve1 = new HslCommunicationDemo.DemoControl.UserControlCurve();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.groupBox4.SuspendLayout();
@@ -112,8 +110,6 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.panel1.Controls.Add(this.comboBox1);
-            this.panel1.Controls.Add(this.textBox17);
-            this.panel1.Controls.Add(this.label25);
             this.panel1.Controls.Add(this.textBox16);
             this.panel1.Controls.Add(this.label24);
             this.panel1.Controls.Add(this.textBox15);
@@ -141,26 +137,9 @@
             this.comboBox1.Size = new System.Drawing.Size(95, 25);
             this.comboBox1.TabIndex = 14;
             // 
-            // textBox17
-            // 
-            this.textBox17.Location = new System.Drawing.Point(389, 27);
-            this.textBox17.Name = "textBox17";
-            this.textBox17.Size = new System.Drawing.Size(56, 23);
-            this.textBox17.TabIndex = 13;
-            this.textBox17.Text = "33";
-            // 
-            // label25
-            // 
-            this.label25.AutoSize = true;
-            this.label25.Location = new System.Drawing.Point(313, 30);
-            this.label25.Name = "label25";
-            this.label25.Size = new System.Drawing.Size(77, 17);
-            this.label25.TabIndex = 12;
-            this.label25.Text = "PLC网络号：";
-            // 
             // textBox16
             // 
-            this.textBox16.Location = new System.Drawing.Point(389, 2);
+            this.textBox16.Location = new System.Drawing.Point(389, 14);
             this.textBox16.Name = "textBox16";
             this.textBox16.Size = new System.Drawing.Size(56, 23);
             this.textBox16.TabIndex = 11;
@@ -169,7 +148,7 @@
             // label24
             // 
             this.label24.AutoSize = true;
-            this.label24.Location = new System.Drawing.Point(313, 5);
+            this.label24.Location = new System.Drawing.Point(313, 17);
             this.label24.Name = "label24";
             this.label24.Size = new System.Drawing.Size(77, 17);
             this.label24.TabIndex = 10;
@@ -280,6 +259,15 @@
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(978, 537);
             this.panel2.TabIndex = 1;
+            // 
+            // userControlCurve1
+            // 
+            this.userControlCurve1.AddressExample = "D100";
+            this.userControlCurve1.Location = new System.Drawing.Point(546, 242);
+            this.userControlCurve1.Name = "userControlCurve1";
+            this.userControlCurve1.ReadWriteNet = null;
+            this.userControlCurve1.Size = new System.Drawing.Size(420, 279);
+            this.userControlCurve1.TabIndex = 4;
             // 
             // groupBox4
             // 
@@ -811,15 +799,6 @@
             this.label20.TabIndex = 6;
             this.label20.Text = "作者：Richard Hu";
             // 
-            // userControlCurve1
-            // 
-            this.userControlCurve1.AddressExample = "D100";
-            this.userControlCurve1.Location = new System.Drawing.Point(546, 242);
-            this.userControlCurve1.Name = "userControlCurve1";
-            this.userControlCurve1.ReadWriteNet = null;
-            this.userControlCurve1.Size = new System.Drawing.Size(420, 279);
-            this.userControlCurve1.TabIndex = 4;
-            // 
             // FormOmron
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 17F);
@@ -921,8 +900,6 @@
         private System.Windows.Forms.Label label21;
         private System.Windows.Forms.TextBox textBox15;
         private System.Windows.Forms.Label label23;
-        private System.Windows.Forms.TextBox textBox17;
-        private System.Windows.Forms.Label label25;
         private System.Windows.Forms.TextBox textBox16;
         private System.Windows.Forms.Label label24;
         private System.Windows.Forms.ComboBox comboBox1;

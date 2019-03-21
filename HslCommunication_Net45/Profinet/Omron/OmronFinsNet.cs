@@ -106,6 +106,23 @@ namespace HslCommunication.Profinet.Omron
         }
 
         #endregion
+        
+        #region IpAddress Override
+
+        /// <summary>
+        /// 设备的Ip地址信息
+        /// </summary>
+        public override string IpAddress
+        {
+            get => base.IpAddress;
+            set
+            {
+                DA1 = Convert.ToByte( value.Substring( value.LastIndexOf( "." ) + 1 ) );
+                base.IpAddress = value;
+            }
+        }
+
+        #endregion
 
         #region Public Member
 

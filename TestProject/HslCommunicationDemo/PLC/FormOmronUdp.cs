@@ -60,7 +60,7 @@ namespace HslCommunicationDemo
                 label2.Text = "Blogs:";
                 label4.Text = "Protocols:";
                 label20.Text = "Author:Richard Hu";
-                label5.Text = "Fins Tcp";
+                label5.Text = "Fins Udp";
                 label23.Text = "PC Net Num";
 
                 label1.Text = "Ip:";

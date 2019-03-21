@@ -65,7 +65,6 @@ namespace HslCommunicationDemo
                 label20.Text = "Author:Richard Hu";
                 label5.Text = "Fins Tcp";
                 label24.Text = "Unit Num";
-                label25.Text = "Net Num";
                 label23.Text = "PC Net Num";
 
                 label1.Text = "Ip:";
@@ -153,17 +152,10 @@ namespace HslCommunicationDemo
                 MessageBox.Show( "PLC DA2 input wrong！" );
                 return;
             }
-
-            if (!byte.TryParse( textBox17.Text, out byte DA1 ))
-            {
-                MessageBox.Show( "PLC DA1 input wrong！" );
-                return;
-            }
-
+            
             omronFinsNet.IpAddress = textBox1.Text;
             omronFinsNet.Port = port;
             omronFinsNet.SA1 = SA1;
-            omronFinsNet.DA1 = DA1;
             omronFinsNet.DA2 = DA2;
             omronFinsNet.ByteTransform.DataFormat = (HslCommunication.Core.DataFormat)comboBox1.SelectedItem;
 

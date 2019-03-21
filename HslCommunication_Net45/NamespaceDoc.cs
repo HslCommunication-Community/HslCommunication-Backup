@@ -652,6 +652,14 @@ namespace HslCommunication
     ///             <item>如果有公司使用了本库并愿意公开logo的，将在官网及git上进行统一显示，有意愿的联系作者。</item>
     ///         </list>
     ///     </revision>
+    ///     <revision date="2019-3-21" version="6.0.2" author="Richard.Hu">
+    ///         <list type="bullet">
+    ///             <item>修复西门子s7协议读写200smart字符串的bug。</item>
+    ///             <item>重构优化NetworkBase及NetwordDoubleBase网络类的代码。</item>
+    ///             <item>新增欧姆龙的FinsUdp的实现，DA1【PLC节点号】在配置Ip地址的时候自动赋值，不需要额外配置。</item>
+    ///             <item>FinsTcp类的DA1【PLC节点号】在配置Ip地址的时候自动赋值，不需要额外配置。</item>
+    ///         </list>
+    ///     </revision>
     /// </revisionHistory>
     [System.Runtime.CompilerServices.CompilerGeneratedAttribute( )]
     public class NamespaceDoc
