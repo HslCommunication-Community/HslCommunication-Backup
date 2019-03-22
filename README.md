@@ -261,7 +261,7 @@ Warmly welcome suggestions for improvement of the Code of this project, you can 
 [![Picture](https://raw.githubusercontent.com/dathlin/HslCommunication/master/imgs/partner/Pia.jpg)](http://www.piagroup.com) [![Picture](https://raw.githubusercontent.com/dathlin/HslCommunication/master/imgs/partner/堤摩讯.png)](https://www.timotion.com)
 [![Picture](https://raw.githubusercontent.com/dathlin/HslCommunication/master/imgs/partner/盛意达.jpg)](http://bjsyd.cn) [![Picture](https://raw.githubusercontent.com/dathlin/HslCommunication/master/imgs/partner/PENC.jpg)](http://www.penc.com)
 ![Picture](https://raw.githubusercontent.com/dathlin/HslCommunication/master/imgs/partner/rocket_Blue.png) ![Picture](https://raw.githubusercontent.com/dathlin/HslCommunication/master/imgs/partner/翔宇自控.jpg) 
-[![Picture](https://raw.githubusercontent.com/dathlin/HslCommunication/master/imgs/partner/杭州优海.jpg)](http://www.eohi700.com/)
+[![Picture](https://raw.githubusercontent.com/dathlin/HslCommunication/master/imgs/partner/杭州优海.png)](http://www.eohi700.com/)
 
 ## Creative is not easy, thanks for the reward
 If this library really helps you, you can support me by AliPay. Please choose the amount according to your actual ability.
