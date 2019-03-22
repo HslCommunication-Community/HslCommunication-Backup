@@ -26,5 +26,15 @@ namespace HslCommunication.Core.Net
 
 
         internal SimpleHybirdLock HybirdLockSend { get; set; }
+
+        /// <summary>
+        /// 关键字
+        /// </summary>
+        internal string Key { get; set; }
+
+        /// <summary>
+        /// 客户端的标识
+        /// </summary>
+        internal string ClientId { get; set; }
     }
 }

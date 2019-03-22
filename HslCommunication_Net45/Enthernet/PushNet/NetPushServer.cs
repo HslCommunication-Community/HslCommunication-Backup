@@ -40,14 +40,14 @@ namespace HslCommunication.Enthernet
         /// </summary>
         public NetPushServer()
         {
-            dictPushClients = new Dictionary<string, PushGroupClient>( );
-            dictSendHistory = new Dictionary<string, string>( );
-            dicHybirdLock = new SimpleHybirdLock( );
-            dicSendCacheLock = new SimpleHybirdLock( );
-            sendAction = new Action<AppSession, string>( SendString );
+            dictPushClients        = new Dictionary<string, PushGroupClient>( );
+            dictSendHistory        = new Dictionary<string, string>( );
+            dicHybirdLock          = new SimpleHybirdLock( );
+            dicSendCacheLock       = new SimpleHybirdLock( );
+            sendAction             = new Action<AppSession, string>( SendString );
 
-            hybirdLock = new SimpleHybirdLock( );
-            pushClients = new List<NetPushClient>( );
+            hybirdLock             = new SimpleHybirdLock( );
+            pushClients            = new List<NetPushClient>( );
         }
 
 
@@ -343,14 +343,107 @@ namespace HslCommunication.Enthernet
 
         private void SendString(AppSession appSession,string content)
         {
-            OperateResult result = Send( appSession.WorkSocket, HslProtocol.CommandBytes( 0, Token, content ) );
-            // OperateResult result = SendStringAndCheckReceive( appSession.WorkSocket, 0, content );
-            if(!result.IsSuccess)
+            PushSendAsync( appSession, HslProtocol.CommandBytes( 0, Token, content ) );
+        }
+
+
+        #region Send Bytes Async
+
+        /// <summary>
+        /// 发送数据的方法
+        /// </summary>
+        /// <param name="session">通信用的核心对象</param>
+        /// <param name="content">完整的字节信息</param>
+        internal void PushSendAsync( AppSession session, byte[] content )
+        {
+            if (content == null) return;
+            try
             {
-                RemoveGroupOnlien( appSession.KeyGroup, appSession.ClientUniqueID );
+                // 进入发送数据的锁，然后开启异步的数据发送
+                session.HybirdLockSend.Enter( );
+
+                // 启用另外一个网络封装对象进行发送数据
+                AsyncStateSend state = new AsyncStateSend( )
+                {
+                    WorkSocket = session.WorkSocket,
+                    Content = content,
+                    AlreadySendLength = 0,
+                    HybirdLockSend = session.HybirdLockSend,
+                    Key = session.KeyGroup,
+                    ClientId = session.ClientUniqueID,
+                };
+
+                state.WorkSocket.BeginSend(
+                    state.Content,
+                    state.AlreadySendLength,
+                    state.Content.Length - state.AlreadySendLength,
+                    SocketFlags.None,
+                    new AsyncCallback( PushSendCallBack ),
+                    state );
+            }
+            catch (ObjectDisposedException)
+            {
+                // 不操作
+                session.HybirdLockSend.Leave( );
+                RemoveGroupOnlien( session.KeyGroup, session.ClientUniqueID );
+            }
+            catch (Exception ex)
+            {
+                session.HybirdLockSend.Leave( );
+                if (!ex.Message.Contains( StringResources.Language.SocketRemoteCloseException ))
+                {
+                    LogNet?.WriteException( ToString( ), StringResources.Language.SocketSendException, ex );
+                }
+                RemoveGroupOnlien( session.KeyGroup, session.ClientUniqueID );
             }
         }
 
+        /// <summary>
+        /// 发送回发方法
+        /// </summary>
+        /// <param name="ar"></param>
+        internal void PushSendCallBack( IAsyncResult ar )
+        {
+            if (ar.AsyncState is AsyncStateSend stateone)
+            {
+                try
+                {
+                    stateone.AlreadySendLength += stateone.WorkSocket.EndSend( ar );
+                    if (stateone.AlreadySendLength < stateone.Content.Length)
+                    {
+                        // 继续发送
+                        stateone.WorkSocket.BeginSend( stateone.Content,
+                        stateone.AlreadySendLength,
+                        stateone.Content.Length - stateone.AlreadySendLength,
+                        SocketFlags.None,
+                        new AsyncCallback( SendCallBack ),
+                        stateone );
+                    }
+                    else
+                    {
+                        stateone.HybirdLockSend.Leave( );
+                        // 发送完成
+                        stateone = null;
+                    }
+                }
+                catch (ObjectDisposedException)
+                {
+                    stateone.HybirdLockSend.Leave( );
+                    // 不处理
+                    stateone = null;
+                    RemoveGroupOnlien( stateone.Key, stateone.ClientId );
+                }
+                catch (Exception ex)
+                {
+                    LogNet?.WriteException( ToString( ), StringResources.Language.SocketEndSendException, ex );
+                    stateone.HybirdLockSend.Leave( );
+                    stateone = null;
+                    RemoveGroupOnlien( stateone.Key, stateone.ClientId );
+                }
+            }
+        }
+
+        #endregion
 
 
         private void GetPushFromServer( NetPushClient pushClient, string data )
