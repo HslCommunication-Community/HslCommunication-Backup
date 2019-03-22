@@ -101,6 +101,7 @@ Install-Package HslCommunication
 * [常用控件库](http://www.cnblogs.com/dathlin/p/8150516.html)
 * [连接池使用](https://www.cnblogs.com/dathlin/p/9191211.html)
 * [Redis读写](https://www.cnblogs.com/dathlin/p/9998013.html)
+* [从Labview调用本库](http://bbs.elecfans.com/jishu_1710384_1_1.html)
 
 
 ## HslCommunication.jar Summary 
