@@ -79,6 +79,8 @@ namespace HslCommunication.BasicFramework
         /// 获取指定的位置的bool值，如果超出，则引发异常
         /// </summary>
         /// <param name="destIndex">目标存储的索引</param>
+        /// <returns>获取索引位置的bool数据值</returns>
+        /// <exception cref="IndexOutOfRangeException"></exception>
         public bool GetBool( int destIndex )
         {
             bool result = false;
@@ -603,7 +605,7 @@ namespace HslCommunication.BasicFramework
         /// <returns>double数据</returns>
         public double GetDouble( int index )
         {
-            return GetUInt64( index, 1 )[0];
+            return GetDouble( index, 1 )[0];
         }
 
         #endregion
