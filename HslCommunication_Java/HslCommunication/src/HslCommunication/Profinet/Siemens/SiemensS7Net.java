@@ -7,11 +7,11 @@ import HslCommunication.Core.Transfer.ReverseBytesTransform;
 import HslCommunication.Core.Types.OperateResult;
 import HslCommunication.Core.Types.OperateResultExOne;
 import HslCommunication.Core.Types.OperateResultExThree;
-import HslCommunication.Core.Types.OperateResultExTwo;
 import HslCommunication.StringResources;
 import HslCommunication.Utilities;
 
 import java.io.ByteArrayOutputStream;
+import java.io.UnsupportedEncodingException;
 import java.net.Socket;
 import java.util.Arrays;
 
@@ -59,6 +59,10 @@ public class SiemensS7Net extends NetworkDeviceBase<S7Message, ReverseBytesTrans
             case S300:
                 plcHead1[21] = 2;
                 break;
+            case S400:
+                plcHead1[21] = 3;
+                plcHead1[17] = 0;
+                break;
             case S1500:
                 plcHead1[21] = 0;
                 break;
@@ -73,6 +77,39 @@ public class SiemensS7Net extends NetworkDeviceBase<S7Message, ReverseBytesTrans
         }
     }
 
+    /**
+     * 获取 PLC的槽号，针对S7-400的PLC设置的
+     * @return 槽号
+     */
+    public byte getSlot(){
+        return plc_slot;
+    }
+
+    /**
+     * 设置PLC的槽号信息，针对S7-400的PLC设置的
+     * @param value 槽号信息
+     */
+    public void setSlot(byte value){
+        plc_slot = value;
+        plcHead1[21] = (byte)((this.plc_rack * 0x20) + this.plc_slot);
+    }
+
+    /**
+     * 获取PLC的机架号，针对S7-400的PLC设置的
+     * @return Plc的机架号
+     */
+    public byte getRack() {
+        return plc_rack;
+    }
+
+    /**
+     * 设置PLC的机架号，针对S7-400的PLC设置的
+     * @param value 机架号
+     */
+    public void setRack(byte value){
+        plc_rack = value;
+        plcHead1[21] = (byte)((this.plc_rack * 0x20) + this.plc_slot);
+    }
 
     /**
      * 在客户端连接上服务器后，所做的一些初始化操作 ->
@@ -83,11 +120,11 @@ public class SiemensS7Net extends NetworkDeviceBase<S7Message, ReverseBytesTrans
     @Override
     protected OperateResult InitializationOnConnect(Socket socket) {
         // 第一层通信的初始化
-        OperateResultExTwo<byte[], byte[]> read_first = ReadFromCoreServerBase(socket, plcHead1);
+        OperateResultExOne<byte[]> read_first = ReadFromCoreServer(socket, plcHead1);
         if (!read_first.IsSuccess) return read_first;
 
         // 第二层通信的初始化
-        OperateResultExTwo<byte[], byte[]> read_second = ReadFromCoreServerBase(socket, plcHead2);
+        OperateResultExOne<byte[]> read_second = ReadFromCoreServer(socket, plcHead2);
         if (!read_second.IsSuccess) return read_second;
 
         // 返回成功的信号
@@ -98,7 +135,7 @@ public class SiemensS7Net extends NetworkDeviceBase<S7Message, ReverseBytesTrans
 
     /**
      * 从PLC读取订货号信息
-     * @return
+     * @return 订货号信息
      */
     public OperateResultExOne<String> ReadOrderNumber() {
         OperateResultExOne<String> result = new OperateResultExOne<String>();
@@ -106,7 +143,7 @@ public class SiemensS7Net extends NetworkDeviceBase<S7Message, ReverseBytesTrans
         if (read.IsSuccess) {
             if (read.Content.length > 100) {
                 result.IsSuccess = true;
-                result.Content = Utilities.getString(Arrays.copyOfRange(read.Content, 71, 20), "ASCII");
+                result.Content = Utilities.getString(Arrays.copyOfRange(read.Content, 71, 91), "ASCII");
             }
         }
 
@@ -377,6 +414,76 @@ public class SiemensS7Net extends NetworkDeviceBase<S7Message, ReverseBytesTrans
     }
 
 
+    /**
+     * 读取西门子的地址的字符串信息，这个信息是和西门子绑定在一起，长度随西门子的信息动态变化的
+     * @param address 数据地址，具体的格式需要参照类的说明文档
+     * @return 带有是否成功的字符串结果类对象
+     * @throws UnsupportedEncodingException
+     */
+    public OperateResultExOne<String> ReadString( String address )
+    {
+        if (CurrentPlc != SiemensPLCS.S200Smart)
+        {
+            OperateResultExOne<byte[]> read = Read( address, (short) 2 );
+            if (!read.IsSuccess) return OperateResultExOne.<String>CreateFailedResult(read );
+
+            if (read.Content[0] != (byte) 254) return new OperateResultExOne<String>( "Value in plc is not string type" );
+
+            OperateResultExOne<byte[]> readString = Read( address, (short)(2 + read.Content[1]) );
+            if (!readString.IsSuccess) return OperateResultExOne.CreateFailedResult( readString );
+
+            try {
+                byte[] buffer = new byte[read.Content[1]];
+                System.arraycopy(readString.Content, 2, buffer, 0,buffer.length );
+                return OperateResultExOne.CreateSuccessResult( new String(buffer,"US-ASCII") );
+            }
+            catch (Exception ex){
+                return new OperateResultExOne<>(ex.getMessage());
+            }
+        }
+        else
+        {
+            OperateResultExOne<byte[]> read = Read( address, (short) 1 );
+            if (!read.IsSuccess) return OperateResultExOne.<String>CreateFailedResult( read );
+
+            OperateResultExOne<byte[]> readString = Read( address, (short)(1 + read.Content[0]) );
+            if (!readString.IsSuccess) return OperateResultExOne.CreateFailedResult( readString );
+
+            try {
+                byte[] buffer = new byte[read.Content[0]];
+                System.arraycopy(readString.Content, 1, buffer, 0, buffer.length);
+                return OperateResultExOne.CreateSuccessResult(new String(buffer, "US-ASCII"));
+            }
+            catch (Exception ex){
+                return new OperateResultExOne<>(ex.getMessage());
+            }
+        }
+    }
+
+
+    /**
+     * 向设备中写入字符串，编码格式为ASCII
+     * @param address 起始地址
+     * @param value 写入值
+     * @return 返回读取结果
+     */
+    @Override
+    public OperateResult Write(String address, String value) {
+        byte[] temp = getByteTransform().TransByte(value, "US-ASCII");
+        if (WordLength == 1) temp = SoftBasic.ArrayExpandToLengthEven(temp);
+
+        if (CurrentPlc != SiemensPLCS.S200Smart)
+        {
+            return Write( address, SoftBasic.SpliceTwoByteArray( new byte[] { (byte) 254, (byte)temp.length }, temp ) );
+        }
+        else
+        {
+            return Write( address, SoftBasic.SpliceTwoByteArray( new byte[] { (byte)temp.length }, temp ) );
+        }
+    }
+
+
+
     private byte[] plcHead1 = new byte[]
             {
                     0x03,0x00,0x00,0x16,0x11,(byte) 0xE0,0x00,0x00,0x00,0x01,0x00,(byte) 0xC0,0x01,
@@ -404,6 +511,8 @@ public class SiemensS7Net extends NetworkDeviceBase<S7Message, ReverseBytesTrans
                     0x00,0x08,0x00,0x00,(byte) 0xF0,0x00,0x00,0x01,0x00,0x01,0x03,(byte) 0xC0
             };
 
+    private byte plc_slot = 0;
+    private byte plc_rack = 0;
 
     /**
      * 返回表示当前对象的字符串

@@ -8,11 +8,12 @@ import HslCommunication.Enthernet.ComplexNet.NetComplexClient;
 import HslCommunication.Enthernet.PushNet.NetPushClient;
 import HslCommunication.Enthernet.SimplifyNet.NetSimplifyClient;
 import HslCommunication.ModBus.ModbusTcpNet;
+import HslCommunication.Profinet.Melsec.MelsecA1ENet;
 import HslCommunication.Profinet.Melsec.MelsecMcAsciiNet;
 import HslCommunication.Profinet.Melsec.MelsecMcNet;
-import HslCommunication.Profinet.Melsec.MelsecA1ENet;
 import HslCommunication.Profinet.Siemens.SiemensPLCS;
 import HslCommunication.Profinet.Siemens.SiemensS7Net;
+import HslCommunicationDemo.FormLoad;
 
 import java.util.Arrays;
 
@@ -30,6 +31,9 @@ public class Main {
         //SiemesTest();
 
 
+        FormLoad formLoad = new FormLoad();
+        formLoad.setVisible(true);
+        formLoad.dispose();
 
         try {
             //Constructor[] aa = Integer.class.getDeclaredConstructors();

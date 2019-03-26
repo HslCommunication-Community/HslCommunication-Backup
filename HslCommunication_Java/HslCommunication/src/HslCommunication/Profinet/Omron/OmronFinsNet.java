@@ -2,6 +2,7 @@ package HslCommunication.Profinet.Omron;
 
 import HslCommunication.Core.IMessage.FinsMessage;
 import HslCommunication.Core.Net.NetworkBase.NetworkDeviceBase;
+import HslCommunication.Core.Transfer.DataFormat;
 import HslCommunication.Core.Transfer.ReverseWordTransform;
 import HslCommunication.Core.Types.OperateResult;
 import HslCommunication.Core.Types.OperateResultExOne;
@@ -105,6 +106,42 @@ public class OmronFinsNet extends NetworkDeviceBase<FinsMessage,ReverseWordTrans
     public byte SID = 0x00;
 
 
+    /**
+     * 获取多字节数据的反转类型，适用于int,float,double,long类型的数据
+     *
+     * @return
+     */
+    public DataFormat getDataFormat() {
+        return getByteTransform().getDataFormat();
+    }
+
+
+    /**
+     * 字符串数据是否发生反转
+     *
+     * @return bool值
+     */
+    public boolean isStringReverse() {
+        return getByteTransform().IsStringReverse;
+    }
+
+    /**
+     * 设置多字节数据的反转类型，适用于int,float,double,long类型的数据
+     *
+     * @param dataFormat 数据类型
+     */
+    public void setDataFormat(DataFormat dataFormat) {
+        getByteTransform().setDataFormat(dataFormat);
+    }
+
+    /**
+     * 设置字符串数据是否反转
+     *
+     * @param stringReverse bool值
+     */
+    public void setStringReverse(boolean stringReverse) {
+        getByteTransform().IsStringReverse = stringReverse;
+    }
 
     /**
      * 将普通的指令打包成完整的指令
@@ -136,7 +173,15 @@ public class OmronFinsNet extends NetworkDeviceBase<FinsMessage,ReverseWordTrans
         return buffer;
     }
 
-
+    /**
+     * 重写Ip地址的赋值的实现
+     * @param ipAddress IP地址
+     */
+    @Override
+    public void setIpAddress(String ipAddress) {
+        super.setIpAddress(ipAddress);
+        DA1 = (byte) Integer.parseInt( ipAddress.substring( ipAddress.lastIndexOf( "." ) + 1 ) );
+    }
 
     /**
      * 根据类型地址长度确认需要读取的指令头
@@ -167,9 +212,9 @@ public class OmronFinsNet extends NetworkDeviceBase<FinsMessage,ReverseWordTrans
 
 
     /**
-     *
-     * @param address 根据类型地址以及需要写入的数据来生成指令头
-     * @param value 起始地址
+     * 根据类型地址以及需要写入的数据来生成指令头
+     * @param address 起始地址
+     * @param value 原始的字节数据信息
      * @param isBit 是否是位操作
      * @return 结果
      */
@@ -210,20 +255,20 @@ public class OmronFinsNet extends NetworkDeviceBase<FinsMessage,ReverseWordTrans
     @Override
     protected OperateResult InitializationOnConnect(Socket socket) {
         // handSingle就是握手信号字节
-        OperateResultExTwo<byte[], byte[]> read = ReadFromCoreServerBase(socket, handSingle);
+        OperateResultExOne<byte[]> read = ReadFromCoreServer(socket, handSingle);
         if (!read.IsSuccess) return read;
 
         // 检查返回的状态
         byte[] buffer = new byte[4];
-        buffer[0] = read.Content2[7];
-        buffer[1] = read.Content2[6];
-        buffer[2] = read.Content2[5];
-        buffer[3] = read.Content2[4];
+        buffer[0] = read.Content[15];
+        buffer[1] = read.Content[14];
+        buffer[2] = read.Content[13];
+        buffer[3] = read.Content[12];
         int status = Utilities.getInt(buffer, 0);
         if (status != 0) return new OperateResult( status, GetStatusDescription( status ) );
 
         // 提取PLC的节点地址
-        if (read.Content2.length >= 16) DA1 = read.Content2[15];
+        if (read.Content.length >= 24) DA1 = read.Content[23];
 
         return OperateResult.CreateSuccessResult();
     }

@@ -112,7 +112,7 @@ public class MelsecMcNet extends NetworkDeviceBase<MelsecQnA3EBinaryMessage,Regu
      */
     public OperateResultExOne<boolean[]> ReadBool(String address, short length) {
         // 解析地址
-        OperateResultExTwo<MelsecMcDataType, Short> analysis = MelsecHelper.McAnalysisAddress( address );
+        OperateResultExTwo<MelsecMcDataType, Integer> analysis = MelsecHelper.McAnalysisAddress( address );
         if (!analysis.IsSuccess) return OperateResultExOne.CreateFailedResult( analysis );
 
         // 位读取校验
@@ -233,7 +233,7 @@ public class MelsecMcNet extends NetworkDeviceBase<MelsecQnA3EBinaryMessage,Regu
      * @return 带有成功标志的指令数据
      */
     public static OperateResultExOne<byte[]> BuildReadCommand(String address, short length, byte networkNumber, byte networkStationNumber) {
-        OperateResultExTwo<MelsecMcDataType, Short> analysis = MelsecHelper.McAnalysisAddress(address);
+        OperateResultExTwo<MelsecMcDataType, Integer> analysis = MelsecHelper.McAnalysisAddress(address);
         if (!analysis.IsSuccess) return OperateResultExOne.CreateFailedResult(analysis);
 
         byte[] _PLCCommand = new byte[21];
@@ -283,7 +283,7 @@ public class MelsecMcNet extends NetworkDeviceBase<MelsecQnA3EBinaryMessage,Regu
      * @return 结果
      */
     public static OperateResultExOne<byte[]> BuildWriteCommand(String address, byte[] value, byte networkNumber, byte networkStationNumber) {
-        OperateResultExTwo<MelsecMcDataType, Short> analysis = MelsecHelper.McAnalysisAddress(address);
+        OperateResultExTwo<MelsecMcDataType, Integer> analysis = MelsecHelper.McAnalysisAddress(address);
         if (!analysis.IsSuccess) return OperateResultExOne.CreateFailedResult(analysis);
 
         int length = -1;

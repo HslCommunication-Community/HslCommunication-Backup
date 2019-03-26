@@ -1,6 +1,9 @@
 package HslCommunication.Profinet.Melsec;
 
+import HslCommunication.Core.Types.FunctionOperateExOne;
+import HslCommunication.Core.Types.OperateResultExOne;
 import HslCommunication.Core.Types.OperateResultExTwo;
+import HslCommunication.StringResources;
 import HslCommunication.Utilities;
 
 /**
@@ -71,104 +74,347 @@ public class MelsecHelper {
      * @param address 数据地址
      * @return 解析值
      */
-    public static OperateResultExTwo<MelsecMcDataType, Short> McAnalysisAddress( String address )
+    public static OperateResultExTwo<MelsecMcDataType, Integer> McAnalysisAddress( String address )
     {
-        OperateResultExTwo<MelsecMcDataType, Short> result = new OperateResultExTwo<MelsecMcDataType, Short>();
-        try {
-            switch (address.charAt(0)) {
+        OperateResultExTwo<MelsecMcDataType, Integer> result = new OperateResultExTwo<MelsecMcDataType, Integer>( );
+        try
+        {
+            switch (address.charAt(0))
+            {
                 case 'M':
-                case 'm': {
+                case 'm':
+                {
                     result.Content1 = MelsecMcDataType.M;
-                    result.Content2 = Short.parseShort(address.substring(1), MelsecMcDataType.M.getFromBase());
+                    result.Content2 = Integer.parseInt( address.substring( 1 ), MelsecMcDataType.M.getFromBase() );
                     break;
                 }
                 case 'X':
-                case 'x': {
+                case 'x':
+                {
                     result.Content1 = MelsecMcDataType.X;
-                    result.Content2 = Short.parseShort(address.substring(1), MelsecMcDataType.X.getFromBase());
+                    result.Content2 = Integer.parseInt( address.substring( 1 ), MelsecMcDataType.X.getFromBase() );
                     break;
                 }
                 case 'Y':
-                case 'y': {
+                case 'y':
+                {
                     result.Content1 = MelsecMcDataType.Y;
-                    result.Content2 = Short.parseShort(address.substring(1), MelsecMcDataType.Y.getFromBase());
+                    result.Content2 = Integer.parseInt( address.substring( 1 ), MelsecMcDataType.Y.getFromBase() );
                     break;
                 }
                 case 'D':
-                case 'd': {
+                case 'd':
+                {
                     result.Content1 = MelsecMcDataType.D;
-                    result.Content2 = Short.parseShort(address.substring(1), MelsecMcDataType.D.getFromBase());
+                    result.Content2 = Integer.parseInt( address.substring( 1 ), MelsecMcDataType.D.getFromBase() );
                     break;
                 }
                 case 'W':
-                case 'w': {
+                case 'w':
+                {
                     result.Content1 = MelsecMcDataType.W;
-                    result.Content2 = Short.parseShort(address.substring(1), MelsecMcDataType.W.getFromBase());
+                    result.Content2 = Integer.parseInt( address.substring( 1 ), MelsecMcDataType.W.getFromBase() );
                     break;
                 }
                 case 'L':
-                case 'l': {
+                case 'l':
+                {
                     result.Content1 = MelsecMcDataType.L;
-                    result.Content2 = Short.parseShort(address.substring(1), MelsecMcDataType.L.getFromBase());
+                    result.Content2 = Integer.parseInt( address.substring( 1 ), MelsecMcDataType.L.getFromBase() );
                     break;
                 }
                 case 'F':
-                case 'f': {
+                case 'f':
+                {
                     result.Content1 = MelsecMcDataType.F;
-                    result.Content2 = Short.parseShort(address.substring(1), MelsecMcDataType.F.getFromBase());
+                    result.Content2 = Integer.parseInt( address.substring( 1 ), MelsecMcDataType.F.getFromBase() );
                     break;
                 }
                 case 'V':
-                case 'v': {
+                case 'v':
+                {
                     result.Content1 = MelsecMcDataType.V;
-                    result.Content2 = Short.parseShort(address.substring(1), MelsecMcDataType.V.getFromBase());
+                    result.Content2 =Integer.parseInt( address.substring( 1 ), MelsecMcDataType.V.getFromBase() );
                     break;
                 }
                 case 'B':
-                case 'b': {
+                case 'b':
+                {
                     result.Content1 = MelsecMcDataType.B;
-                    result.Content2 = Short.parseShort(address.substring(1), MelsecMcDataType.B.getFromBase());
+                    result.Content2 = Integer.parseInt( address.substring( 1 ), MelsecMcDataType.B.getFromBase() );
                     break;
                 }
                 case 'R':
-                case 'r': {
+                case 'r':
+                {
                     result.Content1 = MelsecMcDataType.R;
-                    result.Content2 = Short.parseShort(address.substring(1), MelsecMcDataType.R.getFromBase());
+                    result.Content2 = Integer.parseInt( address.substring( 1 ), MelsecMcDataType.R.getFromBase() );
                     break;
                 }
                 case 'S':
-                case 's': {
-                    result.Content1 = MelsecMcDataType.S;
-                    result.Content2 = Short.parseShort(address.substring(1), MelsecMcDataType.S.getFromBase());
-                    break;
+                case 's':
+                {
+                    if (address.charAt(1) == 'N' || address.charAt(1) == 'n')
+                    {
+                        result.Content1 = MelsecMcDataType.SN;
+                        result.Content2 = Integer.parseInt( address.substring( 2 ), MelsecMcDataType.SN.getFromBase() );
+                        break;
+                    }
+                    else if (address.charAt(1) == 'S' || address.charAt(1) == 's')
+                    {
+                        result.Content1 = MelsecMcDataType.SS;
+                        result.Content2 = Integer.parseInt( address.substring( 2 ), MelsecMcDataType.SS.getFromBase() );
+                        break;
+                    }
+                    else if (address.charAt(1) == 'C' || address.charAt(1) == 'c')
+                    {
+                        result.Content1 = MelsecMcDataType.SC;
+                        result.Content2 = Integer.parseInt( address.substring( 2 ), MelsecMcDataType.SC.getFromBase() );
+                        break;
+                    }
+                    else
+                    {
+                        result.Content1 = MelsecMcDataType.S;
+                        result.Content2 = Integer.parseInt( address.substring( 1 ), MelsecMcDataType.S.getFromBase() );
+                        break;
+                    }
                 }
                 case 'Z':
-                case 'z': {
-                    result.Content1 = MelsecMcDataType.Z;
-                    result.Content2 = Short.parseShort(address.substring(1), MelsecMcDataType.Z.getFromBase());
-                    break;
+                case 'z':
+                {
+                    if (address.startsWith( "ZR" ) || address.startsWith( "zr" ))
+                    {
+                        result.Content1 = MelsecMcDataType.ZR;
+                        result.Content2 = Integer.parseInt( address.substring( 2 ), MelsecMcDataType.ZR.getFromBase() );
+                        break;
+                    }
+                    else
+                    {
+                        result.Content1 = MelsecMcDataType.Z;
+                        result.Content2 = Integer.parseInt( address.substring( 1 ), MelsecMcDataType.Z.getFromBase() );
+                        break;
+                    }
                 }
                 case 'T':
-                case 't': {
-                    result.Content1 = MelsecMcDataType.T;
-                    result.Content2 = Short.parseShort(address.substring(1), MelsecMcDataType.T.getFromBase());
-                    break;
+                case 't':
+                {
+                    if (address.charAt(1) == 'N' || address.charAt(1) == 'n')
+                    {
+                        result.Content1 = MelsecMcDataType.TN;
+                        result.Content2 = Integer.parseInt( address.substring( 2 ), MelsecMcDataType.TN.getFromBase() );
+                        break;
+                    }
+                    else if (address.charAt(1) == 'S' || address.charAt(1) == 's')
+                    {
+                        result.Content1 = MelsecMcDataType.TS;
+                        result.Content2 = Integer.parseInt( address.substring( 2 ), MelsecMcDataType.TS.getFromBase() );
+                        break;
+                    }
+                    else if (address.charAt(1) == 'C' || address.charAt(1) == 'c')
+                    {
+                        result.Content1 = MelsecMcDataType.TC;
+                        result.Content2 = Integer.parseInt( address.substring( 2 ), MelsecMcDataType.TC.getFromBase() );
+                        break;
+                    }
+                    else
+                    {
+                        throw new Exception( StringResources.Language.NotSupportedDataType() );
+                    }
                 }
                 case 'C':
-                case 'c': {
-                    result.Content1 = MelsecMcDataType.C;
-                    result.Content2 = Short.parseShort(address.substring(1), MelsecMcDataType.C.getFromBase());
-                    break;
+                case 'c':
+                {
+                    if (address.charAt(1) == 'N' || address.charAt(1) == 'n')
+                    {
+                        result.Content1 = MelsecMcDataType.CN;
+                        result.Content2 = Integer.parseInt( address.substring( 2 ), MelsecMcDataType.CN.getFromBase() );
+                        break;
+                    }
+                    else if (address.charAt(1) == 'S' || address.charAt(1) == 's')
+                    {
+                        result.Content1 = MelsecMcDataType.CS;
+                        result.Content2 = Integer.parseInt( address.substring( 2 ), MelsecMcDataType.CS.getFromBase() );
+                        break;
+                    }
+                    else if (address.charAt(1) == 'C' || address.charAt(1) == 'c')
+                    {
+                        result.Content1 = MelsecMcDataType.CC;
+                        result.Content2 = Integer.parseInt( address.substring( 2 ), MelsecMcDataType.CC.getFromBase() );
+                        break;
+                    }
+                    else
+                    {
+                        throw new Exception( StringResources.Language.NotSupportedDataType() );
+                    }
                 }
-                default:
-                    throw new Exception("输入的类型不支持，请重新输入");
+                default: throw new Exception( StringResources.Language.NotSupportedDataType() );
             }
-        } catch (Exception ex) {
-            result.Message = "地址格式填写错误：" + ex.getMessage();
+        }
+        catch (Exception ex)
+        {
+            result.Message = ex.getMessage();
             return result;
         }
 
         result.IsSuccess = true;
+        result.Message = StringResources.Language.SuccessText();
+        return result;
+    }
+
+
+    /**
+     * 基恩士解析数据地址
+     * @param address 数据地址
+     * @return 解析值
+     */
+    public static OperateResultExTwo<MelsecMcDataType, Integer> KeyenceAnalysisAddress( String address )
+    {
+        OperateResultExTwo<MelsecMcDataType, Integer> result = new OperateResultExTwo<MelsecMcDataType, Integer>( );
+        try
+        {
+            switch (address.charAt(0))
+            {
+                case 'M':
+                case 'm':
+                {
+                    result.Content1 = MelsecMcDataType.Keyence_M;
+                    result.Content2 = Integer.parseInt( address.substring( 1 ), MelsecMcDataType.Keyence_M.getFromBase() );
+                    break;
+                }
+                case 'X':
+                case 'x':
+                {
+                    result.Content1 = MelsecMcDataType.Keyence_X;
+                    result.Content2 = Integer.parseInt( address.substring( 1 ), MelsecMcDataType.Keyence_X.getFromBase() );
+                    break;
+                }
+                case 'Y':
+                case 'y':
+                {
+                    result.Content1 = MelsecMcDataType.Keyence_Y;
+                    result.Content2 = Integer.parseInt( address.substring( 1 ), MelsecMcDataType.Keyence_Y.getFromBase() );
+                    break;
+                }
+                case 'B':
+                case 'b':
+                {
+                    result.Content1 = MelsecMcDataType.Keyence_B;
+                    result.Content2 = Integer.parseInt( address.substring( 1 ), MelsecMcDataType.Keyence_B.getFromBase() );
+                    break;
+                }
+                case 'L':
+                case 'l':
+                {
+                    result.Content1 = MelsecMcDataType.Keyence_L;
+                    result.Content2 = Integer.parseInt( address.substring( 1 ), MelsecMcDataType.Keyence_L.getFromBase() );
+                    break;
+                }
+                case 'S':
+                case 's':
+                {
+                    if (address.charAt(1) == 'M' || address.charAt(1) == 'm')
+                    {
+                        result.Content1 = MelsecMcDataType.Keyence_SM;
+                        result.Content2 = Integer.parseInt( address.substring( 2 ), MelsecMcDataType.Keyence_SM.getFromBase() );
+                        break;
+                    }
+                    else if (address.charAt(1) == 'D' || address.charAt(1) == 'd')
+                    {
+                        result.Content1 = MelsecMcDataType.Keyence_SD;
+                        result.Content2 = Integer.parseInt( address.substring( 2 ), MelsecMcDataType.Keyence_SD.getFromBase() );
+                        break;
+                    }
+                    else
+                    {
+                        throw new Exception( StringResources.Language.NotSupportedDataType() );
+                    }
+                }
+                case 'D':
+                case 'd':
+                {
+                    result.Content1 = MelsecMcDataType.Keyence_D;
+                    result.Content2 = Integer.parseInt( address.substring( 1 ), MelsecMcDataType.Keyence_D.getFromBase() );
+                    break;
+                }
+                case 'R':
+                case 'r':
+                {
+                    result.Content1 = MelsecMcDataType.Keyence_R;
+                    result.Content2 = Integer.parseInt( address.substring( 1 ), MelsecMcDataType.Keyence_R.getFromBase() );
+                    break;
+                }
+                case 'Z':
+                case 'z':
+                {
+                    if (address.charAt(1) == 'R' || address.charAt(1) == 'r')
+                    {
+                        result.Content1 = MelsecMcDataType.Keyence_ZR;
+                        result.Content2 = Integer.parseInt( address.substring( 2 ), MelsecMcDataType.Keyence_ZR.getFromBase() );
+                        break;
+                    }
+                    else
+                    {
+                        throw new Exception( StringResources.Language.NotSupportedDataType() );
+                    }
+                }
+                case 'W':
+                case 'w':
+                {
+                    result.Content1 = MelsecMcDataType.Keyence_W;
+                    result.Content2 = Integer.parseInt( address.substring( 1 ), MelsecMcDataType.Keyence_W.getFromBase() );
+                    break;
+                }
+                case 'T':
+                case 't':
+                {
+                    if (address.charAt(1) == 'N' || address.charAt(1) == 'n')
+                    {
+                        result.Content1 = MelsecMcDataType.Keyence_TN;
+                        result.Content2 = Integer.parseInt( address.substring( 2 ), MelsecMcDataType.Keyence_TN.getFromBase() );
+                        break;
+                    }
+                    else if (address.charAt(1) == 'S' || address.charAt(1) == 's')
+                    {
+                        result.Content1 = MelsecMcDataType.Keyence_TS;
+                        result.Content2 = Integer.parseInt( address.substring( 2 ), MelsecMcDataType.Keyence_TS.getFromBase() );
+                        break;
+                    }
+                    else
+                    {
+                        throw new Exception( StringResources.Language.NotSupportedDataType() );
+                    }
+                }
+                case 'C':
+                case 'c':
+                {
+                    if (address.charAt(1) == 'N' || address.charAt(1) == 'n')
+                    {
+                        result.Content1 = MelsecMcDataType.Keyence_CN;
+                        result.Content2 = Integer.parseInt( address.substring( 2 ), MelsecMcDataType.Keyence_CN.getFromBase() );
+                        break;
+                    }
+                    else if (address.charAt(1) == 'S' || address.charAt(1) == 's')
+                    {
+                        result.Content1 = MelsecMcDataType.Keyence_CS;
+                        result.Content2 = Integer.parseInt( address.substring( 2 ), MelsecMcDataType.Keyence_CS.getFromBase() );
+                        break;
+                    }
+                    else
+                    {
+                        throw new Exception( StringResources.Language.NotSupportedDataType() );
+                    }
+                }
+                default: throw new Exception( StringResources.Language.NotSupportedDataType() );
+            }
+        }
+        catch (Exception ex)
+        {
+            result.Message = ex.getMessage();
+            return result;
+        }
+
+        result.IsSuccess = true;
+        result.Message = StringResources.Language.SuccessText();
         return result;
     }
 
@@ -287,4 +533,75 @@ public class MelsecHelper {
         return true;
     }
 
+
+    /**
+     * 从地址，长度，是否位读取进行创建读取的MC的核心报文
+     * @param address 三菱的地址信息，具体格式参照 MelsecMcNet 的注释说明
+     * @param length 读取的长度信息
+     * @param isBit 是否进行了位读取操作
+     * @param analysisAddress 对地址分析的委托方法
+     * @return 带有成功标识的报文对象
+     */
+    public static OperateResultExOne<byte[]> BuildReadMcCoreCommand(String address, short length, boolean isBit, FunctionOperateExOne<String, OperateResultExTwo<MelsecMcDataType, Integer>> analysisAddress)
+    {
+        OperateResultExTwo<MelsecMcDataType, Integer> analysis = analysisAddress.Action( address );
+        if (!analysis.IsSuccess) return OperateResultExOne.CreateFailedResult( analysis );
+
+        byte[] command = new byte[10];
+        command[0] = 0x01;                                               // 批量读取数据命令
+        command[1] = 0x04;
+        command[2] = isBit ? (byte)0x01 : (byte)0x00;                    // 以点为单位还是字为单位成批读取
+        command[3] = 0x00;
+        command[4] = (byte) (analysis.Content2 % 256);                   // 起始地址的地位
+        command[5] = (byte) (analysis.Content2 / 256 % 256);
+        command[6] = (byte) (analysis.Content2 / 256 / 256);
+        command[7] = analysis.Content1.getDataCode();                    // 指明读取的数据
+        command[8] = (byte)(length % 256);                               // 软元件的长度
+        command[9] = (byte)(length / 256);
+
+        return OperateResultExOne.CreateSuccessResult( command );
+    }
+
+    /**
+     * 从地址，长度，是否位读取进行创建读取Ascii格式的MC的核心报文
+     * @param address 三菱的地址信息，具体格式参照 MelsecMcNet 的注释说明
+     * @param length 读取的长度信息
+     * @param isBit 是否进行了位读取操作
+     * @param analysisAddress 对地址分析的委托方法
+     * @return 带有成功标识的报文对象
+     */
+    public static OperateResultExOne<byte[]> BuildAsciiReadMcCoreCommand(String address, short length, boolean isBit,  FunctionOperateExOne<String, OperateResultExTwo<MelsecMcDataType, Integer>> analysisAddress )
+    {
+        OperateResultExTwo<MelsecMcDataType, Integer> analysis = analysisAddress.Action( address );
+        if (!analysis.IsSuccess) return OperateResultExOne.CreateFailedResult( analysis );
+
+        try {
+            byte[] command = new byte[20];
+            command[0] = 0x30;                                                               // 批量读取数据命令
+            command[1] = 0x34;
+            command[2] = 0x30;
+            command[3] = 0x31;
+            command[4] = 0x30;                                                               // 以点为单位还是字为单位成批读取
+            command[5] = 0x30;
+            command[6] = 0x30;
+            command[7] = isBit ? (byte) 0x31 : (byte) 0x30;
+            command[8] = (analysis.Content1.getAsciiCode().getBytes("ASCII"))[0];          // 软元件类型
+            command[9] = (analysis.Content1.getAsciiCode().getBytes("ASCII"))[1];
+            command[10] = MelsecHelper.BuildBytesFromAddress(analysis.Content2, analysis.Content1)[0];            // 起始地址的地位
+            command[11] = MelsecHelper.BuildBytesFromAddress(analysis.Content2, analysis.Content1)[1];
+            command[12] = MelsecHelper.BuildBytesFromAddress(analysis.Content2, analysis.Content1)[2];
+            command[13] = MelsecHelper.BuildBytesFromAddress(analysis.Content2, analysis.Content1)[3];
+            command[14] = MelsecHelper.BuildBytesFromAddress(analysis.Content2, analysis.Content1)[4];
+            command[15] = MelsecHelper.BuildBytesFromAddress(analysis.Content2, analysis.Content1)[5];
+            command[16] = MelsecHelper.BuildBytesFromData(length)[0];                                             // 软元件点数
+            command[17] = MelsecHelper.BuildBytesFromData(length)[1];
+            command[18] = MelsecHelper.BuildBytesFromData(length)[2];
+            command[19] = MelsecHelper.BuildBytesFromData(length)[3];
+
+            return OperateResultExOne.CreateSuccessResult(command);
+        }
+        catch (Exception ex){
+            return new OperateResultExOne<byte[]>(ex.getMessage());
+        }
+    }
 }

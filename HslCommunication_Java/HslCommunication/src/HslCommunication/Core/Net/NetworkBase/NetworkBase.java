@@ -39,8 +39,8 @@ public abstract class NetworkBase {
 
     /**
      * 线程检查是否发生了超时的方法
-     * @param timeout
-     * @param millisecond
+     * @param timeout 超时对象
+     * @param millisecond 超时时间，单位：毫秒
      */
     public static void ThreadPoolCheckConnect(HslTimeOut timeout, int millisecond) {
         while (!timeout.IsSuccessful) {

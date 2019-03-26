@@ -114,9 +114,106 @@ public class MelsecMcDataType {
     /**
      * 定时器的值
      */
-    public final static MelsecMcDataType T = new MelsecMcDataType( (byte) (0xC2), (byte) (0x00), "TN", 10 );
+    public final static MelsecMcDataType TN = new MelsecMcDataType( (byte) (0xC2), (byte) (0x00), "TN", 10 );
+    /**
+     * 定时器的触点
+     */
+    public final static MelsecMcDataType TS = new MelsecMcDataType( (byte)0xC1, (byte)0x01, "TS", 10 );
+    /**
+     * 定时器的线圈
+     */
+    public final static MelsecMcDataType TC = new MelsecMcDataType( (byte)0xC0, (byte)0x01, "TC", 10 );
+    /**
+     * 累计定时器的触点
+     */
+    public final static MelsecMcDataType SS = new MelsecMcDataType( (byte)0xC7, (byte)0x01, "SS", 10 );
+    /**
+     * 累计定时器的线圈
+     */
+    public final static MelsecMcDataType SC = new MelsecMcDataType( (byte)0xC6, (byte)0x01, "SC", 10 );
+    /**
+     * 累计定时器的当前值
+     */
+    public final static MelsecMcDataType SN = new MelsecMcDataType( (byte)0xC8, (byte)0x00, "SN", 100 );
     /**
      * 计数器的值
      */
-    public final static MelsecMcDataType C = new MelsecMcDataType( (byte) (0xC5), (byte) (0x00), "CN", 10 );
+    public final static MelsecMcDataType CN = new MelsecMcDataType( (byte) (0xC5), (byte) (0x00), "CN", 10 );
+    /**
+     * 计数器的触点
+     */
+    public final static MelsecMcDataType CS = new MelsecMcDataType( (byte)0xC4, (byte)0x01, "CS", 10 );
+    /**
+     * 计数器的线圈
+     */
+    public final static MelsecMcDataType CC = new MelsecMcDataType( (byte)0xC3, (byte)0x01, "CC", 10 );
+    /**
+     * 文件寄存器ZR区
+     */
+    public final static MelsecMcDataType ZR = new MelsecMcDataType( (byte)0xB0, (byte)0x00, "ZR", 16 );
+
+
+
+
+
+    /**
+     * X输入继电器
+     */
+    public final static MelsecMcDataType Keyence_X = new MelsecMcDataType( (byte)0x9C, (byte)0x01, "X*", 16 );
+    /**
+     * Y输出继电器
+     */
+    public final static MelsecMcDataType Keyence_Y = new MelsecMcDataType( (byte)0x9D, (byte)0x01, "Y*", 16 );
+    /**
+     * 链接继电器
+     */
+    public final static MelsecMcDataType Keyence_B = new MelsecMcDataType( (byte)0xA0, (byte)0x01, "B*", 16 );
+    /**
+     * 内部辅助继电器
+     */
+    public final static MelsecMcDataType Keyence_M = new MelsecMcDataType( (byte)0x90, (byte)0x01, "M*", 10 );
+    /**
+     * 内部辅助继电器
+     */
+    public final static MelsecMcDataType Keyence_L = new MelsecMcDataType( (byte)0x92, (byte)0x01, "L*", 10 );
+    /**
+     * 控制继电器
+     */
+    public final static MelsecMcDataType Keyence_SM = new MelsecMcDataType( (byte)0x91, (byte)0x01, "SM", 10 );
+    /**
+     * 控制存储器
+     */
+    public final static MelsecMcDataType Keyence_SD = new MelsecMcDataType( (byte)0xA9, (byte)0x00, "SD", 10 );
+    /**
+     * 数据存储器
+     */
+    public final static MelsecMcDataType Keyence_D = new MelsecMcDataType( (byte)0xA8, (byte)0x00, "D*", 10 );
+    /**
+     * 文件寄存器
+     */
+    public final static MelsecMcDataType Keyence_R = new MelsecMcDataType( (byte)0xAF, (byte)0x00, "R*", 10 );
+    /**
+     * 文件寄存器
+     */
+    public final static MelsecMcDataType Keyence_ZR = new MelsecMcDataType( (byte)0xB0, (byte)0x00, "ZR", 16 );
+    /**
+     * 链路寄存器
+     */
+    public final static MelsecMcDataType Keyence_W = new MelsecMcDataType( (byte)0xB4, (byte)0x00, "W*", 16 );
+    /**
+     * 计时器（当前值）
+     */
+    public final static MelsecMcDataType Keyence_TN = new MelsecMcDataType( (byte)0xC2, (byte)0x00, "TN", 10 );
+    /**
+     * 计时器（接点）
+     */
+    public final static MelsecMcDataType Keyence_TS = new MelsecMcDataType( (byte)0xC1, (byte)0x01, "TS", 10 );
+    /**
+     * 计数器（当前值）
+     */
+    public final static MelsecMcDataType Keyence_CN = new MelsecMcDataType( (byte)0xC5, (byte)0x00, "CN", 10 );
+    /**
+     * 计数器（接点）
+     */
+    public final static MelsecMcDataType Keyence_CS = new MelsecMcDataType( (byte)0xC4, (byte)0x01, "CS", 10 );
 }

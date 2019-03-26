@@ -3,17 +3,15 @@ package HslCommunication.Core.Net.NetworkBase;
 import HslCommunication.BasicFramework.SoftBasic;
 import HslCommunication.Core.IMessage.INetMessage;
 import HslCommunication.Core.Net.StateOne.AlienSession;
+import HslCommunication.Core.Thread.SimpleHybirdLock;
 import HslCommunication.Core.Transfer.ByteTransformHelper;
 import HslCommunication.Core.Transfer.IByteTransform;
 import HslCommunication.Core.Types.OperateResult;
 import HslCommunication.Core.Types.OperateResultExOne;
-import HslCommunication.Core.Types.OperateResultExTwo;
 import HslCommunication.StringResources;
 
 import java.lang.reflect.ParameterizedType;
 import java.net.Socket;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * 双模式的客户端基类，
@@ -27,9 +25,9 @@ public class NetworkDoubleBase<TNetMessage extends INetMessage  ,TTransform exte
      */
     public NetworkDoubleBase( )
     {
-        queueLock = new ReentrantLock();                               // 实例化数据访问锁
-        byteTransform = getInstanceOfTTransform();                           // 实例化数据转换规则
-        connectionId = SoftBasic.GetUniqueStringByGuidAndRandom( );
+        simpleHybirdLock    = new SimpleHybirdLock();                              // 实例化数据访问锁
+        byteTransform       = getInstanceOfTTransform();                           // 实例化数据转换规则
+        connectionId        = SoftBasic.GetUniqueStringByGuidAndRandom( );
     }
 
 
@@ -40,7 +38,7 @@ public class NetworkDoubleBase<TNetMessage extends INetMessage  ,TTransform exte
     private int connectTimeOut = 10000;              // 连接超时时间设置
     private int receiveTimeOut = 10000;              // 数据接收的超时时间
     private boolean isPersistentConn = false;           // 是否处于长连接的状态
-    private Lock queueLock = null;                      // 数据访问的同步锁
+    private SimpleHybirdLock simpleHybirdLock = null;                      // 数据访问的同步锁
     private boolean IsSocketError = false;              // 指示长连接的套接字是否处于错误的状态
     private boolean isUseSpecifiedSocket = false;       // 指示是否使用指定的网络套接字访问数据
     private String connectionId = "";                  // 当前连接
@@ -284,7 +282,7 @@ public class NetworkDoubleBase<TNetMessage extends INetMessage  ,TTransform exte
         OperateResult result = new OperateResult( );
         isPersistentConn = false;
 
-        queueLock.lock();
+        simpleHybirdLock.Enter();
 
         // 额外操作
         result = ExtraOnDisconnect( CoreSocket );
@@ -292,7 +290,7 @@ public class NetworkDoubleBase<TNetMessage extends INetMessage  ,TTransform exte
         if(CoreSocket != null ) CloseSocket(CoreSocket);
         CoreSocket = null;
 
-        queueLock.unlock();
+        simpleHybirdLock.Leave();
 
         if(LogNet != null ) LogNet.WriteDebug( toString( ), StringResources.Language.NetEngineClose() );
         return result;
@@ -418,21 +416,39 @@ public class NetworkDoubleBase<TNetMessage extends INetMessage  ,TTransform exte
      */
     public OperateResultExOne<byte[]> ReadFromCoreServer( Socket socket, byte[] send )
     {
-        OperateResultExOne<byte[]> result = new OperateResultExOne<byte[]>( );
+        TNetMessage netMsg = getInstanceOfTNetMessage();
+        netMsg.setSendBytes(send);
 
-        OperateResultExTwo<byte[], byte[]> read = ReadFromCoreServerBase( socket, send );
-        if (read.IsSuccess)
+        // send data
+        OperateResult resultSend = Send( socket, send );
+        if (!resultSend.IsSuccess)
         {
-            result.IsSuccess = read.IsSuccess;
-            result.Content = new byte[read.Content1.length + read.Content2.length];
-            if (read.Content1.length > 0) System.arraycopy(read.Content1,0,result.Content,0,read.Content1.length);
-            if (read.Content2.length > 0) System.arraycopy(read.Content2,0,result.Content,read.Content1.length,read.Content2.length);
+            CloseSocket(socket);
+            return OperateResultExOne.CreateFailedResult(resultSend);
         }
-        else
-        {
-            result.CopyErrorFromOther( read );
+
+        // 接收超时时间大于0时才允许接收远程的数据
+        if (receiveTimeOut >= 0) {
+            // 接收数据信息
+            OperateResultExOne<TNetMessage> resultReceive = ReceiveMessage(socket, receiveTimeOut, netMsg);
+            if (!resultReceive.IsSuccess) {
+                CloseSocket(socket);
+                return OperateResultExOne.CreateFailedResult(resultReceive);
+            }
+
+            // 复制结果
+            byte[] Content1 = resultReceive.Content.getHeadBytes();
+            byte[] Content2 = resultReceive.Content.getContentBytes();
+
+
+            byte[] Content = new byte[Content1.length + Content2.length];
+            if (Content1.length > 0) System.arraycopy(Content1, 0, Content, 0, Content1.length);
+            if (Content2.length > 0) System.arraycopy(Content2, 0, Content, Content1.length, Content2.length);
+
+            return OperateResultExOne.CreateSuccessResult(Content);
         }
-        return result;
+
+        return new OperateResultExOne<byte[]>();
     }
 
 
@@ -447,7 +463,7 @@ public class NetworkDoubleBase<TNetMessage extends INetMessage  ,TTransform exte
         OperateResultExOne<byte[]> result = new OperateResultExOne<byte[]>( );
         // string tmp1 = BasicFramework.SoftBasic.ByteToHexString( send, '-' );
 
-        queueLock.lock( );
+        simpleHybirdLock.Enter( );
 
         // 获取有用的网络通道，如果没有，就建立新的连接
         OperateResultExOne<Socket> resultSocket = GetAvailableSocket( );
@@ -455,7 +471,7 @@ public class NetworkDoubleBase<TNetMessage extends INetMessage  ,TTransform exte
         {
             IsSocketError = true;
             if (AlienSession != null) AlienSession.setIsStatusOk( false);
-            queueLock.unlock();
+            simpleHybirdLock.Leave();
             result.CopyErrorFromOther( resultSocket );
             return result;
         }
@@ -465,7 +481,7 @@ public class NetworkDoubleBase<TNetMessage extends INetMessage  ,TTransform exte
         if (read.IsSuccess)
         {
             IsSocketError = false;
-            result.IsSuccess = read.IsSuccess;
+            result.IsSuccess = true;
             result.Content = read.Content;
             // string tmp2 = BasicFramework.SoftBasic.ByteToHexString( result.Content ) ;
         }
@@ -476,56 +492,10 @@ public class NetworkDoubleBase<TNetMessage extends INetMessage  ,TTransform exte
             result.CopyErrorFromOther( read );
         }
 
-        queueLock.unlock();
+        simpleHybirdLock.Leave();
         if (!isPersistentConn) CloseSocket(resultSocket.Content );
         return result;
     }
-
-
-    /**
-     * 使用底层的数据报文来通讯，传入需要发送的消息，返回最终的数据结果，被拆分成了头子节和内容字节信息
-     * @param socket 网络套接字
-     * @param send 发送的数据
-     * @return 结果对象
-     */
-    protected OperateResultExTwo<byte[], byte[]> ReadFromCoreServerBase(Socket socket, byte[] send )
-    {
-        OperateResultExTwo<byte[], byte[]> result = new OperateResultExTwo<byte[], byte[]>( );
-        // LogNet?.WriteDebug( ToString( ), "Command: " + BasicFramework.SoftBasic.ByteToHexString( send ) );
-        TNetMessage netMsg = getInstanceOfTNetMessage();
-        netMsg.setSendBytes(send);
-
-        // 发送数据信息
-        OperateResult resultSend = Send( socket, send );
-        if (!resultSend.IsSuccess)
-        {
-            CloseSocket(socket);
-            result.CopyErrorFromOther( resultSend );
-            return result;
-        }
-
-        // 接收超时时间大于0时才允许接收远程的数据
-        if (receiveTimeOut >= 0)
-        {
-            // 接收数据信息
-            OperateResultExOne<TNetMessage> resultReceive = ReceiveMessage(socket, receiveTimeOut, netMsg);
-            if (!resultReceive.IsSuccess)
-            {
-                CloseSocket(socket );
-                result.CopyErrorFromOther( resultReceive );
-                // result.Message = "Receive data timeout: " + receiveTimeOut;
-                return result;
-            }
-
-            // 复制结果
-            result.Content1 = resultReceive.Content.getHeadBytes();
-            result.Content2 = resultReceive.Content.getContentBytes();
-        }
-
-        result.IsSuccess = true;
-        return result;
-    }
-
 
 
     /**

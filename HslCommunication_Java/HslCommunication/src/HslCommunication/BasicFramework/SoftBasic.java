@@ -14,6 +14,7 @@ import java.util.UUID;
 public class SoftBasic {
 
 
+
     /**
      * 根据大小获取文本描述信息
      * @param size 数据大小
@@ -34,6 +35,33 @@ public class SoftBasic {
         }
     }
 
+    /**
+     * 从一个时间差返回带单位的描述
+     * @param secondTicks 当前的秒数信息
+     * @return 最终的字符串值
+     */
+    public static String GetTimeSpanDescription( long secondTicks )
+    {
+        if (secondTicks <= 60)
+        {
+            return secondTicks + " 秒";
+        }
+        else if (secondTicks <= 60 * 60)
+        {
+            float data = (float) secondTicks / 60;
+            return String.format("%.1f", data) + " 分钟";
+        }
+        else if (secondTicks <= 24 * 60 * 60)
+        {
+            float data = (float) secondTicks / 60 / 60;
+            return String.format("%.1f", data) + " 小时";
+        }
+        else
+        {
+            float data = (float) secondTicks / 60 / 60 / 24;
+            return String.format("%.1f", data) + " 天";
+        }
+    }
 
     /**
      * 判断两个字节数组是否是一致的，可以指定中间的某个区域
@@ -57,7 +85,6 @@ public class SoftBasic {
 
         return true;
     }
-
 
     /**
      * 将byte数组的长度扩充到指定长度
@@ -89,7 +116,6 @@ public class SoftBasic {
             return data;
         }
     }
-
 
 
     /**
@@ -379,5 +405,8 @@ public class SoftBasic {
         return buffer;
     }
 
+
+
+    public static SystemVersion FrameworkVersion = new SystemVersion("1.0.0");
 }
 
