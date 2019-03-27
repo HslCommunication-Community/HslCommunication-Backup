@@ -12,9 +12,20 @@ namespace HslCommunication.Robot.KUKA
     /// <summary>
     /// Kuka机器人的数据交互对象，通讯支持的条件为KUKA 的 KRC4 控制器中运行KUKAVARPROXY 这个第三方软件，端口通常为7000
     /// </summary>
+    /// <remarks>
+    /// 非常感谢 昆山-LT 网友的测试和意见反馈。
+    /// </remarks>
     public class KukaAvarProxyNet : NetworkDoubleBase<KukaVarProxyMessage, ReverseWordTransform>, IRobotNet
     {
         #region Constructor
+
+        /// <summary>
+        /// 实例化一个默认的对象
+        /// </summary>
+        public KukaAvarProxyNet( )
+        {
+            softIncrementCount = new SoftIncrementCount( ushort.MaxValue );
+        }
 
         /// <summary>
         /// 实例化一个默认的Kuka机器人对象，并指定IP地址和端口号，端口号通常为7000
@@ -41,7 +52,7 @@ namespace HslCommunication.Robot.KUKA
         /// <returns>带有成功标识的byte[]数组</returns>
         public OperateResult<byte[]> Read( string address )
         {
-            OperateResult<byte[]> read = ReadFromCoreServer( BuildReadValueCommand( address ) );
+            OperateResult<byte[]> read = ReadFromCoreServer( PackCommand( BuildReadValueCommand( address ) ) );
             if (!read.IsSuccess) return read;
 
             return ExtractActualData( read.Content );
@@ -79,7 +90,7 @@ namespace HslCommunication.Robot.KUKA
         /// <returns>是否成功的写入</returns>
         public OperateResult Write( string address, string value )
         {
-            OperateResult<byte[]> read = ReadFromCoreServer( BuildWriteValueCommand( address, value ) );
+            OperateResult<byte[]> read = ReadFromCoreServer( PackCommand( BuildWriteValueCommand( address, value ) ) );
             if (!read.IsSuccess) return read;
 
             return ExtractActualData( read.Content );
