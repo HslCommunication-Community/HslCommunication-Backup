@@ -52,11 +52,40 @@ namespace HslCommunication.BasicFramework
         /// </example>
         public static string CalculateStreamMD5( Stream stream )
         {
-            MD5 md5 = new MD5CryptoServiceProvider( );
-            byte[] bytes_md5 = md5.ComputeHash( stream );
+            byte[] bytes_md5 = null;
+            using (MD5 md5 = new MD5CryptoServiceProvider( ))
+            {
+                bytes_md5 = md5.ComputeHash( stream );
+            }
             return BitConverter.ToString( bytes_md5 ).Replace( "-", "" );
         }
 
+        /// <summary>
+        /// 获取文本字符串信息的Md5码，编码为UTF8
+        /// </summary>
+        /// <param name="data">文本数据信息</param>
+        /// <returns>Md5字符串</returns>
+        public static string CalculateStreamMD5( string data )
+        {
+            return CalculateStreamMD5( data, Encoding.UTF8 );
+        }
+
+        /// <summary>
+        /// 获取文本字符串信息的Md5码，使用指定的编码
+        /// </summary>
+        /// <param name="data">文本数据信息</param>
+        /// <param name="encode">编码信息</param>
+        /// <returns>Md5字符串</returns>
+        public static string CalculateStreamMD5( string data, Encoding encode )
+        {
+            string str_md5 = string.Empty;
+            using (MD5 md5 = new MD5CryptoServiceProvider( ))
+            {
+                byte[] bytes_md5 = md5.ComputeHash( encode.GetBytes( data ) );
+                str_md5 = BitConverter.ToString( bytes_md5 ).Replace( "-", "" );
+            }
+            return str_md5;
+        }
 
 #if !NETSTANDARD2_0
         /// <summary>
@@ -82,7 +111,7 @@ namespace HslCommunication.BasicFramework
         #endregion
 
         #region DataSize Format
-        
+
         /// <summary>
         /// 从一个字节大小返回带单位的描述
         /// </summary>
