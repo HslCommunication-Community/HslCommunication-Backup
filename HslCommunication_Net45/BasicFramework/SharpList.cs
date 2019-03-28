@@ -23,8 +23,8 @@ namespace HslCommunication.BasicFramework
         {
             if (count > 8192) capacity = 4096;
 
-            array = new T[capacity + count];
-            hybirdLock = new SimpleHybirdLock( );
+            this.array = new T[capacity + count];
+            this.hybirdLock = new SimpleHybirdLock( );
             this.count = count;
             if (appendLast) this.lastIndex = count;
         }
