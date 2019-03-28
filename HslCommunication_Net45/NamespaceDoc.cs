@@ -660,6 +660,15 @@ namespace HslCommunication
     ///             <item>FinsTcp类的DA1【PLC节点号】在配置Ip地址的时候自动赋值，不需要额外配置。</item>
     ///         </list>
     ///     </revision>
+    ///     <revision date="2019-3-28" version="6.0.3" author="Richard.Hu">
+    ///         <list type="bullet">
+    ///             <item>NetPushServer推送服务器修复某些情况下的推送卡死的bug。</item>
+    ///             <item>SoftBuffer内存数据类修复Double转换时出现的错误bug。</item>
+    ///             <item>修复Kuka机器人读写数据错误的bug，已通过测试。</item>
+    ///             <item>修复三菱的MelsecMcAsciiNet类写入bool值及数组会导致异常的bug，已通过单元测试。</item>
+    ///             <item>SoftBasic新增从字符串计算MD5码的方法。</item>
+    ///         </list>
+    ///     </revision>
     /// </revisionHistory>
     [System.Runtime.CompilerServices.CompilerGeneratedAttribute( )]
     public class NamespaceDoc
