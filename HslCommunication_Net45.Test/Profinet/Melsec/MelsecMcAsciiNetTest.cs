@@ -4,19 +4,19 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using HslCommunication.Profinet.Siemens;
+using HslCommunication.Profinet.Melsec;
 using HslCommunication.BasicFramework;
 
-namespace HslCommunication_Net45.Test.Profinet.Siemens
+namespace HslCommunication_Net45.Test.Profinet.Melsec
 {
     [TestClass]
-    public class SiemensTest
+    public class MelsecMcAsciiNetTest
     {
 
         [TestMethod]
         public void MelsecUnitTest( )
         {
-            SiemensS7Net plc = new SiemensS7Net( SiemensPLCS.S1200, "192.168.8.12" );
+            MelsecMcAsciiNet plc = new MelsecMcAsciiNet( "192.168.8.14", 6001 );
             if (!plc.ConnectServer( ).IsSuccess)
             {
                 Console.WriteLine( "无法连接PLC，将跳过单元测试。等待网络正常时，再进行测试" );
@@ -24,11 +24,18 @@ namespace HslCommunication_Net45.Test.Profinet.Siemens
             }
 
             // 开始单元测试，从bool类型开始测试
-            string address = "M200.4";
+            string address = "M200";
+            bool[] boolTmp = new bool[] { true, true, false, true, false, true, false };
             Assert.IsTrue( plc.Write( address, true ).IsSuccess );
             Assert.IsTrue( plc.ReadBool( address ).Content == true );
+            Assert.IsTrue( plc.Write( address, boolTmp ).IsSuccess );
+            bool[] readBool = plc.ReadBool( address, (ushort)boolTmp.Length ).Content;
+            for (int i = 0; i < boolTmp.Length; i++)
+            {
+                Assert.IsTrue( readBool[i] == boolTmp[i] );
+            }
 
-            address = "M300";
+            address = "D300";
             // short类型
             Assert.IsTrue( plc.Write( address, (short)12345 ).IsSuccess );
             Assert.IsTrue( plc.ReadInt16( address ).Content == 12345 );
@@ -119,12 +126,12 @@ namespace HslCommunication_Net45.Test.Profinet.Siemens
 
             // string类型
             Assert.IsTrue( plc.Write( address, "123123" ).IsSuccess );
-            Assert.IsTrue( plc.ReadString( address ).Content == "123123" );
+            Assert.IsTrue( plc.ReadString( address, 3 ).Content == "123123" );
 
             // byte类型
             byte[] byteTmp = new byte[] { 0x4F, 0x12, 0x72, 0xA7, 0x54, 0xB8 };
             Assert.IsTrue( plc.Write( address, byteTmp ).IsSuccess );
-            Assert.IsTrue( SoftBasic.IsTwoBytesEquel( plc.Read( address, 6 ).Content, byteTmp ) );
+            Assert.IsTrue( SoftBasic.IsTwoBytesEquel( plc.Read( address, 3 ).Content, byteTmp ) );
 
             plc.ConnectClose( );
         }

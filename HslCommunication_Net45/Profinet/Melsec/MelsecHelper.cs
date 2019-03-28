@@ -635,7 +635,7 @@ namespace HslCommunication.Profinet.Melsec
             command[17] = MelsecHelper.BuildBytesFromData( (ushort)(value.Length) )[1];
             command[18] = MelsecHelper.BuildBytesFromData( (ushort)(value.Length) )[2];
             command[19] = MelsecHelper.BuildBytesFromData( (ushort)(value.Length) )[3];
-            value.CopyTo( command, 20 );
+            buffer.CopyTo( command, 20 );
 
             return OperateResult.CreateSuccessResult( command );
         }
