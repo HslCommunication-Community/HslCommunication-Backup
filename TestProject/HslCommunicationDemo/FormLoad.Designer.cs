@@ -59,6 +59,7 @@
             this.button9 = new System.Windows.Forms.Button();
             this.button8 = new System.Windows.Forms.Button();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
+            this.button52 = new System.Windows.Forms.Button();
             this.button48 = new System.Windows.Forms.Button();
             this.button11 = new System.Windows.Forms.Button();
             this.groupBox6 = new System.Windows.Forms.GroupBox();
@@ -107,7 +108,6 @@
             this.groupBox13 = new System.Windows.Forms.GroupBox();
             this.button50 = new System.Windows.Forms.Button();
             this.button49 = new System.Windows.Forms.Button();
-            this.button52 = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -493,6 +493,17 @@
             this.groupBox5.TabIndex = 11;
             this.groupBox5.TabStop = false;
             this.groupBox5.Text = "Omron PLC(欧姆龙 PLC)";
+            // 
+            // button52
+            // 
+            this.button52.Location = new System.Drawing.Point(19, 104);
+            this.button52.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.button52.Name = "button52";
+            this.button52.Size = new System.Drawing.Size(150, 32);
+            this.button52.TabIndex = 2;
+            this.button52.Text = "Fins Udp";
+            this.button52.UseVisualStyleBackColor = true;
+            this.button52.Click += new System.EventHandler(this.button52_Click);
             // 
             // button48
             // 
@@ -1006,17 +1017,6 @@
             this.button49.Text = "MC-3E (Binary)";
             this.button49.UseVisualStyleBackColor = true;
             this.button49.Click += new System.EventHandler(this.button49_Click);
-            // 
-            // button52
-            // 
-            this.button52.Location = new System.Drawing.Point(19, 104);
-            this.button52.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.button52.Name = "button52";
-            this.button52.Size = new System.Drawing.Size(150, 32);
-            this.button52.TabIndex = 2;
-            this.button52.Text = "Fins Udp";
-            this.button52.UseVisualStyleBackColor = true;
-            this.button52.Click += new System.EventHandler(this.button52_Click);
             // 
             // FormLoad
             // 
