@@ -3,6 +3,7 @@ package HslCommunication.Profinet.Melsec;
 import HslCommunication.Core.IMessage.MelsecQnA3EBinaryMessage;
 import HslCommunication.Core.Net.NetworkBase.NetworkDeviceBase;
 import HslCommunication.Core.Transfer.RegularByteTransform;
+import HslCommunication.Core.Types.FunctionOperateExOne;
 import HslCommunication.Core.Types.OperateResult;
 import HslCommunication.Core.Types.OperateResultExOne;
 import HslCommunication.Core.Types.OperateResultExTwo;
@@ -19,6 +20,7 @@ public class MelsecMcNet extends NetworkDeviceBase<MelsecQnA3EBinaryMessage,Regu
      * 实例化三菱的Qna兼容3E帧协议的通讯对象
      */
     public MelsecMcNet() {
+        super(MelsecQnA3EBinaryMessage.class, RegularByteTransform.class);
         WordLength = 1;
     }
 
@@ -30,6 +32,7 @@ public class MelsecMcNet extends NetworkDeviceBase<MelsecQnA3EBinaryMessage,Regu
      * @param port      PLC的端口
      */
     public MelsecMcNet(String ipAddress, int port) {
+        super(MelsecQnA3EBinaryMessage.class, RegularByteTransform.class);
         WordLength = 1;
         super.setIpAddress(ipAddress);
         super.setPort(port);
@@ -75,7 +78,15 @@ public class MelsecMcNet extends NetworkDeviceBase<MelsecQnA3EBinaryMessage,Regu
         NetworkStationNumber = networkStationNumber;
     }
 
-
+    /**
+     * 分析地址的方法，允许派生类里进行重写操作
+     * @param address 地址信息
+     * @return 解析后的数据信息
+     */
+    protected OperateResultExTwo<MelsecMcDataType, Integer> McAnalysisAddress( String address )
+    {
+        return MelsecHelper.McAnalysisAddress( address );
+    }
 
     /**
      * 从三菱PLC中读取想要的数据，返回读取结果
@@ -86,11 +97,16 @@ public class MelsecMcNet extends NetworkDeviceBase<MelsecQnA3EBinaryMessage,Regu
     @Override
     public OperateResultExOne<byte[]> Read(String address, short length) {
         // 获取指令
-        OperateResultExOne<byte[]> command = BuildReadCommand( address, length, NetworkNumber, NetworkStationNumber );
+        OperateResultExOne<byte[]> command = MelsecHelper.BuildReadMcCoreCommand( address, length, false, new FunctionOperateExOne<String, OperateResultExTwo<MelsecMcDataType, Integer>>(){
+            @Override
+            public OperateResultExTwo<MelsecMcDataType, Integer> Action(String content) {
+                return McAnalysisAddress(content);
+            }
+        });
         if (!command.IsSuccess) return OperateResultExOne.CreateFailedResult( command );
 
         // 核心交互
-        OperateResultExOne<byte[]> read = ReadFromCoreServer( command.Content );
+        OperateResultExOne<byte[]> read = ReadFromCoreServer( PackMcCommand(command.Content,this.NetworkNumber, this.NetworkStationNumber) );
         if (!read.IsSuccess) return OperateResultExOne.CreateFailedResult( read );
 
         // 错误代码验证
@@ -98,7 +114,7 @@ public class MelsecMcNet extends NetworkDeviceBase<MelsecQnA3EBinaryMessage,Regu
         if (errorCode != 0) return new OperateResultExOne<>( errorCode, StringResources.Language.MelsecPleaseReferToManulDocument() );
 
         // 数据解析，需要传入是否使用位的参数
-        return ExtractActualData( read.Content, command.Content[13] == 1 );
+        return ExtractActualData( read.Content, false );
     }
 
 
@@ -111,21 +127,31 @@ public class MelsecMcNet extends NetworkDeviceBase<MelsecQnA3EBinaryMessage,Regu
      * @return 带成功标志的结果数据对象
      */
     public OperateResultExOne<boolean[]> ReadBool(String address, short length) {
-        // 解析地址
-        OperateResultExTwo<MelsecMcDataType, Integer> analysis = MelsecHelper.McAnalysisAddress( address );
-        if (!analysis.IsSuccess) return OperateResultExOne.CreateFailedResult( analysis );
-
-        // 位读取校验
-        if (analysis.Content1.getDataType() == 0x00) return new OperateResultExOne<boolean[]>( 0, StringResources.Language.MelsecReadBitInfo() );
+        // 获取指令
+        OperateResultExOne<byte[]> command = MelsecHelper.BuildReadMcCoreCommand( address, length, true, new FunctionOperateExOne<String, OperateResultExTwo<MelsecMcDataType, Integer>>(){
+            @Override
+            public OperateResultExTwo<MelsecMcDataType, Integer> Action(String content) {
+                return McAnalysisAddress(content);
+            }
+        });
+        if (!command.IsSuccess) return OperateResultExOne.CreateFailedResult( command );
 
         // 核心交互
-        OperateResultExOne<byte[]> read = Read( address, length );
+        OperateResultExOne<byte[]> read = ReadFromCoreServer( PackMcCommand(command.Content,this.NetworkNumber, this.NetworkStationNumber) );
         if (!read.IsSuccess) return OperateResultExOne.CreateFailedResult( read );
 
+        // 错误代码验证
+        int errorCode = Utilities.getShort(read.Content, 9);
+        if (errorCode != 0) return new OperateResultExOne<>( errorCode, StringResources.Language.MelsecPleaseReferToManulDocument() );
+
+        // 数据解析，需要传入是否使用位的参数
+        OperateResultExOne<byte[]> extract = ExtractActualData( read.Content, true );
+        if(!extract.IsSuccess) return OperateResultExOne.CreateFailedResult( extract );
+
         // 转化bool数组
-        boolean[] result = new boolean[read.Content.length];
+        boolean[] result = new boolean[extract.Content.length];
         for(int i=0;i<result.length;i++){
-            if(read.Content[i] == 0x01) result[i] = true;
+            if(extract.Content[i] == 0x01) result[i] = true;
         }
         return OperateResultExOne.CreateSuccessResult( result );
     }
@@ -156,12 +182,17 @@ public class MelsecMcNet extends NetworkDeviceBase<MelsecQnA3EBinaryMessage,Regu
      */
     @Override
     public OperateResult Write(String address, byte[] value) {
-        // 解析指令
-        OperateResultExOne<byte[]> command = BuildWriteCommand( address, value, NetworkNumber, NetworkStationNumber );
-        if (!command.IsSuccess) return command;
+
+        OperateResultExOne<byte[]> coreResult = MelsecHelper.BuildWriteWordCoreCommand( address, value, new FunctionOperateExOne<String, OperateResultExTwo<MelsecMcDataType, Integer>>(){
+            @Override
+            public OperateResultExTwo<MelsecMcDataType, Integer> Action(String content) {
+                return McAnalysisAddress(content);
+            }
+        });
+        if (!coreResult.IsSuccess) return coreResult;
 
         // 核心交互
-        OperateResultExOne<byte[]> read = ReadFromCoreServer( command.Content );
+        OperateResultExOne<byte[]> read = ReadFromCoreServer( PackMcCommand( coreResult.Content, NetworkNumber, NetworkStationNumber ) );
         if (!read.IsSuccess) return read;
 
         // 错误码校验
@@ -193,11 +224,24 @@ public class MelsecMcNet extends NetworkDeviceBase<MelsecQnA3EBinaryMessage,Regu
      * @return 返回写入结果
      */
     public OperateResult Write(String address, boolean[] values) {
-        byte[] buffer = new byte[values.length];
-        for (int i = 0; i < values.length; i++) {
-            buffer[i] = values[i] ? (byte) 0x01 : (byte) 0x00;
-        }
-        return Write(address, buffer);
+        OperateResultExOne<byte[]> coreResult = MelsecHelper.BuildWriteBitCoreCommand( address, values, new FunctionOperateExOne<String, OperateResultExTwo<MelsecMcDataType, Integer>>(){
+            @Override
+            public OperateResultExTwo<MelsecMcDataType, Integer> Action(String content) {
+                return McAnalysisAddress(content);
+            }
+        } );
+        if (!coreResult.IsSuccess) return coreResult;
+
+        // 核心交互
+        OperateResultExOne<byte[]> read = ReadFromCoreServer( PackMcCommand( coreResult.Content, NetworkNumber, NetworkStationNumber ) );
+        if (!read.IsSuccess) return read;
+
+        // 错误码校验
+        short ErrorCode = Utilities.getShort(read.Content, 9);
+        if (ErrorCode != 0) return new OperateResultExOne<byte[]>( ErrorCode, StringResources.Language.MelsecPleaseReferToManulDocument() );
+
+        // 成功
+        return OperateResult.CreateSuccessResult( );
     }
 
 
@@ -211,132 +255,31 @@ public class MelsecMcNet extends NetworkDeviceBase<MelsecQnA3EBinaryMessage,Regu
     }
 
 
-
-
-
     /**
-     * 根据类型地址长度确认需要读取的指令头
-     * @param address 起始地址
-     * @param length 长度
-     * @return 带有成功标志的指令数据
-     */
-    public static OperateResultExOne<byte[]> BuildReadCommand(String address, short length) {
-        return BuildReadCommand(address,length,(byte) 0,(byte)0);
-    }
-
-    /**
-     * 根据类型地址长度确认需要读取的指令头
-     * @param address 起始地址
-     * @param length 长度
+     * 将MC协议的核心报文打包成一个可以直接对PLC进行发送的原始报文
+     * @param mcCore MC协议的核心报文
      * @param networkNumber 网络号
      * @param networkStationNumber 网络站号
-     * @return 带有成功标志的指令数据
+     * @return 原始报文信息
      */
-    public static OperateResultExOne<byte[]> BuildReadCommand(String address, short length, byte networkNumber, byte networkStationNumber) {
-        OperateResultExTwo<MelsecMcDataType, Integer> analysis = MelsecHelper.McAnalysisAddress(address);
-        if (!analysis.IsSuccess) return OperateResultExOne.CreateFailedResult(analysis);
-
-        byte[] _PLCCommand = new byte[21];
-        _PLCCommand[0] = 0x50;                         // 副标题
+    public static byte[] PackMcCommand(byte[] mcCore, byte networkNumber, byte networkStationNumber)
+    {
+        byte[] _PLCCommand = new byte[11 + mcCore.length];
+        _PLCCommand[0] = 0x50;                                               // 副标题
         _PLCCommand[1] = 0x00;
-        _PLCCommand[2] = networkNumber;                // 网络号
-        _PLCCommand[3] = (byte) (0xFF);                         // PLC编号
-        _PLCCommand[4] = (byte) (0xFF);
+        _PLCCommand[2] = networkNumber;                                      // 网络号
+        _PLCCommand[3] = (byte) 0xFF;                                               // PLC编号
+        _PLCCommand[4] = (byte)0xFF;                                               // 目标模块IO编号
         _PLCCommand[5] = 0x03;
-        _PLCCommand[6] = networkStationNumber;         // 目标模块站号
-        _PLCCommand[7] = 0x0C;                         // 请求数据长度
-        _PLCCommand[8] = 0x00;
-        _PLCCommand[9] = 0x0A;                         // CPU监视定时器
+        _PLCCommand[6] = networkStationNumber;                               // 目标模块站号
+        _PLCCommand[7] = (byte)((_PLCCommand.length - 9) % 256);             // 请求数据长度
+        _PLCCommand[8] = (byte)((_PLCCommand.length - 9) / 256);
+        _PLCCommand[9] = 0x0A;                                               // CPU监视定时器
         _PLCCommand[10] = 0x00;
-        _PLCCommand[11] = 0x01;                        // 批量读取数据命令
-        _PLCCommand[12] = 0x04;
-        _PLCCommand[13] = analysis.Content1.getDataType();               // 以点为单位还是字为单位成批读取
-        _PLCCommand[14] = 0x00;
-        _PLCCommand[15] = (byte) (analysis.Content2 % 256);       // 起始地址的地位
-        _PLCCommand[16] = (byte) (analysis.Content2 / 256);
-        _PLCCommand[17] = 0x00;
-        _PLCCommand[18] = analysis.Content1.getDataCode();               // 指明读取的数据
-        _PLCCommand[19] = (byte) (length % 256);        // 软元件长度的地位
-        _PLCCommand[20] = (byte) (length / 256);
+        System.arraycopy(mcCore, 0, _PLCCommand, 11, mcCore.length);
 
-        return OperateResultExOne.CreateSuccessResult(_PLCCommand);
+        return _PLCCommand;
     }
-
-
-
-    /**
-     * 根据类型地址以及需要写入的数据来生成指令头
-     * @param address 起始地址
-     * @param value 值
-     * @return 结果
-     */
-    public static OperateResultExOne<byte[]> BuildWriteCommand(String address, byte[] value) {
-        return BuildWriteCommand(address,value,(byte)0,(byte)0);
-    }
-
-    /**
-     * 根据类型地址以及需要写入的数据来生成指令头
-     * @param address 起始地址
-     * @param value 值
-     * @param networkNumber 网络号
-     * @param networkStationNumber 网络站号
-     * @return 结果
-     */
-    public static OperateResultExOne<byte[]> BuildWriteCommand(String address, byte[] value, byte networkNumber, byte networkStationNumber) {
-        OperateResultExTwo<MelsecMcDataType, Integer> analysis = MelsecHelper.McAnalysisAddress(address);
-        if (!analysis.IsSuccess) return OperateResultExOne.CreateFailedResult(analysis);
-
-        int length = -1;
-        if (analysis.Content1.getDataType() == 1)
-        {
-            // 按照位写入的操作，数据需要重新计算
-            length = value.length;
-            value = MelsecHelper.TransBoolArrayToByteData( value );
-        }
-
-        byte[] _PLCCommand = new byte[21 + value.length];
-        _PLCCommand[0] = 0x50;                                          // 副标题
-        _PLCCommand[1] = 0x00;
-        _PLCCommand[2] = networkNumber;                                 // 网络号
-        _PLCCommand[3] = (byte) (0xFF);                                          // PLC编号
-        _PLCCommand[4] = (byte) (0xFF);                                          // 目标模块IO编号
-        _PLCCommand[5] = 0x03;
-        _PLCCommand[6] = networkStationNumber;                          // 目标模块站号
-
-        _PLCCommand[7] = (byte) ((_PLCCommand.length - 9) % 256);        // 请求数据长度
-        _PLCCommand[8] = (byte) ((_PLCCommand.length - 9) / 256);
-        ;
-        _PLCCommand[9] = 0x0A;                                          // CPU监视定时器
-        _PLCCommand[10] = 0x00;
-        _PLCCommand[11] = 0x01;                                         // 批量读取数据命令
-        _PLCCommand[12] = 0x14;
-        _PLCCommand[13] = analysis.Content1.getDataType();                   // 以点为单位还是字为单位成批读取
-        _PLCCommand[14] = 0x00;
-        _PLCCommand[15] = (byte) (analysis.Content2 % 256);
-        ;            // 起始地址的地位
-        _PLCCommand[16] = (byte) (analysis.Content2 / 256);
-        _PLCCommand[17] = 0x00;
-        _PLCCommand[18] = analysis.Content1.getDataCode();                   // 指明写入的数据
-
-        // 判断是否进行位操作
-        if (analysis.Content1.getDataType() == 1) {
-            if (length > 0) {
-                _PLCCommand[19] = (byte) (length % 256);                 // 软元件长度的地位
-                _PLCCommand[20] = (byte) (length / 256);
-            } else {
-                _PLCCommand[19] = (byte) (value.length * 2 % 256);        // 软元件长度的地位
-                _PLCCommand[20] = (byte) (value.length * 2 / 256);
-            }
-        } else {
-            _PLCCommand[19] = (byte) (value.length / 2 % 256);            // 软元件长度的地位
-            _PLCCommand[20] = (byte) (value.length / 2 / 256);
-        }
-
-        System.arraycopy(value, 0, _PLCCommand, 21, value.length);
-
-        return OperateResultExOne.CreateSuccessResult(_PLCCommand);
-    }
-
 
     /**
      * 从PLC反馈的数据中提取出实际的数据内容，需要传入反馈数据，是否位读取

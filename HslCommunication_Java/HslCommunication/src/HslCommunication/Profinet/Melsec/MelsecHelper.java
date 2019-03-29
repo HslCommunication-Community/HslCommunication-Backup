@@ -503,6 +503,28 @@ public class MelsecHelper {
         return buffer;
     }
 
+    /**
+     * 将bool的组压缩成三菱格式的字节数组来表示开关量的
+     * @param value 原始的数据字节
+     * @return 压缩过后的数据字节
+     */
+    public static byte[] TransBoolArrayToByteData( boolean[] value )
+    {
+        int length = (value.length + 1) / 2;
+        byte[] buffer = new byte[length];
+
+        for (int i = 0; i < length; i++)
+        {
+            if (value[i * 2 + 0]) buffer[i] += 0x10;
+            if ((i * 2 + 1) < value.length)
+            {
+                if (value[i * 2 + 1]) buffer[i] += 0x01;
+            }
+        }
+
+        return buffer;
+    }
+
 
     /**
      * 计算Fx协议指令的和校验信息
@@ -570,23 +592,23 @@ public class MelsecHelper {
      * @param analysisAddress 对地址分析的委托方法
      * @return 带有成功标识的报文对象
      */
-    public static OperateResultExOne<byte[]> BuildAsciiReadMcCoreCommand(String address, short length, boolean isBit,  FunctionOperateExOne<String, OperateResultExTwo<MelsecMcDataType, Integer>> analysisAddress )
+    public static OperateResultExOne<byte[]> BuildAsciiReadMcCoreCommand(String address, short length, boolean isBit, FunctionOperateExOne<String, OperateResultExTwo<MelsecMcDataType, Integer>> analysisAddress )
     {
         OperateResultExTwo<MelsecMcDataType, Integer> analysis = analysisAddress.Action( address );
         if (!analysis.IsSuccess) return OperateResultExOne.CreateFailedResult( analysis );
 
         try {
             byte[] command = new byte[20];
-            command[0] = 0x30;                                                               // 批量读取数据命令
-            command[1] = 0x34;
-            command[2] = 0x30;
-            command[3] = 0x31;
-            command[4] = 0x30;                                                               // 以点为单位还是字为单位成批读取
-            command[5] = 0x30;
-            command[6] = 0x30;
-            command[7] = isBit ? (byte) 0x31 : (byte) 0x30;
-            command[8] = (analysis.Content1.getAsciiCode().getBytes("ASCII"))[0];          // 软元件类型
-            command[9] = (analysis.Content1.getAsciiCode().getBytes("ASCII"))[1];
+            command[0 ] = 0x30;                                                               // 批量读取数据命令
+            command[1 ] = 0x34;
+            command[2 ] = 0x30;
+            command[3 ] = 0x31;
+            command[4 ] = 0x30;                                                               // 以点为单位还是字为单位成批读取
+            command[5 ] = 0x30;
+            command[6 ] = 0x30;
+            command[7 ] = isBit ? (byte) 0x31 : (byte) 0x30;
+            command[8 ] = (analysis.Content1.getAsciiCode().getBytes("ASCII"))[0];          // 软元件类型
+            command[9 ] = (analysis.Content1.getAsciiCode().getBytes("ASCII"))[1];
             command[10] = MelsecHelper.BuildBytesFromAddress(analysis.Content2, analysis.Content1)[0];            // 起始地址的地位
             command[11] = MelsecHelper.BuildBytesFromAddress(analysis.Content2, analysis.Content1)[1];
             command[12] = MelsecHelper.BuildBytesFromAddress(analysis.Content2, analysis.Content1)[2];
@@ -604,4 +626,166 @@ public class MelsecHelper {
             return new OperateResultExOne<byte[]>(ex.getMessage());
         }
     }
+
+    /**
+     * 以字为单位，创建数据写入的核心报文
+     * @param address 三菱的地址信息，具体格式参照 MelsecMcNet 的注释说明
+     * @param value 实际的原始数据信息
+     * @param analysisAddress 对地址分析的委托方法
+     * @return 带有成功标识的报文对象
+     */
+    public static OperateResultExOne<byte[]> BuildWriteWordCoreCommand(String address, byte[] value, FunctionOperateExOne<String, OperateResultExTwo<MelsecMcDataType, Integer>> analysisAddress )
+    {
+        OperateResultExTwo<MelsecMcDataType, Integer> analysis = analysisAddress.Action( address );
+        if (!analysis.IsSuccess) return OperateResultExOne.CreateFailedResult( analysis );
+
+        if (value == null) value = new byte[0];
+        byte[] command = new byte[10 + value.length];
+        command[0] = 0x01;                                                        // 批量读取数据命令
+        command[1] = 0x14;
+        command[2] = 0x00;                                                        // 以字为单位成批读取
+        command[3] = 0x00;
+        command[4] = (byte) (analysis.Content2 % 256);                            // 起始地址的地位
+        command[5] = (byte) (analysis.Content2 / 256 % 256);
+        command[6] = (byte) (analysis.Content2 / 256 / 256);
+        command[7] = analysis.Content1.getDataCode();                             // 指明写入的数据
+        command[8] = (byte)(value.length / 2 % 256);                              // 软元件长度的地位
+        command[9] = (byte)(value.length / 2 / 256);
+        System.arraycopy(value, 0, command,10,value.length);
+
+        return OperateResultExOne.CreateSuccessResult( command );
+    }
+
+    /**
+     * 以字为单位，创建ASCII数据写入的核心报文
+     * @param address 三菱的地址信息，具体格式参照 MelsecMcNet 的注释说明
+     * @param value 实际的原始数据信息
+     * @param analysisAddress 对地址分析的委托方法
+     * @return 带有成功标识的报文对象
+     */
+    public static OperateResultExOne<byte[]> BuildAsciiWriteWordCoreCommand(String address, byte[] value, FunctionOperateExOne<String, OperateResultExTwo<MelsecMcDataType, Integer>> analysisAddress )
+    {
+        OperateResultExTwo<MelsecMcDataType, Integer> analysis = analysisAddress.Action( address );
+        if (!analysis.IsSuccess) return OperateResultExOne.CreateFailedResult( analysis );
+
+        if (value == null) value = new byte[0];
+        byte[] buffer = new byte[value.length * 2];
+        for (int i = 0; i < value.length / 2; i++)
+        {
+            short tmpValue = Utilities.getShort(value, i * 2);
+            byte[] tmpBuffer = MelsecHelper.BuildBytesFromData( tmpValue );
+            System.arraycopy(tmpBuffer, 0, buffer, 4*i, tmpBuffer.length);
+        }
+        value = buffer;
+
+        try {
+            byte[] command = new byte[20 + value.length];
+            command[0] = 0x31;                                                                              // 批量写入的命令
+            command[1] = 0x34;
+            command[2] = 0x30;
+            command[3] = 0x31;
+            command[4] = 0x30;                                                                              // 子命令
+            command[5] = 0x30;
+            command[6] = 0x30;
+            command[7] = 0x30;
+            command[8] = (analysis.Content1.getAsciiCode().getBytes("ASCII"))[0];                         // 软元件类型
+            command[9] = (analysis.Content1.getAsciiCode().getBytes("ASCII"))[1];
+            command[10] = MelsecHelper.BuildBytesFromAddress(analysis.Content2, analysis.Content1)[0];     // 起始地址的地位
+            command[11] = MelsecHelper.BuildBytesFromAddress(analysis.Content2, analysis.Content1)[1];
+            command[12] = MelsecHelper.BuildBytesFromAddress(analysis.Content2, analysis.Content1)[2];
+            command[13] = MelsecHelper.BuildBytesFromAddress(analysis.Content2, analysis.Content1)[3];
+            command[14] = MelsecHelper.BuildBytesFromAddress(analysis.Content2, analysis.Content1)[4];
+            command[15] = MelsecHelper.BuildBytesFromAddress(analysis.Content2, analysis.Content1)[5];
+            command[16] = MelsecHelper.BuildBytesFromData((short) (value.length / 4))[0];              // 软元件点数
+            command[17] = MelsecHelper.BuildBytesFromData((short) (value.length / 4))[1];
+            command[18] = MelsecHelper.BuildBytesFromData((short) (value.length / 4))[2];
+            command[19] = MelsecHelper.BuildBytesFromData((short) (value.length / 4))[3];
+            System.arraycopy(value, 0, command, 20, value.length);
+
+            return OperateResultExOne.CreateSuccessResult(command);
+        }
+        catch (Exception ex){
+            return new OperateResultExOne<byte[]>(ex.getMessage());
+        }
+    }
+
+    /**
+     * 以位为单位，创建数据写入的核心报文
+     * @param address 三菱的地址信息，具体格式参照 MelsecMcNet 的注释说明
+     * @param value 原始的bool数组数据
+     * @param analysisAddress 对地址分析的委托方法
+     * @return 带有成功标识的报文对象
+     */
+    public static OperateResultExOne<byte[]> BuildWriteBitCoreCommand( String address, boolean[] value, FunctionOperateExOne<String, OperateResultExTwo<MelsecMcDataType, Integer>> analysisAddress )
+    {
+        OperateResultExTwo<MelsecMcDataType, Integer> analysis = analysisAddress.Action( address );
+        if (!analysis.IsSuccess) return OperateResultExOne.CreateFailedResult( analysis );
+
+        if (value == null) value = new boolean[0];
+        byte[] buffer = MelsecHelper.TransBoolArrayToByteData( value );
+        byte[] command = new byte[10 + buffer.length];
+        command[0] = 0x01;                                                        // 批量写入数据命令
+        command[1] = 0x14;
+        command[2] = 0x01;                                                        // 以位为单位成批写入
+        command[3] = 0x00;
+        command[4] = (byte) (analysis.Content2 % 256);                            // 起始地址的地位
+        command[5] = (byte) (analysis.Content2 / 256 % 256);
+        command[6] = (byte) (analysis.Content2 / 256 / 256);
+        command[7] = analysis.Content1.getDataCode();                                  // 指明写入的数据
+        command[8] = (byte)(value.length % 256);                                  // 软元件长度的地位
+        command[9] = (byte)(value.length / 256);
+        System.arraycopy(buffer,0,command,10,buffer.length);
+
+        return OperateResultExOne.CreateSuccessResult( command );
+    }
+
+    /**
+     * 以位为单位，创建ASCII数据写入的核心报文
+     * @param address 三菱的地址信息，具体格式参照 MelsecMcNet 的注释说明
+     * @param value 原始的bool数组数据
+     * @param analysisAddress 对地址分析的委托方法
+     * @return 带有成功标识的报文对象
+     */
+    public static OperateResultExOne<byte[]> BuildAsciiWriteBitCoreCommand( String address, boolean[] value, FunctionOperateExOne<String, OperateResultExTwo<MelsecMcDataType, Integer>> analysisAddress )
+    {
+        OperateResultExTwo<MelsecMcDataType, Integer> analysis = analysisAddress.Action( address );
+        if (!analysis.IsSuccess) return OperateResultExOne.CreateFailedResult( analysis );
+
+        if (value == null) value = new boolean[0];
+        byte[] buffer = new byte[value.length];
+        for(int i=0;i<buffer.length;i++){
+            buffer[i] = value[i] ? (byte)0x31 : (byte)0x30;
+        }
+
+        try {
+            byte[] command = new byte[20 + buffer.length];
+            command[0] = 0x31;                                                                              // 批量写入的命令
+            command[1] = 0x34;
+            command[2] = 0x30;
+            command[3] = 0x31;
+            command[4] = 0x30;                                                                              // 子命令
+            command[5] = 0x30;
+            command[6] = 0x30;
+            command[7] = 0x31;
+            command[8] = (analysis.Content1.getAsciiCode().getBytes("ASCII"))[0];            // 软元件类型
+            command[9] = (analysis.Content1.getAsciiCode().getBytes("ASCII"))[1];
+            command[10] = MelsecHelper.BuildBytesFromAddress(analysis.Content2, analysis.Content1)[0];     // 起始地址的地位
+            command[11] = MelsecHelper.BuildBytesFromAddress(analysis.Content2, analysis.Content1)[1];
+            command[12] = MelsecHelper.BuildBytesFromAddress(analysis.Content2, analysis.Content1)[2];
+            command[13] = MelsecHelper.BuildBytesFromAddress(analysis.Content2, analysis.Content1)[3];
+            command[14] = MelsecHelper.BuildBytesFromAddress(analysis.Content2, analysis.Content1)[4];
+            command[15] = MelsecHelper.BuildBytesFromAddress(analysis.Content2, analysis.Content1)[5];
+            command[16] = MelsecHelper.BuildBytesFromData((short) (value.length))[0];                      // 软元件点数
+            command[17] = MelsecHelper.BuildBytesFromData((short) (value.length))[1];
+            command[18] = MelsecHelper.BuildBytesFromData((short) (value.length))[2];
+            command[19] = MelsecHelper.BuildBytesFromData((short) (value.length))[3];
+            System.arraycopy(buffer, 0, command, 20, value.length);
+
+            return OperateResultExOne.CreateSuccessResult(command);
+        }
+        catch (Exception ex){
+            return new OperateResultExOne<>(ex.getMessage());
+        }
+    }
+
 }

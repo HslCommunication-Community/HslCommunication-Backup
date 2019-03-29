@@ -45,15 +45,22 @@ public class NetPushClient extends NetworkXBase
     protected void SocketReceiveException( AppSession session) {
         // 发生异常的时候需要进行重新连接
         while (true) {
-            System.out.print("10 秒钟后尝试重连服务器");
+            System.out.println("10 秒钟后尝试重连服务器");
             try {
                 Thread.sleep(10000);
             }catch (Exception ex){
 
             }
 
-            if (CreatePush().IsSuccess) {
-                System.out.print("重连服务器成功");
+            if(action != null){
+                if (CreatePush().IsSuccess) {
+                    System.out.println("重连服务器成功");
+                    break;
+                }
+            }
+            else {
+                super.thread.interrupt();
+                System.out.println("退出服务器。");
                 break;
             }
         }

@@ -26,7 +26,10 @@ public class SiemensS7Net extends NetworkDeviceBase<S7Message, ReverseBytesTrans
      * @param siemens 指定西门子的型号
      */
     public SiemensS7Net(SiemensPLCS siemens) {
-        Initialization(siemens, "");
+        super(S7Message.class, ReverseBytesTransform.class);
+
+        Initialization(siemens, ""
+        );
     }
 
 
@@ -37,6 +40,7 @@ public class SiemensS7Net extends NetworkDeviceBase<S7Message, ReverseBytesTrans
      * @param ipAddress Ip地址
      */
     public SiemensS7Net(SiemensPLCS siemens, String ipAddress) {
+        super(S7Message.class, ReverseBytesTransform.class);
         Initialization(siemens, ipAddress);
     }
 
@@ -70,6 +74,10 @@ public class SiemensS7Net extends NetworkDeviceBase<S7Message, ReverseBytesTrans
                 plcHead1 = plcHead1_200smart;
                 plcHead2 = plcHead2_200smart;
                 break;
+            }
+            case S200:{
+                plcHead1 = plcHead1_200;
+                plcHead2 = plcHead2_200;
             }
             default:
                 plcHead1[18] = 0;
@@ -509,6 +517,16 @@ public class SiemensS7Net extends NetworkDeviceBase<S7Message, ReverseBytesTrans
             {
                     0x03,0x00,0x00,0x19,0x02,(byte) 0xF0,(byte) 0x80,0x32,0x01,0x00,0x00,(byte) 0xCC,(byte) 0xC1,
                     0x00,0x08,0x00,0x00,(byte) 0xF0,0x00,0x00,0x01,0x00,0x01,0x03,(byte) 0xC0
+            };
+    private byte[] plcHead1_200 = new byte[]
+            {
+                    0x03, 0x00, 0x00, 0x16, 0x11, (byte) 0xE0, 0x00, 0x00, 0x00, 0x01, 0x00, (byte) 0xC1, 0x02, 0x4D, 0x57, (byte) 0xC2,
+                    0x02, 0x4D, 0x57, (byte) 0xC0, 0x01, 0x09
+            };
+    private byte[] plcHead2_200 = new byte[]
+            {
+                    0x03, 0x00, 0x00, 0x19, 0x02, (byte) 0xF0, (byte) 0x80, 0x32, 0x01, 0x00, 0x00, 0x00, 0x00,
+                    0x00, 0x08, 0x00, 0x00, (byte) 0xF0, 0x00, 0x00, 0x01, 0x00, 0x01, 0x03, (byte) 0xC0
             };
 
     private byte plc_slot = 0;

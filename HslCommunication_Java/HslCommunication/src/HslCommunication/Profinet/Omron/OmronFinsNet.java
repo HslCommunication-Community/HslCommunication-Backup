@@ -20,6 +20,8 @@ public class OmronFinsNet extends NetworkDeviceBase<FinsMessage,ReverseWordTrans
      * 实例化一个欧姆龙Fins帧协议的通讯对象
      */
     public OmronFinsNet() {
+
+        super(FinsMessage.class, ReverseWordTransform.class);
         WordLength = 1;
     }
 
@@ -30,6 +32,7 @@ public class OmronFinsNet extends NetworkDeviceBase<FinsMessage,ReverseWordTrans
      * @param port PLC的端口
      */
     public OmronFinsNet(String ipAddress, int port) {
+        super(FinsMessage.class, ReverseWordTransform.class);
         WordLength = 1;
         setIpAddress(ipAddress);
         setPort(port);

@@ -23,25 +23,33 @@ public class NetworkDoubleBase<TNetMessage extends INetMessage  ,TTransform exte
     /**
      * 默认的无参构造函数
      */
-    public NetworkDoubleBase( )
+    public NetworkDoubleBase( Class<TNetMessage> netMessageClass, Class<TTransform> tTransformClass )
     {
-        simpleHybirdLock    = new SimpleHybirdLock();                              // 实例化数据访问锁
-        byteTransform       = getInstanceOfTTransform();                           // 实例化数据转换规则
-        connectionId        = SoftBasic.GetUniqueStringByGuidAndRandom( );
+        this.netMessageClass = netMessageClass;
+        this.tTransformClass = tTransformClass;
+        simpleHybirdLock     = new SimpleHybirdLock();                              // 实例化数据访问锁
+        try {
+            byteTransform    = tTransformClass.newInstance();                       // 实例化数据转换规则
+        }
+        catch (Exception ex){
+            System.out.println(ex.getMessage());
+        }
+        connectionId         = SoftBasic.GetUniqueStringByGuidAndRandom( );
     }
 
 
-
-    private TTransform byteTransform;                // 数据变换的接口
-    private String ipAddress = "127.0.0.1";          // 连接的IP地址
-    private int port = 10000;                        // 端口号
-    private int connectTimeOut = 10000;              // 连接超时时间设置
-    private int receiveTimeOut = 10000;              // 数据接收的超时时间
-    private boolean isPersistentConn = false;           // 是否处于长连接的状态
-    private SimpleHybirdLock simpleHybirdLock = null;                      // 数据访问的同步锁
-    private boolean IsSocketError = false;              // 指示长连接的套接字是否处于错误的状态
-    private boolean isUseSpecifiedSocket = false;       // 指示是否使用指定的网络套接字访问数据
-    private String connectionId = "";                  // 当前连接
+    private Class<TNetMessage> netMessageClass;           // 消息的泛型类对象
+    private Class<TTransform> tTransformClass;            // 转换的泛型类对象
+    private TTransform byteTransform;                     // 数据变换的接口
+    private String ipAddress = "127.0.0.1";               // 连接的IP地址
+    private int port = 10000;                             // 端口号
+    private int connectTimeOut = 10000;                   // 连接超时时间设置
+    private int receiveTimeOut = 10000;                   // 数据接收的超时时间
+    private boolean isPersistentConn = false;             // 是否处于长连接的状态
+    private SimpleHybirdLock simpleHybirdLock = null;     // 数据访问的同步锁
+    private boolean IsSocketError = false;                // 指示长连接的套接字是否处于错误的状态
+    private boolean isUseSpecifiedSocket = false;         // 指示是否使用指定的网络套接字访问数据
+    private String connectionId = "";                     // 当前连接
 
 
 
@@ -416,7 +424,15 @@ public class NetworkDoubleBase<TNetMessage extends INetMessage  ,TTransform exte
      */
     public OperateResultExOne<byte[]> ReadFromCoreServer( Socket socket, byte[] send )
     {
-        TNetMessage netMsg = getInstanceOfTNetMessage();
+        TNetMessage netMsg;
+        try {
+            netMsg = netMessageClass.newInstance();
+        }
+        catch (Exception ex){
+            return new OperateResultExOne<>(ex.getMessage());
+        }
+
+
         netMsg.setSendBytes(send);
 
         // send data

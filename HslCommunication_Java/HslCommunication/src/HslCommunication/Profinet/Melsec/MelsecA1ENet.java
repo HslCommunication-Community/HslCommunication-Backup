@@ -7,7 +7,6 @@ import HslCommunication.Core.Types.OperateResult;
 import HslCommunication.Core.Types.OperateResultExOne;
 import HslCommunication.Core.Types.OperateResultExTwo;
 import HslCommunication.StringResources;
-import HslCommunication.Utilities;
 
 /**
  * 三菱PLC通讯协议，采用A兼容1E帧协议实现，使用二进制码通讯，请根据实际型号来进行选取
@@ -19,6 +18,8 @@ public class MelsecA1ENet extends NetworkDeviceBase<MelsecA1EBinaryMessage,Regul
      * 实例化三菱的A兼容1E帧协议的通讯对象
      */
     public MelsecA1ENet() {
+
+        super(MelsecA1EBinaryMessage.class, RegularByteTransform.class);
         WordLength = 1;
     }
 
@@ -30,6 +31,7 @@ public class MelsecA1ENet extends NetworkDeviceBase<MelsecA1EBinaryMessage,Regul
      * @param port      PLC的端口
      */
     public MelsecA1ENet(String ipAddress, int port) {
+        super(MelsecA1EBinaryMessage.class, RegularByteTransform.class);
         WordLength = 1;
         super.setIpAddress(ipAddress);
         super.setPort(port);

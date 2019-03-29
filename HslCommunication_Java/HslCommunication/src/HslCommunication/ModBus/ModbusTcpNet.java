@@ -24,6 +24,7 @@ public class ModbusTcpNet extends NetworkDeviceBase<ModbusTcpMessage, ReverseWor
      * 实例化一个MOdbus-Tcp协议的客户端对象
      */
     public ModbusTcpNet() {
+        super(ModbusTcpMessage.class, ReverseWordTransform.class);
         this.softIncrementCount = new SoftIncrementCount(65535, 0);
         this.WordLength = 1;
         this.station = 1;
@@ -38,6 +39,7 @@ public class ModbusTcpNet extends NetworkDeviceBase<ModbusTcpMessage, ReverseWor
      * @param station   客户端自身的站号，可以在读取的时候动态配置
      */
     public ModbusTcpNet(String ipAddress, int port, byte station) {
+        super(ModbusTcpMessage.class, ReverseWordTransform.class);
         this.softIncrementCount = new SoftIncrementCount(65535, 0);
         setIpAddress(ipAddress);
         setPort(port);

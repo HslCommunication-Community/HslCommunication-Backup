@@ -25,6 +25,7 @@ public class NetSimplifyClient extends NetworkDoubleBase<HslMessage,RegularByteT
      */
     public NetSimplifyClient(String ipAddress, int port)
     {
+        super(HslMessage.class, RegularByteTransform.class);
         this.setIpAddress(ipAddress);
         this.setPort( port);
     }
@@ -37,6 +38,7 @@ public class NetSimplifyClient extends NetworkDoubleBase<HslMessage,RegularByteT
      */
     public NetSimplifyClient(String ipAddress, int port, UUID token)
     {
+        super(HslMessage.class, RegularByteTransform.class);
         this.setIpAddress(ipAddress);
         this.setPort( port);
         this.Token = token;
@@ -48,7 +50,7 @@ public class NetSimplifyClient extends NetworkDoubleBase<HslMessage,RegularByteT
      */
     public NetSimplifyClient()
     {
-
+        super(HslMessage.class, RegularByteTransform.class);
     }
 
 

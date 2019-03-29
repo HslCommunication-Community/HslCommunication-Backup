@@ -28,4 +28,8 @@ public enum SiemensPLCS {
      * S200Smart系列
      */
     S200Smart,
+    /**
+     * 200系列
+     */
+    S200,
 }

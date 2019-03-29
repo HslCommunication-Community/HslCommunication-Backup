@@ -18,6 +18,8 @@ public class SiemensFetchWriteNet extends NetworkDeviceBase<FetchWriteMessage, R
      * 实例化一个西门子的Fetch/Write协议的通讯对象
      */
     public SiemensFetchWriteNet() {
+
+        super(FetchWriteMessage.class, ReverseBytesTransform.class);
         WordLength = 2;
     }
 
@@ -29,6 +31,7 @@ public class SiemensFetchWriteNet extends NetworkDeviceBase<FetchWriteMessage, R
      * @param port      PLC的端口
      */
     public SiemensFetchWriteNet(String ipAddress, int port) {
+        super(FetchWriteMessage.class, ReverseBytesTransform.class);
         WordLength = 2;
         setIpAddress(ipAddress);
         setPort(port);

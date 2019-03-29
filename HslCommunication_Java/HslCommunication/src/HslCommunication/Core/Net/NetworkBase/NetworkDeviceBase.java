@@ -18,7 +18,9 @@ import HslCommunication.Utilities;
 public class NetworkDeviceBase<TNetMessage extends INetMessage,TTransform extends IByteTransform> extends NetworkDoubleBase<TNetMessage,TTransform>  implements IReadWriteNet
 {
 
-
+    public NetworkDeviceBase(Class<TNetMessage> netMessageClass, Class<TTransform> tTransformClass){
+        super(netMessageClass, tTransformClass);
+    }
 
     /**************************************************************************************************
      *

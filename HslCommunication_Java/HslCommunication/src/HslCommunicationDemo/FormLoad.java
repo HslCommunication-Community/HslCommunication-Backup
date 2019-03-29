@@ -28,6 +28,7 @@ public class FormLoad extends JDialog
         AddModbusGroup(panel);
         AddOmronGroup(panel);
         AddKeyenceGroup(panel);
+        AddHslGroup(panel);
         this.add(panel);
 
 
@@ -220,6 +221,23 @@ public class FormLoad extends JDialog
         buttonPanel.add(button5);
         location_y+=40;
 
+        JButton button7 = new JButton( "200");
+        button7.setBounds(15,location_y,150, 32);
+        button7.setFocusPainted(false);
+        button7.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                setVisible(false);
+                FormSiemensS7 form = new FormSiemensS7(SiemensPLCS.S200);
+                form.setVisible(true);
+                form.dispose();
+                setVisible(true);
+            }
+        });
+        buttonPanel.add(button7);
+        location_y+=40;
+
         JButton button6 = new JButton( "Fetch/Write");
         button6.setBounds(15,location_y,150, 32);
         button6.setFocusPainted(false);
@@ -301,14 +319,80 @@ public class FormLoad extends JDialog
         JButton button1 = new JButton( "Mc 二进制");
         button1.setBounds(15,location_y,150, 32);
         button1.setFocusPainted(false);
+        button1.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                setVisible(false);
+                FormKeyenceBinary form = new FormKeyenceBinary();
+                form.setVisible(true);
+                form.dispose();
+                setVisible(true);
+            }
+        });
         buttonPanel.add(button1);
         location_y+=40;
 
         JButton button2 = new JButton( "Mc Ascii");
         button2.setBounds(15,location_y,150, 32);
         button2.setFocusPainted(false);
+        button2.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                setVisible(false);
+                FormKeyenceAscii form = new FormKeyenceAscii();
+                form.setVisible(true);
+                form.dispose();
+                setVisible(true);
+            }
+        });
         buttonPanel.add(button2);
         location_y+=40;
+
+        panel.add(buttonPanel);
+    }
+
+    private void AddHslGroup(JPanel panel){
+        JPanel buttonPanel = new JPanel(null);
+        buttonPanel.setBounds(9,336,183, 315);
+        buttonPanel.setBorder(BorderFactory.createTitledBorder( "Hsl"));
+        int location_y = 24;
+
+        JButton button1 = new JButton( "NetSimplify");
+        button1.setBounds(15,location_y,150, 32);
+        button1.setFocusPainted(false);
+        button1.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                setVisible(false);
+                FormSimplifyNet form = new FormSimplifyNet();
+                form.setVisible(true);
+                form.dispose();
+                setVisible(true);
+            }
+        });
+        buttonPanel.add(button1);
+        location_y+=40;
+
+        JButton button2 = new JButton( "Net Push");
+        button2.setBounds(15,location_y,150, 32);
+        button2.setFocusPainted(false);
+        button2.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                setVisible(false);
+                FormPushNet form = new FormPushNet();
+                form.setVisible(true);
+                form.dispose();
+                setVisible(true);
+            }
+        });
+        buttonPanel.add(button2);
+        location_y+=40;
+
 
         panel.add(buttonPanel);
     }

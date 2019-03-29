@@ -54,7 +54,7 @@ public class NetworkXBase extends NetworkBase
     }
 
 
-    private Thread thread;  // 后台线程
+    protected Thread thread;  // 后台线程
 
     /**
      * 开始接受数据
