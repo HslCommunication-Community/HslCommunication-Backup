@@ -57,7 +57,7 @@ namespace HslCommunicationDemo
                 label2.Text = "Blogs:";
                 label4.Text = "Protocols:";
                 label20.Text = "Author:Richard Hu";
-                label5.Text = "Qna-3E Binary";
+                label5.Text = "KUKAVARPROXY Protocol";
 
                 label1.Text = "Ip:";
                 label3.Text = "Port:";

@@ -296,18 +296,19 @@
             // linkLabel1
             // 
             this.linkLabel1.AutoSize = true;
-            this.linkLabel1.Location = new System.Drawing.Point(74, 9);
+            this.linkLabel1.Location = new System.Drawing.Point(74, 10);
             this.linkLabel1.Name = "linkLabel1";
-            this.linkLabel1.Size = new System.Drawing.Size(199, 17);
+            this.linkLabel1.Size = new System.Drawing.Size(616, 17);
             this.linkLabel1.TabIndex = 3;
             this.linkLabel1.TabStop = true;
-            this.linkLabel1.Text = "http://www.hslcommunication.cn/";
+            this.linkLabel1.Text = "http://blog.davidrobot.com/2019/03/hslcommunication_kukavarproxy.html?tdsourcetag" +
+    "=s_pctim_aiomsg";
             this.linkLabel1.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel1_LinkClicked);
             // 
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(466, 9);
+            this.label4.Location = new System.Drawing.Point(622, 10);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(68, 17);
             this.label4.TabIndex = 4;
@@ -317,7 +318,7 @@
             // 
             this.label5.AutoSize = true;
             this.label5.ForeColor = System.Drawing.Color.Red;
-            this.label5.Location = new System.Drawing.Point(540, 9);
+            this.label5.Location = new System.Drawing.Point(687, 9);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(157, 17);
             this.label5.TabIndex = 5;

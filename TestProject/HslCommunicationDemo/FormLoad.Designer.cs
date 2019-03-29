@@ -108,6 +108,7 @@
             this.groupBox13 = new System.Windows.Forms.GroupBox();
             this.button50 = new System.Windows.Forms.Button();
             this.button49 = new System.Windows.Forms.Button();
+            this.button53 = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -126,6 +127,7 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.button53);
             this.groupBox1.Controls.Add(this.button46);
             this.groupBox1.Controls.Add(this.button39);
             this.groupBox1.Controls.Add(this.button36);
@@ -156,7 +158,7 @@
             // 
             // button39
             // 
-            this.button39.Location = new System.Drawing.Point(98, 104);
+            this.button39.Location = new System.Drawing.Point(98, 64);
             this.button39.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.button39.Name = "button39";
             this.button39.Size = new System.Drawing.Size(70, 32);
@@ -194,13 +196,13 @@
             this.button5.Name = "button5";
             this.button5.Size = new System.Drawing.Size(150, 32);
             this.button5.TabIndex = 3;
-            this.button5.Text = "200Smart";
+            this.button5.Text = "s7-200Smart";
             this.button5.UseVisualStyleBackColor = true;
             this.button5.Click += new System.EventHandler(this.button5_Click);
             // 
             // button3
             // 
-            this.button3.Location = new System.Drawing.Point(18, 104);
+            this.button3.Location = new System.Drawing.Point(18, 64);
             this.button3.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(70, 32);
@@ -211,10 +213,10 @@
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(18, 64);
+            this.button2.Location = new System.Drawing.Point(98, 24);
             this.button2.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(150, 32);
+            this.button2.Size = new System.Drawing.Size(70, 32);
             this.button2.TabIndex = 1;
             this.button2.Text = "s7-1500";
             this.button2.UseVisualStyleBackColor = true;
@@ -225,7 +227,7 @@
             this.button1.Location = new System.Drawing.Point(18, 24);
             this.button1.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(150, 32);
+            this.button1.Size = new System.Drawing.Size(70, 32);
             this.button1.TabIndex = 0;
             this.button1.Text = "s7-1200";
             this.button1.UseVisualStyleBackColor = true;
@@ -1018,6 +1020,16 @@
             this.button49.UseVisualStyleBackColor = true;
             this.button49.Click += new System.EventHandler(this.button49_Click);
             // 
+            // button53
+            // 
+            this.button53.Location = new System.Drawing.Point(18, 104);
+            this.button53.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.button53.Name = "button53";
+            this.button53.Size = new System.Drawing.Size(150, 32);
+            this.button53.TabIndex = 8;
+            this.button53.Text = "s7-200";
+            this.button53.UseVisualStyleBackColor = true;
+            // 
             // FormLoad
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 17F);
@@ -1149,6 +1161,7 @@
         private System.Windows.Forms.Button button49;
         private System.Windows.Forms.Button button51;
         private System.Windows.Forms.Button button52;
+        private System.Windows.Forms.Button button53;
     }
 }
 
