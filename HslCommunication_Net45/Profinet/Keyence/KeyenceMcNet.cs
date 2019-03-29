@@ -206,7 +206,7 @@ namespace HslCommunication.Profinet.Keyence
         #region Constructor
 
         /// <summary>
-        /// 实例化三菱的Qna兼容3E帧协议的通讯对象
+        /// 实例化基恩士的Qna兼容3E帧协议的通讯对象
         /// </summary>
         public KeyenceMcNet( ) : base( )
         {
