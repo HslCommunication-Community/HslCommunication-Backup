@@ -33,6 +33,10 @@ namespace HslCommunication.Profinet.Siemens
         /// 200的smart系列
         /// </summary>
         S200Smart = 5,
+        /// <summary>
+        /// 200系统，需要额外配置以太网模块
+        /// </summary>
+        S200 = 6
     }
 
 
