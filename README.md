@@ -244,6 +244,7 @@ will be used in English and Chinese double annotation, thank you for your unders
 This component provides the Java version, for the. NET version of the castration version, removed all the server function code, 
 retained part of the client function code, convenient and plc, device data interaction, and C # program data interaction, 
 this jar component is suitable for the development of Android, easy to build a. NET Server + Windows Client + asp.net client + J2EE client + Java Client + Android client.
+![Picture](https://raw.githubusercontent.com/dathlin/HslCommunication/master/imgs/java_demo.png)
 
 ## HslCommunication.py Summary 
 This component provides a Python version, a castration version of the. NET version, removes all server function codes, retains some of the client function code, 
