@@ -893,8 +893,8 @@ class EFORTMessage (INetMessage):
 		return 18
 	def GetContentLengthByHeadBytes(self):
 		'''二次接收的数据长度'''
-		if self.SendBytes != None:
-			return struct.unpack('<h',self.SendBytes[16:18])[0] - 18
+		if self.HeadBytes != None:
+			return struct.unpack('<h',self.HeadBytes[16:18])[0] - 18
 		else:
 			return 0
 	def CheckHeadBytesLegal(self,token):
@@ -908,8 +908,23 @@ class EFORTMessagePrevious (INetMessage):
 		return 17
 	def GetContentLengthByHeadBytes(self):
 		'''二次接收的数据长度'''
-		if self.SendBytes != None:
-			return struct.unpack('<h',self.SendBytes[15:17])[0] - 17
+		if self.HeadBytes != None:
+			return struct.unpack('<h',self.HeadBytes[15:17])[0] - 17
+		else:
+			return 0
+	def CheckHeadBytesLegal(self,token):
+		'''令牌检查是否成功'''
+		return True
+	
+class KukaVarProxyMessage(INetMessage):
+	'''Kuka机器人的 KRC4 控制器中的服务器KUKAVARPROXY'''
+	def ProtocolHeadBytesLength(self):
+		'''协议头数据长度，也即是第一次接收的数据长度'''
+		return 4
+	def GetContentLengthByHeadBytes(self):
+		'''二次接收的数据长度'''
+		if self.HeadBytes != None:
+			return self.HeadBytes[2]*256 + self.HeadBytes[3]
 		else:
 			return 0
 	def CheckHeadBytesLegal(self,token):
@@ -932,20 +947,50 @@ class ByteTransform:
 	DataFormat = DataFormat.DCBA
 
 	def TransBool(self, buffer, index ):
-		'''将buffer数组转化成bool对象'''
+		'''
+		将buffer数组转化成bool对象 -> bool
+
+		Parameter
+		  buffer: bytes 原始的数据对象
+		  index: int 等待数据转换的起始索引
+		Return -> bool
+		'''
 		return ((buffer[index] & 0x01) == 0x01)
 	def TransBoolArray(self, buffer, index, length ):
-		'''将buffer数组转化成bool数组对象，需要转入索引，长度'''
+		'''
+		将buffer数组转化成bool数组对象，需要转入索引，长度
+		
+		Parameter
+		  buffer: bytes 原始的缓存数据对象
+		  index: int 等待数据转换的起始索引
+		  length: 转换的字节数的长度
+		Return -> bool[]
+		'''
 		data = bytearray(length)
 		for i in range(length):
 			data[i]=buffer[i+index]
 		return SoftBasic.ByteToBoolArray( data )
 
 	def TransByte( self, buffer, index ):
-		'''将buffer中的字节转化成byte对象，需要传入索引'''
+		'''
+		将buffer中的字节转化成byte对象，需要传入索引
+		
+		Parameter
+		  buffer: bytes 原始的缓存数据对象
+		  index: int 等待数据转换的起始索引
+		Return -> byte
+		'''
 		return buffer[index]
 	def TransByteArray( self, buffer, index, length ):
-		'''将buffer中的字节转化成byte数组对象，需要传入索引'''
+		'''
+		将buffer中的字节转化成byte数组对象，需要传入索引
+		
+		Parameter
+		  buffer: bytes 原始的缓存数据对象
+		  index: int 等待数据转换的起始索引
+		  length: int 长度信息
+		Return -> bytes
+		'''
 		data = bytearray(length)
 		for i in range(length):
 			data[i]=buffer[i+index]
@@ -4588,17 +4633,18 @@ class NetSimplifyClient(NetworkDoubleBase):
 		self.byteTransform = RegularByteTransform()
 		self.ipAddress = ipAddress
 		self.port = port
-	def ReadBytesFromServer( self, customer, send = None):
-		'''客户端向服务器进行请求，请求字节数据'''
-		return self.__ReadFromServerBase( HslProtocol.CommandBytes( customer, self.Token, send))
 
-	def ReadStringFromServer( self, customer, send = None):
-		'''客户端向服务器进行请求，请求字符串数据'''
-		read = self.__ReadFromServerBase(  HslProtocol.CommandString( customer, self.Token, send))
-		if read.IsSuccess == False:
-			return OperateResult.CreateFailedResult( read )
-		
-		return OperateResult.CreateSuccessResult( read.Content.decode('utf-16') )
+	def ReadFromServer( self, customer, send = None):
+		'''客户端向服务器进行请求，请求数据，类型取决于你的send的类型'''
+		if send == None: return
+		if type(send) == str:
+			read = self.__ReadFromServerBase(  HslProtocol.CommandString( customer, self.Token, send))
+			if read.IsSuccess == False:
+				return OperateResult.CreateFailedResult( read )
+			
+			return OperateResult.CreateSuccessResult( read.Content.decode('utf-16') )
+		else:
+			return self.__ReadFromServerBase( HslProtocol.CommandBytes( customer, self.Token, send))
 
 	def __ReadFromServerBase( self, send):
 		'''需要发送的底层数据'''
