@@ -298,11 +298,10 @@
             this.linkLabel1.AutoSize = true;
             this.linkLabel1.Location = new System.Drawing.Point(74, 10);
             this.linkLabel1.Name = "linkLabel1";
-            this.linkLabel1.Size = new System.Drawing.Size(616, 17);
+            this.linkLabel1.Size = new System.Drawing.Size(367, 17);
             this.linkLabel1.TabIndex = 3;
             this.linkLabel1.TabStop = true;
-            this.linkLabel1.Text = "http://blog.davidrobot.com/2019/03/hslcommunication_kukavarproxy.html?tdsourcetag" +
-    "=s_pctim_aiomsg";
+            this.linkLabel1.Text = "http://blog.davidrobot.com/2014/09/kukavarproxy_index.html";
             this.linkLabel1.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel1_LinkClicked);
             // 
             // label4

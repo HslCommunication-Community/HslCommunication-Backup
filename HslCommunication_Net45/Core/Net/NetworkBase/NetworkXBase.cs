@@ -684,7 +684,7 @@ namespace HslCommunication.Core.Net
 
                 if (!write.IsSuccess)
                 {
-                    File.Delete( savename );
+                    if (File.Exists( savename )) File.Delete( savename );
                     return OperateResult.CreateFailedResult<FileBaseInfo>( write );
                 }
 

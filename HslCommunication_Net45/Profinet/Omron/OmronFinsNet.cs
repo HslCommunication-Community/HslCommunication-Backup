@@ -88,8 +88,8 @@ namespace HslCommunication.Profinet.Omron
         /// </summary>
         public OmronFinsNet( )
         {
-            WordLength = 1;
-            ByteTransform.DataFormat = DataFormat.CDAB;
+            WordLength                  = 1;
+            ByteTransform.DataFormat    = DataFormat.CDAB;
         }
 
         /// <summary>
@@ -99,10 +99,10 @@ namespace HslCommunication.Profinet.Omron
         /// <param name="port">PLC的端口</param>
         public OmronFinsNet( string ipAddress, int port )
         {
-            WordLength = 1;
-            IpAddress = ipAddress;
-            Port = port;
-            ByteTransform.DataFormat = DataFormat.CDAB;
+            WordLength                  = 1;
+            IpAddress                   = ipAddress;
+            Port                        = port;
+            ByteTransform.DataFormat    = DataFormat.CDAB;
         }
 
         #endregion
