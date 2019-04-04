@@ -29,6 +29,7 @@
         private void InitializeComponent( )
         {
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.button53 = new System.Windows.Forms.Button();
             this.button46 = new System.Windows.Forms.Button();
             this.button39 = new System.Windows.Forms.Button();
             this.button36 = new System.Windows.Forms.Button();
@@ -108,7 +109,6 @@
             this.groupBox13 = new System.Windows.Forms.GroupBox();
             this.button50 = new System.Windows.Forms.Button();
             this.button49 = new System.Windows.Forms.Button();
-            this.button53 = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -144,6 +144,17 @@
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Siemens PLC(西门子 PLC)";
+            // 
+            // button53
+            // 
+            this.button53.Location = new System.Drawing.Point(18, 104);
+            this.button53.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.button53.Name = "button53";
+            this.button53.Size = new System.Drawing.Size(150, 32);
+            this.button53.TabIndex = 8;
+            this.button53.Text = "s7-200";
+            this.button53.UseVisualStyleBackColor = true;
+            this.button53.Click += new System.EventHandler(this.Button53_Click);
             // 
             // button46
             // 
@@ -1019,16 +1030,6 @@
             this.button49.Text = "MC-3E (Binary)";
             this.button49.UseVisualStyleBackColor = true;
             this.button49.Click += new System.EventHandler(this.button49_Click);
-            // 
-            // button53
-            // 
-            this.button53.Location = new System.Drawing.Point(18, 104);
-            this.button53.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.button53.Name = "button53";
-            this.button53.Size = new System.Drawing.Size(150, 32);
-            this.button53.TabIndex = 8;
-            this.button53.Text = "s7-200";
-            this.button53.UseVisualStyleBackColor = true;
             // 
             // FormLoad
             // 

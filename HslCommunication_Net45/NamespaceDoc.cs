@@ -669,6 +669,15 @@ namespace HslCommunication
     ///             <item>SoftBasic新增从字符串计算MD5码的方法。</item>
     ///         </list>
     ///     </revision>
+    ///     <revision date="2019-4-4" version="6.0.4" author="Richard.Hu">
+    ///         <list type="bullet">
+    ///             <item>修复java的NetPushClient掉线重复连接的bug。</item>
+    ///             <item>发布java的全新测试Demo。</item>
+    ///             <item>Kuka机器人Demo修改帮助链接。</item>
+    ///             <item>西门子新增s200的以太网模块连接对象。</item>
+    ///             <item>修复文件引擎在上传文件时意外失败，服务器仍然识别为成功的bug。</item>
+    ///         </list>
+    ///     </revision>
     /// </revisionHistory>
     [System.Runtime.CompilerServices.CompilerGeneratedAttribute( )]
     public class NamespaceDoc
