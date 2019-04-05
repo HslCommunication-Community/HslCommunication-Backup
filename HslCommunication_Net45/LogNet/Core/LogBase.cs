@@ -375,15 +375,8 @@ namespace HslCommunication.LogNet
                     sw = new StreamWriter(LogSaveFileName, true, Encoding.UTF8);
                     while (current != null)
                     {
-                        try
-                        {
-                            // 触发事件
-                            OnBeforeSaveToFile( new HslEventArgs( ) { HslMessage = current } );
-                        }
-                        catch(Exception ex)
-                        {
-                            throw new LogNetException( ex );
-                        }
+                        // 触发事件
+                        OnBeforeSaveToFile( new HslEventArgs( ) { HslMessage = current } );
 
                         // 检查是否需要真的进行存储
                         bool isSave = true;
@@ -404,10 +397,6 @@ namespace HslCommunication.LogNet
                         current = GetAndRemoveLogItem();
                     }
                 }
-                catch (LogNetException ex)
-                {
-                    throw;
-                }
                 catch (Exception ex)
                 {
                     AddItemToCache( current );
@@ -425,7 +414,6 @@ namespace HslCommunication.LogNet
 
             // 释放锁
             m_fileSaveLock.Leave();
-
             Interlocked.Exchange(ref m_SaveStatus, 0);
 
             // 再次检测锁是否释放完成
