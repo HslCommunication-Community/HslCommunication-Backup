@@ -309,8 +309,6 @@ namespace HslCommunication.LogNet
 
         #region File Write
 
-
-
         private void WriteToFile( HslMessageDegree degree, string keyWord, string text )
         {
             // 过滤事件
@@ -377,8 +375,15 @@ namespace HslCommunication.LogNet
                     sw = new StreamWriter(LogSaveFileName, true, Encoding.UTF8);
                     while (current != null)
                     {
-                        // 触发事件
-                        OnBeforeSaveToFile( new HslEventArgs( ) { HslMessage = current } );
+                        try
+                        {
+                            // 触发事件
+                            OnBeforeSaveToFile( new HslEventArgs( ) { HslMessage = current } );
+                        }
+                        catch(Exception ex)
+                        {
+                            throw new LogNetException( ex );
+                        }
 
                         // 检查是否需要真的进行存储
                         bool isSave = true;
@@ -399,21 +404,24 @@ namespace HslCommunication.LogNet
                         current = GetAndRemoveLogItem();
                     }
                 }
+                catch (LogNetException ex)
+                {
+                    throw;
+                }
                 catch (Exception ex)
                 {
-                    AddItemToCache(current);
-                    AddItemToCache(new HslMessageItem()
+                    AddItemToCache( current );
+                    AddItemToCache( new HslMessageItem( )
                     {
                         Degree = HslMessageDegree.FATAL,
                         Text = LogNetManagment.GetSaveStringFromException("LogNetSelf", ex),
-                    });
+                    } );
                 }
                 finally
                 {
                     sw?.Dispose();
                 }
             }
-
 
             // 释放锁
             m_fileSaveLock.Leave();
@@ -528,11 +536,10 @@ namespace HslCommunication.LogNet
         {
             return new HslMessageItem()
             {
-                KeyWord = keyWord,
-                Degree = degree,
-                Text = text,
-                ThreadId = Thread.CurrentThread.ManagedThreadId,
-                Time = DateTime.Now,
+                KeyWord      = keyWord,
+                Degree       = degree,
+                Text         = text,
+                ThreadId     = Thread.CurrentThread.ManagedThreadId,
             };
         }
 
