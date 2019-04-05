@@ -141,17 +141,17 @@ namespace HslCommunication.Profinet.Siemens
         /// <param name="ipAddress">Ip地址 -> IpAddress</param>
         private void Initialization( SiemensPLCS siemens, string ipAddress )
         {
-            WordLength = 2;
-            IpAddress = ipAddress;
-            Port = 102;
-            CurrentPlc = siemens;
+            WordLength   = 2;
+            IpAddress    = ipAddress;
+            Port         = 102;
+            CurrentPlc   = siemens;
 
             switch (siemens)
             {
-                case SiemensPLCS.S1200: plcHead1[21] = 0; break;
-                case SiemensPLCS.S300: plcHead1[21] = 2; break;
-                case SiemensPLCS.S400: plcHead1[21] = 3; plcHead1[17] = 0x00; break;
-                case SiemensPLCS.S1500: plcHead1[21] = 0; break;
+                case SiemensPLCS.S1200:    plcHead1[21] = 0; break;
+                case SiemensPLCS.S300:     plcHead1[21] = 2; break;
+                case SiemensPLCS.S400:     plcHead1[21] = 3; plcHead1[17] = 0x00; break;
+                case SiemensPLCS.S1500:    plcHead1[21] = 0; break;
                 case SiemensPLCS.S200Smart:
                     {
                         plcHead1 = plcHead1_200smart;
@@ -411,7 +411,6 @@ namespace HslCommunication.Profinet.Siemens
             OperateResult<byte[]> read = ReadFromCoreServer( command.Content );
             if (!read.IsSuccess) return read;
 
-
             // 分析结果 -> Analysis results
             int receiveCount = 0;
             for (int i = 0; i < length.Length; i++)
@@ -443,7 +442,7 @@ namespace HslCommunication.Profinet.Siemens
             }
             else
             {
-                return new OperateResult<byte[]>( ) { ErrorCode = read.ErrorCode, Message = StringResources.Language.SiemensDataLengthCheckFailed };
+                return new OperateResult<byte[]>( read.ErrorCode, StringResources.Language.SiemensDataLengthCheckFailed );
             }
         }
         
