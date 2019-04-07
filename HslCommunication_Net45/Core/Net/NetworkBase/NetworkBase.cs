@@ -79,6 +79,11 @@ namespace HslCommunication.Core.Net
         /// </example>
         public Guid Token { get; set; }
 
+        /// <summary>
+        /// 是否使用同步的网络通讯
+        /// </summary>
+        public bool UseSynchronousNet { get; set; } = false;
+
         #endregion
 
         #region Potect Member
@@ -156,6 +161,19 @@ namespace HslCommunication.Core.Net
             //}
 
             //#if NET35
+            if (UseSynchronousNet)
+            {
+                try
+                {
+                    byte[] data = NetSupport.ReadBytesFromSocket( socket, length );
+                    return OperateResult.CreateSuccessResult( data );
+                }
+                catch(Exception ex)
+                {
+                    return new OperateResult<byte[]>( ex.Message );
+                }
+            }
+
 
             OperateResult<byte[]> result = new OperateResult<byte[]>( );
             ManualResetEvent receiveDone = null;
@@ -349,6 +367,18 @@ namespace HslCommunication.Core.Net
         {
             if (data == null) return OperateResult.CreateSuccessResult( );
 
+            if (UseSynchronousNet)
+            {
+                try
+                {
+                    socket.Send( data );
+                }
+                catch (Exception ex)
+                {
+                    return new OperateResult<byte[]>( ex.Message );
+                }
+            }
+
             OperateResult result = new OperateResult( );
             ManualResetEvent sendDone = null;
             StateObject state = null;
@@ -484,68 +514,93 @@ namespace HslCommunication.Core.Net
         /// </example>
         protected OperateResult<Socket> CreateSocketAndConnect( IPEndPoint endPoint, int timeOut )
         {
-            OperateResult<Socket> result = new OperateResult<Socket>( );
-            ManualResetEvent connectDone = null;
-            StateObject state = null;
-            try
+            if (UseSynchronousNet)
             {
-                connectDone = new ManualResetEvent( false );
-                state = new StateObject( );
+                var socket = new Socket( AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp );
+                try
+                {
+                    HslTimeOut connectTimeout = new HslTimeOut( )
+                    {
+                        WorkSocket = socket,
+                        DelayTime = timeOut
+                    };
+                    ThreadPool.QueueUserWorkItem( new WaitCallback( ThreadPoolCheckTimeOut ), connectTimeout );
+                    socket.Connect( endPoint );
+                    connectTimeout.IsSuccessful = true;
+
+                    return OperateResult.CreateSuccessResult( socket );
+                }
+                catch (Exception ex)
+                {
+                    socket?.Close( );
+                    return new OperateResult<Socket>( ex.Message );
+                }
             }
-            catch(Exception ex)
+            else
             {
-                return new OperateResult<Socket>( ex.Message );
-            }
+                OperateResult<Socket> result = new OperateResult<Socket>( );
+                ManualResetEvent connectDone = null;
+                StateObject state = null;
+                try
+                {
+                    connectDone = new ManualResetEvent( false );
+                    state = new StateObject( );
+                }
+                catch (Exception ex)
+                {
+                    return new OperateResult<Socket>( ex.Message );
+                }
 
 
-            var socket = new Socket( AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp );
+                var socket = new Socket( AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp );
 
-            // 超时验证的信息
-            HslTimeOut connectTimeout = new HslTimeOut( )
-            {
-                WorkSocket = socket,
-                DelayTime = timeOut
-            };
-            ThreadPool.QueueUserWorkItem( new WaitCallback( ThreadPoolCheckTimeOut ), connectTimeout );
+                // 超时验证的信息
+                HslTimeOut connectTimeout = new HslTimeOut( )
+                {
+                    WorkSocket = socket,
+                    DelayTime = timeOut
+                };
+                ThreadPool.QueueUserWorkItem( new WaitCallback( ThreadPoolCheckTimeOut ), connectTimeout );
 
-            try
-            {
-                state.WaitDone = connectDone;
-                state.WorkSocket = socket;
-                socket.BeginConnect( endPoint, new AsyncCallback( ConnectCallBack ), state );
-            }
-            catch (Exception ex)
-            {
-                // 直接失败
-                connectTimeout.IsSuccessful = true;                                  // 退出线程池的超时检查
-                LogNet?.WriteException( ToString( ), ex );                           // 记录错误日志
-                socket.Close( );                                                     // 关闭网络信息
-                connectDone.Close( );                                                // 释放等待资源
-                result.Message = StringResources.Language.ConnectedFailed + ex.Message;       // 传递错误消息
+                try
+                {
+                    state.WaitDone = connectDone;
+                    state.WorkSocket = socket;
+                    socket.BeginConnect( endPoint, new AsyncCallback( ConnectCallBack ), state );
+                }
+                catch (Exception ex)
+                {
+                    // 直接失败
+                    connectTimeout.IsSuccessful = true;                                  // 退出线程池的超时检查
+                    LogNet?.WriteException( ToString( ), ex );                           // 记录错误日志
+                    socket.Close( );                                                     // 关闭网络信息
+                    connectDone.Close( );                                                // 释放等待资源
+                    result.Message = StringResources.Language.ConnectedFailed + ex.Message;       // 传递错误消息
+                    return result;
+                }
+
+
+
+                // 等待连接完成
+                connectDone.WaitOne( );
+                connectDone.Close( );
+                connectTimeout.IsSuccessful = true;
+
+                if (state.IsError)
+                {
+                    // 连接失败
+                    result.Message = StringResources.Language.ConnectedFailed + state.ErrerMsg;
+                    socket?.Close( );
+                    return result;
+                }
+
+
+                result.Content = socket;
+                result.IsSuccess = true;
+                state.Clear( );
+                state = null;
                 return result;
             }
-            
-            
-
-            // 等待连接完成
-            connectDone.WaitOne( );
-            connectDone.Close( );
-            connectTimeout.IsSuccessful = true;
-
-            if (state.IsError)
-            {
-                // 连接失败
-                result.Message = StringResources.Language.ConnectedFailed + state.ErrerMsg;
-                socket?.Close( );
-                return result;
-            }
-
-
-            result.Content = socket;
-            result.IsSuccess = true;
-            state.Clear( );
-            state = null;
-            return result;
         }
 
 
