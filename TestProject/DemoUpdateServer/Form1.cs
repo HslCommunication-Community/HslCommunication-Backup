@@ -111,6 +111,13 @@ namespace DemoUpdateServer
                 lognet.WriteInfo( $"{arg1.IpAddress.PadRight( 15 )} [{msg.PadRight( 8 )}] [{address}] Java" );
                 AddDict( address );
             }
+            else if (handle == 300)
+            {
+                simplifyServer.SendMessage( arg1, handle, version.ToString( ) );
+                string address = GetAddressByIp( arg1.IpAddress );
+                lognet.WriteInfo( $"{arg1.IpAddress.PadRight( 15 )} [{msg.PadRight( 8 )}] [{address}] Android" );
+                AddDict( address );
+            }
             else if (handle == 1000)
             {
                 // 返回统计信息
