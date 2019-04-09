@@ -250,6 +250,8 @@ this jar component is suitable for the development of Android, easy to build a. 
 This component provides a Python version, a castration version of the. NET version, removes all server function codes, retains some of the client function code, 
 facilitates data interaction with PLC, devices, and data interaction with C # programs for cross-platform operation
 
+## Xamarin.Android Demo
+![Picture](https://raw.githubusercontent.com/dathlin/HslCommunication/master/imgs/appDemo.png)
 
 ## Contribution
 Warmly welcome suggestions for improvement of the Code of this project, you can launch pull Request.
