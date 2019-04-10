@@ -643,7 +643,7 @@ namespace HslCommunication.Profinet.Siemens
                 var read = Read( address, 2 );
                 if (!read.IsSuccess) return OperateResult.CreateFailedResult<string>( read );
 
-                if (read.Content[0] != 254) return new OperateResult<string>( "Value in plc is not string type" );
+                if (read.Content[0] != 0) return new OperateResult<string>( "Value in plc is not string type" );    // max string length can't be zero
 
                 var readString = Read( address, (ushort)(2 + read.Content[1]) );
                 if (!readString.IsSuccess) return OperateResult.CreateFailedResult<string>( readString );
