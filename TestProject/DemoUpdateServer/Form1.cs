@@ -38,6 +38,12 @@ namespace DemoUpdateServer
                 version2 = new HslCommunication.BasicFramework.SystemVersion( textBox3.Text );
             }
 
+            if (File.Exists( "version3.txt" ))
+            {
+                textBox4.Text = Encoding.Default.GetString( File.ReadAllBytes( "version3.txt" ) );
+                version3 = new HslCommunication.BasicFramework.SystemVersion( textBox4.Text );
+            }
+
             if (!Directory.Exists( Application.StartupPath + @"\Demo" ))
             {
                 Directory.CreateDirectory( Application.StartupPath + @"\Demo" );
@@ -69,6 +75,7 @@ namespace DemoUpdateServer
 
         private HslCommunication.BasicFramework.SystemVersion version = new HslCommunication.BasicFramework.SystemVersion( "1.0.1" );
         private HslCommunication.BasicFramework.SystemVersion version2 = new HslCommunication.BasicFramework.SystemVersion( "1.0.5" );
+        private HslCommunication.BasicFramework.SystemVersion version3 = new HslCommunication.BasicFramework.SystemVersion( "1.0.0" );
         private HslCommunication.LogNet.ILogNet lognet;
         private Random random = new Random( );
         private Timer timer = new Timer( );
@@ -113,7 +120,7 @@ namespace DemoUpdateServer
             }
             else if (handle == 300)
             {
-                simplifyServer.SendMessage( arg1, handle, version.ToString( ) );
+                simplifyServer.SendMessage( arg1, handle, version3.ToString( ) );
                 string address = GetAddressByIp( arg1.IpAddress );
                 lognet.WriteInfo( $"{arg1.IpAddress.PadRight( 15 )} [{msg.PadRight( 8 )}] [{address}] Android" );
                 AddDict( address );
@@ -419,6 +426,14 @@ namespace DemoUpdateServer
         {
             version2 = new HslCommunication.BasicFramework.SystemVersion( textBox3.Text );
             File.WriteAllBytes( "version2.txt", Encoding.Default.GetBytes( textBox3.Text ) );
+
+            MessageBox.Show( "更新成功" );
+        }
+
+        private void Button4_Click( object sender, EventArgs e )
+        {
+            version3 = new HslCommunication.BasicFramework.SystemVersion( textBox4.Text );
+            File.WriteAllBytes( "version3.txt", Encoding.Default.GetBytes( textBox4.Text ) );
 
             MessageBox.Show( "更新成功" );
         }

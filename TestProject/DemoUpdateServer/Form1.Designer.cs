@@ -48,6 +48,9 @@
             this.button3 = new System.Windows.Forms.Button();
             this.textBox3 = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
+            this.button4 = new System.Windows.Forms.Button();
+            this.textBox4 = new System.Windows.Forms.TextBox();
+            this.label4 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView3)).BeginInit();
@@ -66,14 +69,14 @@
             // 
             this.textBox1.Location = new System.Drawing.Point(74, 19);
             this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(94, 23);
+            this.textBox1.Size = new System.Drawing.Size(83, 23);
             this.textBox1.TabIndex = 1;
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(183, 15);
+            this.button1.Location = new System.Drawing.Point(163, 15);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(108, 31);
+            this.button1.Size = new System.Drawing.Size(64, 31);
             this.button1.TabIndex = 2;
             this.button1.Text = "确认";
             this.button1.UseVisualStyleBackColor = true;
@@ -204,9 +207,9 @@
             // 
             // button3
             // 
-            this.button3.Location = new System.Drawing.Point(510, 15);
+            this.button3.Location = new System.Drawing.Point(436, 15);
             this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(108, 31);
+            this.button3.Size = new System.Drawing.Size(61, 31);
             this.button3.TabIndex = 11;
             this.button3.Text = "确认";
             this.button3.UseVisualStyleBackColor = true;
@@ -214,7 +217,7 @@
             // 
             // textBox3
             // 
-            this.textBox3.Location = new System.Drawing.Point(397, 19);
+            this.textBox3.Location = new System.Drawing.Point(336, 19);
             this.textBox3.Name = "textBox3";
             this.textBox3.Size = new System.Drawing.Size(94, 23);
             this.textBox3.TabIndex = 10;
@@ -222,17 +225,46 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(308, 22);
+            this.label3.Location = new System.Drawing.Point(250, 22);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(80, 17);
             this.label3.TabIndex = 9;
             this.label3.Text = "控件版本号：";
+            // 
+            // button4
+            // 
+            this.button4.Location = new System.Drawing.Point(689, 15);
+            this.button4.Name = "button4";
+            this.button4.Size = new System.Drawing.Size(61, 31);
+            this.button4.TabIndex = 14;
+            this.button4.Text = "确认";
+            this.button4.UseVisualStyleBackColor = true;
+            this.button4.Click += new System.EventHandler(this.Button4_Click);
+            // 
+            // textBox4
+            // 
+            this.textBox4.Location = new System.Drawing.Point(589, 19);
+            this.textBox4.Name = "textBox4";
+            this.textBox4.Size = new System.Drawing.Size(94, 23);
+            this.textBox4.TabIndex = 13;
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(503, 22);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(80, 17);
+            this.label4.TabIndex = 12;
+            this.label4.Text = "手机版本号：";
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 17F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1171, 656);
+            this.Controls.Add(this.button4);
+            this.Controls.Add(this.textBox4);
+            this.Controls.Add(this.label4);
             this.Controls.Add(this.button3);
             this.Controls.Add(this.textBox3);
             this.Controls.Add(this.label3);
@@ -280,6 +312,9 @@
         private System.Windows.Forms.Button button3;
         private System.Windows.Forms.TextBox textBox3;
         private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Button button4;
+        private System.Windows.Forms.TextBox textBox4;
+        private System.Windows.Forms.Label label4;
     }
 }
 
