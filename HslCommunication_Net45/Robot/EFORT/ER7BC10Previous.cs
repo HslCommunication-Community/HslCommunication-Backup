@@ -115,7 +115,6 @@ namespace HslCommunication.Robot.EFORT
 
         #region Private Member
 
-        private int heartbeat = 0;
         private SoftIncrementCount softIncrementCount;              // 自增消息的对象
 
         #endregion
