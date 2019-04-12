@@ -7,7 +7,7 @@
          /////////////\/             \//////\               //\/
         //\\\\\\\\\//\/               \\\\\//\             //\/
        //\/       //\/                     \//\           //\/
-      //\/       //\/           ///\      //\\/          //\/       //\   
+      //\/       //\/           ///\      //\\/          //\/       //\
      ///\      ///\/            \/////////\\/           /////////////\/
      \\\/      \\\/              \\\\\\\\\/             \\\\\\\\\\\\\/             Present by Richard.Hu
 </pre>
@@ -175,6 +175,9 @@ int main()
 	}
 }
 ```
+
+If you want to communication in your mobile phone application, you also can use C# code by xamarin, you can download HslAppDemo to test
+[HslAppDemo.apk](https://github.com/dathlin/HslCommunication/raw/master/Download/com.companyname.HslAppDemo-Signed.apk)
 
 
 Another feature of this project is support for cross-language communication support. You can build a C # background server that supports Windows desktop application 
