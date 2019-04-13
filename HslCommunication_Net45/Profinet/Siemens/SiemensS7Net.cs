@@ -605,7 +605,7 @@ namespace HslCommunication.Profinet.Siemens
         #endregion
 
         #region ReadWrite String
-        
+
         /// <summary>
         /// 向设备中写入字符串，编码格式为ASCII
         /// </summary>
@@ -623,7 +623,15 @@ namespace HslCommunication.Profinet.Siemens
             byte[] buffer = Encoding.ASCII.GetBytes( value );
             if (CurrentPlc != SiemensPLCS.S200Smart)
             {
-                return Write( address, BasicFramework.SoftBasic.SpliceTwoByteArray( new byte[] { 254, (byte)buffer.Length }, buffer ) );
+                // need read one time
+                OperateResult<byte[]> readLength = Read( address, 2 );
+                if (!readLength.IsSuccess) return readLength;
+
+                if (readLength.Content[0] == 255) return new OperateResult<string>( "Value in plc is not string type" );
+                if (readLength.Content[0] == 0) readLength.Content[0] = 254; // allow to create new string
+                if (value.Length > readLength.Content[0]) return new OperateResult<string>( "String length is too long than plc defined" );
+
+                return Write( address, BasicFramework.SoftBasic.SpliceTwoByteArray( new byte[] { readLength.Content[0], (byte)buffer.Length }, buffer ) );
             }
             else
             {
@@ -643,7 +651,7 @@ namespace HslCommunication.Profinet.Siemens
                 var read = Read( address, 2 );
                 if (!read.IsSuccess) return OperateResult.CreateFailedResult<string>( read );
 
-                if (read.Content[0] != 0) return new OperateResult<string>( "Value in plc is not string type" );    // max string length can't be zero
+                if (read.Content[0] == 0 || read.Content[0] == 255) return new OperateResult<string>( "Value in plc is not string type" );    // max string length can't be zero
 
                 var readString = Read( address, (ushort)(2 + read.Content[1]) );
                 if (!readString.IsSuccess) return OperateResult.CreateFailedResult<string>( readString );
