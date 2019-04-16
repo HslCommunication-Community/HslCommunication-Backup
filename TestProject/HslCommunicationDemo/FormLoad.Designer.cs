@@ -109,6 +109,7 @@
             this.groupBox13 = new System.Windows.Forms.GroupBox();
             this.button50 = new System.Windows.Forms.Button();
             this.button49 = new System.Windows.Forms.Button();
+            this.button54 = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -998,6 +999,7 @@
             // 
             // groupBox13
             // 
+            this.groupBox13.Controls.Add(this.button54);
             this.groupBox13.Controls.Add(this.button50);
             this.groupBox13.Controls.Add(this.button49);
             this.groupBox13.Location = new System.Drawing.Point(777, 208);
@@ -1030,6 +1032,17 @@
             this.button49.Text = "MC-3E (Binary)";
             this.button49.UseVisualStyleBackColor = true;
             this.button49.Click += new System.EventHandler(this.button49_Click);
+            // 
+            // button54
+            // 
+            this.button54.Location = new System.Drawing.Point(18, 100);
+            this.button54.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.button54.Name = "button54";
+            this.button54.Size = new System.Drawing.Size(150, 32);
+            this.button54.TabIndex = 4;
+            this.button54.Text = "Nano(ASCII)";
+            this.button54.UseVisualStyleBackColor = true;
+            this.button54.Click += new System.EventHandler(this.button54_Click);
             // 
             // FormLoad
             // 
@@ -1163,6 +1176,7 @@
         private System.Windows.Forms.Button button51;
         private System.Windows.Forms.Button button52;
         private System.Windows.Forms.Button button53;
+        private System.Windows.Forms.Button button54;
     }
 }
 

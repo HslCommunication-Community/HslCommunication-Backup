@@ -877,5 +877,17 @@ namespace HslCommunicationDemo
             System.Threading.Thread.Sleep( 200 );
             Show( );
         }
+
+        private void button54_Click(object sender, EventArgs e)
+        {
+            Hide();
+            System.Threading.Thread.Sleep(200);
+            using (FormKeyenceNanoSerial form = new FormKeyenceNanoSerial())
+            {
+                form.ShowDialog();
+            }
+            System.Threading.Thread.Sleep(200);
+            Show();
+        }
     }
 }
