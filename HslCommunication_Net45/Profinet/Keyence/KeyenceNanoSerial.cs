@@ -11,6 +11,7 @@ namespace HslCommunication.Profinet.Keyence
     /// <summary>
     /// 基恩士KV上位链路串口通信的对象,适用于Nano系列串口数据,以及L20V通信模块
     /// </summary>
+    /// <remarks>
     /// 地址的输入的格式说明如下：
     /// <list type="table">
     ///   <listheader>
@@ -47,17 +48,6 @@ namespace HslCommunication.Profinet.Keyence
     ///     <term>R00000～R59915</term>
     ///   </item>
     ///   <item>
-    ///     <term>链接继电器</term>
-    ///     <term>B</term>
-    ///     <term>B100,B1A0</term>
-    ///     <term>16</term>
-    ///     <term>√</term>
-    ///     <term>√</term>
-    ///     <term>B0000~B7FFF</term>
-    ///     <term>B0000~B3FFF</term>
-    ///     <term>B0000~B1FFF</term>
-    ///   </item>
-    ///   <item>
     ///     <term>内部辅助继电器</term>
     ///     <term>MR</term>
     ///     <term>MR100,M200</term>
@@ -69,39 +59,6 @@ namespace HslCommunication.Profinet.Keyence
     ///     <term>MR00000～MR59915</term>
     ///   </item>
     ///   <item>
-    ///     <term>锁存继电器</term>
-    ///     <term>LR</term>
-    ///     <term>LR100,L200</term>
-    ///     <term>10</term>
-    ///     <term>√</term>
-    ///     <term>√</term>
-    ///     <term>LR00000~LR99915</term>
-    ///     <term>LR00000~LR99915</term>
-    ///     <term>LR00000～LR19915</term>
-    ///   </item>
-    ///   <item>
-    ///     <term>控制继电器</term>
-    ///     <term>CR</term>
-    ///     <term>CR100,CR200</term>
-    ///     <term>10</term>
-    ///     <term>√</term>
-    ///     <term>√</term>
-    ///     <term>CR0000~CR7915</term>
-    ///     <term>CR0000~CR3915</term>
-    ///     <term>CR0000～CR8915</term>
-    ///   </item>
-    ///   <item>
-    ///     <term>控制存储器</term>
-    ///     <term>CM</term>
-    ///     <term>CM100,CM200</term>
-    ///     <term>10</term>
-    ///     <term>√</term>
-    ///     <term>×</term>
-    ///     <term>CM0000~CM5999</term>
-    ///     <term>CM0000~CM5999</term>
-    ///     <term>CM0000～CM8999</term>
-    ///   </item>
-    ///   <item>
     ///     <term>数据存储器</term>
     ///     <term>DM</term>
     ///     <term>DM100,DM200</term>
@@ -111,50 +68,6 @@ namespace HslCommunication.Profinet.Keyence
     ///     <term>DM00000~DM65534</term>
     ///     <term>DM00000~DM65534</term>
     ///     <term>DM00000～DM32767</term>
-    ///   </item>
-    ///   <item>
-    ///     <term>扩展数据存储器</term>
-    ///     <term>EM</term>
-    ///     <term>EM100000~EM165534</term>
-    ///     <term>10</term>
-    ///     <term>√</term>
-    ///     <term>×</term>
-    ///     <term>EM00000~EM65534</term>
-    ///     <term>EM00000~EM65534</term>
-    ///     <term>×</term>
-    ///   </item>
-    ///   <item>
-    ///     <term>文件寄存器</term>
-    ///     <term>FM</term>
-    ///     <term>FM100,FM200</term>
-    ///     <term>10</term>
-    ///     <term>√</term>
-    ///     <term>×</term>
-    ///     <term>FM00000~FM32767</term>
-    ///     <term>FM00000~FM32767</term>
-    ///     <term>×</term>
-    ///   </item>
-    ///   <item>
-    ///     <term>文件寄存器</term>
-    ///     <term>ZF</term>
-    ///     <term>ZF100,ZF1A0</term>
-    ///     <term>16</term>
-    ///     <term>√</term>
-    ///     <term>×</term>
-    ///     <term>ZF000000~ZF524287</term>
-    ///     <term>ZF000000~ZF131071</term>
-    ///     <term>×</term>
-    ///   </item>
-    ///   <item>
-    ///     <term>链路寄存器</term>
-    ///     <term>W</term>
-    ///     <term>W100,W1A0</term>
-    ///     <term>16</term>
-    ///     <term>√</term>
-    ///     <term>×</term>
-    ///     <term>W0000~7FFF</term>
-    ///     <term>W0000~3FFF</term>
-    ///     <term>W0000~3FFF</term>
     ///   </item>
     ///   <item>
     ///     <term>定时器（当前值）</term>
@@ -202,10 +115,10 @@ namespace HslCommunication.Profinet.Keyence
     ///   </item>
     /// </list>
     /// </remarks>
-
     public class KeyenceNanoSerial : SerialDeviceBase<KeyenceNanoByteTransform>
     { 
         #region Constructor
+
         /// <summary>
         /// 实例化基恩士的串口协议的通讯对象
         /// </summary>
@@ -214,26 +127,21 @@ namespace HslCommunication.Profinet.Keyence
             WordLength = 1;
         }
         /// <summary>
-        /// 建立通讯连接{CR/r}
-        /// </summary>
-        private byte[] _buildConnectCmd = new byte[3] {0x43,0x52,0x0d };
-        /// <summary>
-        /// 写入数据成功返回指令
-        /// </summary>
-        private byte[]  _writeOkReturn = new byte[] { 0x4f, 0x4b, 0x0d, 0x0a };
-        /// <summary>
         /// 初始化后建立通讯连接
         /// </summary>
-        /// <returns></returns>
+        /// <returns>是否初始化成功</returns>
         protected override OperateResult InitializationOnOpen()
         {
-            //建立通讯连接{CR/r}
-            var result = ReadBase(_buildConnectCmd); 
+            // 建立通讯连接{CR/r}
+            var result = ReadBase(_buildConnectCmd);
+            if (!result.IsSuccess) return result;
+
             return OperateResult.CreateSuccessResult();
         }
         #endregion
 
         #region Check Response
+
        /// <summary>
        /// 校验读取返回数据状态
        /// </summary>
@@ -268,7 +176,7 @@ namespace HslCommunication.Profinet.Keyence
         /// </summary>
         /// <param name="address">软元件地址</param>
         /// <param name="length">读取长度</param>
-        /// <returns></returns>
+        /// <returns>是否建立成功</returns>
         private OperateResult<byte[]> BuildReadCommand(string address, ushort length)
         {
             var addressResult = KvCalculateWordStartAddress(address);
@@ -277,16 +185,16 @@ namespace HslCommunication.Profinet.Keyence
             ushort startAddress = addressResult.Content;
 
             StringBuilder StrCommand = new StringBuilder();
-            StrCommand.Append("RDS");           //批量读取
-            StrCommand.Append(" ");                 //空格符
-            StrCommand.Append(address);        //软元件地址，如DM100
-            StrCommand.Append(" ");                 //空格符
+            StrCommand.Append("RDS");                        //批量读取
+            StrCommand.Append(" ");                          //空格符
+            StrCommand.Append(address);                      //软元件地址，如DM100
+            StrCommand.Append(" ");                          //空格符
             StrCommand.Append(length.ToString());
-            StrCommand.Append("\r");                 //结束符
+            StrCommand.Append("\r");                         //结束符
 
             byte[] _PLCCommand = Encoding.ASCII.GetBytes(StrCommand.ToString().ToCharArray());
 
-            return OperateResult.CreateSuccessResult(_PLCCommand);                  // Return
+            return OperateResult.CreateSuccessResult(_PLCCommand);
 
         }
 
@@ -445,7 +353,7 @@ namespace HslCommunication.Profinet.Keyence
         /// </summary>
         /// <param name="address">软元件地址</param>
         /// <param name="value">转换后的Byte[]数据</param>
-        /// <returns></returns>
+        /// <returns>是否成功写入的结果</returns>
         public override OperateResult Write(string address, byte[] value)
         {
             // 获取写入
@@ -514,8 +422,16 @@ namespace HslCommunication.Profinet.Keyence
         }
 
         #endregion
-         
+
+        #region Private Member
+
+        private byte[] _buildConnectCmd = new byte[3] { 0x43, 0x52, 0x0d };     // 建立通讯连接{CR/r}
+        private byte[] _writeOkReturn = new byte[] { 0x4f, 0x4b, 0x0d, 0x0a };  // 写入数据成功返回指令
+
+        #endregion
+
         #region Static Method Helper
+
         /// <summary>
         /// 从PLC反馈的数据进行提炼操作
         /// </summary>
