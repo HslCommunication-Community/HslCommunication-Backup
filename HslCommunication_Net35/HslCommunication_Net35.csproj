@@ -535,11 +535,20 @@
     <Compile Include="..\HslCommunication_Net45\Profinet\AllenBradley\AllenBradleyNet.cs">
       <Link>Profinet\AllenBradley\AllenBradleyNet.cs</Link>
     </Compile>
+    <Compile Include="..\HslCommunication_Net45\Profinet\Keyence\KeyenceDataType.cs">
+      <Link>Profinet\Keyence\KeyenceDataType.cs</Link>
+    </Compile>
     <Compile Include="..\HslCommunication_Net45\Profinet\Keyence\KeyenceMcAsciiNet.cs">
       <Link>Profinet\Keyence\KeyenceMcAsciiNet.cs</Link>
     </Compile>
     <Compile Include="..\HslCommunication_Net45\Profinet\Keyence\KeyenceMcNet.cs">
       <Link>Profinet\Keyence\KeyenceMcNet.cs</Link>
+    </Compile>
+    <Compile Include="..\HslCommunication_Net45\Profinet\Keyence\KeyenceNanoByteTransform.cs">
+      <Link>Profinet\Keyence\KeyenceNanoByteTransform.cs</Link>
+    </Compile>
+    <Compile Include="..\HslCommunication_Net45\Profinet\Keyence\KeyenceNanoSerial.cs">
+      <Link>Profinet\Keyence\KeyenceNanoSerial.cs</Link>
     </Compile>
     <Compile Include="..\HslCommunication_Net45\Profinet\Melsec\MelsecA1EDataType.cs">
       <Link>Profinet\Melsec\MelsecA1EDataType.cs</Link>
