@@ -30,6 +30,7 @@ HslCommunication.py
 
 ## Official Website
 Webside: [http://www.hslcommunication.cn/](http://www.hslcommunication.cn/)
+BBS: [http://bbs.hslcommunication.cn/](http://bbs.hslcommunication.cn/)
 
 Gitter[talk with me]: [https://gitter.im/HslCommunication/community](https://gitter.im/HslCommunication/community)
 
