@@ -82,7 +82,7 @@ namespace HslCommunication.Core.Net
         /// <summary>
         /// 是否使用同步的网络通讯
         /// </summary>
-        public bool UseSynchronousNet { get; set; } = false;
+        public bool UseSynchronousNet { get; set; } = true;
 
         #endregion
 
@@ -170,6 +170,7 @@ namespace HslCommunication.Core.Net
                 }
                 catch(Exception ex)
                 {
+                    socket?.Close( );
                     return new OperateResult<byte[]>( ex.Message );
                 }
             }
@@ -347,7 +348,6 @@ namespace HslCommunication.Core.Net
                 return contentResult;
             }
 
-            // 防止没有实例化造成后续的操作失败
             hslTimeOut.IsSuccessful = true;
             netMessage.ContentBytes = contentResult.Content;
             return OperateResult.CreateSuccessResult( SoftBasic.SpliceTwoByteArray( headResult.Content, contentResult.Content ) );
@@ -372,9 +372,11 @@ namespace HslCommunication.Core.Net
                 try
                 {
                     socket.Send( data );
+                    return OperateResult.CreateSuccessResult( );
                 }
                 catch (Exception ex)
                 {
+                    socket?.Close( );
                     return new OperateResult<byte[]>( ex.Message );
                 }
             }
