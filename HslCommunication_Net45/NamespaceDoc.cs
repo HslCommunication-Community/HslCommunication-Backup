@@ -678,6 +678,17 @@ namespace HslCommunication
     ///             <item>修复文件引擎在上传文件时意外失败，服务器仍然识别为成功的bug。</item>
     ///         </list>
     ///     </revision>
+    ///     <revision date="2019-4-4" version="6.1.0" author="Richard.Hu">
+    ///         <list type="bullet">
+    ///             <item>修复日志存储自身异常时，时间没有初始化的bug。</item>
+    ///             <item>NetworkBase: 新增UseSynchronousNet属性，默认为true，通过同步的网络进行读写数据，异步手动设置为false。</item>
+    ///             <item>修复西门子的读写字符串的bug。</item>
+    ///             <item>添加KeyenceNanoSerial以支持基恩士Nano系列串口通信。</item>
+    ///             <item>其他的代码优化。</item>
+    ///             <item>发布一个基于xamarin的安卓测试demo。</item>
+    ///             <item>发布官方论坛： http://bbs.hslcommunication.cn/ </item>
+    ///         </list>
+    ///     </revision>
     /// </revisionHistory>
     [System.Runtime.CompilerServices.CompilerGeneratedAttribute( )]
     public class NamespaceDoc
