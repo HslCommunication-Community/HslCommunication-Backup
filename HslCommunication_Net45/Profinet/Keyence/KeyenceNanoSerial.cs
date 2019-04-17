@@ -379,7 +379,7 @@ namespace HslCommunication.Profinet.Keyence
         public OperateResult Write(string address, bool value)
         {
             //value=true时:指令尾部命令为" 1 1";value=false:指令尾部命令为" 1 0";
-            var byteTemp = value ? new byte[] { 0x31,0x20,0x31 } : new byte[] { 0x31, 0x20, 0x30 };
+            var byteTemp = value ? new byte[] {0x20, 0x31,0x20,0x31 } : new byte[] {{0x20, 0x31, 0x20, 0x30 };
             // 先获取指令
             OperateResult<byte[]> command = BuildWriteCommand(address, byteTemp);
             if (!command.IsSuccess) return command;
