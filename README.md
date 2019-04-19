@@ -73,7 +73,7 @@ Install-Package HslCommunication
 ```
 
 ## Environment
-* IDE: **Visual Studio 2017** 
+* IDE: **Visual Studio 2019** 
 * java：**Intellij Idea 2018.4**
 * python: **Visual Studio Code**
 
