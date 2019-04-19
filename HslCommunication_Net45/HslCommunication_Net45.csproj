@@ -315,6 +315,7 @@
     <Compile Include="Robot\EFORT\ER7BC10.cs" />
     <Compile Include="Robot\EFORT\ER7BC10Previous.cs" />
     <Compile Include="Robot\KUKA\KukaAvarProxyNet.cs" />
+    <Compile Include="Robot\YASKAWA\YRC1000TcpNet.cs" />
     <Compile Include="Serial\CRCSupport.cs" />
     <Compile Include="Serial\FP1_C72.cs" />
     <Compile Include="Serial\SerialBase.cs" />

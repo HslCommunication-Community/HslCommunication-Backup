@@ -161,6 +161,7 @@
     <Compile Include="..\HslCommunication_Net45\Robot\EFORT\ER7BC10.cs" Link="Robot\EFORT\ER7BC10.cs" />
     <Compile Include="..\HslCommunication_Net45\Robot\EFORT\ER7BC10Previous.cs" Link="Robot\EFORT\ER7BC10Previous.cs" />
     <Compile Include="..\HslCommunication_Net45\Robot\KUKA\KukaAvarProxyNet.cs" Link="Robot\KUKA\KukaAvarProxyNet.cs" />
+    <Compile Include="..\HslCommunication_Net45\Robot\YASKAWA\YRC1000TcpNet.cs" Link="Robot\YASKAWA\YRC1000TcpNet.cs" />
     <Compile Include="..\HslCommunication_Net45\StringResources.cs" Link="StringResources.cs" />
   </ItemGroup>
 
@@ -208,6 +209,7 @@
     <Folder Include="Language\" />
     <Folder Include="Instrument\" />
     <Folder Include="Robot\KUKA\" />
+    <Folder Include="Robot\YASKAWA\" />
   </ItemGroup>
 
 </Project>

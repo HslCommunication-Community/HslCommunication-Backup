@@ -625,6 +625,9 @@
     <Compile Include="..\HslCommunication_Net45\Robot\KUKA\KukaAvarProxyNet.cs">
       <Link>Robot\KUKA\KukaAvarProxyNet.cs</Link>
     </Compile>
+    <Compile Include="..\HslCommunication_Net45\Robot\YASKAWA\YRC1000TcpNet.cs">
+      <Link>Robot\YASKAWA\YRC1000TcpNet.cs</Link>
+    </Compile>
     <Compile Include="..\HslCommunication_Net45\Serial\CRCSupport.cs">
       <Link>Serial\CRCSupport.cs</Link>
     </Compile>
