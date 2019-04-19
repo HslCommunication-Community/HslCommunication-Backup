@@ -126,6 +126,7 @@ namespace HslCommunication.Profinet.Keyence
         {
             WordLength = 1;
         }
+
         /// <summary>
         /// 初始化后建立通讯连接
         /// </summary>
@@ -275,7 +276,7 @@ namespace HslCommunication.Profinet.Keyence
         /// </summary>
         /// <param name="address">起始地址</param>
         /// <returns>带成功标志的结果数据对象</returns>
-        public OperateResult<uint> ReadUInt32(string address)
+        public new OperateResult<uint> ReadUInt32(string address)
         {
             var result = ReadUInt32(address, 1);
             if (!result.IsSuccess) return OperateResult.CreateFailedResult<uint>(result);
@@ -293,7 +294,7 @@ namespace HslCommunication.Profinet.Keyence
             address += ".D";
             return base.ReadUInt32(address, length);
         }
-            
+
         /// <summary>
         /// 从PLC中读取想要的数据，返回读取结果
         /// </summary>
@@ -313,13 +314,14 @@ namespace HslCommunication.Profinet.Keyence
 
             // 数据提炼
             return ExtractActualData(read.Content);
-        } 
+        }
+
         /// <summary>
         /// 成批读取Bool值
         /// </summary>
-        /// <param name="address"></param>
-        /// <param name="length"></param>
-        /// <returns></returns>
+        /// <param name="address">地址信息</param>
+        /// <param name="length">数组长度</param>
+        /// <returns>带成功标志的结果数据对象</returns>
         public OperateResult<bool[]> ReadBool(string address, ushort length)
         {
             var strBuffer = Encoding.Default.GetString(Read(address, length).Content).Split(' ');
@@ -331,11 +333,12 @@ namespace HslCommunication.Profinet.Keyence
             }
             return OperateResult.CreateSuccessResult(result);
         }
-         /// <summary>
-         /// 读取单个Bool值
-         /// </summary>
-         /// <param name="address"></param>
-         /// <returns></returns>
+
+        /// <summary>
+        /// 读取单个Bool值
+        /// </summary>
+        /// <param name="address">地址信息</param>
+        /// <returns>带成功标志的结果数据对象</returns>
         public OperateResult<bool> ReadBool(string address)
         {
             OperateResult<bool[]> read = ReadBool(address, 1);
@@ -370,6 +373,7 @@ namespace HslCommunication.Profinet.Keyence
 
             return OperateResult.CreateSuccessResult();
         }
+
         /// <summary>
         ///  写入位数据的通断，支持的类型参考文档说明
         /// </summary>
@@ -379,7 +383,7 @@ namespace HslCommunication.Profinet.Keyence
         public OperateResult Write(string address, bool value)
         {
             //value=true时:指令尾部命令为" 1 1";value=false:指令尾部命令为" 1 0";
-            var byteTemp = value ? new byte[] {0x20, 0x31,0x20,0x31 } : new byte[] {{0x20, 0x31, 0x20, 0x30 };
+            var byteTemp = value ? new byte[] {0x20, 0x31,0x20,0x31 } : new byte[] { 0x20, 0x31, 0x20, 0x30 };
             // 先获取指令
             OperateResult<byte[]> command = BuildWriteCommand(address, byteTemp);
             if (!command.IsSuccess) return command;
