@@ -341,9 +341,12 @@ namespace HslCommunication.Enthernet
         }
 
 
-        private void SendString(AppSession appSession,string content)
+        private void SendString(AppSession appSession, string content)
         {
-            PushSendAsync( appSession, HslProtocol.CommandBytes( 0, Token, content ) );
+            System.Threading.ThreadPool.QueueUserWorkItem(new System.Threading.WaitCallback(m =>
+            {
+                PushSendAsync(appSession, HslProtocol.CommandBytes(0, Token, content));
+            }), null);
         }
 
 
@@ -356,7 +359,6 @@ namespace HslCommunication.Enthernet
         /// <param name="content">完整的字节信息</param>
         internal void PushSendAsync( AppSession session, byte[] content )
         {
-            if (content == null) return;
             try
             {
                 // 进入发送数据的锁，然后开启异步的数据发送
@@ -365,12 +367,12 @@ namespace HslCommunication.Enthernet
                 // 启用另外一个网络封装对象进行发送数据
                 AsyncStateSend state = new AsyncStateSend( )
                 {
-                    WorkSocket = session.WorkSocket,
-                    Content = content,
-                    AlreadySendLength = 0,
-                    HybirdLockSend = session.HybirdLockSend,
-                    Key = session.KeyGroup,
-                    ClientId = session.ClientUniqueID,
+                    WorkSocket          = session.WorkSocket,
+                    Content             = content,
+                    AlreadySendLength   = 0,
+                    HybirdLockSend      = session.HybirdLockSend,
+                    Key                 = session.KeyGroup,
+                    ClientId            = session.ClientUniqueID,
                 };
 
                 state.WorkSocket.BeginSend(
@@ -416,7 +418,7 @@ namespace HslCommunication.Enthernet
                         stateone.AlreadySendLength,
                         stateone.Content.Length - stateone.AlreadySendLength,
                         SocketFlags.None,
-                        new AsyncCallback( SendCallBack ),
+                        new AsyncCallback( PushSendCallBack ),
                         stateone );
                     }
                     else
