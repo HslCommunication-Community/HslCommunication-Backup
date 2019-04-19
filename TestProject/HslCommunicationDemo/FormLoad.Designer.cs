@@ -107,9 +107,11 @@
             this.button42 = new System.Windows.Forms.Button();
             this.button40 = new System.Windows.Forms.Button();
             this.groupBox13 = new System.Windows.Forms.GroupBox();
+            this.button54 = new System.Windows.Forms.Button();
             this.button50 = new System.Windows.Forms.Button();
             this.button49 = new System.Windows.Forms.Button();
-            this.button54 = new System.Windows.Forms.Button();
+            this.论坛toolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.label2 = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -852,6 +854,7 @@
             this.aboutToolStripMenuItem,
             this.简体中文ToolStripMenuItem,
             this.englishToolStripMenuItem,
+            this.论坛toolStripMenuItem,
             this.日志ToolStripMenuItem,
             this.verisonToolStripMenuItem,
             this.免责条款ToolStripMenuItem});
@@ -1011,6 +1014,17 @@
             this.groupBox13.TabStop = false;
             this.groupBox13.Text = "Keyence(基恩士 PLC)";
             // 
+            // button54
+            // 
+            this.button54.Location = new System.Drawing.Point(18, 100);
+            this.button54.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.button54.Name = "button54";
+            this.button54.Size = new System.Drawing.Size(150, 32);
+            this.button54.TabIndex = 4;
+            this.button54.Text = "Nano(ASCII)";
+            this.button54.UseVisualStyleBackColor = true;
+            this.button54.Click += new System.EventHandler(this.button54_Click);
+            // 
             // button50
             // 
             this.button50.Location = new System.Drawing.Point(18, 64);
@@ -1033,16 +1047,23 @@
             this.button49.UseVisualStyleBackColor = true;
             this.button49.Click += new System.EventHandler(this.button49_Click);
             // 
-            // button54
+            // 论坛toolStripMenuItem
             // 
-            this.button54.Location = new System.Drawing.Point(18, 100);
-            this.button54.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.button54.Name = "button54";
-            this.button54.Size = new System.Drawing.Size(150, 32);
-            this.button54.TabIndex = 4;
-            this.button54.Text = "Nano(ASCII)";
-            this.button54.UseVisualStyleBackColor = true;
-            this.button54.Click += new System.EventHandler(this.button54_Click);
+            this.论坛toolStripMenuItem.Name = "论坛toolStripMenuItem";
+            this.论坛toolStripMenuItem.Size = new System.Drawing.Size(43, 21);
+            this.论坛toolStripMenuItem.Text = "BBS";
+            this.论坛toolStripMenuItem.Click += new System.EventHandler(this.论坛toolStripMenuItem_Click);
+            // 
+            // label2
+            // 
+            this.label2.BackColor = System.Drawing.Color.LightSeaGreen;
+            this.label2.ForeColor = System.Drawing.Color.Yellow;
+            this.label2.Location = new System.Drawing.Point(486, 0);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(494, 25);
+            this.label2.TabIndex = 29;
+            this.label2.Text = "如果你有什么问题，可以先去论坛看看";
+            this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // FormLoad
             // 
@@ -1050,6 +1071,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.AliceBlue;
             this.ClientSize = new System.Drawing.Size(980, 684);
+            this.Controls.Add(this.label2);
             this.Controls.Add(this.groupBox13);
             this.Controls.Add(this.groupBox12);
             this.Controls.Add(this.groupBox11);
@@ -1177,6 +1199,8 @@
         private System.Windows.Forms.Button button52;
         private System.Windows.Forms.Button button53;
         private System.Windows.Forms.Button button54;
+        private System.Windows.Forms.ToolStripMenuItem 论坛toolStripMenuItem;
+        private System.Windows.Forms.Label label2;
     }
 }
 

@@ -320,6 +320,7 @@ namespace HslCommunicationDemo
                 button16.Text = "常用简单控件";
                 Text = "HslCommunication 测试工具";
                 免责条款ToolStripMenuItem.Text = "免责条款";
+                论坛toolStripMenuItem.Text = "论坛";
             }
             else
             {
@@ -334,6 +335,7 @@ namespace HslCommunicationDemo
                 button29.Text = "Alien Simplify Net";
                 button16.Text = "Simple Control";
                 Text = "HslCommunication Test Tool";
+                论坛toolStripMenuItem.Text = "BBS";
                 免责条款ToolStripMenuItem.Text = "Disclaimer";
             }
         }
@@ -354,6 +356,18 @@ namespace HslCommunicationDemo
             Program.Language = 1;
             Language( Program.Language );
             MessageBox.Show( "已选择中文" );
+        }
+
+        private void 论坛toolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                System.Diagnostics.Process.Start("http://bbs.hslcommunication.cn/");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
         }
 
         private void button20_Click( object sender, EventArgs e )
@@ -889,5 +903,6 @@ namespace HslCommunicationDemo
             System.Threading.Thread.Sleep(200);
             Show();
         }
+
     }
 }
