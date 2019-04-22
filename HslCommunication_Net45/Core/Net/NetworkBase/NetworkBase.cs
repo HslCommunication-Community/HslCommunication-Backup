@@ -168,7 +168,7 @@ namespace HslCommunication.Core.Net
                     byte[] data = NetSupport.ReadBytesFromSocket( socket, length );
                     return OperateResult.CreateSuccessResult( data );
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     socket?.Close( );
                     return new OperateResult<byte[]>( ex.Message );
@@ -184,12 +184,12 @@ namespace HslCommunication.Core.Net
                 receiveDone = new ManualResetEvent( false );
                 state = new StateObject( length );
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return new OperateResult<byte[]>( ex.Message );
             }
 
-            
+
             try
             {
                 state.WaitDone = receiveDone;
@@ -244,7 +244,7 @@ namespace HslCommunication.Core.Net
             state = null;
             return result;
 
-//#else
+            //#else
             //SocketAsyncEventArgs eventArgs = new SocketAsyncEventArgs( );
             //byte[] buffer = new byte[length];
             //eventArgs.SetBuffer( buffer, 0, length );
@@ -256,7 +256,7 @@ namespace HslCommunication.Core.Net
             //    if (receiveCount == length) break;
             //}
             //return OperateResult.CreateSuccessResult( buffer );
-//#endif
+            //#endif
         }
 
 
@@ -303,6 +303,94 @@ namespace HslCommunication.Core.Net
             }
         }
 
+
+        /// <summary>
+        /// 接收固定长度的字节数组
+        /// </summary>
+        /// <remarks>
+        /// Receive Special Length Bytes
+        /// </remarks>
+        /// <param name="socket">网络通讯的套接字</param>
+        /// <param name="length">准备接收的数据长度</param>
+        /// <returns>包含了字节数据的结果类</returns>
+        protected OperateResult<byte[]> ReceiveAsync( Socket socket, int length )
+        {
+            if (length <= 0) return OperateResult.CreateSuccessResult( new byte[0] );
+
+            StateObjectAsync<byte[]> state = null;
+            try
+            {
+                state = new StateObjectAsync<byte[]>( );
+                state.Tcs = new TaskCompletionSource<byte[]>( );
+            }
+            catch (Exception ex)
+            {
+                return new OperateResult<byte[]>( ex.Message );
+            }
+
+            state.WorkSocket = socket;
+
+            try
+            {
+                socket.BeginReceive( state.Buffer, state.AlreadyDealLength, state.DataLength - state.AlreadyDealLength, 
+                    SocketFlags.None, new AsyncCallback( ReceiveAsyncCallback ), state );
+                byte[] byteResult = state.Tcs.Task.Result;
+                if(byteResult == null)
+                {
+                    socket?.Close( );
+                    return new OperateResult<byte[]>( StringResources.Language.RemoteClosedConnection );
+                }
+
+                state.Clear( );
+                state = null;
+                return OperateResult.CreateSuccessResult( byteResult );
+            }
+            catch (Exception ex)
+            {
+                return new OperateResult<byte[]>( ex.Message );
+            }
+        }
+
+        private void ReceiveAsyncCallback( IAsyncResult ar )
+        {
+            if (ar.AsyncState is StateObjectAsync<byte[]> state)
+            {
+                try
+                {
+                    Socket client = state.WorkSocket;
+                    int bytesRead = client.EndReceive( ar );
+
+                    if (bytesRead > 0)
+                    {
+                        // 接收到了数据
+                        state.AlreadyDealLength += bytesRead;
+                        if (state.AlreadyDealLength < state.DataLength)
+                        {
+                            // 获取接下来的所有的数据
+                            client.BeginReceive( state.Buffer, state.AlreadyDealLength, state.DataLength - state.AlreadyDealLength, 
+                                SocketFlags.None, new AsyncCallback( ReceiveAsyncCallback ), state );
+                        }
+                        else
+                        {
+                            // 接收到了所有的数据，通知接收数据的线程继续
+                            state.Tcs.SetResult( state.Buffer );
+                        }
+                    }
+                    else
+                    {
+                        // 对方关闭了网络通讯
+                        state.IsClose = true;
+                        state.Tcs.SetResult( null );
+                    }
+                }
+                catch (Exception ex)
+                {
+                    state.IsError = true;
+                    LogNet?.WriteException( ToString( ), ex );
+                    state.Tcs.SetException( ex );
+                }
+            }
+        }
 
         #endregion
 
@@ -352,7 +440,7 @@ namespace HslCommunication.Core.Net
             netMessage.ContentBytes = contentResult.Content;
             return OperateResult.CreateSuccessResult( SoftBasic.SpliceTwoByteArray( headResult.Content, contentResult.Content ) );
         }
-        
+
         #endregion
 
         #region Send Content
@@ -381,6 +469,7 @@ namespace HslCommunication.Core.Net
                 }
             }
 
+#if NET35
             OperateResult result = new OperateResult( );
             ManualResetEvent sendDone = null;
             StateObject state = null;
@@ -389,7 +478,7 @@ namespace HslCommunication.Core.Net
                 sendDone = new ManualResetEvent( false );
                 state = new StateObject( data.Length );
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return new OperateResult( ex.Message );
             }
@@ -430,6 +519,12 @@ namespace HslCommunication.Core.Net
             result.Message = StringResources.Language.SuccessText;
 
             return result;
+
+#else
+
+            return SendAsync( socket, data );
+
+#endif
         }
 
         /// <summary>
@@ -469,6 +564,76 @@ namespace HslCommunication.Core.Net
             }
         }
 
+        #if !NET35
+
+        /// <summary>
+        /// 发送一个异步的数据信息，该方式在NET35里是不可用的。
+        /// </summary>
+        /// <param name="socket">网络的套接字</param>
+        /// <param name="data">数据内容</param>
+        /// <returns>是否发送成功</returns>
+        protected OperateResult SendAsync( Socket socket, byte[] data )
+        {
+            if (data == null) return OperateResult.CreateSuccessResult( );
+
+            StateObjectAsync<bool> state = null;
+            try
+            {
+                state = new StateObjectAsync<bool>( data.Length );
+                state.Tcs = new TaskCompletionSource<bool>( );
+            }
+            catch (Exception ex)
+            {
+                return new OperateResult( ex.Message );
+            }
+
+            state.WorkSocket = socket;
+            state.Buffer = data;
+
+            try
+            {
+                socket.BeginSend( state.Buffer, state.AlreadyDealLength, state.DataLength - state.AlreadyDealLength,
+                    SocketFlags.None, new AsyncCallback( SendAsyncCallBack ), state );
+                bool boolResult = state.Tcs.Task.Result;
+                return OperateResult.CreateSuccessResult( );
+            }
+            catch (Exception ex)
+            {
+                return new OperateResult( ex.Message );
+            }
+        }
+
+        private void SendAsyncCallBack( IAsyncResult ar )
+        {
+            if (ar.AsyncState is StateObjectAsync<bool> state)
+            {
+                try
+                {
+                    Socket socket = state.WorkSocket;
+                    int byteSend = socket.EndSend( ar );
+                    state.AlreadyDealLength += byteSend;
+
+                    if (state.AlreadyDealLength < state.DataLength)
+                    {
+                        // 继续发送数据
+                        socket.BeginSend( state.Buffer, state.AlreadyDealLength, state.DataLength - state.AlreadyDealLength,
+                            SocketFlags.None, new AsyncCallback( SendAsyncCallBack ), state );
+                    }
+                    else
+                    {
+                        // 发送完成
+                        state.Tcs.SetResult( true );
+                    }
+                }
+                catch (Exception ex)
+                {
+                    state.IsError = true;
+                    state.Tcs.SetException( ex );
+                }
+            }
+        }
+
+        #endif
 
         #endregion
 
@@ -651,7 +816,7 @@ namespace HslCommunication.Core.Net
         /// <param name="stream">数据流</param>
         /// <param name="buffer">缓冲区</param>
         /// <returns>带有成功标志的读取数据长度</returns>
-        protected OperateResult<int> ReadStream( Stream stream, byte[] buffer)
+        protected OperateResult<int> ReadStream( Stream stream, byte[] buffer )
         {
             ManualResetEvent WaitDone = new ManualResetEvent( false );
             FileStateObject stateObject = new FileStateObject
@@ -796,5 +961,5 @@ namespace HslCommunication.Core.Net
 
     }
 
-    
+
 }
