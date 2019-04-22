@@ -222,7 +222,7 @@ namespace HslCommunication.BasicFramework
             hybirdLock.Enter( );
 
             value = current;
-            current++;
+            current += IncreaseTick;
             if (current > max)
             {
                 current = start;
@@ -232,6 +232,32 @@ namespace HslCommunication.BasicFramework
             return value;
         }
 
+        /// <summary>
+        /// 重置当前序号的最大值
+        /// </summary>
+        /// <param name="max">最大值</param>
+        public void ResetMaxNumber(long max )
+        {
+            hybirdLock.Enter( );
+
+            if (max > start)
+            {
+                if (max < current)
+                    current = start;
+                this.max = max;
+            }
+
+            hybirdLock.Leave( );
+        }
+
+        #endregion
+
+        #region Public Properties
+
+        /// <summary>
+        /// 增加的单元，如果设置为0，就是不增加。注意，不能小于0
+        /// </summary>
+        public int IncreaseTick { get; set; } = 1;
 
         #endregion
 
