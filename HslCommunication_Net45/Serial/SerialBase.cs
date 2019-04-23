@@ -35,23 +35,38 @@ namespace HslCommunication.Serial
         /// <param name="portName">端口号信息，例如"COM3"</param>
         public void SerialPortInni( string portName )
         {
+            SerialPortInni( portName, 9600 );
+        }
+
+        /// <summary>
+        /// 初始化串口信息，波特率，8位数据位，1位停止位，无奇偶校验
+        /// </summary>
+        /// <param name="portName">端口号信息，例如"COM3"</param>
+        /// <param name="baudRate">波特率</param>
+        public void SerialPortInni( string portName, int baudRate )
+        {
+            SerialPortInni( portName, baudRate, 8, StopBits.One, Parity.None );
+        }
+
+        /// <summary>
+        /// 初始化串口信息，波特率，数据位，停止位，奇偶校验需要全部自己来指定
+        /// </summary>
+        /// <param name="portName">端口号信息，例如"COM3"</param>
+        /// <param name="baudRate">波特率</param>
+        /// <param name="dataBits">数据位</param>
+        /// <param name="stopBits">停止位</param>
+        /// <param name="parity">奇偶校验</param>
+        public void SerialPortInni( string portName, int baudRate, int dataBits, StopBits stopBits, Parity parity )
+        {
             if (SP_ReadData.IsOpen)
             {
                 return;
             }
-            // 串口的端口号
-            SP_ReadData.PortName = portName;
-            // 串口的波特率
-            SP_ReadData.BaudRate = 9600;
-            // 串口的数据位
-            SP_ReadData.DataBits = 8;
-            // 停止位
-            SP_ReadData.StopBits = StopBits.One;
-            // 奇偶校验为偶数
-            SP_ReadData.Parity = Parity.None;
-
-
-            //SP_ReadData.DataReceived += SP_ReadData_DataReceived;
+            SP_ReadData.PortName     = portName;    // 串口
+            SP_ReadData.BaudRate     = baudRate;    // 波特率
+            SP_ReadData.DataBits     = dataBits;    // 数据位
+            SP_ReadData.StopBits     = stopBits;    // 停止位
+            SP_ReadData.Parity       = parity;      // 奇偶校验
         }
 
         /// <summary>
@@ -64,25 +79,14 @@ namespace HslCommunication.Serial
             {
                 return;
             }
-            // 串口的端口号
             SP_ReadData.PortName = "COM5";
-            // 串口的波特率
             SP_ReadData.BaudRate = 9600;
-            // 串口的数据位
             SP_ReadData.DataBits = 8;
-            // 停止位
             SP_ReadData.StopBits = StopBits.One;
-            // 奇偶校验为偶数
             SP_ReadData.Parity = Parity.None;
 
             initi.Invoke( SP_ReadData );
-
-
-            //SP_ReadData.DataReceived += SP_ReadData_DataReceived;
         }
-
-
-
 
         /// <summary>
         /// 打开一个新的串行端口连接
