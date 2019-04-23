@@ -1640,11 +1640,11 @@ namespace HslCommunication.ModBus
 
 
         /// <summary>
-        /// Modbus核心数据交互方法
+        /// Modbus核心数据交互方法，允许重写自己来实现，报文只剩下核心的Modbus信息，去除了MPAB报头信息
         /// </summary>
         /// <param name="modbusCore">核心的Modbus报文</param>
         /// <returns>进行数据交互之后的结果</returns>
-        private byte[] ReadFromModbusCore( byte[] modbusCore )
+        protected virtual byte[] ReadFromModbusCore( byte[] modbusCore )
         {
             byte[] buffer = null;
 
