@@ -14,9 +14,9 @@ namespace HslCommunication_Net45.Test.Profinet.Siemens
     {
 
         [TestMethod]
-        public void MelsecUnitTest( )
+        public void SiemensUnitTest( )
         {
-            SiemensS7Net plc = new SiemensS7Net( SiemensPLCS.S1200, "192.168.8.12" );
+            SiemensS7Net plc = new SiemensS7Net( SiemensPLCS.S1200, "127.0.0.1" );
             if (!plc.ConnectServer( ).IsSuccess)
             {
                 Console.WriteLine( "无法连接PLC，将跳过单元测试。等待网络正常时，再进行测试" );

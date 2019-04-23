@@ -23,10 +23,6 @@ using System.Threading.Tasks;
  * 
  *************************************************************************************/
 
-
-
-
-
 namespace HslCommunication.Core.Net
 {
     /// <summary>
@@ -82,7 +78,7 @@ namespace HslCommunication.Core.Net
         /// <summary>
         /// 是否使用同步的网络通讯
         /// </summary>
-        public bool UseSynchronousNet { get; set; } = true;
+        public bool UseSynchronousNet { get; set; } = false;
 
         #endregion
 
@@ -151,16 +147,6 @@ namespace HslCommunication.Core.Net
         {
             if (length == 0) return OperateResult.CreateSuccessResult( new byte[0] );
 
-            //try
-            //{
-            //    return OperateResult.CreateSuccessResult( NetSupport.ReadBytesFromSocket( socket, length ) );
-            //}
-            //catch(Exception ex)
-            //{
-            //    return new OperateResult<byte[]>( ex.Message );
-            //}
-
-            //#if NET35
             if (UseSynchronousNet)
             {
                 try
@@ -171,11 +157,13 @@ namespace HslCommunication.Core.Net
                 catch (Exception ex)
                 {
                     socket?.Close( );
+                    LogNet?.WriteException( ToString( ), "Receive", ex );
                     return new OperateResult<byte[]>( ex.Message );
                 }
             }
 
 
+#if NET35
             OperateResult<byte[]> result = new OperateResult<byte[]>( );
             ManualResetEvent receiveDone = null;
             StateObject state = null;
@@ -257,6 +245,9 @@ namespace HslCommunication.Core.Net
             //}
             //return OperateResult.CreateSuccessResult( buffer );
             //#endif
+#else
+            return ReceiveAsync( socket, length );
+#endif
         }
 
 
@@ -296,13 +287,14 @@ namespace HslCommunication.Core.Net
                 catch (Exception ex)
                 {
                     state.IsError = true;
-                    LogNet?.WriteException( ToString( ), ex );
+                    LogNet?.WriteException( ToString( ), "ReceiveCallback", ex );
                     state.ErrerMsg = ex.Message;
                     state.WaitDone.Set( );
                 }
             }
         }
 
+#if !NET35
 
         /// <summary>
         /// 接收固定长度的字节数组
@@ -317,25 +309,16 @@ namespace HslCommunication.Core.Net
         {
             if (length <= 0) return OperateResult.CreateSuccessResult( new byte[0] );
 
-            StateObjectAsync<byte[]> state = null;
-            try
-            {
-                state = new StateObjectAsync<byte[]>( );
-                state.Tcs = new TaskCompletionSource<byte[]>( );
-            }
-            catch (Exception ex)
-            {
-                return new OperateResult<byte[]>( ex.Message );
-            }
-
-            state.WorkSocket = socket;
+            var state               = new StateObjectAsync<byte[]>( length );
+            state.Tcs               = new TaskCompletionSource<byte[]>( );
+            state.WorkSocket        = socket;
 
             try
             {
-                socket.BeginReceive( state.Buffer, state.AlreadyDealLength, state.DataLength - state.AlreadyDealLength, 
+                socket.BeginReceive( state.Buffer, state.AlreadyDealLength, state.DataLength - state.AlreadyDealLength,
                     SocketFlags.None, new AsyncCallback( ReceiveAsyncCallback ), state );
                 byte[] byteResult = state.Tcs.Task.Result;
-                if(byteResult == null)
+                if (byteResult == null)
                 {
                     socket?.Close( );
                     return new OperateResult<byte[]>( StringResources.Language.RemoteClosedConnection );
@@ -357,8 +340,8 @@ namespace HslCommunication.Core.Net
             {
                 try
                 {
-                    Socket client = state.WorkSocket;
-                    int bytesRead = client.EndReceive( ar );
+                    Socket socket = state.WorkSocket;
+                    int bytesRead = socket.EndReceive( ar );
 
                     if (bytesRead > 0)
                     {
@@ -367,7 +350,7 @@ namespace HslCommunication.Core.Net
                         if (state.AlreadyDealLength < state.DataLength)
                         {
                             // 获取接下来的所有的数据
-                            client.BeginReceive( state.Buffer, state.AlreadyDealLength, state.DataLength - state.AlreadyDealLength, 
+                            socket.BeginReceive( state.Buffer, state.AlreadyDealLength, state.DataLength - state.AlreadyDealLength,
                                 SocketFlags.None, new AsyncCallback( ReceiveAsyncCallback ), state );
                         }
                         else
@@ -386,11 +369,13 @@ namespace HslCommunication.Core.Net
                 catch (Exception ex)
                 {
                     state.IsError = true;
-                    LogNet?.WriteException( ToString( ), ex );
+                    LogNet?.WriteException( ToString( ), "ReceiveAsyncCallback", ex );
                     state.Tcs.SetException( ex );
                 }
             }
         }
+
+#endif
 
         #endregion
 
@@ -465,6 +450,7 @@ namespace HslCommunication.Core.Net
                 catch (Exception ex)
                 {
                     socket?.Close( );
+                    LogNet?.WriteException( "Send", ex );
                     return new OperateResult<byte[]>( ex.Message );
                 }
             }
@@ -523,7 +509,6 @@ namespace HslCommunication.Core.Net
 #else
 
             return SendAsync( socket, data );
-
 #endif
         }
 
@@ -557,14 +542,14 @@ namespace HslCommunication.Core.Net
                 {
                     // 发生了异常
                     state.IsError = true;
-                    LogNet?.WriteException( ToString( ), ex );
+                    LogNet?.WriteException( ToString( ), "SendCallBack", ex );
                     state.ErrerMsg = ex.Message;
                     state.WaitDone.Set( );
                 }
             }
         }
 
-        #if !NET35
+#if !NET35
 
         /// <summary>
         /// 发送一个异步的数据信息，该方式在NET35里是不可用的。
@@ -575,20 +560,12 @@ namespace HslCommunication.Core.Net
         protected OperateResult SendAsync( Socket socket, byte[] data )
         {
             if (data == null) return OperateResult.CreateSuccessResult( );
+            if (data.Length == 0) return OperateResult.CreateSuccessResult( );
 
-            StateObjectAsync<bool> state = null;
-            try
-            {
-                state = new StateObjectAsync<bool>( data.Length );
-                state.Tcs = new TaskCompletionSource<bool>( );
-            }
-            catch (Exception ex)
-            {
-                return new OperateResult( ex.Message );
-            }
-
-            state.WorkSocket = socket;
-            state.Buffer = data;
+            var state              = new StateObjectAsync<bool>( data.Length );
+            state.Tcs              = new TaskCompletionSource<bool>( );
+            state.WorkSocket       = socket;
+            state.Buffer           = data;
 
             try
             {
@@ -609,9 +586,8 @@ namespace HslCommunication.Core.Net
             {
                 try
                 {
-                    Socket socket = state.WorkSocket;
-                    int byteSend = socket.EndSend( ar );
-                    state.AlreadyDealLength += byteSend;
+                    Socket socket            = state.WorkSocket;
+                    state.AlreadyDealLength += socket.EndSend( ar );
 
                     if (state.AlreadyDealLength < state.DataLength)
                     {
@@ -628,12 +604,13 @@ namespace HslCommunication.Core.Net
                 catch (Exception ex)
                 {
                     state.IsError = true;
+                    LogNet?.WriteException( "SendAsyncCallBack", ex );
                     state.Tcs.SetException( ex );
                 }
             }
         }
 
-        #endif
+#endif
 
         #endregion
 
@@ -700,11 +677,13 @@ namespace HslCommunication.Core.Net
                 catch (Exception ex)
                 {
                     socket?.Close( );
+                    LogNet?.WriteException( "CreateSocketAndConnect", ex );
                     return new OperateResult<Socket>( ex.Message );
                 }
             }
             else
             {
+#if NET35
                 OperateResult<Socket> result = new OperateResult<Socket>( );
                 ManualResetEvent connectDone = null;
                 StateObject state = null;
@@ -720,7 +699,6 @@ namespace HslCommunication.Core.Net
 
 
                 var socket = new Socket( AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp );
-
                 // 超时验证的信息
                 HslTimeOut connectTimeout = new HslTimeOut( )
                 {
@@ -767,6 +745,31 @@ namespace HslCommunication.Core.Net
                 state.Clear( );
                 state = null;
                 return result;
+#else
+                var socket        = new Socket( AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp );
+                var state         = new StateObjectAsync<Socket>( );
+                state.Tcs         = new TaskCompletionSource<Socket>( );
+                state.WorkSocket  = socket;
+
+                // timeout check
+                HslTimeOut connectTimeout = new HslTimeOut( )
+                {
+                    WorkSocket = socket,
+                    DelayTime = timeOut
+                };
+                ThreadPool.QueueUserWorkItem( new WaitCallback( ThreadPoolCheckTimeOut ), connectTimeout );
+
+                try
+                {
+                    socket.BeginConnect( endPoint, new AsyncCallback( ConnectAsyncCallBack ), state );
+                    socket = state.Tcs.Task.Result;
+                    return OperateResult.CreateSuccessResult( socket );
+                }
+                catch (Exception ex)
+                {
+                    return new OperateResult<Socket>( ex.Message );
+                }
+#endif
             }
         }
 
@@ -789,12 +792,37 @@ namespace HslCommunication.Core.Net
                 {
                     // 发生了异常
                     state.IsError = true;
-                    LogNet?.WriteException( ToString( ), ex );
+                    LogNet?.WriteException( ToString( ), "ConnectCallBack", ex );
                     state.ErrerMsg = ex.Message;
                     state.WaitDone.Set( );
                 }
             }
         }
+
+#if !NET35
+
+        private void ConnectAsyncCallBack( IAsyncResult ar )
+        {
+            if (ar.AsyncState is StateObjectAsync<Socket> state)
+            {
+                try
+                {
+                    Socket socket = state.WorkSocket;
+                    socket.EndConnect( ar );
+                    state.Tcs.SetResult( socket );
+                }
+                catch (Exception ex)
+                {
+                    // 发生了异常
+                    state.IsError = true;
+                    LogNet?.WriteException( "ConnectAsyncCallBack", ex );
+                    state.ErrerMsg = ex.Message;
+                    state.Tcs.SetException( ex );
+                }
+            }
+        }
+
+#endif
 
 
         #endregion
@@ -903,7 +931,7 @@ namespace HslCommunication.Core.Net
                 LogNet?.WriteException( ToString( ), ex );
                 stateObject = null;
                 WaitDone.Close( );
-                return new OperateResult( );
+                return new OperateResult( ex.Message );
             }
 
             WaitDone.WaitOne( );
@@ -919,8 +947,6 @@ namespace HslCommunication.Core.Net
             {
                 return OperateResult.CreateSuccessResult( );
             }
-
-
         }
 
         private void WriteStreamCallBack( IAsyncResult ar )
@@ -960,6 +986,4 @@ namespace HslCommunication.Core.Net
         #endregion
 
     }
-
-
 }
