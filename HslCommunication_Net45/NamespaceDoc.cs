@@ -678,7 +678,7 @@ namespace HslCommunication
     ///             <item>修复文件引擎在上传文件时意外失败，服务器仍然识别为成功的bug。</item>
     ///         </list>
     ///     </revision>
-    ///     <revision date="2019-4-4" version="6.1.0" author="Richard.Hu">
+    ///     <revision date="2019-4-17" version="6.1.0" author="Richard.Hu">
     ///         <list type="bullet">
     ///             <item>修复日志存储自身异常时，时间没有初始化的bug。</item>
     ///             <item>NetworkBase: 新增UseSynchronousNet属性，默认为true，通过同步的网络进行读写数据，异步手动设置为false。</item>
@@ -686,6 +686,20 @@ namespace HslCommunication
     ///             <item>添加KeyenceNanoSerial以支持基恩士Nano系列串口通信。</item>
     ///             <item>其他的代码优化。</item>
     ///             <item>发布一个基于xamarin的安卓测试demo。</item>
+    ///             <item>发布官方论坛： http://bbs.hslcommunication.cn/ </item>
+    ///         </list>
+    ///     </revision>
+    ///     <revision date="2019-4-24" version="6.1.1" author="Richard.Hu">
+    ///         <list type="bullet">
+    ///             <item>修复基恩士MC协议读取D区数据索引不能大于100000的bug。</item>
+    ///             <item>修复基恩士串口协议读写bool数据的异常bug。</item>
+    ///             <item>修复数据推送服务器在客户端异常断开时的奔溃bug，界面卡死bug。</item>
+    ///             <item>SoftNumericalOrder类新增数据重置和，最大数限制 。</item>
+    ///             <item>ModbusTcp客户端公开属性SoftIncrementCount，可以强制消息号不变，或是最大值。</item>
+    ///             <item>NetworkBase: 异步的方法针对Net451及standard版本重写。</item>
+    ///             <term>modbus服务器的方法ReadFromModbusCore( byte[] modbusCore )设置为虚方法，可以继承重写，实现自定义返回。</term>
+    ///             <item>串口基类serialbase的初始化方法新增多个重载方法，方便VB和labview调用。</item>
+    ///             <item>NetworkBase: 默认的机制任然使用异步实现，UseSynchronousNet=false。</item>
     ///             <item>发布官方论坛： http://bbs.hslcommunication.cn/ </item>
     ///         </list>
     ///     </revision>

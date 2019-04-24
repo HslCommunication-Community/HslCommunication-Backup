@@ -16,7 +16,7 @@ namespace HslCommunication_Net45.Test.Profinet.Siemens
         [TestMethod]
         public void SiemensUnitTest( )
         {
-            SiemensS7Net plc = new SiemensS7Net( SiemensPLCS.S1200, "127.0.0.1" );
+            SiemensS7Net plc = new SiemensS7Net( SiemensPLCS.S1200, "192.168.8.12" );
             if (!plc.ConnectServer( ).IsSuccess)
             {
                 Console.WriteLine( "无法连接PLC，将跳过单元测试。等待网络正常时，再进行测试" );
@@ -120,6 +120,10 @@ namespace HslCommunication_Net45.Test.Profinet.Siemens
             // string类型
             Assert.IsTrue( plc.Write( address, "123123" ).IsSuccess );
             Assert.IsTrue( plc.ReadString( address ).Content == "123123" );
+
+            // 中文，编码可以自定义
+            Assert.IsTrue( plc.Write( address, "测试信息123", Encoding.Unicode ).IsSuccess );
+            Assert.IsTrue( plc.ReadString( address, 14, Encoding.Unicode ).Content == "测试信息123" );
 
             // byte类型
             byte[] byteTmp = new byte[] { 0x4F, 0x12, 0x72, 0xA7, 0x54, 0xB8 };

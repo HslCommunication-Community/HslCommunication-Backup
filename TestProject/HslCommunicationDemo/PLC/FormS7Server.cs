@@ -149,8 +149,8 @@ namespace HslCommunicationDemo
             {
 
                 s7NetServer = new HslCommunication.Profinet.Siemens.SiemensS7Server( );                       // 实例化对象
-                s7NetServer.LogNet = new HslCommunication.LogNet.LogNetSingle( "logs.txt" );        // 配置日志信息
-                s7NetServer.LogNet.BeforeSaveToFile += LogNet_BeforeSaveToFile;
+                //s7NetServer.LogNet = new HslCommunication.LogNet.LogNetSingle( "logs.txt" );                  // 配置日志信息
+                //s7NetServer.LogNet.BeforeSaveToFile += LogNet_BeforeSaveToFile;
                 s7NetServer.OnDataReceived += BusTcpServer_OnDataReceived;
                 
                 s7NetServer.ServerStart( port );

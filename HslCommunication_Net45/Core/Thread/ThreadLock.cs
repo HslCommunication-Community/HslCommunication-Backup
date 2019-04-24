@@ -879,7 +879,7 @@ namespace HslCommunication.Core
 
     #region 双检锁
 
-#if NET451 || NETSTANDARD2_0
+#if !NET35
 
     /// <summary>
     /// 一个双检锁的示例，适合一些占内存的静态数据对象，获取的时候才实例化真正的对象
@@ -921,7 +921,7 @@ namespace HslCommunication.Core
     #region 高级混合锁
 
 
-#if NET451 || NETSTANDARD2_0
+#if !NET35
 
 
     /// <summary>
