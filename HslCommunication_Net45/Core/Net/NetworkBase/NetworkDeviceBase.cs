@@ -383,7 +383,23 @@ namespace HslCommunication.Core.Net
         {
             return ByteTransformHelper.GetResultFromBytes( Read( address, length ), m => ByteTransform.TransString( m, 0, m.Length, Encoding.ASCII ) );
         }
-        
+
+        /// <summary>
+        /// 读取设备的字符串数据，编码为指定的编码信息
+        /// </summary>
+        /// <param name="address">起始地址</param>
+        /// <param name="length">地址长度</param>
+        /// <param name="encoding">编码机制</param>
+        /// <returns>带成功标志的结果数据对象</returns>
+        /// <example>
+        /// 以下为三菱的连接对象示例，其他的设备读写情况参照下面的代码：
+        /// <code lang="cs" source="HslCommunication_Net45.Test\Documentation\Samples\Core\NetworkDeviceBase.cs" region="ReadString" title="String类型示例" />
+        /// </example>
+        public OperateResult<string> ReadString( string address, ushort length, Encoding encoding )
+        {
+            return ByteTransformHelper.GetResultFromBytes( Read( address, length ), m => ByteTransform.TransString( m, 0, m.Length, encoding ) );
+        }
+
         #endregion
 
         #region Read Write Async Support
@@ -649,6 +665,21 @@ namespace HslCommunication.Core.Net
             return Task.Run( ( ) => ReadString( address, length ) );
         }
 
+        /// <summary>
+        /// 读取设备的字符串数据，编码为指定的编码信息
+        /// </summary>
+        /// <param name="address">起始地址</param>
+        /// <param name="length">地址长度</param>
+        /// <param name="encoding">编码机制</param>
+        /// <returns>带成功标志的结果数据对象</returns>
+        /// <example>
+        /// 以下为三菱的连接对象示例，其他的设备读写情况参照下面的代码：
+        /// <code lang="cs" source="HslCommunication_Net45.Test\Documentation\Samples\Core\NetworkDeviceBase.cs" region="ReadStringAsync" title="String类型示例" />
+        /// </example>
+        public Task<OperateResult<string>> ReadStringAsync( string address, ushort length, Encoding encoding )
+        {
+            return Task.Run( ( ) => ReadString( address, length, encoding ) );
+        }
 
         /// <summary>
         /// 异步将原始数据写入设备
@@ -922,6 +953,22 @@ namespace HslCommunication.Core.Net
         }
 
         /// <summary>
+        /// 异步向设备中写入字符串，使用指定的字符编码
+        /// </summary>
+        /// <param name="address">数据地址</param>
+        /// <param name="value">字符串数据</param>
+        /// <param name="encoding">字符编码</param>
+        /// <returns>是否写入成功的结果对象</returns>
+        /// <example>
+        /// 以下为三菱的连接对象示例，其他的设备读写情况参照下面的代码：
+        /// <code lang="cs" source="HslCommunication_Net45.Test\Documentation\Samples\Core\NetworkDeviceBase.cs" region="WriteStringAsync" title="String类型示例" />
+        /// </example>
+        public Task<OperateResult> WriteAsync( string address, string value, Encoding encoding )
+        {
+            return Task.Run( ( ) => Write( address, value, encoding ) );
+        }
+
+        /// <summary>
         /// 异步向设备中写入指定长度的字符串,超出截断，不够补0，编码格式为ASCII
         /// </summary>
         /// <param name="address">数据地址</param>
@@ -935,6 +982,23 @@ namespace HslCommunication.Core.Net
         public Task<OperateResult> WriteAsync( string address, string value, int length )
         {
             return Task.Run( ( ) => Write( address, value, length ) );
+        }
+
+        /// <summary>
+        /// 异步向设备中写入指定长度的字符串,超出截断，不够补0，指定的编码格式
+        /// </summary>
+        /// <param name="address">数据地址</param>
+        /// <param name="value">字符串数据</param>
+        /// <param name="length">指定的字符串长度，必须大于0</param>
+        /// <param name="encoding">指定的编码格式</param>
+        /// <returns>是否写入成功的结果对象 -> Whether to write a successful result object</returns>
+        /// <example>
+        /// 以下为三菱的连接对象示例，其他的设备读写情况参照下面的代码：
+        /// <code lang="cs" source="HslCommunication_Net45.Test\Documentation\Samples\Core\NetworkDeviceBase.cs" region="WriteString2Async" title="String类型示例" />
+        /// </example>
+        public Task<OperateResult> WriteAsync( string address, string value, int length, Encoding encoding )
+        {
+            return Task.Run( ( ) => Write( address, value, length, encoding ) );
         }
 
         /// <summary>
@@ -1295,8 +1359,24 @@ namespace HslCommunication.Core.Net
         /// </example>
         public virtual OperateResult Write( string address, string value )
         {
-            byte[] temp = ByteTransform.TransByte( value, Encoding.ASCII );
-            if(WordLength == 1) temp = SoftBasic.ArrayExpandToLengthEven( temp );
+            return Write( address, value, Encoding.ASCII );
+        }
+
+        /// <summary>
+        /// 向设备中写入指定编码的字符串
+        /// </summary>
+        /// <param name="address">数据地址</param>
+        /// <param name="value">字符串数据</param>
+        /// <param name="encoding">字节编码</param>
+        /// <returns>是否写入成功的结果对象</returns>
+        /// <example>
+        /// 以下为三菱的连接对象示例，其他的设备读写情况参照下面的代码：
+        /// <code lang="cs" source="HslCommunication_Net45.Test\Documentation\Samples\Core\NetworkDeviceBase.cs" region="WriteString" title="String类型示例" />
+        /// </example>
+        public virtual OperateResult Write( string address, string value, Encoding encoding )
+        {
+            byte[] temp = ByteTransform.TransByte( value, encoding );
+            if (WordLength == 1) temp = SoftBasic.ArrayExpandToLengthEven( temp );
             return Write( address, temp );
         }
 
@@ -1313,7 +1393,24 @@ namespace HslCommunication.Core.Net
         /// </example>
         public virtual OperateResult Write( string address, string value, int length )
         {
-            byte[] temp = ByteTransform.TransByte( value, Encoding.ASCII );
+            return Write( address, value, Encoding.ASCII );
+        }
+
+        /// <summary>
+        /// 向设备中写入指定长度并且指定编码的字符串,超出截断，不够补0
+        /// </summary>
+        /// <param name="address">数据地址</param>
+        /// <param name="value">字符串数据</param>
+        /// <param name="length">指定的长度，按照转换后的字节计算</param>
+        /// <param name="encoding">字符编码</param>
+        /// <returns>是否写入成功的结果对象 -> Whether to write a successful result object</returns>
+        /// <example>
+        /// 以下为三菱的连接对象示例，其他的设备读写情况参照下面的代码：
+        /// <code lang="cs" source="HslCommunication_Net45.Test\Documentation\Samples\Core\NetworkDeviceBase.cs" region="WriteString2" title="String类型示例" />
+        /// </example>
+        public virtual OperateResult Write( string address, string value, int length, Encoding encoding )
+        {
+            byte[] temp = ByteTransform.TransByte( value, encoding );
             if (WordLength == 1) temp = SoftBasic.ArrayExpandToLengthEven( temp );
             temp = SoftBasic.ArrayExpandToLength( temp, length );
             return Write( address, temp );
