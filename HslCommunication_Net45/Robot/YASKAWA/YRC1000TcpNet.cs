@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Sockets;
 using System.Text;
 using HslCommunication.Core;
 using HslCommunication.Core.IMessage;
@@ -61,7 +62,43 @@ namespace HslCommunication.Robot.YASKAWA
 
         #endregion
 
+        #region Override Read
 
+        /// <summary>
+        /// 重写父类的数据交互方法，接收的时候采用标识符来接收
+        /// </summary>
+        /// <param name="socket">套接字</param>
+        /// <param name="send">发送的数据</param>
+        /// <returns>发送结果对象</returns>
+        public override OperateResult<byte[]> ReadFromCoreServer( Socket socket, byte[] send )
+        {
+            LogNet?.WriteDebug( ToString( ), StringResources.Language.Send + " : " + BasicFramework.SoftBasic.ByteToHexString( send, ' ' ) );
+
+            // send
+            OperateResult sendResult = Send( socket, send );
+            if (!sendResult.IsSuccess)
+            {
+                socket?.Close( );
+                return OperateResult.CreateFailedResult<byte[]>( sendResult );
+            }
+
+            if (ReceiveTimeOut < 0) return OperateResult.CreateSuccessResult( new byte[0] );
+
+            // receive msg
+            OperateResult<byte[]> resultReceive = NetSupport.ReceiveCommandLineFromSocket( socket, (byte)'\r', (byte)'\n' );
+            if (!resultReceive.IsSuccess)
+            {
+                socket?.Close( );
+                return new OperateResult<byte[]>( StringResources.Language.ReceiveDataTimeout + ReceiveTimeOut );
+            }
+
+            LogNet?.WriteDebug( ToString( ), StringResources.Language.Receive + " : " + BasicFramework.SoftBasic.ByteToHexString( resultReceive.Content, ' ' ) );
+
+            // Success
+            return OperateResult.CreateSuccessResult( resultReceive.Content );
+        }
+
+        #endregion
 
 
 

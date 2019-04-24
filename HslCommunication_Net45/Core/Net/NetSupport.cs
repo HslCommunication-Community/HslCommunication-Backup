@@ -184,6 +184,41 @@ namespace HslCommunication.Core
             }
         }
 
+        /// <summary>
+        /// 接收一行命令数据，需要自己指定这个结束符
+        /// </summary>
+        /// <param name="socket">网络套接字</param>
+        /// <param name="endCode1">结束符1信息</param>
+        /// <param name="endCode2">结束符2信息</param>
+        /// <returns>带有结果对象的数据信息</returns>
+        public static OperateResult<byte[]> ReceiveCommandLineFromSocket( Socket socket, byte endCode1, byte endCode2 )
+        {
+            List<byte> bufferArray = new List<byte>( );
+            try
+            {
+                // 接收到endCode为止
+                while (true)
+                {
+                    byte[] head = NetSupport.ReadBytesFromSocket( socket, 1 );
+                    bufferArray.AddRange( head );
+                    if (head[0] == endCode2)
+                    {
+                        if(bufferArray.Count > 0 && bufferArray.Last( ) == endCode1)
+                        {
+                            break;
+                        }
+                    }
+                }
+
+                // 指令头已经接收完成
+                return OperateResult.CreateSuccessResult( bufferArray.ToArray( ) );
+            }
+            catch (Exception ex)
+            {
+                return new OperateResult<byte[]>( ex.Message );
+            }
+        }
+
 
         /// <summary>
         /// 从socket套接字读取数据并写入流中，必然报告进度
@@ -230,7 +265,6 @@ namespace HslCommunication.Core
                 // 回发进度
                 socket.Send( BitConverter.GetBytes( count_receive ) );
             }
-            buffer = null;
         }
 
 
@@ -291,7 +325,6 @@ namespace HslCommunication.Core
                     break;
                 }
             }
-            buffer = null;
         }
 
     }
