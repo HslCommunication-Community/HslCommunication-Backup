@@ -403,7 +403,7 @@ namespace HslCommunication.Enthernet
         /// <summary>
         /// 发送回发方法
         /// </summary>
-        /// <param name="ar"></param>
+        /// <param name="ar">异步数据</param>
         internal void PushSendCallBack( IAsyncResult ar )
         {
             if (ar.AsyncState is AsyncStateSend stateone)
@@ -431,15 +431,12 @@ namespace HslCommunication.Enthernet
                 catch (ObjectDisposedException)
                 {
                     stateone.HybirdLockSend.Leave( );
-                    // 不处理
-                    stateone = null;
                     RemoveGroupOnlien( stateone.Key, stateone.ClientId );
                 }
                 catch (Exception ex)
                 {
                     LogNet?.WriteException( ToString( ), StringResources.Language.SocketEndSendException, ex );
                     stateone.HybirdLockSend.Leave( );
-                    stateone = null;
                     RemoveGroupOnlien( stateone.Key, stateone.ClientId );
                 }
             }
