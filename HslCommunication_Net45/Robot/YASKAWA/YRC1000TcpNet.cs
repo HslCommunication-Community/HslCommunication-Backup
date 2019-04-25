@@ -15,6 +15,17 @@ namespace HslCommunication.Robot.YASKAWA
     [Obsolete("还没有完成")]
     public class YRC1000TcpNet : NetworkDoubleBase<KukaVarProxyMessage, ReverseWordTransform>, IRobotNet
     {
+        #region Constructor
+
+        /// <summary>
+        /// 实例化一个默认的对象
+        /// </summary>
+        public YRC1000TcpNet( )
+        {
+
+        }
+
+        #endregion
 
         #region IRobot Interface
 
@@ -86,12 +97,8 @@ namespace HslCommunication.Robot.YASKAWA
 
             // receive msg
             OperateResult<byte[]> resultReceive = NetSupport.ReceiveCommandLineFromSocket( socket, (byte)'\r', (byte)'\n' );
-            if (!resultReceive.IsSuccess)
-            {
-                socket?.Close( );
-                return new OperateResult<byte[]>( StringResources.Language.ReceiveDataTimeout + ReceiveTimeOut );
-            }
-
+            if (!resultReceive.IsSuccess) return new OperateResult<byte[]>( StringResources.Language.ReceiveDataTimeout + ReceiveTimeOut );
+            
             LogNet?.WriteDebug( ToString( ), StringResources.Language.Receive + " : " + BasicFramework.SoftBasic.ByteToHexString( resultReceive.Content, ' ' ) );
 
             // Success
@@ -99,8 +106,6 @@ namespace HslCommunication.Robot.YASKAWA
         }
 
         #endregion
-
-
 
         #region Private Member
 

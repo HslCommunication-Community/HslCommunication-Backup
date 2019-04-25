@@ -131,7 +131,6 @@ namespace HslCommunication.Core.Net
 
         #region Read Support
 
-
         /// <summary>
         /// 读取设备的short类型的数据
         /// </summary>
@@ -145,7 +144,6 @@ namespace HslCommunication.Core.Net
         {
             return ByteTransformHelper.GetResultFromArray( ReadInt16( address, 1 ) );
         }
-
 
         /// <summary>
         /// 读取设备的short类型的数组
@@ -1393,7 +1391,7 @@ namespace HslCommunication.Core.Net
         /// </example>
         public virtual OperateResult Write( string address, string value, int length )
         {
-            return Write( address, value, Encoding.ASCII );
+            return Write( address, value, length, Encoding.ASCII );
         }
 
         /// <summary>

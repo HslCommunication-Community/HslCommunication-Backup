@@ -58,6 +58,7 @@ namespace HslCommunication.Enthernet.Redis
         public static OperateResult<byte[]> ReceiveCommand( Socket socket )
         {
             List<byte> bufferArray = new List<byte>( );
+
             OperateResult<byte[]> readCommandLine = ReceiveCommandLine( socket );
             if (!readCommandLine.IsSuccess) return readCommandLine;
 

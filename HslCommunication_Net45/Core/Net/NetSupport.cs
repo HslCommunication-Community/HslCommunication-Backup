@@ -180,6 +180,7 @@ namespace HslCommunication.Core
             }
             catch (Exception ex)
             {
+                socket?.Close( );
                 return new OperateResult<byte[]>( ex.Message );
             }
         }
@@ -215,6 +216,7 @@ namespace HslCommunication.Core
             }
             catch (Exception ex)
             {
+                socket?.Close( );
                 return new OperateResult<byte[]>( ex.Message );
             }
         }
