@@ -703,6 +703,13 @@ namespace HslCommunication
     ///             <item>发布官方论坛： http://bbs.hslcommunication.cn/ </item>
     ///         </list>
     ///     </revision>
+    ///     <revision date="2019-4-25" version="6.1.2" author="Richard.Hu">
+    ///         <list type="bullet">
+    ///             <item>紧急修复在NET451和Core里的异步读取的bug。</item>
+    ///             <item>紧急修复PushNetServer的发送回调bug。</item>
+    ///             <item>发布官方论坛： http://bbs.hslcommunication.cn/ </item>
+    ///         </list>
+    ///     </revision>
     /// </revisionHistory>
     [System.Runtime.CompilerServices.CompilerGeneratedAttribute( )]
     public class NamespaceDoc

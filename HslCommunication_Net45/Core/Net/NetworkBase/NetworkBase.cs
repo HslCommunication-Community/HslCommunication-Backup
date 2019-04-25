@@ -162,8 +162,6 @@ namespace HslCommunication.Core.Net
                 }
             }
 
-
-#if NET35
             OperateResult<byte[]> result = new OperateResult<byte[]>( );
             ManualResetEvent receiveDone = null;
             StateObject state = null;
@@ -231,23 +229,6 @@ namespace HslCommunication.Core.Net
             state.Clear( );
             state = null;
             return result;
-
-            //#else
-            //SocketAsyncEventArgs eventArgs = new SocketAsyncEventArgs( );
-            //byte[] buffer = new byte[length];
-            //eventArgs.SetBuffer( buffer, 0, length );
-            //int receiveCount = 0;
-            //while (true)
-            //{
-            //    socket.ReceiveAsync( eventArgs );
-            //    receiveCount += eventArgs.BytesTransferred;
-            //    if (receiveCount == length) break;
-            //}
-            //return OperateResult.CreateSuccessResult( buffer );
-            //#endif
-#else
-            return ReceiveAsync( socket, length );
-#endif
         }
 
 
@@ -455,7 +436,6 @@ namespace HslCommunication.Core.Net
                 }
             }
 
-#if NET35
             OperateResult result = new OperateResult( );
             ManualResetEvent sendDone = null;
             StateObject state = null;
@@ -505,11 +485,6 @@ namespace HslCommunication.Core.Net
             result.Message = StringResources.Language.SuccessText;
 
             return result;
-
-#else
-
-            return SendAsync( socket, data );
-#endif
         }
 
         /// <summary>
@@ -683,7 +658,6 @@ namespace HslCommunication.Core.Net
             }
             else
             {
-#if NET35
                 OperateResult<Socket> result = new OperateResult<Socket>( );
                 ManualResetEvent connectDone = null;
                 StateObject state = null;
@@ -745,31 +719,6 @@ namespace HslCommunication.Core.Net
                 state.Clear( );
                 state = null;
                 return result;
-#else
-                var socket        = new Socket( AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp );
-                var state         = new StateObjectAsync<Socket>( );
-                state.Tcs         = new TaskCompletionSource<Socket>( );
-                state.WorkSocket  = socket;
-
-                // timeout check
-                HslTimeOut connectTimeout = new HslTimeOut( )
-                {
-                    WorkSocket = socket,
-                    DelayTime = timeOut
-                };
-                ThreadPool.QueueUserWorkItem( new WaitCallback( ThreadPoolCheckTimeOut ), connectTimeout );
-
-                try
-                {
-                    socket.BeginConnect( endPoint, new AsyncCallback( ConnectAsyncCallBack ), state );
-                    socket = state.Tcs.Task.Result;
-                    return OperateResult.CreateSuccessResult( socket );
-                }
-                catch (Exception ex)
-                {
-                    return new OperateResult<Socket>( ex.Message );
-                }
-#endif
             }
         }
 
@@ -800,6 +749,33 @@ namespace HslCommunication.Core.Net
         }
 
 #if !NET35
+
+        private OperateResult<Socket> ConnectAsync( IPEndPoint endPoint, int timeOut )
+        {
+            var socket = new Socket( AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp );
+            var state = new StateObjectAsync<Socket>( );
+            state.Tcs = new TaskCompletionSource<Socket>( );
+            state.WorkSocket = socket;
+
+            // timeout check
+            HslTimeOut connectTimeout = new HslTimeOut( )
+            {
+                WorkSocket = socket,
+                DelayTime = timeOut
+            };
+            ThreadPool.QueueUserWorkItem( new WaitCallback( ThreadPoolCheckTimeOut ), connectTimeout );
+
+            try
+            {
+                socket.BeginConnect( endPoint, new AsyncCallback( ConnectAsyncCallBack ), state );
+                socket = state.Tcs.Task.Result;
+                return OperateResult.CreateSuccessResult( socket );
+            }
+            catch (Exception ex)
+            {
+                return new OperateResult<Socket>( ex.Message );
+            }
+        }
 
         private void ConnectAsyncCallBack( IAsyncResult ar )
         {

@@ -19,16 +19,18 @@ namespace HslCommunicationCoreDemo
         {
             Console.WriteLine("Hello World!");
 
-            ModbusTcpNet modbus = new ModbusTcpNet( "127.0.0.1", 503, 1 );
-            bool[] values = modbus.ReadDiscrete( "32", 4 ).Content;
-            if(values == null)
-            {
-                Console.WriteLine( "值为空，读取不正确！" );
-            }
-            else
-            {
-                Console.WriteLine( $"[{values[0]},{values[1]},{values[2]},{values[3]}]" );
-            }
+            //ModbusTcpNet modbus = new ModbusTcpNet( "127.0.0.1", 503, 1 );
+            //bool[] values = modbus.ReadDiscrete( "32", 4 ).Content;
+            //if(values == null)
+            //{
+            //    Console.WriteLine( "值为空，读取不正确！" );
+            //}
+            //else
+            //{
+            //    Console.WriteLine( $"[{values[0]},{values[1]},{values[2]},{values[3]}]" );
+            //}
+
+            SiemensUnitTest( );
 
             Console.ReadLine( );
 
@@ -198,5 +200,72 @@ namespace HslCommunicationCoreDemo
                 Console.WriteLine( read.Message );
             }
         }
+
+        public static async void SiemensUnitTest( )
+        {
+            SiemensS7Net plc = new SiemensS7Net( SiemensPLCS.S1200, "192.168.8.12" );
+            if (!plc.ConnectServer( ).IsSuccess)
+            {
+                Console.WriteLine( "无法连接PLC，将跳过单元测试。等待网络正常时，再进行测试" );
+                return;
+            }
+
+            Console.WriteLine( "测试开始" );
+            // 开始单元测试，从bool类型开始测试
+            string address = "M300";
+            // short类型
+            short[] shortTmp = new short[] { 123, 423, -124, 5313, 2361 };
+            byte[] byteTmp = new byte[] { 0x1A, 0x2B, 0x36, 0x18, 0x52, 0xD1 };
+
+            // 异步short类型
+            for (int j = 0; j < 100; j++)
+            {
+                if (!(await plc.WriteAsync( address, byteTmp )).IsSuccess)
+                {
+                    Console.WriteLine( "Error!" );
+                    return;
+                }
+
+                byte[] readBytes = (await plc.ReadAsync( address, (ushort)byteTmp.Length )).Content;
+                for (int i = 0; i < readBytes.Length; i++)
+                {
+                    if (byteTmp[i] != readBytes[i])
+                    {
+                        Console.WriteLine( "Error!" );
+                        return;
+                    }
+                }
+
+                if (!(await plc.WriteAsync( address, (short)12345 )).IsSuccess)
+                {
+                    Console.WriteLine( "Error!" );
+                    return;
+                }
+                if ((await plc.ReadInt16Async( address )).Content != 12345)
+                {
+                    Console.WriteLine( "Error!" );
+                    return;
+                }
+                if (!(await plc.WriteAsync( address, shortTmp )).IsSuccess)
+                {
+                    Console.WriteLine( "Error!" );
+                    return;
+                }
+
+                short[] readShort = (await plc.ReadInt16Async( address, (ushort)shortTmp.Length )).Content;
+                for (int i = 0; i < readShort.Length; i++)
+                {
+                    if (readShort[i] != shortTmp[i])
+                    {
+                        Console.WriteLine( "Error!" );
+                        return;
+                    }
+                }
+            }
+
+            plc.ConnectClose( );
+            Console.WriteLine( "测试完成" );
+        }
+
     }
 }

@@ -14,7 +14,7 @@ namespace HslCommunication_Net45.Test.Profinet.Siemens
     {
 
         [TestMethod]
-        public void SiemensUnitTest( )
+        public async Task SiemensUnitTest( )
         {
             SiemensS7Net plc = new SiemensS7Net( SiemensPLCS.S1200, "192.168.8.12" );
             if (!plc.ConnectServer( ).IsSuccess)
@@ -38,6 +38,19 @@ namespace HslCommunication_Net45.Test.Profinet.Siemens
             for (int i = 0; i < readShort.Length; i++)
             {
                 Assert.IsTrue( readShort[i] == shortTmp[i] );
+            }
+
+            // 异步short类型
+            for (int j = 0; j < 100; j++)
+            {
+                Assert.IsTrue( (await plc.WriteAsync( address, (short)12345 )).IsSuccess );
+                Assert.IsTrue( (await plc.ReadInt16Async( address )).Content == 12345 );
+                Assert.IsTrue( (await plc.WriteAsync( address, shortTmp )).IsSuccess );
+                readShort = (await plc.ReadInt16Async( address, (ushort)shortTmp.Length )).Content;
+                for (int i = 0; i < readShort.Length; i++)
+                {
+                    Assert.IsTrue( readShort[i] == shortTmp[i] );
+                }
             }
 
             // ushort类型
