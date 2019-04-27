@@ -60,6 +60,7 @@
     <Compile Include="..\HslCommunication_Net45\Core\IMessage\HslMessage.cs" Link="Core\IMessage\HslMessage.cs" />
     <Compile Include="..\HslCommunication_Net45\Core\IMessage\INetMessage.cs" Link="Core\IMessage\INetMessage.cs" />
     <Compile Include="..\HslCommunication_Net45\Core\IMessage\KukaVarProxyMessage.cs" Link="Core\IMessage\KukaVarProxyMessage.cs" />
+    <Compile Include="..\HslCommunication_Net45\Core\IMessage\LsisFastEnetMessage.cs" Link="Core\IMessage\LsisFastEnetMessage.cs" />
     <Compile Include="..\HslCommunication_Net45\Core\IMessage\MelsecA1EBinaryMessage.cs" Link="Core\IMessage\MelsecA1EBinaryMessage.cs" />
     <Compile Include="..\HslCommunication_Net45\Core\IMessage\MelsecQnA3EAsciiMessage.cs" Link="Core\IMessage\MelsecQnA3EAsciiMessage.cs" />
     <Compile Include="..\HslCommunication_Net45\Core\IMessage\MelsecQnA3EBinaryMessage.cs" Link="Core\IMessage\MelsecQnA3EBinaryMessage.cs" />
@@ -142,6 +143,8 @@
     <Compile Include="..\HslCommunication_Net45\Profinet\AllenBradley\AllenBradleyNet.cs" Link="Profinet\AllenBradley\AllenBradleyNet.cs" />
     <Compile Include="..\HslCommunication_Net45\Profinet\Keyence\KeyenceMcAsciiNet.cs" Link="Profinet\Keyence\KeyenceMcAsciiNet.cs" />
     <Compile Include="..\HslCommunication_Net45\Profinet\Keyence\KeyenceMcNet.cs" Link="Profinet\Keyence\KeyenceMcNet.cs" />
+    <Compile Include="..\HslCommunication_Net45\Profinet\LSIS\LSCpuInfo.cs" Link="Profinet\LSIS\LSCpuInfo.cs" />
+    <Compile Include="..\HslCommunication_Net45\Profinet\LSIS\XGBFastEnet.cs" Link="Profinet\LSIS\XGBFastEnet.cs" />
     <Compile Include="..\HslCommunication_Net45\Profinet\Melsec\MelsecA1EDataType.cs" Link="Profinet\Melsec\MelsecA1EDataType.cs" />
     <Compile Include="..\HslCommunication_Net45\Profinet\Melsec\MelsecA1ENet.cs" Link="Profinet\Melsec\MelsecA1ENet.cs" />
     <Compile Include="..\HslCommunication_Net45\Profinet\Melsec\MelsecHelper.cs" Link="Profinet\Melsec\MelsecHelper.cs" />
@@ -199,6 +202,7 @@
     <Folder Include="ModBus\ModbusRtu\" />
     <Folder Include="ModBus\ModbusTcp\" />
     <Folder Include="ModBus\ModbusAscii\" />
+    <Folder Include="Profinet\LSIS\" />
     <Folder Include="Profinet\Melsec\" />
     <Folder Include="Profinet\Omron\" />
     <Folder Include="Profinet\Siemens\" />

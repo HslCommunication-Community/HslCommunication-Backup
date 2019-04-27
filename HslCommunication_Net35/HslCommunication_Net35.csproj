@@ -270,6 +270,9 @@
     <Compile Include="..\HslCommunication_Net45\Core\IMessage\KukaVarProxyMessage.cs">
       <Link>Core\IMessage\KukaVarProxyMessage.cs</Link>
     </Compile>
+    <Compile Include="..\HslCommunication_Net45\Core\IMessage\LsisFastEnetMessage.cs">
+      <Link>Core\IMessage\LsisFastEnetMessage.cs</Link>
+    </Compile>
     <Compile Include="..\HslCommunication_Net45\Core\IMessage\MelsecA1EBinaryMessage.cs">
       <Link>Core\IMessage\MelsecA1EBinaryMessage.cs</Link>
     </Compile>
@@ -549,6 +552,12 @@
     </Compile>
     <Compile Include="..\HslCommunication_Net45\Profinet\Keyence\KeyenceNanoSerial.cs">
       <Link>Profinet\Keyence\KeyenceNanoSerial.cs</Link>
+    </Compile>
+    <Compile Include="..\HslCommunication_Net45\Profinet\LSIS\LSCpuInfo.cs">
+      <Link>Profinet\LSIS\LSCpuInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\HslCommunication_Net45\Profinet\LSIS\XGBFastEnet.cs">
+      <Link>Profinet\LSIS\XGBFastEnet.cs</Link>
     </Compile>
     <Compile Include="..\HslCommunication_Net45\Profinet\Melsec\MelsecA1EDataType.cs">
       <Link>Profinet\Melsec\MelsecA1EDataType.cs</Link>

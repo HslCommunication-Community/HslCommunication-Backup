@@ -183,6 +183,7 @@
     <Compile Include="Core\IMessage\HslMessage.cs" />
     <Compile Include="Core\IMessage\INetMessage.cs" />
     <Compile Include="Core\IMessage\KukaVarProxyMessage.cs" />
+    <Compile Include="Core\IMessage\LsisFastEnetMessage.cs" />
     <Compile Include="Core\IMessage\MelsecA1EBinaryMessage.cs" />
     <Compile Include="Core\IMessage\MelsecQnA3EAsciiMessage.cs" />
     <Compile Include="Core\IMessage\MelsecQnA3EBinaryMessage.cs" />
@@ -283,6 +284,8 @@
     <Compile Include="Profinet\Keyence\KeyenceMcNet.cs" />
     <Compile Include="Profinet\Keyence\KeyenceNanoByteTransform.cs" />
     <Compile Include="Profinet\Keyence\KeyenceNanoSerial.cs" />
+    <Compile Include="Profinet\LSIS\LSCpuInfo.cs" />
+    <Compile Include="Profinet\LSIS\XGBFastEnet.cs" />
     <Compile Include="Profinet\Melsec\MelsecA1EDataType.cs" />
     <Compile Include="Profinet\Melsec\MelsecA1ENet.cs" />
     <Compile Include="Profinet\Melsec\MelsecA3CNet1.cs" />
