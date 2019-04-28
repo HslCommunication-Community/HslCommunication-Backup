@@ -216,6 +216,12 @@
     <Compile Include="PLC\FormS7Server.Designer.cs">
       <DependentUpon>FormS7Server.cs</DependentUpon>
     </Compile>
+    <Compile Include="PLC\FormLsisFEnet.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="PLC\FormLsisFEnet.Designer.cs">
+      <DependentUpon>FormLsisFEnet.cs</DependentUpon>
+    </Compile>
     <Compile Include="Redis\FormRedisSubscribe.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -486,6 +492,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="PLC\FormS7Server.resx">
       <DependentUpon>FormS7Server.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PLC\FormLsisFEnet.resx">
+      <DependentUpon>FormLsisFEnet.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Redis\FormRedisSubscribe.resx">
       <DependentUpon>FormRedisSubscribe.cs</DependentUpon>

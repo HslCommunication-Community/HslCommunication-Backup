@@ -9,20 +9,20 @@ using System.Windows.Forms;
 using HslCommunication.Profinet;
 using HslCommunication;
 using System.Threading;
-using HslCommunication.Profinet.Siemens;
+using HslCommunication.Profinet.LSIS;
 
 namespace HslCommunicationDemo
 {
-    public partial class FormSiemensFW : Form
+    public partial class FormLsisFEnet : Form
     {
-        public FormSiemensFW( )
+        public FormLsisFEnet( )
         {
             InitializeComponent( );
-            siemensFWNet = new SiemensFetchWriteNet( );
+            fastEnet = new XGBFastEnet( );
         }
 
 
-        private SiemensFetchWriteNet siemensFWNet = null;
+        private XGBFastEnet fastEnet = null;
 
         private void linkLabel1_LinkClicked( object sender, LinkLabelLinkClickedEventArgs e )
         {
@@ -55,11 +55,11 @@ namespace HslCommunicationDemo
         {
             if (language == 2)
             {
-                Text = "Siemens Read PLC Demo";
+                Text = "Lsis Read PLC Demo";
                 label2.Text = "Blogs:";
                 label4.Text = "Protocols:";
                 label20.Text = "Author:Richard Hu";
-                label5.Text = "Fetch/Write";
+                label5.Text = "Fast Enet";
 
                 label1.Text = "Ip:";
                 label3.Text = "Port:";
@@ -134,12 +134,12 @@ namespace HslCommunicationDemo
                 return;
             }
 
-            siemensFWNet.IpAddress = textBox1.Text;
-            siemensFWNet.Port = port;
+            fastEnet.IpAddress = textBox1.Text;
+            fastEnet.Port = port;
 
             try
             {
-                OperateResult connect = siemensFWNet.ConnectServer( );
+                OperateResult connect = fastEnet.ConnectServer( );
                 if (connect.IsSuccess)
                 {
                     MessageBox.Show( HslCommunication.StringResources.Language.ConnectedSuccess );
@@ -147,7 +147,7 @@ namespace HslCommunicationDemo
                     button1.Enabled = false;
                     panel2.Enabled = true;
 
-                    userControlCurve1.ReadWriteNet = siemensFWNet;
+                    userControlCurve1.ReadWriteNet = fastEnet;
                 }
                 else
                 {
@@ -163,7 +163,7 @@ namespace HslCommunicationDemo
         private void button2_Click( object sender, EventArgs e )
         {
             // 断开连接
-            siemensFWNet.ConnectClose( );
+            fastEnet.ConnectClose( );
             button2.Enabled = false;
             button1.Enabled = true;
             panel2.Enabled = false;
@@ -177,58 +177,58 @@ namespace HslCommunicationDemo
         private void button_read_byte_Click( object sender, EventArgs e )
         {
             // 读取byte变量
-            DemoUtils.ReadResultRender( siemensFWNet.ReadByte( textBox3.Text ), textBox3.Text, textBox4 );
+            DemoUtils.ReadResultRender( fastEnet.ReadByte( textBox3.Text ), textBox3.Text, textBox4 );
         }
         private void button_read_short_Click( object sender, EventArgs e )
         {
             // 读取short变量
-            DemoUtils.ReadResultRender( siemensFWNet.ReadInt16( textBox3.Text ), textBox3.Text, textBox4 );
+            DemoUtils.ReadResultRender( fastEnet.ReadInt16( textBox3.Text ), textBox3.Text, textBox4 );
         }
 
         private void button_read_ushort_Click( object sender, EventArgs e )
         {
             // 读取ushort变量
-            DemoUtils.ReadResultRender( siemensFWNet.ReadUInt16( textBox3.Text ), textBox3.Text, textBox4 );
+            DemoUtils.ReadResultRender( fastEnet.ReadUInt16( textBox3.Text ), textBox3.Text, textBox4 );
         }
 
         private void button_read_int_Click( object sender, EventArgs e )
         {
             // 读取int变量
-            DemoUtils.ReadResultRender( siemensFWNet.ReadInt32( textBox3.Text ), textBox3.Text, textBox4 );
+            DemoUtils.ReadResultRender( fastEnet.ReadInt32( textBox3.Text ), textBox3.Text, textBox4 );
         }
         private void button_read_uint_Click( object sender, EventArgs e )
         {
             // 读取uint变量
-            DemoUtils.ReadResultRender( siemensFWNet.ReadUInt32( textBox3.Text ), textBox3.Text, textBox4 );
+            DemoUtils.ReadResultRender( fastEnet.ReadUInt32( textBox3.Text ), textBox3.Text, textBox4 );
         }
         private void button_read_long_Click( object sender, EventArgs e )
         {
             // 读取long变量
-            DemoUtils.ReadResultRender( siemensFWNet.ReadInt64( textBox3.Text ), textBox3.Text, textBox4 );
+            DemoUtils.ReadResultRender( fastEnet.ReadInt64( textBox3.Text ), textBox3.Text, textBox4 );
         }
 
         private void button_read_ulong_Click( object sender, EventArgs e )
         {
             // 读取ulong变量
-            DemoUtils.ReadResultRender( siemensFWNet.ReadUInt64( textBox3.Text ), textBox3.Text, textBox4 );
+            DemoUtils.ReadResultRender( fastEnet.ReadUInt64( textBox3.Text ), textBox3.Text, textBox4 );
         }
 
         private void button_read_float_Click( object sender, EventArgs e )
         {
             // 读取float变量
-            DemoUtils.ReadResultRender( siemensFWNet.ReadFloat( textBox3.Text ), textBox3.Text, textBox4 );
+            DemoUtils.ReadResultRender( fastEnet.ReadFloat( textBox3.Text ), textBox3.Text, textBox4 );
         }
 
         private void button_read_double_Click( object sender, EventArgs e )
         {
             // 读取double变量
-            DemoUtils.ReadResultRender( siemensFWNet.ReadDouble( textBox3.Text ), textBox3.Text, textBox4 );
+            DemoUtils.ReadResultRender( fastEnet.ReadDouble( textBox3.Text ), textBox3.Text, textBox4 );
         }
 
         private void button_read_string_Click( object sender, EventArgs e )
         {
             // 读取字符串
-            DemoUtils.ReadResultRender( siemensFWNet.ReadString( textBox3.Text, ushort.Parse( textBox5.Text ) ), textBox3.Text, textBox4 );
+            DemoUtils.ReadResultRender( fastEnet.ReadString( textBox3.Text, ushort.Parse( textBox5.Text ) ), textBox3.Text, textBox4 );
         }
 
 
@@ -243,7 +243,7 @@ namespace HslCommunicationDemo
             // byte写入
             try
             {
-                DemoUtils.WriteResultRender( siemensFWNet.Write( textBox8.Text, byte.Parse( textBox7.Text ) ), textBox8.Text );
+                DemoUtils.WriteResultRender( fastEnet.Write( textBox8.Text, byte.Parse( textBox7.Text ) ), textBox8.Text );
             }
             catch (Exception ex)
             {
@@ -256,7 +256,7 @@ namespace HslCommunicationDemo
             // short写入
             try
             {
-                DemoUtils.WriteResultRender( siemensFWNet.Write( textBox8.Text, short.Parse( textBox7.Text ) ), textBox8.Text );
+                DemoUtils.WriteResultRender( fastEnet.Write( textBox8.Text, short.Parse( textBox7.Text ) ), textBox8.Text );
             }
             catch (Exception ex)
             {
@@ -269,7 +269,7 @@ namespace HslCommunicationDemo
             // ushort写入
             try
             {
-                DemoUtils.WriteResultRender( siemensFWNet.Write( textBox8.Text, ushort.Parse( textBox7.Text ) ), textBox8.Text );
+                DemoUtils.WriteResultRender( fastEnet.Write( textBox8.Text, ushort.Parse( textBox7.Text ) ), textBox8.Text );
             }
             catch (Exception ex)
             {
@@ -283,7 +283,7 @@ namespace HslCommunicationDemo
             // int写入
             try
             {
-                DemoUtils.WriteResultRender( siemensFWNet.Write( textBox8.Text, int.Parse( textBox7.Text ) ), textBox8.Text );
+                DemoUtils.WriteResultRender( fastEnet.Write( textBox8.Text, int.Parse( textBox7.Text ) ), textBox8.Text );
             }
             catch (Exception ex)
             {
@@ -296,7 +296,7 @@ namespace HslCommunicationDemo
             // uint写入
             try
             {
-                DemoUtils.WriteResultRender( siemensFWNet.Write( textBox8.Text, uint.Parse( textBox7.Text ) ), textBox8.Text );
+                DemoUtils.WriteResultRender( fastEnet.Write( textBox8.Text, uint.Parse( textBox7.Text ) ), textBox8.Text );
             }
             catch (Exception ex)
             {
@@ -309,7 +309,7 @@ namespace HslCommunicationDemo
             // long写入
             try
             {
-                DemoUtils.WriteResultRender( siemensFWNet.Write( textBox8.Text, long.Parse( textBox7.Text ) ), textBox8.Text );
+                DemoUtils.WriteResultRender( fastEnet.Write( textBox8.Text, long.Parse( textBox7.Text ) ), textBox8.Text );
             }
             catch (Exception ex)
             {
@@ -322,7 +322,7 @@ namespace HslCommunicationDemo
             // ulong写入
             try
             {
-                DemoUtils.WriteResultRender( siemensFWNet.Write( textBox8.Text, ulong.Parse( textBox7.Text ) ), textBox8.Text );
+                DemoUtils.WriteResultRender( fastEnet.Write( textBox8.Text, ulong.Parse( textBox7.Text ) ), textBox8.Text );
             }
             catch (Exception ex)
             {
@@ -335,7 +335,7 @@ namespace HslCommunicationDemo
             // float写入
             try
             {
-                DemoUtils.WriteResultRender( siemensFWNet.Write( textBox8.Text, float.Parse( textBox7.Text ) ), textBox8.Text );
+                DemoUtils.WriteResultRender( fastEnet.Write( textBox8.Text, float.Parse( textBox7.Text ) ), textBox8.Text );
             }
             catch (Exception ex)
             {
@@ -348,7 +348,7 @@ namespace HslCommunicationDemo
             // double写入
             try
             {
-                DemoUtils.WriteResultRender( siemensFWNet.Write( textBox8.Text, double.Parse( textBox7.Text ) ), textBox8.Text );
+                DemoUtils.WriteResultRender( fastEnet.Write( textBox8.Text, double.Parse( textBox7.Text ) ), textBox8.Text );
             }
             catch (Exception ex)
             {
@@ -362,7 +362,7 @@ namespace HslCommunicationDemo
             // string写入
             try
             {
-                DemoUtils.WriteResultRender( siemensFWNet.Write( textBox8.Text, textBox7.Text ), textBox8.Text );
+                DemoUtils.WriteResultRender( fastEnet.Write( textBox8.Text, textBox7.Text ), textBox8.Text );
             }
             catch (Exception ex)
             {
@@ -379,7 +379,7 @@ namespace HslCommunicationDemo
 
         private void button25_Click( object sender, EventArgs e )
         {
-            DemoUtils.BulkReadRenderResult( siemensFWNet, textBox6, textBox9, textBox10 );
+            DemoUtils.BulkReadRenderResult( fastEnet, textBox6, textBox9, textBox10 );
         }
 
 
@@ -391,7 +391,7 @@ namespace HslCommunicationDemo
 
         private void button26_Click( object sender, EventArgs e )
         {
-                OperateResult<byte[]> read = siemensFWNet.ReadFromCoreServer( HslCommunication.BasicFramework.SoftBasic.HexStringToBytes( textBox13.Text ) );
+                OperateResult<byte[]> read = fastEnet.ReadFromCoreServer( HslCommunication.BasicFramework.SoftBasic.HexStringToBytes( textBox13.Text ) );
                 if (read.IsSuccess)
                 {
                     textBox11.Text = "Result：" + HslCommunication.BasicFramework.SoftBasic.ByteToHexString( read.Content );
@@ -404,5 +404,6 @@ namespace HslCommunicationDemo
 
 
         #endregion
+        
     }
 }

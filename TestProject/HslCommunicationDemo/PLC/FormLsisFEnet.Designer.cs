@@ -1,6 +1,6 @@
 ﻿namespace HslCommunicationDemo
 {
-    partial class FormSiemensFW
+    partial class FormLsisFEnet
     {
         /// <summary>
         /// Required designer variable.
@@ -124,7 +124,7 @@
             this.label22.Name = "label22";
             this.label22.Size = new System.Drawing.Size(197, 45);
             this.label22.TabIndex = 7;
-            this.label22.Text = "M100  I100  Q100 DB100.20   T100 C100";
+            this.label22.Text = "M100  D100";
             // 
             // label21
             // 
@@ -162,7 +162,7 @@
             this.textBox2.Name = "textBox2";
             this.textBox2.Size = new System.Drawing.Size(141, 23);
             this.textBox2.TabIndex = 3;
-            this.textBox2.Text = "102";
+            this.textBox2.Text = "2004";
             // 
             // label3
             // 
@@ -711,10 +711,10 @@
             this.linkLabel1.AutoSize = true;
             this.linkLabel1.Location = new System.Drawing.Point(74, 9);
             this.linkLabel1.Name = "linkLabel1";
-            this.linkLabel1.Size = new System.Drawing.Size(287, 17);
+            this.linkLabel1.Size = new System.Drawing.Size(194, 17);
             this.linkLabel1.TabIndex = 3;
             this.linkLabel1.TabStop = true;
-            this.linkLabel1.Text = "http://www.cnblogs.com/dathlin/p/8685855.html";
+            this.linkLabel1.Text = "http://www.hslcommunication.cn";
             this.linkLabel1.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel1_LinkClicked);
             // 
             // label4
@@ -732,9 +732,9 @@
             this.label5.ForeColor = System.Drawing.Color.Red;
             this.label5.Location = new System.Drawing.Point(540, 9);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(134, 17);
+            this.label5.Size = new System.Drawing.Size(88, 17);
             this.label5.TabIndex = 5;
-            this.label5.Text = "西门子Fetch/Write协议";
+            this.label5.Text = "Fast Enet 协议";
             // 
             // label20
             // 
@@ -746,7 +746,7 @@
             this.label20.TabIndex = 6;
             this.label20.Text = "作者：Richard Hu";
             // 
-            // FormSiemensFW
+            // FormLsisFEnet
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 17F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -760,9 +760,9 @@
             this.Controls.Add(this.panel1);
             this.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.Name = "FormSiemensFW";
+            this.Name = "FormLsisFEnet";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "西门子PLC访问Demo";
+            this.Text = "LSIS PLC访问Demo";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormSiemens_FormClosing);
             this.Load += new System.EventHandler(this.FormSiemens_Load);
             this.panel1.ResumeLayout(false);

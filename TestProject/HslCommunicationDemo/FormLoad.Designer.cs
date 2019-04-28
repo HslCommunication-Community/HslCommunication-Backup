@@ -99,6 +99,7 @@
             this.rToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.简体中文ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.englishToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.论坛toolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.日志ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.verisonToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.免责条款ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -110,8 +111,9 @@
             this.button54 = new System.Windows.Forms.Button();
             this.button50 = new System.Windows.Forms.Button();
             this.button49 = new System.Windows.Forms.Button();
-            this.论坛toolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.label2 = new System.Windows.Forms.Label();
+            this.groupBox14 = new System.Windows.Forms.GroupBox();
+            this.button55 = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -126,6 +128,7 @@
             this.menuStrip1.SuspendLayout();
             this.groupBox12.SuspendLayout();
             this.groupBox13.SuspendLayout();
+            this.groupBox14.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupBox1
@@ -258,7 +261,7 @@
             this.groupBox2.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Padding = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.groupBox2.Size = new System.Drawing.Size(185, 319);
+            this.groupBox2.Size = new System.Drawing.Size(185, 225);
             this.groupBox2.TabIndex = 1;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Modbus";
@@ -933,6 +936,13 @@
             this.englishToolStripMenuItem.Text = "English";
             this.englishToolStripMenuItem.Click += new System.EventHandler(this.englishToolStripMenuItem_Click);
             // 
+            // 论坛toolStripMenuItem
+            // 
+            this.论坛toolStripMenuItem.Name = "论坛toolStripMenuItem";
+            this.论坛toolStripMenuItem.Size = new System.Drawing.Size(43, 21);
+            this.论坛toolStripMenuItem.Text = "BBS";
+            this.论坛toolStripMenuItem.Click += new System.EventHandler(this.论坛toolStripMenuItem_Click);
+            // 
             // 日志ToolStripMenuItem
             // 
             this.日志ToolStripMenuItem.Name = "日志ToolStripMenuItem";
@@ -1047,13 +1057,6 @@
             this.button49.UseVisualStyleBackColor = true;
             this.button49.Click += new System.EventHandler(this.button49_Click);
             // 
-            // 论坛toolStripMenuItem
-            // 
-            this.论坛toolStripMenuItem.Name = "论坛toolStripMenuItem";
-            this.论坛toolStripMenuItem.Size = new System.Drawing.Size(43, 21);
-            this.论坛toolStripMenuItem.Text = "BBS";
-            this.论坛toolStripMenuItem.Click += new System.EventHandler(this.论坛toolStripMenuItem_Click);
-            // 
             // label2
             // 
             this.label2.BackColor = System.Drawing.Color.LightSeaGreen;
@@ -1065,12 +1068,36 @@
             this.label2.Text = "如果你有什么问题，可以先去论坛看看";
             this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
+            // groupBox14
+            // 
+            this.groupBox14.Controls.Add(this.button55);
+            this.groupBox14.Location = new System.Drawing.Point(395, 253);
+            this.groupBox14.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.groupBox14.Name = "groupBox14";
+            this.groupBox14.Padding = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.groupBox14.Size = new System.Drawing.Size(185, 95);
+            this.groupBox14.TabIndex = 30;
+            this.groupBox14.TabStop = false;
+            this.groupBox14.Text = "LSIS PLC";
+            // 
+            // button55
+            // 
+            this.button55.Location = new System.Drawing.Point(19, 18);
+            this.button55.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.button55.Name = "button55";
+            this.button55.Size = new System.Drawing.Size(150, 32);
+            this.button55.TabIndex = 0;
+            this.button55.Text = "XGT Fast Enet";
+            this.button55.UseVisualStyleBackColor = true;
+            this.button55.Click += new System.EventHandler(this.Button55_Click);
+            // 
             // FormLoad
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 17F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.AliceBlue;
             this.ClientSize = new System.Drawing.Size(980, 684);
+            this.Controls.Add(this.groupBox14);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.groupBox13);
             this.Controls.Add(this.groupBox12);
@@ -1110,6 +1137,7 @@
             this.menuStrip1.PerformLayout();
             this.groupBox12.ResumeLayout(false);
             this.groupBox13.ResumeLayout(false);
+            this.groupBox14.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1201,6 +1229,8 @@
         private System.Windows.Forms.Button button54;
         private System.Windows.Forms.ToolStripMenuItem 论坛toolStripMenuItem;
         private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.GroupBox groupBox14;
+        private System.Windows.Forms.Button button55;
     }
 }
 
