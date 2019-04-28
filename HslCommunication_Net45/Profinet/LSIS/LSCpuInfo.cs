@@ -16,4 +16,12 @@ namespace HslCommunication.Profinet.LSIS
         XGB_MK,
         XGB_IEC,
     }
+
+    public enum LSCpuStatus
+    {
+        RUN = 1,
+        STOP,
+        ERROR,
+        DEBUG
+    }
 }
