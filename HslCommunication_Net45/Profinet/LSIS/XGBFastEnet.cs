@@ -180,7 +180,7 @@ namespace HslCommunication.Profinet.LSIS
             {
                 count += command[i];
             }
-            command[19] = BitConverter.GetBytes( count )[0];
+            command[19] = (byte)count;
 
             coreCommand.CopyTo( command, 20 );
 

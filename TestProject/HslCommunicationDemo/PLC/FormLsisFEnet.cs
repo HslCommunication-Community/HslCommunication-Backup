@@ -134,8 +134,15 @@ namespace HslCommunicationDemo
                 return;
             }
 
+            if(!byte.TryParse(textBox12.Text, out byte slot ))
+            {
+                MessageBox.Show( DemoUtils.SlotInputWrong );
+                return;
+            }
+
             fastEnet.IpAddress = textBox1.Text;
             fastEnet.Port = port;
+            fastEnet.SlotNo = slot;
 
             try
             {

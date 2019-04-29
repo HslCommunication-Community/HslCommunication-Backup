@@ -91,6 +91,8 @@
             this.label4 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.label20 = new System.Windows.Forms.Label();
+            this.textBox12 = new System.Windows.Forms.TextBox();
+            this.label15 = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.groupBox4.SuspendLayout();
@@ -104,6 +106,8 @@
             this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel1.Controls.Add(this.textBox12);
+            this.panel1.Controls.Add(this.label15);
             this.panel1.Controls.Add(this.label22);
             this.panel1.Controls.Add(this.label21);
             this.panel1.Controls.Add(this.button2);
@@ -158,16 +162,16 @@
             // 
             // textBox2
             // 
-            this.textBox2.Location = new System.Drawing.Point(305, 14);
+            this.textBox2.Location = new System.Drawing.Point(263, 14);
             this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(141, 23);
+            this.textBox2.Size = new System.Drawing.Size(80, 23);
             this.textBox2.TabIndex = 3;
             this.textBox2.Text = "2004";
             // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(251, 17);
+            this.label3.Location = new System.Drawing.Point(209, 17);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(56, 17);
             this.label3.TabIndex = 2;
@@ -746,6 +750,23 @@
             this.label20.TabIndex = 6;
             this.label20.Text = "作者：Richard Hu";
             // 
+            // textBox12
+            // 
+            this.textBox12.Location = new System.Drawing.Point(403, 14);
+            this.textBox12.Name = "textBox12";
+            this.textBox12.Size = new System.Drawing.Size(53, 23);
+            this.textBox12.TabIndex = 9;
+            this.textBox12.Text = "3";
+            // 
+            // label15
+            // 
+            this.label15.AutoSize = true;
+            this.label15.Location = new System.Drawing.Point(349, 17);
+            this.label15.Name = "label15";
+            this.label15.Size = new System.Drawing.Size(42, 17);
+            this.label15.TabIndex = 8;
+            this.label15.Text = "Slot：";
+            // 
             // FormLsisFEnet
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 17F);
@@ -846,5 +867,7 @@
         private System.Windows.Forms.Label label22;
         private System.Windows.Forms.Label label21;
         private DemoControl.UserControlCurve userControlCurve1;
+        private System.Windows.Forms.TextBox textBox12;
+        private System.Windows.Forms.Label label15;
     }
 }
