@@ -22,9 +22,9 @@ namespace HslCommunication.Profinet.LSIS
         /// </summary>
         public XGBFastEnet( )
         {
-            WordLength     = 2;
-            IpAddress      = string.Empty;
-            Port           = 2004;
+            WordLength = 2;
+            IpAddress = string.Empty;
+            Port = 2004;
         }
 
         /// <summary>
@@ -34,9 +34,9 @@ namespace HslCommunication.Profinet.LSIS
         /// <param name="port">the port of the plc, default is 2004</param>
         public XGBFastEnet( string ipAddress, int port )
         {
-            WordLength     = 2;
-            IpAddress      = ipAddress;
-            Port           = port;
+            WordLength = 2;
+            IpAddress = ipAddress;
+            Port = port;
         }
 
         #endregion
@@ -135,9 +135,9 @@ namespace HslCommunication.Profinet.LSIS
         /// </summary>
         /// <param name="address">Start address</param>
         /// <returns>result</returns>
-        public OperateResult<byte> ReadByte(string address )
+        public OperateResult<byte> ReadByte( string address )
         {
-            var read = Read( address, 1 );
+            var read = Read( address, 2 );
             if (!read.IsSuccess) return OperateResult.CreateFailedResult<byte>( read );
 
             return OperateResult.CreateSuccessResult( read.Content[0] );
@@ -149,7 +149,7 @@ namespace HslCommunication.Profinet.LSIS
         /// <param name="address">Start address</param>
         /// <param name="value">value</param>
         /// <returns>Whether to write the successful</returns>
-        public OperateResult Write(string address, byte value )
+        public OperateResult Write( string address, byte value )
         {
             return Write( address, new byte[] { value } );
         }
@@ -158,17 +158,17 @@ namespace HslCommunication.Profinet.LSIS
 
         #region Private Member
 
-        private byte[] PackCommand(byte[] coreCommand )
+        private byte[] PackCommand( byte[] coreCommand )
         {
             byte[] command = new byte[coreCommand.Length + 20];
             Encoding.ASCII.GetBytes( CompanyID1 ).CopyTo( command, 0 );
             switch (cpuInfo)
             {
-                case LSCpuInfo.XGK:         command[12] = 0xA0; break;
-                case LSCpuInfo.XGI:         command[12] = 0xA4; break;
-                case LSCpuInfo.XGR:         command[12] = 0xA8; break;
-                case LSCpuInfo.XGB_MK:      command[12] = 0xB0; break;
-                case LSCpuInfo.XGB_IEC:     command[12] = 0xB4; break;
+                case LSCpuInfo.XGK: command[12] = 0xA0; break;
+                case LSCpuInfo.XGI: command[12] = 0xA4; break;
+                case LSCpuInfo.XGR: command[12] = 0xA8; break;
+                case LSCpuInfo.XGB_MK: command[12] = 0xB0; break;
+                case LSCpuInfo.XGB_IEC: command[12] = 0xB4; break;
                 default: break;
             }
             command[13] = 0x33;
@@ -183,6 +183,8 @@ namespace HslCommunication.Profinet.LSIS
             command[19] = BitConverter.GetBytes( count )[0];
 
             coreCommand.CopyTo( command, 20 );
+
+            string hex = SoftBasic.ByteToHexString( command, ' ' );
             return command;
         }
 
@@ -200,7 +202,7 @@ namespace HslCommunication.Profinet.LSIS
 
         #region Static Helper
 
-        private static OperateResult<string> AnalysisAddress(string address )
+        private static OperateResult<string> AnalysisAddress( string address )
         {
             StringBuilder sb = new StringBuilder( );
             try
@@ -245,6 +247,90 @@ namespace HslCommunication.Profinet.LSIS
                     {
                         sb.Append( int.Parse( address.Substring( 1 ) ) );
                     }
+                }
+                else if (address[0] == 'T')
+                {
+                    sb.Append( "TB" );
+                    if (address[1] == 'B')
+                    {
+                        sb.Append( int.Parse( address.Substring( 2 ) ) );
+                    }
+                    else if (address[1] == 'W')
+                    {
+                        sb.Append( int.Parse( address.Substring( 2 ) ) * 2 );
+                    }
+                    else if (address[1] == 'D')
+                    {
+                        sb.Append( int.Parse( address.Substring( 2 ) ) * 4 );
+                    }
+                    else
+                    {
+                        sb.Append( int.Parse( address.Substring( 1 ) ) );
+                    }
+                }
+                else if (address[0] == 'C')
+                {
+                    sb.Append( "CB" );
+                    if (address[1] == 'B')
+                    {
+                        sb.Append( int.Parse( address.Substring( 2 ) ) );
+                    }
+                    else if (address[1] == 'W')
+                    {
+                        sb.Append( int.Parse( address.Substring( 2 ) ) * 2 );
+                    }
+                    else if (address[1] == 'D')
+                    {
+                        sb.Append( int.Parse( address.Substring( 2 ) ) * 4 );
+                    }
+                    else
+                    {
+                        sb.Append( int.Parse( address.Substring( 1 ) ) );
+                    }
+                }
+                else if (address[0] == 'I')
+                {
+                    sb.Append( "IB" );
+                    if (address[1] == 'B')
+                    {
+                        sb.Append( int.Parse( address.Substring( 2 ) ) );
+                    }
+                    else if (address[1] == 'W')
+                    {
+                        sb.Append( int.Parse( address.Substring( 2 ) ) * 2 );
+                    }
+                    else if (address[1] == 'D')
+                    {
+                        sb.Append( int.Parse( address.Substring( 2 ) ) * 4 );
+                    }
+                    else
+                    {
+                        sb.Append( int.Parse( address.Substring( 1 ) ) );
+                    }
+                }
+                else if (address[0] == 'Q')
+                {
+                    sb.Append( "QB" );
+                    if (address[1] == 'B')
+                    {
+                        sb.Append( int.Parse( address.Substring( 2 ) ) );
+                    }
+                    else if (address[1] == 'W')
+                    {
+                        sb.Append( int.Parse( address.Substring( 2 ) ) * 2 );
+                    }
+                    else if (address[1] == 'D')
+                    {
+                        sb.Append( int.Parse( address.Substring( 2 ) ) * 4 );
+                    }
+                    else
+                    {
+                        sb.Append( int.Parse( address.Substring( 1 ) ) );
+                    }
+                }
+                else
+                {
+                    throw new Exception( StringResources.Language.NotSupportedDataType );
                 }
             }
             catch (Exception ex)
@@ -329,7 +415,7 @@ namespace HslCommunication.Profinet.LSIS
 
             if (response.Length < 28) return new OperateResult<byte[]>( "Length is less than 28:" + SoftBasic.ByteToHexString( response ) );
             ushort error = BitConverter.ToUInt16( response, 26 );
-            if(error > 0) return new OperateResult<byte[]>( error, "Error:" + SoftBasic.ByteToHexString( response ) );
+            if (error > 0) return new OperateResult<byte[]>( error, "Error:" + SoftBasic.ByteToHexString( response ) );
 
             if (response[20] == 0x59) return OperateResult.CreateSuccessResult( new byte[0] );  // write
 
@@ -353,12 +439,12 @@ namespace HslCommunication.Profinet.LSIS
 
         #endregion
 
-            #region Override
+        #region Override
 
-            /// <summary>
-            /// 返回表示当前对象的字符串
-            /// </summary>
-            /// <returns>字符串</returns>
+        /// <summary>
+        /// 返回表示当前对象的字符串
+        /// </summary>
+        /// <returns>字符串</returns>
         public override string ToString( )
         {
             return base.ToString( );

@@ -73,6 +73,26 @@ namespace HslCommunication.Robot.YASKAWA
 
         #endregion
 
+        #region Initialization Override
+
+        /// <summary>
+        /// before read data , the connection should be Initialized
+        /// </summary>
+        /// <param name="socket">connected socket</param>
+        /// <returns>whether is the Initialization is success.</returns>
+        protected override OperateResult InitializationOnConnect( Socket socket )
+        {
+            var read = ReadFromCoreServer( socket, "CONNECT Robot_access KeepAlive:-1\r\n" );
+            if (!read.IsSuccess) return read;
+
+            if (read.Content != "OK:YR Information Server(Ver) Keep-Alive:-1.\r\n")
+                return new OperateResult( read.Content );
+
+            return OperateResult.CreateSuccessResult( );
+        }
+
+        #endregion
+
         #region Override Read
 
         /// <summary>
@@ -105,11 +125,23 @@ namespace HslCommunication.Robot.YASKAWA
             return OperateResult.CreateSuccessResult( resultReceive.Content );
         }
 
+        /// <summary>
+        /// Read string value from socket
+        /// </summary>
+        /// <param name="socket">connected socket</param>
+        /// <param name="send">string value</param>
+        /// <returns>received string value with is successfully</returns>
+        public OperateResult<string> ReadFromCoreServer( Socket socket, string send )
+        {
+            var read = ReadFromCoreServer( socket, Encoding.Default.GetBytes( send ) );
+            if (!read.IsSuccess) return OperateResult.CreateFailedResult<string>( read );
+
+            return OperateResult.CreateSuccessResult( Encoding.Default.GetString( read.Content ) );
+        }
+
         #endregion
 
         #region Private Member
-
-        private string connectStr = "CONNECT Robot_access KeepAlive:-1\r\n";
 
         #endregion
     }
