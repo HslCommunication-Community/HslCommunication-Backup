@@ -50,30 +50,52 @@ namespace HslCommunication.BasicFramework
         /// <summary>
         /// 设置指定的位置的数据块，如果超出，则丢弃数据
         /// </summary>
-        /// <param name="value">数据块信息</param>
+        /// <param name="value">bool值</param>
         /// <param name="destIndex">目标存储的索引</param>
+        /// <exception cref="IndexOutOfRangeException"></exception>
         public void SetBool( bool value, int destIndex )
         {
-            if (destIndex < capacity * 8 && destIndex >= 0 )
-            {
-                hybirdLock.Enter( );
-
-                int byteIndex = destIndex / 8;
-                int offect = destIndex % 8;
-
-                if (value)
-                {
-                    buffer[byteIndex] = (byte)(buffer[byteIndex] | getOrByte( offect ));
-                }
-                else
-                {
-                    buffer[byteIndex] = (byte)(buffer[byteIndex] & getAndByte( offect ));
-                }
-
-                hybirdLock.Leave( );
-            }
+            SetBool( new bool[] { value }, destIndex );
         }
 
+        /// <summary>
+        /// 设置指定的位置的数据块，如果超出，则丢弃数据
+        /// </summary>
+        /// <param name="value">bool数组值</param>
+        /// <param name="destIndex">目标存储的索引</param>
+        /// <exception cref="IndexOutOfRangeException"></exception>
+        public void SetBool( bool[] value, int destIndex )
+        {
+            if (value != null)
+            {
+                try
+                {
+                    hybirdLock.Enter( );
+                    for (int i = 0; i < value.Length; i++)
+                    {
+                        int byteIndex = (destIndex + i) / 8;
+                        int offect = (destIndex + i) % 8;
+
+                        if (value[i])
+                        {
+                            buffer[byteIndex] = (byte)(buffer[byteIndex] | getOrByte( offect ));
+                        }
+                        else
+                        {
+                            buffer[byteIndex] = (byte)(buffer[byteIndex] & getAndByte( offect ));
+                        }
+                    }
+
+                    hybirdLock.Leave( );
+                }
+                catch
+                {
+                    hybirdLock.Leave( );
+                    throw;
+                }
+            }
+
+        }
 
         /// <summary>
         /// 获取指定的位置的bool值，如果超出，则引发异常
@@ -83,23 +105,37 @@ namespace HslCommunication.BasicFramework
         /// <exception cref="IndexOutOfRangeException"></exception>
         public bool GetBool( int destIndex )
         {
-            bool result = false;
-            if (destIndex < capacity * 8 && destIndex >= 0)
+            return GetBool( destIndex, 1 )[0];
+        }
+
+        /// <summary>
+        /// 获取指定位置的bool数组值，如果超过，则引发异常
+        /// </summary>
+        /// <param name="destIndex">目标存储的索引</param>
+        /// <param name="length">读取的数组长度</param>
+        /// <exception cref="IndexOutOfRangeException"></exception>
+        /// <returns>bool数组值</returns>
+        public bool[] GetBool( int destIndex, int length )
+        {
+            bool[] result = new bool[length];
+            try
             {
                 hybirdLock.Enter( );
+                for (int i = 0; i < length; i++)
+                {
+                    int byteIndex = (destIndex + i) / 8;
+                    int offect = (destIndex + i) % 8;
 
-                int byteIndex = destIndex / 8;
-                int offect = destIndex % 8;
-
-                result = (buffer[byteIndex] & getOrByte( offect )) == getOrByte( offect );
+                    result[i] = (buffer[byteIndex] & getOrByte( offect )) == getOrByte( offect );
+                }
 
                 hybirdLock.Leave( );
             }
-            else
+            catch
             {
-                throw new IndexOutOfRangeException( "destIndex" );
+                hybirdLock.Leave( );
+                throw;
             }
-
             return result;
         }
 

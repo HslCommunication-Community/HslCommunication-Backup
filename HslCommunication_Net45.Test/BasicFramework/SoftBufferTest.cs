@@ -49,6 +49,16 @@ namespace HslCommunication_Net45.Test.BasicFramework
 
             softBuffer.SetBool( true, 8 );
             Assert.IsTrue( softBuffer.GetByte( 1 ) == 0x01 );
+
+            softBuffer.SetBool( new bool[] { true, true, false, false, true, false, true }, 3451 );
+            bool[] data = softBuffer.GetBool( 3451, 7 );
+            Assert.IsTrue( data[0] );
+            Assert.IsTrue( data[1] );
+            Assert.IsFalse( data[2] );
+            Assert.IsFalse( data[3] );
+            Assert.IsTrue( data[4] );
+            Assert.IsFalse( data[5] );
+            Assert.IsTrue( data[6] );
         }
 
         [TestMethod]
