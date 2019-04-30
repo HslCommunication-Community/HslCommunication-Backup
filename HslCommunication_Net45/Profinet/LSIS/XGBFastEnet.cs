@@ -204,134 +204,44 @@ namespace HslCommunication.Profinet.LSIS
 
         private static OperateResult<string> AnalysisAddress( string address )
         {
+            // P,M,L,K,F,T
+            // P,M,L,K,F,T,C,D,S
             StringBuilder sb = new StringBuilder( );
             try
             {
                 sb.Append( "%" );
-                if (address[0] == 'D')
+                char[] types = new char[] { 'P', 'M', 'L', 'K', 'F', 'T', 'C', 'D', 'S' };
+                bool exsist = false;
+
+                for (int i = 0; i < types.Length; i++)
                 {
-                    sb.Append( "DB" );
-                    if (address[1] == 'B')
+                    if (types[i] == address[0])
                     {
-                        sb.Append( int.Parse( address.Substring( 2 ) ) );
-                    }
-                    else if (address[1] == 'W')
-                    {
-                        sb.Append( int.Parse( address.Substring( 2 ) ) * 2 );
-                    }
-                    else if (address[1] == 'D')
-                    {
-                        sb.Append( int.Parse( address.Substring( 2 ) ) * 4 );
-                    }
-                    else
-                    {
-                        sb.Append( int.Parse( address.Substring( 1 ) ) );
+                        sb.Append( types[i] );
+                        sb.Append( "B" );
+                        if (address[1] == 'B')
+                        {
+                            sb.Append( int.Parse( address.Substring( 2 ) ) );
+                        }
+                        else if (address[1] == 'W')
+                        {
+                            sb.Append( int.Parse( address.Substring( 2 ) ) * 2 );
+                        }
+                        else if (address[1] == 'D')
+                        {
+                            sb.Append( int.Parse( address.Substring( 2 ) ) * 4 );
+                        }
+                        else
+                        {
+                            sb.Append( int.Parse( address.Substring( 1 ) ) );
+                        }
+
+                        exsist = true;
+                        break;
                     }
                 }
-                else if (address[0] == 'M')
-                {
-                    sb.Append( "MB" );
-                    if (address[1] == 'B')
-                    {
-                        sb.Append( int.Parse( address.Substring( 2 ) ) );
-                    }
-                    else if (address[1] == 'W')
-                    {
-                        sb.Append( int.Parse( address.Substring( 2 ) ) * 2 );
-                    }
-                    else if (address[1] == 'D')
-                    {
-                        sb.Append( int.Parse( address.Substring( 2 ) ) * 4 );
-                    }
-                    else
-                    {
-                        sb.Append( int.Parse( address.Substring( 1 ) ) );
-                    }
-                }
-                else if (address[0] == 'T')
-                {
-                    sb.Append( "TB" );
-                    if (address[1] == 'B')
-                    {
-                        sb.Append( int.Parse( address.Substring( 2 ) ) );
-                    }
-                    else if (address[1] == 'W')
-                    {
-                        sb.Append( int.Parse( address.Substring( 2 ) ) * 2 );
-                    }
-                    else if (address[1] == 'D')
-                    {
-                        sb.Append( int.Parse( address.Substring( 2 ) ) * 4 );
-                    }
-                    else
-                    {
-                        sb.Append( int.Parse( address.Substring( 1 ) ) );
-                    }
-                }
-                else if (address[0] == 'C')
-                {
-                    sb.Append( "CB" );
-                    if (address[1] == 'B')
-                    {
-                        sb.Append( int.Parse( address.Substring( 2 ) ) );
-                    }
-                    else if (address[1] == 'W')
-                    {
-                        sb.Append( int.Parse( address.Substring( 2 ) ) * 2 );
-                    }
-                    else if (address[1] == 'D')
-                    {
-                        sb.Append( int.Parse( address.Substring( 2 ) ) * 4 );
-                    }
-                    else
-                    {
-                        sb.Append( int.Parse( address.Substring( 1 ) ) );
-                    }
-                }
-                else if (address[0] == 'I')
-                {
-                    sb.Append( "IB" );
-                    if (address[1] == 'B')
-                    {
-                        sb.Append( int.Parse( address.Substring( 2 ) ) );
-                    }
-                    else if (address[1] == 'W')
-                    {
-                        sb.Append( int.Parse( address.Substring( 2 ) ) * 2 );
-                    }
-                    else if (address[1] == 'D')
-                    {
-                        sb.Append( int.Parse( address.Substring( 2 ) ) * 4 );
-                    }
-                    else
-                    {
-                        sb.Append( int.Parse( address.Substring( 1 ) ) );
-                    }
-                }
-                else if (address[0] == 'Q')
-                {
-                    sb.Append( "QB" );
-                    if (address[1] == 'B')
-                    {
-                        sb.Append( int.Parse( address.Substring( 2 ) ) );
-                    }
-                    else if (address[1] == 'W')
-                    {
-                        sb.Append( int.Parse( address.Substring( 2 ) ) * 2 );
-                    }
-                    else if (address[1] == 'D')
-                    {
-                        sb.Append( int.Parse( address.Substring( 2 ) ) * 4 );
-                    }
-                    else
-                    {
-                        sb.Append( int.Parse( address.Substring( 1 ) ) );
-                    }
-                }
-                else
-                {
-                    throw new Exception( StringResources.Language.NotSupportedDataType );
-                }
+
+                if(!exsist) throw new Exception( StringResources.Language.NotSupportedDataType );
             }
             catch (Exception ex)
             {
@@ -391,8 +301,8 @@ namespace HslCommunication.Profinet.LSIS
         /// <summary>
         /// 返回真是的数据内容，支持读写返回
         /// </summary>
-        /// <param name="response"></param>
-        /// <returns></returns>
+        /// <param name="response">response data</param>
+        /// <returns>real data</returns>
         public OperateResult<byte[]> ExtractActualData( byte[] response )
         {
             if (response.Length < 20) return new OperateResult<byte[]>( "Length is less than 20:" + SoftBasic.ByteToHexString( response ) );
@@ -415,7 +325,7 @@ namespace HslCommunication.Profinet.LSIS
 
             if (response.Length < 28) return new OperateResult<byte[]>( "Length is less than 28:" + SoftBasic.ByteToHexString( response ) );
             ushort error = BitConverter.ToUInt16( response, 26 );
-            if (error > 0) return new OperateResult<byte[]>( error, "Error:" + SoftBasic.ByteToHexString( response ) );
+            if (error > 0) return new OperateResult<byte[]>( response[28], "Error:" + GetErrorDesciption( response[28] ) );
 
             if (response[20] == 0x59) return OperateResult.CreateSuccessResult( new byte[0] );  // write
 
@@ -435,6 +345,39 @@ namespace HslCommunication.Profinet.LSIS
             }
 
             return new OperateResult<byte[]>( StringResources.Language.NotSupportedFunction );
+        }
+
+        /// <summary>
+        /// get the description of the error code meanning
+        /// </summary>
+        /// <param name="code">code value</param>
+        /// <returns>string information</returns>
+        public static string GetErrorDesciption(byte code )
+        {
+            switch (code)
+            {
+                case 0: return "Normal";
+                case 1: return "Physical layer error (TX, RX unavailable)";
+                case 3: return "There is no identifier of Function Block to receive in communication channel";
+                case 4: return "Mismatch of data type";
+                case 5: return "Reset is received from partner station";
+                case 6: return "Communication instruction of partner station is not ready status";
+                case 7: return "Device status of remote station is not desirable status";
+                case 8: return "Access to some target is not available";
+                case 9: return "Can’ t deal with communication instruction of partner station by too many reception";
+                case 10: return "Time Out error";
+                case 11: return "Structure error";
+                case 12: return "Abort";
+                case 13: return "Reject(local/remote)";
+                case 14: return "Communication channel establishment error (Connect/Disconnect)";
+                case 15: return "High speed communication and connection service error";
+                case 33: return "Can’t find variable identifier";
+                case 34: return "Address error";
+                case 50: return "Response error";
+                case 113: return "Object Access Unsupported";
+                case 187: return "Unknown error code (communication code of other company) is received";
+                default: return "Unknown error";
+            }
         }
 
         #endregion
