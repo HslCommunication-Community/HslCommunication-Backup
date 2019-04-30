@@ -200,7 +200,7 @@ namespace HslCommunication.BasicFramework
                 hybirdLock.Leave( );
             }
         }
-        
+
         /// <summary>
         /// 设置指定的位置的数据块，如果超出，则丢弃数据
         /// </summary>
