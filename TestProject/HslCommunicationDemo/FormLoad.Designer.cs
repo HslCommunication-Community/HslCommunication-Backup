@@ -114,6 +114,7 @@
             this.label2 = new System.Windows.Forms.Label();
             this.groupBox14 = new System.Windows.Forms.GroupBox();
             this.button55 = new System.Windows.Forms.Button();
+            this.button56 = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -323,6 +324,7 @@
             // 
             // groupBox3
             // 
+            this.groupBox3.Controls.Add(this.button56);
             this.groupBox3.Controls.Add(this.button47);
             this.groupBox3.Controls.Add(this.button38);
             this.groupBox3.Controls.Add(this.button32);
@@ -1091,6 +1093,17 @@
             this.button55.UseVisualStyleBackColor = true;
             this.button55.Click += new System.EventHandler(this.Button55_Click);
             // 
+            // button56
+            // 
+            this.button56.Location = new System.Drawing.Point(15, 264);
+            this.button56.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.button56.Name = "button56";
+            this.button56.Size = new System.Drawing.Size(150, 32);
+            this.button56.TabIndex = 7;
+            this.button56.Text = "Mc Virtual Server";
+            this.button56.UseVisualStyleBackColor = true;
+            this.button56.Click += new System.EventHandler(this.Button56_Click);
+            // 
             // FormLoad
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 17F);
@@ -1231,6 +1244,7 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.GroupBox groupBox14;
         private System.Windows.Forms.Button button55;
+        private System.Windows.Forms.Button button56;
     }
 }
 

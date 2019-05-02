@@ -586,6 +586,9 @@
     <Compile Include="..\HslCommunication_Net45\Profinet\Melsec\MelsecMcNet.cs">
       <Link>Profinet\Melsec\MelsecMcNet.cs</Link>
     </Compile>
+    <Compile Include="..\HslCommunication_Net45\Profinet\Melsec\MelsecMcServer.cs">
+      <Link>Profinet\Melsec\MelsecMcServer.cs</Link>
+    </Compile>
     <Compile Include="..\HslCommunication_Net45\Profinet\Melsec\MelsecNetMultiAsync.cs">
       <Link>Profinet\Melsec\MelsecNetMultiAsync.cs</Link>
     </Compile>

@@ -31,8 +31,6 @@ namespace HslCommunication.Profinet.Melsec
 
             WordLength = 1;
             ByteTransform = new RegularByteTransform( );
-            lockOnlineClient = new SimpleHybirdLock( );
-            listsOnlineClient = new List<AppSession>( );
         }
 
         #endregion
@@ -111,12 +109,12 @@ namespace HslCommunication.Profinet.Melsec
             }
             else if (analysis.Content1.DataCode == MelsecMcDataType.D.DataCode)
             {
-                dBuffer.SetBytes( value, analysis.Content2 );
+                dBuffer.SetBytes( value, analysis.Content2 * 2 );
                 return OperateResult.CreateSuccessResult( );
             }
             else if (analysis.Content1.DataCode == MelsecMcDataType.W.DataCode)
             {
-                wBuffer.SetBytes( value, analysis.Content2 );
+                wBuffer.SetBytes( value, analysis.Content2 * 2 );
                 return OperateResult.CreateSuccessResult( );
             }
             else
@@ -220,41 +218,6 @@ namespace HslCommunication.Profinet.Melsec
 
         #endregion
 
-        #region Online Managment
-
-        private List<AppSession> listsOnlineClient;
-        private SimpleHybirdLock lockOnlineClient;
-
-        private void AddClient( AppSession modBusState )
-        {
-            lockOnlineClient.Enter( );
-            listsOnlineClient.Add( modBusState );
-            lockOnlineClient.Leave( );
-        }
-
-        private void RemoveClient( AppSession modBusState )
-        {
-            lockOnlineClient.Enter( );
-            listsOnlineClient.Remove( modBusState );
-            lockOnlineClient.Leave( );
-        }
-
-        /// <summary>
-        /// 关闭之后进行的操作
-        /// </summary>
-        protected override void CloseAction( )
-        {
-            lockOnlineClient.Enter( );
-            for (int i = 0; i < listsOnlineClient.Count; i++)
-            {
-                listsOnlineClient[i]?.WorkSocket?.Close( );
-            }
-            listsOnlineClient.Clear( );
-            lockOnlineClient.Leave( );
-        }
-
-        #endregion
-
         #region NetServer Override
 
         /// <summary>
@@ -271,7 +234,6 @@ namespace HslCommunication.Profinet.Melsec
             try
             {
                 socket.BeginReceive( new byte[0], 0, 0, SocketFlags.None, new AsyncCallback( SocketAsyncCallBack ), appSession );
-                System.Threading.Interlocked.Increment( ref onlineCount );
                 AddClient( appSession );
             }
             catch
@@ -294,6 +256,7 @@ namespace HslCommunication.Profinet.Melsec
                     if (!read1.IsSuccess)
                     {
                         LogNet?.WriteDebug( ToString( ), string.Format( StringResources.Language.ClientOfflineInfo, session.IpEndPoint ) );
+                        RemoveClient( session );
                         return;
                     };
 
@@ -302,12 +265,12 @@ namespace HslCommunication.Profinet.Melsec
                     if (receive[11] == 0x01 && receive[12] == 0x04)
                     {
                         // 读数据
-                        // session.WorkSocket.Send( ReadByMessage( receive ) );
+                        session.WorkSocket.Send( PackCommand( ReadByCommand( SoftBasic.BytesArrayRemoveBegin( receive, 11 ) ) ) );
                     }
                     else if (receive[11] == 0x01 && receive[12] == 0x14)
                     {
                         // 写数据
-                        // session.WorkSocket.Send( WriteByMessage( receive ) );
+                        session.WorkSocket.Send( PackCommand( WriteByMessage( SoftBasic.BytesArrayRemoveBegin( receive, 11 ) ) ) );
                     }
                     else
                     {
@@ -322,125 +285,157 @@ namespace HslCommunication.Profinet.Melsec
                     // 关闭连接，记录日志
                     session.WorkSocket?.Close( );
                     LogNet?.WriteDebug( ToString( ), string.Format( StringResources.Language.ClientOfflineInfo, session.IpEndPoint ) );
-                    System.Threading.Interlocked.Decrement( ref onlineCount );
                     RemoveClient( session );
                     return;
                 }
             }
         }
 
-        //private byte[] ReadByMessage( byte[] packCommand )
-        //{
-        //    List<byte> content = new List<byte>( );
-        //    int count = packCommand[18];
-        //    int index = 19;
-        //    for (int i = 0; i < count; i++)
-        //    {
-        //        byte length = packCommand[index + 1];
-        //        byte[] command = ByteTransform.TransByte( packCommand, index, length + 2 );
-        //        index += length + 2;
+        private byte[] PackCommand( byte[] data )
+        {
+            byte[] back = new byte[11 + data.Length];
+            SoftBasic.HexStringToBytes( "D0 00 00 FF FF 03 00 00 00 00 00" ).CopyTo( back, 0 );
+            if (data.Length > 0) data.CopyTo( back, 11 );
 
-        //        content.AddRange( ReadByCommand( command ) );
-        //    }
+            BitConverter.GetBytes( (short)(data.Length + 2) ).CopyTo( back, 7 );
+            return back;
+        }
 
-        //    byte[] back = new byte[21 + content.Count];
-        //    SoftBasic.HexStringToBytes( "03 00 00 1A 02 F0 80 32 03 00 00 00 01 00 02 00 05 00 00 04 01" ).CopyTo( back, 0 );
-        //    back[2] = (byte)(back.Length / 256);
-        //    back[3] = (byte)(back.Length % 256);
-        //    back[15] = (byte)(packCommand.Length / 256);
-        //    back[16] = (byte)(packCommand.Length % 256);
-        //    back[20] = packCommand[18];
-        //    content.CopyTo( back, 21 );
-        //    return back;
-        //}
+        private byte[] ReadByCommand( byte[] command )
+        {
+            if (command[2] == 0x01)
+            {
+                // 位读取
+                ushort length = ByteTransform.TransUInt16( command, 8 );
+                int startIndex = (command[6] * 65536 + command[5] * 256 + command[4]);
 
-        //private byte[] ReadByCommand( byte[] command )
-        //{
-        //    if (command[3] == 0x01)
-        //    {
-        //        // 位读取
-        //        int startIndex = command[9] * 65536 + command[10] * 256 + command[11];
-        //        switch (command[8])
-        //        {
-        //            case 0x81: return PackReadBitCommandBack( inputBuffer.GetBool( startIndex ) );
-        //            case 0x82: return PackReadBitCommandBack( outputBuffer.GetBool( startIndex ) );
-        //            case 0x83: return PackReadBitCommandBack( memeryBuffer.GetBool( startIndex ) );
-        //            case 0x84: return PackReadBitCommandBack( dbBlockBuffer.GetBool( startIndex ) );
-        //            default: throw new Exception( StringResources.Language.NotSupportedDataType );
-        //        }
-        //    }
-        //    else
-        //    {
-        //        // 字读取
-        //        ushort length = ByteTransform.TransUInt16( command, 4 );
-        //        int startIndex = (command[9] * 65536 + command[10] * 256 + command[11]) / 8;
-        //        switch (command[8])
-        //        {
-        //            case 0x81: return PackReadWordCommandBack( inputBuffer.GetBytes( startIndex, length ) );
-        //            case 0x82: return PackReadWordCommandBack( outputBuffer.GetBytes( startIndex, length ) );
-        //            case 0x83: return PackReadWordCommandBack( memeryBuffer.GetBytes( startIndex, length ) );
-        //            case 0x84: return PackReadWordCommandBack( dbBlockBuffer.GetBytes( startIndex, length ) );
-        //            default: throw new Exception( StringResources.Language.NotSupportedDataType );
-        //        }
-        //    }
-        //}
+                if (command[7] == MelsecMcDataType.M.DataCode)
+                {
+                    byte[] buffer = mBuffer.GetBytes( startIndex, length );
+                    return MelsecHelper.TransBoolArrayToByteData( buffer );
+                }
+                else if (command[7] == MelsecMcDataType.X.DataCode)
+                {
+                    byte[] buffer = xBuffer.GetBytes( startIndex, length );
+                    return MelsecHelper.TransBoolArrayToByteData( buffer );
+                }
+                else if (command[7] == MelsecMcDataType.Y.DataCode)
+                {
+                    byte[] buffer = yBuffer.GetBytes( startIndex, length );
+                    return MelsecHelper.TransBoolArrayToByteData( buffer );
+                }
+                else
+                {
+                    throw new Exception( StringResources.Language.NotSupportedDataType );
+                }
+            }
+            else
+            {
+                // 字读取
+                ushort length = ByteTransform.TransUInt16( command, 8 );
+                int startIndex = (command[6] * 65536 + command[5] * 256 + command[4]);
+                if (command[7] == MelsecMcDataType.M.DataCode)
+                {
+                    bool[] buffer = mBuffer.GetBytes( startIndex, length * 16 ).Select( m => m != 0x00 ).ToArray( );
+                    return SoftBasic.BoolArrayToByte( buffer );
+                }
+                else if(command[7] == MelsecMcDataType.X.DataCode)
+                {
+                    bool[] buffer = xBuffer.GetBytes( startIndex, length * 16 ).Select( m => m != 0x00 ).ToArray( );
+                    return SoftBasic.BoolArrayToByte( buffer );
+                }
+                else if (command[7] == MelsecMcDataType.Y.DataCode)
+                {
+                    bool[] buffer = yBuffer.GetBytes( startIndex, length * 16 ).Select( m => m != 0x00 ).ToArray( );
+                    return SoftBasic.BoolArrayToByte( buffer );
+                }
+                else if (command[7] == MelsecMcDataType.D.DataCode)
+                {
+                    return dBuffer.GetBytes( startIndex * 2, length * 2 );
+                }
+                else if (command[7] == MelsecMcDataType.W.DataCode)
+                {
+                    return wBuffer.GetBytes( startIndex * 2, length * 2 );
+                }
+                else
+                {
+                    throw new Exception( StringResources.Language.NotSupportedDataType );
+                }
+            }
+        }
 
-        //private byte[] PackReadWordCommandBack( byte[] result )
-        //{
-        //    byte[] back = new byte[4 + result.Length];
-        //    back[0] = 0xFF;
-        //    back[1] = 0x04;
 
-        //    ByteTransform.TransByte( (ushort)result.Length ).CopyTo( back, 2 );
-        //    result.CopyTo( back, 4 );
-        //    return back;
-        //}
+        private byte[] WriteByMessage( byte[] command )
+        {
+            if (command[2] == 0x01)
+            {
+                // 位写入
+                ushort length = ByteTransform.TransUInt16( command, 8 );
+                int startIndex = (command[6] * 65536 + command[5] * 256 + command[4]);
 
-        //private byte[] PackReadBitCommandBack( bool value )
-        //{
-        //    byte[] back = new byte[5];
-        //    back[0] = 0xFF;
-        //    back[1] = 0x03;
-        //    back[2] = 0x00;
-        //    back[3] = 0x01;
-        //    back[4] = (byte)(value ? 0x01 : 0x00);
-        //    return back;
-        //}
+                if (command[7] == MelsecMcDataType.M.DataCode)
+                {
+                    byte[] buffer = MelsecMcNet.ExtractActualData( SoftBasic.BytesArrayRemoveBegin( command, 10 ), true ).Content;
+                    mBuffer.SetBytes( buffer.Take( length ).ToArray( ), startIndex );
+                    return new byte[0];
+                }
+                else if (command[7] == MelsecMcDataType.X.DataCode)
+                {
+                    byte[] buffer = MelsecMcNet.ExtractActualData( SoftBasic.BytesArrayRemoveBegin( command, 10 ), true ).Content;
+                    xBuffer.SetBytes( buffer.Take( length ).ToArray( ), startIndex );
+                    return new byte[0];
+                }
+                else if (command[7] == MelsecMcDataType.Y.DataCode)
+                {
+                    byte[] buffer = MelsecMcNet.ExtractActualData( SoftBasic.BytesArrayRemoveBegin( command, 10 ), true ).Content;
+                    yBuffer.SetBytes( buffer.Take( length ).ToArray( ), startIndex );
+                    return new byte[0];
+                }
+                else
+                {
+                    throw new Exception( StringResources.Language.NotSupportedDataType );
+                }
+            }
+            else
+            {
+                // 字写入
+                ushort length = ByteTransform.TransUInt16( command, 8 );
+                int startIndex = (command[6] * 65536 + command[5] * 256 + command[4]);
 
-        //private byte[] WriteByMessage( byte[] packCommand )
-        //{
-        //    if (packCommand[22] == 0x02)
-        //    {
-        //        // 字写入
-        //        int count = ByteTransform.TransInt16( packCommand, 23 );
-        //        int startIndex = (packCommand[28] * 65536 + packCommand[29] * 256 + packCommand[30]) / 8;
-        //        byte[] data = ByteTransform.TransByte( packCommand, 35, count );
-        //        switch (packCommand[27])
-        //        {
-        //            case 0x81: inputBuffer.SetBytes( data, startIndex ); break;
-        //            case 0x82: outputBuffer.SetBytes( data, startIndex ); break;
-        //            case 0x83: memeryBuffer.SetBytes( data, startIndex ); break;
-        //            case 0x84: dbBlockBuffer.SetBytes( data, startIndex ); break;
-        //            default: throw new Exception( StringResources.Language.NotSupportedDataType );
-        //        }
-        //        return SoftBasic.HexStringToBytes( "03 00 00 16 02 F0 80 32 03 00 00 00 01 00 02 00 01 00 00 05 01 FF" );
-        //    }
-        //    else
-        //    {
-        //        // 位写入
-        //        int startIndex = packCommand[28] * 65536 + packCommand[29] * 256 + packCommand[30];
-        //        bool value = packCommand[35] != 0x00;
-        //        switch (packCommand[27])
-        //        {
-        //            case 0x81: inputBuffer.SetBool( value, startIndex ); break;
-        //            case 0x82: outputBuffer.SetBool( value, startIndex ); break;
-        //            case 0x83: memeryBuffer.SetBool( value, startIndex ); break;
-        //            case 0x84: dbBlockBuffer.SetBool( value, startIndex ); break;
-        //            default: throw new Exception( StringResources.Language.NotSupportedDataType );
-        //        }
-        //        return SoftBasic.HexStringToBytes( "03 00 00 16 02 F0 80 32 03 00 00 00 01 00 02 00 01 00 00 05 01 FF" );
-        //    }
-        //}
+                if (command[7] == MelsecMcDataType.M.DataCode)
+                {
+                    byte[] buffer = SoftBasic.ByteToBoolArray( SoftBasic.BytesArrayRemoveBegin( command, 10 ) ).Select( m => m ? (byte)1 : (byte)0 ).ToArray( );
+                    mBuffer.SetBytes( buffer, startIndex );
+                    return new byte[0];
+                }
+                else if (command[7] == MelsecMcDataType.X.DataCode)
+                {
+                    byte[] buffer = SoftBasic.ByteToBoolArray( SoftBasic.BytesArrayRemoveBegin( command, 10 ) ).Select( m => m ? (byte)1 : (byte)0 ).ToArray( );
+                    xBuffer.SetBytes( buffer, startIndex );
+                    return new byte[0];
+                }
+                else if (command[7] == MelsecMcDataType.Y.DataCode)
+                {
+                    byte[] buffer = SoftBasic.ByteToBoolArray( SoftBasic.BytesArrayRemoveBegin( command, 10 ) ).Select( m => m ? (byte)1 : (byte)0 ).ToArray( );
+                    yBuffer.SetBytes( buffer, startIndex );
+                    return new byte[0];
+                }
+                else if (command[7] == MelsecMcDataType.D.DataCode)
+                {
+                    dBuffer.SetBytes( SoftBasic.BytesArrayRemoveBegin( command, 10 ), startIndex * 2 );
+                    return new byte[0];
+                }
+                else if (command[7] == MelsecMcDataType.W.DataCode)
+                {
+                    wBuffer.SetBytes( SoftBasic.BytesArrayRemoveBegin( command, 10 ), startIndex * 2 );
+                    return new byte[0];
+                }
+                else
+                {
+                    throw new Exception( StringResources.Language.NotSupportedDataType );
+                }
+            }
+        }
 
         #endregion
 
@@ -489,7 +484,6 @@ namespace HslCommunication.Profinet.Melsec
         private SoftBuffer wBuffer;                    // w寄存器的数据池
 
         private const int DataPoolLength = 65536;      // 数据的长度
-        private int onlineCount = 0;                   // 在线的客户端的数量
 
         #endregion
 

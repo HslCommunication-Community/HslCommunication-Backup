@@ -329,7 +329,7 @@ namespace HslCommunication.Profinet.Melsec
             if (errorCode != 0) return new OperateResult<byte[]>( errorCode, StringResources.Language.MelsecPleaseReferToManulDocument );
 
             // 数据解析，需要传入是否使用位的参数
-            return ExtractActualData( read.Content, false );
+            return ExtractActualData( SoftBasic.BytesArrayRemoveBegin( read.Content, 11 ), false );
         }
 
         /// <summary>
@@ -393,7 +393,7 @@ namespace HslCommunication.Profinet.Melsec
             if (errorCode != 0) return new OperateResult<bool[]>( errorCode, StringResources.Language.MelsecPleaseReferToManulDocument );
 
             // 数据解析，需要传入是否使用位的参数
-            var extract = ExtractActualData( read.Content, true );
+            var extract = ExtractActualData( SoftBasic.BytesArrayRemoveBegin( read.Content, 11 ), true );
             if(!extract.IsSuccess) return OperateResult.CreateFailedResult<bool[]>( extract );
 
             // 转化bool数组
@@ -585,7 +585,7 @@ namespace HslCommunication.Profinet.Melsec
             if (isBit)
             {
                 // 位读取
-                byte[] Content = new byte[(response.Length - 11) * 2];
+                byte[] Content = new byte[response.Length * 2];
                 for (int i = 11; i < response.Length; i++)
                 {
                     if ((response[i] & 0x10) == 0x10)
@@ -604,10 +604,7 @@ namespace HslCommunication.Profinet.Melsec
             else
             {
                 // 字读取
-                byte[] Content = new byte[response.Length - 11];
-                Array.Copy( response, 11, Content, 0, Content.Length );
-
-                return OperateResult.CreateSuccessResult( Content );
+                return OperateResult.CreateSuccessResult( response );
             }
         }
         

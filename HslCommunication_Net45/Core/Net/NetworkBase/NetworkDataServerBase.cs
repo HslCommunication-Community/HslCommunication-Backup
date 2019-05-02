@@ -20,6 +20,10 @@ namespace HslCommunication.Core.Net
         public NetworkDataServerBase( )
         {
             lock_trusted_clients = new SimpleHybirdLock( );
+
+
+            lockOnlineClient = new SimpleHybirdLock( );
+            listsOnlineClient = new List<AppSession>( );
         }
 
         #endregion
@@ -132,11 +136,6 @@ namespace HslCommunication.Core.Net
         /// 接收到数据的时候就行触发
         /// </summary>
         public event DataReceivedDelegate OnDataReceived;
-
-        /// <summary>
-        /// 当前在线的客户端的数量
-        /// </summary>
-        public int OnlineCount { get; protected set; }
 
         /// <summary>
         /// 触发一个数据接收的事件信息
@@ -274,6 +273,61 @@ namespace HslCommunication.Core.Net
             return result;
         }
 
+
+        #endregion
+
+        #region Online Managment
+
+        /// <summary>
+        /// 在线的客户端的数量
+        /// </summary>
+        public int OnlineCount => onlineCount;
+
+        private List<AppSession> listsOnlineClient;
+        private SimpleHybirdLock lockOnlineClient;
+        private int onlineCount = 0;                   // 在线的客户端的数量
+
+        /// <summary>
+        /// 新增一个在线的客户端信息
+        /// </summary>
+        /// <param name="session">会话内容</param>
+        protected void AddClient( AppSession session )
+        {
+            lockOnlineClient.Enter( );
+            listsOnlineClient.Add( session );
+            onlineCount++;
+            lockOnlineClient.Leave( );
+        }
+
+        /// <summary>
+        /// 移除在线的客户端信息
+        /// </summary>
+        /// <param name="session">会话内容</param>
+        protected void RemoveClient( AppSession session )
+        {
+            lockOnlineClient.Enter( );
+            if(listsOnlineClient.Remove( session ))
+            {
+                onlineCount--;
+            }
+            lockOnlineClient.Leave( );
+        }
+
+        /// <summary>
+        /// 关闭之后进行的操作
+        /// </summary>
+        protected override void CloseAction( )
+        {
+            base.CloseAction( );
+
+            lockOnlineClient.Enter( );
+            for (int i = 0; i < listsOnlineClient.Count; i++)
+            {
+                listsOnlineClient[i]?.WorkSocket?.Close( );
+            }
+            listsOnlineClient.Clear( );
+            lockOnlineClient.Leave( );
+        }
 
         #endregion
 
