@@ -444,29 +444,6 @@ namespace HslCommunicationDemo
             form.ShowDialog( );
         }
 
-
-        private void Test1( )
-        {
-            short Short100      = mcNetServer.ReadInt16( "100" ).Content;               // 读取寄存器值
-            ushort UShort100    = mcNetServer.ReadUInt16( "100" ).Content;              // 读取寄存器ushort值
-            int Int100          = mcNetServer.ReadInt32( "100" ).Content;               // 读取寄存器int值
-            uint UInt100        = mcNetServer.ReadUInt32( "100" ).Content;              // 读取寄存器uint值
-            float Float100      = mcNetServer.ReadFloat( "100" ).Content;               // 读取寄存器Float值
-            long Long100        = mcNetServer.ReadInt64( "100" ).Content;               // 读取寄存器long值
-            ulong ULong100      = mcNetServer.ReadUInt64( "100" ).Content;              // 读取寄存器ulong值
-            double Double100    = mcNetServer.ReadDouble( "100" ).Content;              // 读取寄存器double值
-
-
-            mcNetServer.Write( "100", (short)5 );                          // 写入short值
-            mcNetServer.Write( "100", (ushort)45678 );                     // 写入ushort值
-            mcNetServer.Write( "100", 12345667 );                          // 写入int值
-            mcNetServer.Write( "100", (uint)12312312 );                    // 写入uint值
-            mcNetServer.Write( "100", 123.456f );                          // 写入float值
-            mcNetServer.Write( "100", 1231231231233L );                    // 写入long值
-            mcNetServer.Write( "100", 1212312313UL );                      // 写入ulong值
-            mcNetServer.Write( "100", 123.456d );                          // 写入double值
-        }
-
         private void button4_Click( object sender, EventArgs e )
         {
             // 连接异形客户端
