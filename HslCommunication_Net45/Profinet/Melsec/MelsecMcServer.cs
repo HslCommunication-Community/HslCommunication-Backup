@@ -260,24 +260,19 @@ namespace HslCommunication.Profinet.Melsec
                         return;
                     };
 
-                    byte[] receive = read1.Content;
-
-                    if (receive[11] == 0x01 && receive[12] == 0x04)
+                    byte[] back = ReadFromMcCore( read1.Content );
+                    if(back != null)
                     {
-                        // 读数据
-                        session.WorkSocket.Send( PackCommand( ReadByCommand( SoftBasic.BytesArrayRemoveBegin( receive, 11 ) ) ) );
-                    }
-                    else if (receive[11] == 0x01 && receive[12] == 0x14)
-                    {
-                        // 写数据
-                        session.WorkSocket.Send( PackCommand( WriteByMessage( SoftBasic.BytesArrayRemoveBegin( receive, 11 ) ) ) );
+                        session.WorkSocket.Send( back );
                     }
                     else
                     {
                         session.WorkSocket.Close( );
+                        RemoveClient( session );
+                        return;
                     }
 
-                    RaiseDataReceived( receive );
+                    RaiseDataReceived( read1.Content );
                     session.WorkSocket.BeginReceive( new byte[0], 0, 0, SocketFlags.None, new AsyncCallback( SocketAsyncCallBack ), session );
                 }
                 catch
@@ -288,6 +283,29 @@ namespace HslCommunication.Profinet.Melsec
                     RemoveClient( session );
                     return;
                 }
+            }
+        }
+
+        /// <summary>
+        /// 当收到mc协议的报文的时候应该触发的方法，允许继承重写，来实现自定义的返回，或是数据监听。
+        /// </summary>
+        /// <param name="mcCore">mc报文</param>
+        /// <returns>返回的报文信息</returns>
+        protected virtual byte[] ReadFromMcCore( byte[] mcCore )
+        {
+            if (mcCore[11] == 0x01 && mcCore[12] == 0x04)
+            {
+                // 读数据
+                return PackCommand( ReadByCommand( SoftBasic.BytesArrayRemoveBegin( mcCore, 11 ) ) );
+            }
+            else if (mcCore[11] == 0x01 && mcCore[12] == 0x14)
+            {
+                // 写数据
+                return PackCommand( WriteByMessage( SoftBasic.BytesArrayRemoveBegin( mcCore, 11 ) ) );
+            }
+            else
+            {
+                return null;
             }
         }
 

@@ -216,13 +216,13 @@ namespace HslCommunicationDemo
             label15.Text = busTcpServer.OnlineCount.ToString( ) ;
         }
 
-        private void BusTcpServer_OnDataReceived( HslCommunication.ModBus.ModbusTcpServer tcpServer, byte[] modbus )
+        private void BusTcpServer_OnDataReceived( object sender, byte[] modbus )
         {
             if (!checkBox1.Checked) return;
 
             if (InvokeRequired)
             {
-                BeginInvoke( new Action<HslCommunication.ModBus.ModbusTcpServer,byte[]>( BusTcpServer_OnDataReceived ), tcpServer, modbus );
+                BeginInvoke( new Action<object,byte[]>( BusTcpServer_OnDataReceived ), sender, modbus );
                 return;
             }
 
@@ -544,14 +544,14 @@ namespace HslCommunicationDemo
         {
             bool Coil100 = busTcpServer.ReadCoil( "100" );                  // 读线圈100的值
             bool[] Coil100_109 = busTcpServer.ReadCoil( "100", 10 );        // 读线圈数组
-            short Short100 = busTcpServer.ReadInt16( "100" );               // 读取寄存器值
-            ushort UShort100 = busTcpServer.ReadUInt16( "100" );            // 读取寄存器ushort值
-            int Int100 = busTcpServer.ReadInt32( "100" );                   // 读取寄存器int值
-            uint UInt100 = busTcpServer.ReadUInt32( "100" );                // 读取寄存器uint值
-            float Float100 = busTcpServer.ReadFloat( "100" );               // 读取寄存器Float值
-            long Long100 = busTcpServer.ReadInt64( "100" );                 // 读取寄存器long值
-            ulong ULong100 = busTcpServer.ReadUInt64( "100" );              // 读取寄存器ulong值
-            double Double100 = busTcpServer.ReadDouble( "100" );            // 读取寄存器double值
+            short Short100 = busTcpServer.ReadInt16( "100" ).Content;               // 读取寄存器值
+            ushort UShort100 = busTcpServer.ReadUInt16( "100" ).Content;            // 读取寄存器ushort值
+            int Int100 = busTcpServer.ReadInt32( "100" ).Content;                   // 读取寄存器int值
+            uint UInt100 = busTcpServer.ReadUInt32( "100" ).Content;                // 读取寄存器uint值
+            float Float100 = busTcpServer.ReadFloat( "100" ).Content;               // 读取寄存器Float值
+            long Long100 = busTcpServer.ReadInt64( "100" ).Content;                 // 读取寄存器long值
+            ulong ULong100 = busTcpServer.ReadUInt64( "100" ).Content;              // 读取寄存器ulong值
+            double Double100 = busTcpServer.ReadDouble( "100" ).Content;            // 读取寄存器double值
 
             busTcpServer.WriteCoil( "100", true );                          // 写线圈的通断
             busTcpServer.Write( "100", (short)5 );                          // 写入short值
