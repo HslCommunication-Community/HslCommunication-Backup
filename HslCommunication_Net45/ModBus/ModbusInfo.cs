@@ -174,7 +174,7 @@ namespace HslCommunication.ModBus
         {
             try
             {
-                ModbusAddress mAddress = new ModbusAddress( address );
+                ModbusAddress mAddress = new ModbusAddress( address, ModbusInfo.ReadRegister );
                 if (!isStartWithZero)
                 {
                     if (mAddress.Address < 1) throw new Exception( StringResources.Language.ModbusAddressMustMoreThanOne );

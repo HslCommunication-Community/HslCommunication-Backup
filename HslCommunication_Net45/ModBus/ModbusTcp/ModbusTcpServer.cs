@@ -82,7 +82,6 @@ namespace HslCommunication.ModBus
             set { ((ReverseWordTransform)ByteTransform).IsStringReverse = value; }
         }
 
-
         /// <summary>
         /// 获取或设置服务器的站号信息，对于rtu模式，只有站号对了，才会反馈回数据信息。默认为1。
         /// </summary>
@@ -140,7 +139,6 @@ namespace HslCommunication.ModBus
             return coilBuffer.GetByte( add ) != 0x00;
         }
 
-
         /// <summary>
         /// 批量读取地址的线圈的通断情况
         /// </summary>
@@ -182,7 +180,6 @@ namespace HslCommunication.ModBus
             coilBuffer.SetBytes( data.Select( m => (byte)(m ? 0x01 : 0x00) ).ToArray( ), add );
         }
 
-
         #endregion
 
         #region Discrete Read Write
@@ -198,7 +195,6 @@ namespace HslCommunication.ModBus
             ushort add = ushort.Parse( address );
             return inputBuffer.GetByte( add ) != 0x00;
         }
-
 
         /// <summary>
         /// 批量读取地址的离散线圈的通断情况
@@ -239,9 +235,7 @@ namespace HslCommunication.ModBus
             inputBuffer.SetBytes( data.Select( m => (byte)(m ? 0x01 : 0x00) ).ToArray( ), add );
         }
 
-
         #endregion
-
 
         #region NetworkDataServerBase Override
 
@@ -259,11 +253,11 @@ namespace HslCommunication.ModBus
 
             if(analysis.Content.Function == ModbusInfo.ReadRegister)
             {
-                return OperateResult.CreateSuccessResult( inputRegisterBuffer.GetBytes( analysis.Content.Address * 2, length * 2 ) );
+                return OperateResult.CreateSuccessResult( registerBuffer.GetBytes( analysis.Content.Address * 2, length * 2 ) );
             }
             else if(analysis.Content.Function == ModbusInfo.ReadInputRegister)
             {
-                return OperateResult.CreateSuccessResult( registerBuffer.GetBytes( analysis.Content.Address * 2, length * 2 ) );
+                return OperateResult.CreateSuccessResult( inputRegisterBuffer.GetBytes( analysis.Content.Address * 2, length * 2 ) );
             }
             else
             {
@@ -310,7 +304,6 @@ namespace HslCommunication.ModBus
         }
 
         #endregion
-
 
         #region NetServer Override
 
@@ -707,7 +700,6 @@ namespace HslCommunication.ModBus
             subcriptionHybirdLock.Leave( );
         }
 
-
         /// <summary>
         /// 在数据变更后，进行触发是否产生订阅
         /// </summary>
@@ -792,7 +784,6 @@ namespace HslCommunication.ModBus
             }
         }
 
-
         /// <summary>
         /// Modbus核心数据交互方法，允许重写自己来实现，报文只剩下核心的Modbus信息，去除了MPAB报头信息
         /// </summary>
@@ -861,7 +852,6 @@ namespace HslCommunication.ModBus
         {
             StartSerialPort( com, 9600 );
         }
-
 
         /// <summary>
         /// 使用默认的参数进行初始化串口，8位数据位，无奇偶校验，1位停止位
@@ -934,7 +924,7 @@ namespace HslCommunication.ModBus
             
             if (receive.Length < 3)
             {
-                LogNet?.WriteError( ToString( ), $"Uknown Data：" + BasicFramework.SoftBasic.ByteToHexString( receive, ' ' ) );
+                LogNet?.WriteError( ToString( ), $"Uknown Data：" + SoftBasic.ByteToHexString( receive, ' ' ) );
                 return;
             }
 
@@ -945,14 +935,14 @@ namespace HslCommunication.ModBus
                 if (!CheckModbusMessageLegal( modbusCore ))
                 {
                     // 指令长度验证错误，关闭网络连接
-                    LogNet?.WriteError( ToString( ), $"Receive Nosense Modbus-rtu : " + BasicFramework.SoftBasic.ByteToHexString( receive, ' ' ) );
+                    LogNet?.WriteError( ToString( ), $"Receive Nosense Modbus-rtu : " + SoftBasic.ByteToHexString( receive, ' ' ) );
                     return;
                 }
 
                 // 验证站号是否一致
                 if(station >= 0 && station != modbusCore[0])
                 {
-                    LogNet?.WriteError( ToString( ), $"Station not match Modbus-rtu : " + BasicFramework.SoftBasic.ByteToHexString( receive, ' ' ) );
+                    LogNet?.WriteError( ToString( ), $"Station not match Modbus-rtu : " + SoftBasic.ByteToHexString( receive, ' ' ) );
                     return;
                 }
 
@@ -966,7 +956,7 @@ namespace HslCommunication.ModBus
             }
             else
             {
-                LogNet?.WriteWarn( "CRC Check Failed : " + BasicFramework.SoftBasic.ByteToHexString( receive, ' ' ) );
+                LogNet?.WriteWarn( "CRC Check Failed : " + SoftBasic.ByteToHexString( receive, ' ' ) );
             }
         }
 

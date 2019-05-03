@@ -274,53 +274,53 @@ namespace HslCommunicationDemo
         private void button_read_short_Click( object sender, EventArgs e )
         {
             // 读取short变量
-            readResultRender( busTcpServer.ReadInt16( textBox3.Text ), textBox3.Text, textBox4 );
+            DemoUtils.ReadResultRender( busTcpServer.ReadInt16( textBox3.Text ), textBox3.Text, textBox4 );
         }
 
         private void button_read_ushort_Click( object sender, EventArgs e )
         {
             // 读取ushort变量
-            readResultRender( busTcpServer.ReadUInt16( textBox3.Text ), textBox3.Text, textBox4 );
+            DemoUtils.ReadResultRender( busTcpServer.ReadUInt16( textBox3.Text ), textBox3.Text, textBox4 );
         }
 
         private void button_read_int_Click( object sender, EventArgs e )
         {
             // 读取int变量
-            readResultRender( busTcpServer.ReadInt32( textBox3.Text ), textBox3.Text, textBox4 );
+            DemoUtils.ReadResultRender( busTcpServer.ReadInt32( textBox3.Text ), textBox3.Text, textBox4 );
         }
         private void button_read_uint_Click( object sender, EventArgs e )
         {
             // 读取uint变量
-            readResultRender( busTcpServer.ReadUInt32( textBox3.Text ), textBox3.Text, textBox4 );
+            DemoUtils.ReadResultRender( busTcpServer.ReadUInt32( textBox3.Text ), textBox3.Text, textBox4 );
         }
         private void button_read_long_Click( object sender, EventArgs e )
         {
             // 读取long变量
-            readResultRender( busTcpServer.ReadInt64( textBox3.Text ), textBox3.Text, textBox4 );
+            DemoUtils.ReadResultRender( busTcpServer.ReadInt64( textBox3.Text ), textBox3.Text, textBox4 );
         }
 
         private void button_read_ulong_Click( object sender, EventArgs e )
         {
             // 读取ulong变量
-            readResultRender( busTcpServer.ReadUInt64( textBox3.Text ), textBox3.Text, textBox4 );
+            DemoUtils.ReadResultRender( busTcpServer.ReadUInt64( textBox3.Text ), textBox3.Text, textBox4 );
         }
 
         private void button_read_float_Click( object sender, EventArgs e )
         {
             // 读取float变量
-            readResultRender( busTcpServer.ReadFloat( textBox3.Text ), textBox3.Text, textBox4 );
+            DemoUtils.ReadResultRender( busTcpServer.ReadFloat( textBox3.Text ), textBox3.Text, textBox4 );
         }
 
         private void button_read_double_Click( object sender, EventArgs e )
         {
             // 读取double变量
-            readResultRender( busTcpServer.ReadDouble( textBox3.Text ), textBox3.Text, textBox4 );
+            DemoUtils.ReadResultRender( busTcpServer.ReadDouble( textBox3.Text ), textBox3.Text, textBox4 );
         }
 
         private void button_read_string_Click( object sender, EventArgs e )
         {
             // 读取字符串
-            readResultRender( busTcpServer.ReadString( textBox3.Text, ushort.Parse( textBox5.Text ) ), textBox3.Text, textBox4 );
+            DemoUtils.ReadResultRender( busTcpServer.ReadString( textBox3.Text, ushort.Parse( textBox5.Text ) ), textBox3.Text, textBox4 );
         }
 
 
@@ -362,8 +362,7 @@ namespace HslCommunicationDemo
             // short写入
             try
             {
-                busTcpServer.Write( textBox8.Text, short.Parse( textBox7.Text ) );
-                writeResultRender( textBox8.Text );
+                DemoUtils.WriteResultRender( busTcpServer.Write( textBox8.Text, short.Parse( textBox7.Text ) ), textBox8.Text );
             }
             catch (Exception ex)
             {
@@ -376,8 +375,7 @@ namespace HslCommunicationDemo
             // ushort写入
             try
             {
-                busTcpServer.Write(textBox8.Text, ushort.Parse( textBox7.Text ) );
-                writeResultRender( textBox8.Text );
+                DemoUtils.WriteResultRender( busTcpServer.Write( textBox8.Text, ushort.Parse( textBox7.Text ) ), textBox8.Text );
             }
             catch (Exception ex)
             {
@@ -391,8 +389,7 @@ namespace HslCommunicationDemo
             // int写入
             try
             {
-                busTcpServer.Write( textBox8.Text, int.Parse( textBox7.Text ) );
-                writeResultRender( textBox8.Text );
+                DemoUtils.WriteResultRender( busTcpServer.Write( textBox8.Text, int.Parse( textBox7.Text ) ), textBox8.Text );
             }
             catch (Exception ex)
             {
@@ -405,8 +402,7 @@ namespace HslCommunicationDemo
             // uint写入
             try
             {
-                busTcpServer.Write( textBox8.Text , uint.Parse( textBox7.Text ) );
-                writeResultRender( textBox8.Text );
+                DemoUtils.WriteResultRender( busTcpServer.Write( textBox8.Text, uint.Parse( textBox7.Text ) ), textBox8.Text );
             }
             catch (Exception ex)
             {
@@ -419,8 +415,7 @@ namespace HslCommunicationDemo
             // long写入
             try
             {
-                busTcpServer.Write( textBox8.Text, long.Parse( textBox7.Text ) );
-                writeResultRender( textBox8.Text );
+                DemoUtils.WriteResultRender( busTcpServer.Write( textBox8.Text, long.Parse( textBox7.Text ) ), textBox8.Text );
             }
             catch (Exception ex)
             {
@@ -433,8 +428,7 @@ namespace HslCommunicationDemo
             // ulong写入
             try
             {
-                busTcpServer.Write(textBox8.Text , ulong.Parse( textBox7.Text ) );
-                writeResultRender( textBox8.Text );
+                DemoUtils.WriteResultRender( busTcpServer.Write( textBox8.Text, ulong.Parse( textBox7.Text ) ), textBox8.Text );
             }
             catch (Exception ex)
             {
@@ -447,8 +441,7 @@ namespace HslCommunicationDemo
             // float写入
             try
             {
-                busTcpServer.Write( textBox8.Text, float.Parse( textBox7.Text ) );
-                writeResultRender( textBox8.Text );
+                DemoUtils.WriteResultRender( busTcpServer.Write( textBox8.Text, float.Parse( textBox7.Text ) ), textBox8.Text );
             }
             catch (Exception ex)
             {
@@ -461,8 +454,7 @@ namespace HslCommunicationDemo
             // double写入
             try
             {
-                busTcpServer.Write( textBox8.Text, double.Parse( textBox7.Text ) );
-                writeResultRender( textBox8.Text );
+                DemoUtils.WriteResultRender( busTcpServer.Write( textBox8.Text, double.Parse( textBox7.Text ) ), textBox8.Text );
             }
             catch (Exception ex)
             {
@@ -476,8 +468,7 @@ namespace HslCommunicationDemo
             // string写入
             try
             {
-                busTcpServer.Write( textBox8.Text, textBox7.Text );
-                writeResultRender( textBox8.Text );
+                DemoUtils.WriteResultRender( busTcpServer.Write( textBox8.Text, textBox7.Text ), textBox8.Text );
             }
             catch (Exception ex)
             {
