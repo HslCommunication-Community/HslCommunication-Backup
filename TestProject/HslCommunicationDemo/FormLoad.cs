@@ -927,5 +927,17 @@ namespace HslCommunicationDemo
             System.Threading.Thread.Sleep( 200 );
             Show( );
         }
+
+        private void Button57_Click( object sender, EventArgs e )
+        {
+            Hide( );
+            System.Threading.Thread.Sleep( 200 );
+            using (FormLsisCnet form = new FormLsisCnet( ))
+            {
+                form.ShowDialog( );
+            }
+            System.Threading.Thread.Sleep( 200 );
+            Show( );
+        }
     }
 }

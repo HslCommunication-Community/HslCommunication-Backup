@@ -202,7 +202,7 @@ namespace HslCommunication.Profinet.LSIS
 
         #region Static Helper
 
-        private static OperateResult<string> AnalysisAddress( string address )
+        public static OperateResult<string> AnalysisAddress( string address )
         {
             // P,M,L,K,F,T
             // P,M,L,K,F,T,C,D,S

@@ -198,6 +198,12 @@
     <Compile Include="PLC\FormKeyenceNanoSerial.Designer.cs">
       <DependentUpon>FormKeyenceNanoSerial.cs</DependentUpon>
     </Compile>
+    <Compile Include="PLC\FormLsisCnet.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="PLC\FormLsisCnet.Designer.cs">
+      <DependentUpon>FormLsisCnet.cs</DependentUpon>
+    </Compile>
     <Compile Include="PLC\FormOmronUdp.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -489,6 +495,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="PLC\FormKeyenceNanoSerial.resx">
       <DependentUpon>FormKeyenceNanoSerial.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PLC\FormLsisCnet.resx">
+      <DependentUpon>FormLsisCnet.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="PLC\FormOmronUdp.resx">
       <DependentUpon>FormOmronUdp.cs</DependentUpon>

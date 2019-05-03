@@ -681,11 +681,39 @@ namespace HslCommunication.BasicFramework
             return HexStringToBytes( Encoding.ASCII.GetString( inBytes ) );
         }
 
+        /// <summary>
+        /// 从字节构建一个ASCII格式的数据内容
+        /// </summary>
+        /// <param name="value">数据</param>
+        /// <returns>ASCII格式的字节数组</returns>
+        public static byte[] BuildAsciiBytesFrom( byte value )
+        {
+            return Encoding.ASCII.GetBytes( value.ToString( "X2" ) );
+        }
+
+        /// <summary>
+        /// 从short构建一个ASCII格式的数据内容
+        /// </summary>
+        /// <param name="value">数据</param>
+        /// <returns>ASCII格式的字节数组</returns>
+        public static byte[] BuildAsciiBytesFrom( short value )
+        {
+            return Encoding.ASCII.GetBytes( value.ToString( "X4" ) );
+        }
+
+        /// <summary>
+        /// 从ushort构建一个ASCII格式的数据内容
+        /// </summary>
+        /// <param name="value">数据</param>
+        /// <returns>ASCII格式的字节数组</returns>
+        public static byte[] BuildAsciiBytesFrom( ushort value )
+        {
+            return Encoding.ASCII.GetBytes( value.ToString( "X4" ) );
+        }
 
         #endregion
 
         #region Bool[] and byte[] transform
-
 
         /// <summary>
         /// 将bool数组转换到byte数组 ->

@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using HslCommunication.BasicFramework;
 
 namespace HslCommunication.Profinet.LSIS
 {
@@ -12,148 +13,6 @@ namespace HslCommunication.Profinet.LSIS
     /// </summary>
     public class XGBCnet : SerialDeviceBase<RegularByteTransform>
     {
-        public static int commCountNeed;
-        public byte[] commRecvBuf = new byte[MAX_RECV_BUF + 1];
-        public byte[] commSendBuf = new byte[MAX_SEND_BUF + 1];
-        public static int commCountSend;
-        public static int SOH = 0x1;
-        public static int STX = 0x2; // start of text
-        public static int ETX = 0x3; // end of text
-        public static int EOT = 0x4; // end of transmission
-        public static int ENQ = 0x5; // enquiry
-        public static int ACK = 0x6; // acknowledge
-        public static int LF = 0xA; // line feed
-        public static int CR = 0xD; // carriage return
-        public static int DLE = 0x10;
-        public static int NAK = 0x15; // negative acknowledge
-        public static int MAX_SEND_BUF = 256;
-        public static int MAX_RECV_BUF = 1024;
-
-
-
-        public enum DTYPE
-        {
-            DATA_TYPE_BIT,
-            DATA_TYPE_WORD,
-            DATA_TYPE_DWORD
-        } // WORD ' WORD
-        /// <summary>
-        /// Take the address type PW  MW   
-        /// </summary>
-        /// <param name="Type"></param>
-        /// <param name="data_type"></param>
-        /// <returns></returns>
-        public static int GetDataType(string Type, ref int data_type)
-        {
-            if (string.Compare(Type, "PW") == 0)
-            {
-                data_type = Convert.ToInt32(DTYPE.DATA_TYPE_WORD);
-            }
-            else if (string.Compare(Type, "MW") == 0)
-            {
-                data_type = Convert.ToInt32(DTYPE.DATA_TYPE_WORD);
-            }
-            else if (string.Compare(Type, "LW") == 0)
-            {
-                data_type = Convert.ToInt32(DTYPE.DATA_TYPE_WORD);
-            }
-            else if (string.Compare(Type, "KW") == 0)
-            {
-                data_type = Convert.ToInt32(DTYPE.DATA_TYPE_WORD);
-            }
-            else if (string.Compare(Type, "FW") == 0)
-            {
-                data_type = Convert.ToInt32(DTYPE.DATA_TYPE_WORD);
-            }
-            else if (string.Compare(Type, "TW") == 0)
-            {
-                data_type = Convert.ToInt32(DTYPE.DATA_TYPE_WORD);
-            }
-            else if (string.Compare(Type, "CW") == 0)
-            {
-                data_type = Convert.ToInt32(DTYPE.DATA_TYPE_WORD);
-            }
-            else if (string.Compare(Type, "DW") == 0)
-            {
-                data_type = Convert.ToInt32(DTYPE.DATA_TYPE_WORD);
-            }
-            else if (string.Compare(Type, "SW") == 0)
-            {
-                data_type = Convert.ToInt32(DTYPE.DATA_TYPE_WORD);
-
-            }
-            else if (string.Compare(Type, "PX") == 0)
-            {
-                data_type = Convert.ToInt32(DTYPE.DATA_TYPE_BIT);
-            }
-            else if (string.Compare(Type, "MX") == 0)
-            {
-                data_type = Convert.ToInt32(DTYPE.DATA_TYPE_BIT);
-            }
-            else if (string.Compare(Type, "LX") == 0)
-            {
-                data_type = Convert.ToInt32(DTYPE.DATA_TYPE_BIT);
-            }
-            else if (string.Compare(Type, "KX") == 0)
-            {
-                data_type = Convert.ToInt32(DTYPE.DATA_TYPE_BIT);
-            }
-            else if (string.Compare(Type, "FX") == 0)
-            {
-                data_type = Convert.ToInt32(DTYPE.DATA_TYPE_BIT);
-            }
-            else if (string.Compare(Type, "TX") == 0)
-            {
-                data_type = Convert.ToInt32(DTYPE.DATA_TYPE_BIT);
-            }
-            else if (string.Compare(Type, "CX") == 0)
-            {
-                data_type = Convert.ToInt32(DTYPE.DATA_TYPE_BIT);
-
-            }
-            else if (string.Compare(Type, "PD") == 0)
-            {
-                data_type = Convert.ToInt32(DTYPE.DATA_TYPE_DWORD);
-            }
-            else if (string.Compare(Type, "MD") == 0)
-            {
-                data_type = Convert.ToInt32(DTYPE.DATA_TYPE_DWORD);
-            }
-            else if (string.Compare(Type, "LD") == 0)
-            {
-                data_type = Convert.ToInt32(DTYPE.DATA_TYPE_DWORD);
-            }
-            else if (string.Compare(Type, "KD") == 0)
-            {
-                data_type = Convert.ToInt32(DTYPE.DATA_TYPE_DWORD);
-            }
-            else if (string.Compare(Type, "FD") == 0)
-            {
-                data_type = Convert.ToInt32(DTYPE.DATA_TYPE_DWORD);
-            }
-            else if (string.Compare(Type, "TD") == 0)
-            {
-                data_type = Convert.ToInt32(DTYPE.DATA_TYPE_DWORD);
-            }
-            else if (string.Compare(Type, "CD") == 0)
-            {
-                data_type = Convert.ToInt32(DTYPE.DATA_TYPE_DWORD);
-            }
-            else if (string.Compare(Type, "DD") == 0)
-            {
-                data_type = Convert.ToInt32(DTYPE.DATA_TYPE_DWORD);
-            }
-            else if (string.Compare(Type, "SD") == 0)
-            {
-                data_type = Convert.ToInt32(DTYPE.DATA_TYPE_DWORD);
-            }
-            else
-            {
-                return 0;
-            }
-
-            return 1;
-        }
         #region Constructor
 
         /// <summary>
@@ -162,13 +21,17 @@ namespace HslCommunication.Profinet.LSIS
         public XGBCnet()
         {
             WordLength = 2;
+            ByteTransform = new RegularByteTransform( );
         }
 
         #endregion
 
         #region Public Member
 
-
+        /// <summary>
+        /// PLC Station No.
+        /// </summary>
+        public byte Station { get; set; } = 0x05;
 
         #endregion
 
@@ -182,7 +45,13 @@ namespace HslCommunication.Profinet.LSIS
         /// <returns></returns>
         public override OperateResult<byte[]> Read(string address, ushort length)
         {
-            return null; // to do
+            OperateResult<byte[]> command = BuildReadByteCommand( Station, address, length );
+            if (!command.IsSuccess) return command;
+
+            OperateResult<byte[]> read = ReadBase( command.Content );
+            if (!read.IsSuccess) return read;
+
+            return ExtractActualData( read.Content, true );
         }
 
         /// <summary>
@@ -193,7 +62,13 @@ namespace HslCommunication.Profinet.LSIS
         /// <returns></returns>
         public override OperateResult Write(string address, byte[] value)
         {
-            return null; // to do
+            OperateResult<byte[]> command = BuildWriteByteCommand( Station, address, value );
+            if (!command.IsSuccess) return command;
+
+            OperateResult<byte[]> read = ReadBase( command.Content );
+            if (!read.IsSuccess) return read;
+
+            return ExtractActualData( read.Content, false );
         }
 
         #endregion
@@ -211,202 +86,118 @@ namespace HslCommunication.Profinet.LSIS
 
         #endregion
 
-        #region Private Member
-
-
-
-        #endregion
-
         #region Static Helper
-
-        /// <summary>
-        /// 将命令进行打包传送
-        /// </summary>
-        /// <param name="mcCommand">mc协议的命令</param>
-        /// <param name="station">PLC的站号</param>
-        /// <returns>最终的原始报文信息</returns>
-        public static byte[] PackCommand(byte[] mcCommand, byte station = 0)
-        {
-            return null; // to do
-        }
-        private static OperateResult<string> AnalysisAddress(string address)
-        {
-            // P,M,L,K,F,T
-            // P,M,L,K,F,T,C,D,S
-            StringBuilder sb = new StringBuilder();
-            try
-            {
-                sb.Append("%");
-                char[] types = new char[] { 'P', 'M', 'L', 'K', 'F', 'T', 'C', 'D', 'S' };
-                bool exsist = false;
-
-                for (int i = 0; i < types.Length; i++)
-                {
-                    if (types[i] == address[0])
-                    {
-                        sb.Append(types[i]);
-                        sb.Append("B");
-                        if (address[1] == 'B')
-                        {
-                            sb.Append(int.Parse(address.Substring(2)));
-                        }
-                        else if (address[1] == 'W')
-                        {
-                            sb.Append(int.Parse(address.Substring(2)) * 2);
-                        }
-                        else if (address[1] == 'D')
-                        {
-                            sb.Append(int.Parse(address.Substring(2)) * 4);
-                        }
-                        else
-                        {
-                            sb.Append(int.Parse(address.Substring(1)));
-                        }
-
-                        exsist = true;
-                        break;
-                    }
-                }
-
-                if (!exsist) throw new Exception(StringResources.Language.NotSupportedDataType);
-            }
-            catch (Exception ex)
-            {
-                return new OperateResult<string>(ex.Message);
-            }
-
-            return OperateResult.CreateSuccessResult(sb.ToString());
-        }
 
         /// <summary>
         /// reading address  Type of ReadByte
         /// </summary>
-        /// <param name="station"></param>
-        /// <param name="address"></param>
-        /// <param name="length"></param>
-        /// <returns></returns>
+        /// <param name="station">plc station</param>
+        /// <param name="address">address, for example: M100, D100, DW100</param>
+        /// <param name="length">read length</param>
+        /// <returns>command bytes</returns>
         private static OperateResult<byte[]> BuildReadByteCommand(byte station ,string address, ushort length)
         {
-            byte[] commSendBuf = new byte[MAX_SEND_BUF + 1];
-            var analysisResult = AnalysisAddress(address);
+            var analysisResult = XGBFastEnet.AnalysisAddress(address);
             if (!analysisResult.IsSuccess) return OperateResult.CreateFailedResult<byte[]>(analysisResult);
 
-            commSendBuf[0] = (byte)ENQ; // STX
-            Encoding.ASCII.GetBytes($"{station:X2}").CopyTo(commSendBuf, 1); // status
-            Encoding.ASCII.GetBytes("R").CopyTo(commSendBuf, 3); // status
-            Encoding.ASCII.GetBytes("SB").CopyTo(commSendBuf, 4); // mode
-            Encoding.ASCII.GetBytes($"{ analysisResult.Content.Length: X2}").CopyTo(commSendBuf, 6);
-            Encoding.ASCII.GetBytes($"{analysisResult.Content}").CopyTo(commSendBuf, 8);
-            commCountSend = 8 + analysisResult.Content.Length;
-            Encoding.ASCII.GetBytes($"{length:X2}").CopyTo(commSendBuf,commCountSend); // module no
-            commCountSend += 2;
-            commSendBuf[commCountSend] = (byte)EOT; // STX
-            commCountSend += 1;
-            byte[] command = new byte[commCountSend];
-            Array.Copy(commSendBuf, 0, command, 0, command.Length);
+            List<byte> command = new List<byte>( );
+            command.Add( 0x05 );    // ENQ
+            command.AddRange( SoftBasic.BuildAsciiBytesFrom( station ) );
+            command.Add( 0x72 );    // command r
+            command.Add( 0x53 );    // command type: SB
+            command.Add( 0x42 );
+            command.AddRange( SoftBasic.BuildAsciiBytesFrom( (byte)analysisResult.Content.Length ) );
+            command.AddRange( Encoding.ASCII.GetBytes( analysisResult.Content ) );
+            command.AddRange( SoftBasic.BuildAsciiBytesFrom( (byte)length ) );
+            command.Add( 0x04 );    // EOT
 
-            return OperateResult.CreateSuccessResult(command);
+            int sum = 0;
+            for (int i = 0; i < command.Count; i++)
+            {
+                sum += command[i];
+            }
+            command.AddRange( SoftBasic.BuildAsciiBytesFrom( (byte)sum ) );
+
+            return OperateResult.CreateSuccessResult( command.ToArray( ) );
         }
+
         /// <summary>
-        /// Write-type MX0--
+        /// write data to address  Type of ReadByte
         /// </summary>
-        /// <param name="station"></param>
-        /// <param name="address"></param>
-        /// <param name="value"></param>
-        /// <param name="data_type"></param>
-        /// <returns></returns>
-        public static byte[] WriteBit(int station, string address, ushort value, int data_type)
+        /// <param name="station">plc station</param>
+        /// <param name="address">address, for example: M100, D100, DW100</param>
+        /// <param name="value">source value</param>
+        /// <returns>command bytes</returns>
+        private static OperateResult<byte[]> BuildWriteByteCommand( byte station, string address, byte[] value )
         {
-            int commCountSend = 0;
-            byte[] commSendBuf = new byte[MAX_SEND_BUF + 1];
-            byte[] commRecvBuf = new byte[MAX_SEND_BUF + 1];
-            string imsi = new string(new char[80]);
+            var analysisResult = XGBFastEnet.AnalysisAddress( address );
+            if (!analysisResult.IsSuccess) return OperateResult.CreateFailedResult<byte[]>( analysisResult );
 
-            commSendBuf[0] = (byte)ENQ; // STX
-            Encoding.ASCII.GetBytes($"{station:X2}").CopyTo(commSendBuf, 1); // status
-            Encoding.ASCII.GetBytes(string.Format("WSS", station)).CopyTo(commSendBuf, 3); // status
-            Encoding.ASCII.GetBytes($"{(byte)1:X2}").CopyTo(commSendBuf, 6);
+            List<byte> command = new List<byte>( );
+            command.Add( 0x05 );    // ENQ
+            command.AddRange( SoftBasic.BuildAsciiBytesFrom( station ) );
+            command.Add( 0x77 );    // command w
+            command.Add( 0x53 );    // command type: SB
+            command.Add( 0x42 );
+            command.AddRange( SoftBasic.BuildAsciiBytesFrom( (byte)analysisResult.Content.Length ) );
+            command.AddRange( Encoding.ASCII.GetBytes( analysisResult.Content ) );
+            command.AddRange( SoftBasic.BuildAsciiBytesFrom( (byte)value.Length ) );
+            command.AddRange( SoftBasic.BytesToAsciiBytes( value ) );
+            command.Add( 0x04 );    // EOT
 
-            Encoding.ASCII.GetBytes($"{address.Length:X2}").CopyTo(commSendBuf, 8);
-
-            Encoding.ASCII.GetBytes($"{address}").CopyTo(commSendBuf, 10); // module no
-            commCountSend = 10 + address.Length;
-
-
-            if (data_type == 0)
+            int sum = 0;
+            for (int i = 0; i < command.Count; i++)
             {
-                Encoding.ASCII.GetBytes($"{(byte)value:X2}").CopyTo(commSendBuf, commCountSend); // module no
-                commCountSend += 2;
+                sum += command[i];
             }
-            else if (data_type == 2)
-            {
-                Encoding.ASCII.GetBytes($"{(uint)value:X8}").CopyTo(commSendBuf, commCountSend); // module no
-                commCountSend += 8;
-            }
-            else // WORD
-            {
-                Encoding.ASCII.GetBytes($"{value:X4}").CopyTo(commSendBuf, commCountSend); // module no
-                commCountSend += 4;
-            }
-            commSendBuf[commCountSend] = (byte)EOT; // STX
-            commCountSend += 1;
-            byte[] DATA = new byte[commCountSend];
+            command.AddRange( SoftBasic.BuildAsciiBytesFrom( (byte)sum ) );
 
-            Array.Copy(commSendBuf, DATA, commCountSend);
-
-            return DATA;
+            return OperateResult.CreateSuccessResult( command.ToArray( ) );
         }
+
         /// <summary>
-        /// Write-type MW0--DW0---DD00
+        /// Extract actual data form plc response
         /// </summary>
-        /// <param name="station"></param>
-        /// <param name="address"></param>
-        /// <param name="value"></param>
-        /// <param name="data_type"></param>
-        /// <returns></returns>
-        public static byte[] WriteWord(int station, string address, double value, int data_type)
+        /// <param name="response">response data</param>
+        /// <param name="isRead">read</param>
+        /// <returns>result</returns>
+        public static OperateResult<byte[]> ExtractActualData( byte[] response, bool isRead )
         {
-            int commCountSend = 0;
-            byte[] commSendBuf = new byte[MAX_SEND_BUF + 1];
-            byte[] commRecvBuf = new byte[MAX_SEND_BUF + 1];
-            string imsi = new string(new char[80]);
-
-            commSendBuf[0] = (byte)ENQ; // STX
-            Encoding.ASCII.GetBytes($"{station:X2}").CopyTo(commSendBuf, 1); // status
-            Encoding.ASCII.GetBytes(string.Format("WSB", station)).CopyTo(commSendBuf, 3); // status
-
-            Encoding.ASCII.GetBytes($"{address.Length:X2}").CopyTo(commSendBuf, 6);
-            Encoding.ASCII.GetBytes($"{address}").CopyTo(commSendBuf, 8);
-            commCountSend = 8 + address.Length;
-            Encoding.ASCII.GetBytes($"{byte.Parse("1"):X2}").CopyTo(commSendBuf, commCountSend);
-            commCountSend += 2;
-            if (data_type == 0)
+            try
             {
-                Encoding.ASCII.GetBytes($"{System.Convert.ToByte(Math.Truncate(value)):X2}").CopyTo(commSendBuf, commCountSend); // module no
-                commCountSend += 2;
+                if (isRead)
+                {
+                    if(response[0] == 0x06)
+                    {
+                        byte[] buffer = new byte[response.Length - 13];
+                        Array.Copy( response, 10, buffer, 0, buffer.Length );
+                        return OperateResult.CreateSuccessResult( SoftBasic.AsciiBytesToBytes( buffer ) );
+                    }
+                    else
+                    {
+                        byte[] buffer = new byte[response.Length - 9];
+                        Array.Copy( response, 6, buffer, 0, buffer.Length );
+                        return new OperateResult<byte[]>( BitConverter.ToUInt16( SoftBasic.AsciiBytesToBytes( buffer ), 0 ), "Data:" + SoftBasic.ByteToHexString( response ) );
+                    }
+                }
+                else
+                {
+                    if (response[0] == 0x06)
+                    {
+                        return OperateResult.CreateSuccessResult( new byte[0] );
+                    }
+                    else
+                    {
+                        byte[] buffer = new byte[response.Length - 9];
+                        Array.Copy( response, 6, buffer, 0, buffer.Length );
+                        return new OperateResult<byte[]>( BitConverter.ToUInt16( SoftBasic.AsciiBytesToBytes( buffer ), 0 ), "Data:" + SoftBasic.ByteToHexString( response ) );
+                    }
+                }
             }
-            else if (data_type == 2)
+            catch(Exception ex)
             {
-                Encoding.ASCII.GetBytes($"{System.Convert.ToUInt32(Math.Truncate(value)):X8}").CopyTo(commSendBuf, commCountSend); // module no
-                commCountSend += 8;
+                return new OperateResult<byte[]>( ex.Message );
             }
-            else // WORD
-            {
-                Encoding.ASCII.GetBytes($"{System.Convert.ToUInt16(Math.Truncate(value)):X4}").CopyTo(commSendBuf, commCountSend); // module no
-                commCountSend += 4;
-            }
-            commSendBuf[commCountSend] = (byte)EOT; // STX
-            commCountSend += 1;
-
-
-
-            byte[] DATA = new byte[commCountSend];
-
-            Array.Copy(commSendBuf, DATA, commCountSend);
-
-            return DATA;
-
-
         }
 
         #endregion

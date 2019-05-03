@@ -45,6 +45,7 @@
             this.button19 = new System.Windows.Forms.Button();
             this.button6 = new System.Windows.Forms.Button();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.button56 = new System.Windows.Forms.Button();
             this.button47 = new System.Windows.Forms.Button();
             this.button38 = new System.Windows.Forms.Button();
             this.button32 = new System.Windows.Forms.Button();
@@ -114,7 +115,7 @@
             this.label2 = new System.Windows.Forms.Label();
             this.groupBox14 = new System.Windows.Forms.GroupBox();
             this.button55 = new System.Windows.Forms.Button();
-            this.button56 = new System.Windows.Forms.Button();
+            this.button57 = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -339,6 +340,17 @@
             this.groupBox3.TabIndex = 2;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Melsec PLC(三菱 PLC)";
+            // 
+            // button56
+            // 
+            this.button56.Location = new System.Drawing.Point(15, 264);
+            this.button56.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.button56.Name = "button56";
+            this.button56.Size = new System.Drawing.Size(150, 32);
+            this.button56.TabIndex = 7;
+            this.button56.Text = "Mc Virtual Server";
+            this.button56.UseVisualStyleBackColor = true;
+            this.button56.Click += new System.EventHandler(this.Button56_Click);
             // 
             // button47
             // 
@@ -1072,6 +1084,7 @@
             // 
             // groupBox14
             // 
+            this.groupBox14.Controls.Add(this.button57);
             this.groupBox14.Controls.Add(this.button55);
             this.groupBox14.Location = new System.Drawing.Point(395, 253);
             this.groupBox14.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
@@ -1089,20 +1102,20 @@
             this.button55.Name = "button55";
             this.button55.Size = new System.Drawing.Size(150, 32);
             this.button55.TabIndex = 0;
-            this.button55.Text = "XGT Fast Enet";
+            this.button55.Text = "XGB Fast Enet";
             this.button55.UseVisualStyleBackColor = true;
             this.button55.Click += new System.EventHandler(this.Button55_Click);
             // 
-            // button56
+            // button57
             // 
-            this.button56.Location = new System.Drawing.Point(15, 264);
-            this.button56.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.button56.Name = "button56";
-            this.button56.Size = new System.Drawing.Size(150, 32);
-            this.button56.TabIndex = 7;
-            this.button56.Text = "Mc Virtual Server";
-            this.button56.UseVisualStyleBackColor = true;
-            this.button56.Click += new System.EventHandler(this.Button56_Click);
+            this.button57.Location = new System.Drawing.Point(19, 55);
+            this.button57.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.button57.Name = "button57";
+            this.button57.Size = new System.Drawing.Size(150, 32);
+            this.button57.TabIndex = 1;
+            this.button57.Text = "XGB Cnet";
+            this.button57.UseVisualStyleBackColor = true;
+            this.button57.Click += new System.EventHandler(this.Button57_Click);
             // 
             // FormLoad
             // 
@@ -1245,6 +1258,7 @@
         private System.Windows.Forms.GroupBox groupBox14;
         private System.Windows.Forms.Button button55;
         private System.Windows.Forms.Button button56;
+        private System.Windows.Forms.Button button57;
     }
 }
 
