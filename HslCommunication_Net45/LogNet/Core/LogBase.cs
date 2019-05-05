@@ -284,15 +284,6 @@ namespace HslCommunication.LogNet
             RecordMessage(HslMessageDegree.None, string.Empty, "\u0002" + Environment.NewLine);
             //ThreadPool.QueueUserWorkItem(new WaitCallback(ThreadPoolSaveText), "\u0002" + Environment.NewLine);
         }
-        
-        /// <summary>
-        /// 写入任意字符串
-        /// </summary>
-        /// <param name="text">文本</param>
-        public void WriteAnyString(string text)
-        {
-            ThreadPool.QueueUserWorkItem(new WaitCallback(ThreadPoolSaveText), text + Environment.NewLine);
-        }
 
         /// <summary>
         /// 设置日志的存储等级，高于该等级的才会被存储

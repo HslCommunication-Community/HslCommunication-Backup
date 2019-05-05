@@ -98,7 +98,7 @@ namespace 软件自动更新
 
     public class Class1
     {
-        public static SystemUpdate CurrentSystem = SystemUpdate.Controls项目;
+        public static SystemUpdate CurrentSystem = SystemUpdate.Demo项目;
     }
     
 
