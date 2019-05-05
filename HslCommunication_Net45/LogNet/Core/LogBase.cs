@@ -263,19 +263,26 @@ namespace HslCommunication.LogNet
 
             stringBuilder.Append("/");
             stringBuilder.Append(Environment.NewLine);
-
-            ThreadPool.QueueUserWorkItem(new WaitCallback(ThreadPoolSaveText), stringBuilder.ToString());
+            RecordMessage(HslMessageDegree.None, string.Empty, stringBuilder.ToString());
+            //ThreadPool.QueueUserWorkItem(new WaitCallback(ThreadPoolSaveText), stringBuilder.ToString());
         }
-
-
-
-
+        
+        /// <summary>
+        /// 写入一条任意字符
+        /// </summary>
+        /// <param name="text">内容</param>
+        public void WriteAnyString(string text)
+        {
+            RecordMessage(HslMessageDegree.None, string.Empty, text);
+        }
+        
         /// <summary>
         /// 写入一条换行符
         /// </summary>
         public void WriteNewLine()
         {
-            ThreadPool.QueueUserWorkItem(new WaitCallback(ThreadPoolSaveText), "\u0002" + Environment.NewLine);
+            RecordMessage(HslMessageDegree.None, string.Empty, "\u0002" + Environment.NewLine);
+            //ThreadPool.QueueUserWorkItem(new WaitCallback(ThreadPoolSaveText), "\u0002" + Environment.NewLine);
         }
         
         /// <summary>
@@ -434,22 +441,25 @@ namespace HslCommunication.LogNet
 
         private string HslMessageFormate(HslMessageItem hslMessage)
         {
-            StringBuilder stringBuilder = new StringBuilder("\u0002");
-            stringBuilder.Append("[");
-            stringBuilder.Append(LogNetManagment.GetDegreeDescription(hslMessage.Degree));
-            stringBuilder.Append("] ");
-
-            stringBuilder.Append(hslMessage.Time.ToString("yyyy-MM-dd HH:mm:ss.fff"));
-            stringBuilder.Append(" thread:[");
-            stringBuilder.Append(hslMessage.ThreadId.ToString("D2"));
-            stringBuilder.Append("] ");
-
-            if(!string.IsNullOrEmpty(hslMessage.KeyWord))
+             StringBuilder stringBuilder = new StringBuilder();
+            if (hslMessage.Degree!= HslMessageDegree.None)
             {
-                stringBuilder.Append( hslMessage.KeyWord );
-                stringBuilder.Append( " : " );
-            }
+                stringBuilder.Append("\u0002");
+                stringBuilder.Append("[");
+                stringBuilder.Append(LogNetManagment.GetDegreeDescription(hslMessage.Degree));
+                stringBuilder.Append("] ");
 
+                stringBuilder.Append(hslMessage.Time.ToString("yyyy-MM-dd HH:mm:ss.fff"));
+                stringBuilder.Append(" thread:[");
+                stringBuilder.Append(hslMessage.ThreadId.ToString("D2"));
+                stringBuilder.Append("] ");
+
+                if (!string.IsNullOrEmpty(hslMessage.KeyWord))
+                {
+                    stringBuilder.Append(hslMessage.KeyWord);
+                    stringBuilder.Append(" : ");
+                }
+            }  
             stringBuilder.Append(hslMessage.Text);
 
             return stringBuilder.ToString();
