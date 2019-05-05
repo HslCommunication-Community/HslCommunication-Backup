@@ -118,7 +118,7 @@ namespace HslCommunication.LogNet
         /// <summary>
         /// 写入任意字符串
         /// </summary>
-        /// <param name="text">日志内容</param>
+        /// <param name="text">文本</param>
         void WriteAnyString(string text);
         
         /// <summary>
