@@ -114,7 +114,13 @@ namespace HslCommunication.LogNet
         /// 写入一行换行符
         /// </summary>
         void WriteNewLine();
-
+        
+        /// <summary>
+        /// 写入任意字符串
+        /// </summary>
+        /// <param name="text">文本</param>
+        void WriteAnyString(string text);
+        
         /// <summary>
         /// 写入一条警告日志
         /// </summary>
