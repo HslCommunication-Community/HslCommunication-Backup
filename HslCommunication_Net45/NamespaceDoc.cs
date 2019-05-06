@@ -710,6 +710,18 @@ namespace HslCommunication
     ///             <item>发布官方论坛： http://bbs.hslcommunication.cn/ </item>
     ///         </list>
     ///     </revision>
+    ///     <revision date="2019-5-6" version="6.2.0" author="Richard.Hu">
+    ///         <list type="bullet">
+    ///             <item>SoftBuffer缓存类支持bool数据的读写，bool数组的读写，并修复double读写的bug。</item>
+    ///             <item>Modbus虚拟服务器代码重构实现，继承自NetworkDataServerBase类。</item>
+    ///             <item>新增韩国品牌LS的Fast Enet协议</item>
+    ///             <item>新增韩国品牌LS的Cnet协议</item>
+    ///             <item>新增三菱mc协议的虚拟服务器，仅支持二进制格式的机制。</item>
+    ///             <item>LogNet支持写入任意的字符串格式。</item>
+    ///             <item>其他的注释添加及代码优化。</item>
+    ///             <item>发布官方论坛： http://bbs.hslcommunication.cn/ </item>
+    ///         </list>
+    ///     </revision>
     /// </revisionHistory>
     [System.Runtime.CompilerServices.CompilerGeneratedAttribute( )]
     public class NamespaceDoc
