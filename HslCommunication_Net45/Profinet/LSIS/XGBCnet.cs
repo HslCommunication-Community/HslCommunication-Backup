@@ -9,14 +9,14 @@ using HslCommunication.BasicFramework;
 namespace HslCommunication.Profinet.LSIS
 {
     /// <summary>
-    /// 
+    /// XGB Cnet I/F module supports Serial Port.
     /// </summary>
     public class XGBCnet : SerialDeviceBase<RegularByteTransform>
     {
         #region Constructor
 
         /// <summary>
-        /// 
+        /// Instantiate a Default object
         /// </summary>
         public XGBCnet()
         {
@@ -38,11 +38,11 @@ namespace HslCommunication.Profinet.LSIS
         #region Read Write Support
 
         /// <summary>
-        /// 
+        /// Read Bytes From PLC, you should specify the length
         /// </summary>
-        /// <param name="address"></param>
-        /// <param name="length"></param>
-        /// <returns></returns>
+        /// <param name="address">the address of the data</param>
+        /// <param name="length">the length of the data, in byte unit</param>
+        /// <returns>result contains whether success.</returns>
         public override OperateResult<byte[]> Read(string address, ushort length)
         {
             OperateResult<byte[]> command = BuildReadByteCommand( Station, address, length );
@@ -55,11 +55,11 @@ namespace HslCommunication.Profinet.LSIS
         }
 
         /// <summary>
-        /// 
+        /// Write Data into plc, , you should specify the address
         /// </summary>
-        /// <param name="address"></param>
-        /// <param name="value"></param>
-        /// <returns></returns>
+        /// <param name="address">the address of the data</param>
+        /// <param name="value">source data</param>
+        /// <returns>result contains whether success.</returns>
         public override OperateResult Write(string address, byte[] value)
         {
             OperateResult<byte[]> command = BuildWriteByteCommand( Station, address, value );
@@ -76,9 +76,9 @@ namespace HslCommunication.Profinet.LSIS
         #region Object Override
 
         /// <summary>
-        /// 
+        /// 返回表示当前对象的字符串
         /// </summary>
-        /// <returns></returns>
+        /// <returns>字符串信息</returns>
         public override string ToString()
         {
             return $"XGBCnet";
