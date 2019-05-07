@@ -44,6 +44,7 @@
             this.label1 = new System.Windows.Forms.Label();
             this.label24 = new System.Windows.Forms.Label();
             this.panel2 = new System.Windows.Forms.Panel();
+            this.userControlCurve1 = new HslCommunicationDemo.DemoControl.UserControlCurve();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.textBox11 = new System.Windows.Forms.TextBox();
             this.label14 = new System.Windows.Forms.Label();
@@ -94,7 +95,7 @@
             this.label4 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.label20 = new System.Windows.Forms.Label();
-            this.userControlCurve1 = new HslCommunicationDemo.DemoControl.UserControlCurve();
+            this.button_read_byte = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.groupBox4.SuspendLayout();
@@ -273,6 +274,15 @@
             this.panel2.Size = new System.Drawing.Size(978, 537);
             this.panel2.TabIndex = 1;
             // 
+            // userControlCurve1
+            // 
+            this.userControlCurve1.AddressExample = "100";
+            this.userControlCurve1.Location = new System.Drawing.Point(545, 243);
+            this.userControlCurve1.Name = "userControlCurve1";
+            this.userControlCurve1.ReadWriteNet = null;
+            this.userControlCurve1.Size = new System.Drawing.Size(420, 279);
+            this.userControlCurve1.TabIndex = 4;
+            // 
             // groupBox4
             // 
             this.groupBox4.Controls.Add(this.textBox11);
@@ -321,7 +331,6 @@
             this.textBox13.Name = "textBox13";
             this.textBox13.Size = new System.Drawing.Size(357, 23);
             this.textBox13.TabIndex = 5;
-            this.textBox13.Text = "01 03 00 64 00 02";
             // 
             // label16
             // 
@@ -569,6 +578,7 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.button_read_byte);
             this.groupBox1.Controls.Add(this.textBox5);
             this.groupBox1.Controls.Add(this.button_read_string);
             this.groupBox1.Controls.Add(this.button_read_double);
@@ -782,14 +792,14 @@
             this.label20.TabIndex = 6;
             this.label20.Text = "作者：Richard Hu";
             // 
-            // userControlCurve1
+            // button_read_byte
             // 
-            this.userControlCurve1.AddressExample = "100";
-            this.userControlCurve1.Location = new System.Drawing.Point(545, 243);
-            this.userControlCurve1.Name = "userControlCurve1";
-            this.userControlCurve1.ReadWriteNet = null;
-            this.userControlCurve1.Size = new System.Drawing.Size(420, 279);
-            this.userControlCurve1.TabIndex = 4;
+            this.button_read_byte.Location = new System.Drawing.Point(317, 22);
+            this.button_read_byte.Name = "button_read_byte";
+            this.button_read_byte.Size = new System.Drawing.Size(82, 28);
+            this.button_read_byte.TabIndex = 19;
+            this.button_read_byte.Text = "byte读取";
+            this.button_read_byte.UseVisualStyleBackColor = true;
             // 
             // FormLsisCnet
             // 
@@ -803,7 +813,7 @@
             this.Controls.Add(this.label2);
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.panel1);
-            this.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.Font = new System.Drawing.Font("Microsoft YaHei", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.Name = "FormLsisCnet";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
@@ -895,5 +905,6 @@
         private System.Windows.Forms.Label label22;
         private System.Windows.Forms.ComboBox comboBox3;
         private DemoControl.UserControlCurve userControlCurve1;
+        private System.Windows.Forms.Button button_read_byte;
     }
 }

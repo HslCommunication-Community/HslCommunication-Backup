@@ -101,7 +101,7 @@ namespace HslCommunication.Profinet.LSIS
             try
             {
                 sb.Append("%");
-                char[] types = new char[] { 'P', 'M', 'L', 'K', 'F', 'T', 'C', 'D', 'S' };
+                char[] types = new char[] { 'P', 'M', 'L', 'K', 'F', 'T', 'C', 'D', 'S','Q','I' };
                 bool exsist = false;
                 if (isRead)
                 {
