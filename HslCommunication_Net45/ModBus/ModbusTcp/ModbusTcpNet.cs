@@ -154,7 +154,6 @@ namespace HslCommunication.ModBus
 
         #region Build Command
 
-
         /// <summary>
         /// 生成一个读取线圈的指令头
         /// </summary>

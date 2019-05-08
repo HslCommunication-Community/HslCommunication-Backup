@@ -98,7 +98,6 @@ namespace HslCommunication.ModBus
             return buffer;
         }
 
-
 #if !NETSTANDARD2_0
 
         /// <summary>
@@ -204,7 +203,6 @@ namespace HslCommunication.ModBus
                 default:                                              return StringResources.Language.UnknownError;
             }
         }
-
 
         #endregion
     }

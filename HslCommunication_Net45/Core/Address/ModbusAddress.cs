@@ -128,7 +128,7 @@ namespace HslCommunication.Core.Address
         {
             byte[] buffer = new byte[6];
             buffer[0] = this.Station < 0 ? station : (byte)this.Station;
-            buffer[1] = this.Function < 1 ? ModbusInfo.ReadCoil : (byte)this.Function;
+            buffer[1] = ModbusInfo.ReadCoil;
             buffer[2] = BitConverter.GetBytes( this.Address )[1];
             buffer[3] = BitConverter.GetBytes( this.Address )[0];
             buffer[4] = BitConverter.GetBytes( length )[1];
@@ -146,7 +146,7 @@ namespace HslCommunication.Core.Address
         {
             byte[] buffer = new byte[6];
             buffer[0] = this.Station < 0 ? station : (byte)this.Station;
-            buffer[1] = this.Function < 1 ? ModbusInfo.ReadDiscrete : (byte)this.Function;
+            buffer[1] = ModbusInfo.ReadDiscrete;
             buffer[2] = BitConverter.GetBytes( this.Address )[1];
             buffer[3] = BitConverter.GetBytes( this.Address )[0];
             buffer[4] = BitConverter.GetBytes( length )[1];
