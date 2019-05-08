@@ -59,8 +59,8 @@ namespace HslCommunicationDemo
                 groupBox1.Text = "Single Data Read test";
                 label6.Text = "Adderss:";
                 label7.Text = "Result";
-                button_read_bool.Text = "Read Bit";
-                button6.Text = "r-byte";
+                button_read_bool.Text = "r-coil";
+                button6.Text = "r-Discr";
                 button_read_short.Text = "r-short";
                 button_read_ushort.Text = "r-ushort";
                 button_read_int.Text = "r-int";
@@ -75,8 +75,8 @@ namespace HslCommunicationDemo
                 label10.Text = "Address:";
                 label9.Text = "Value";
                 groupBox2.Text = "Single Data Write test";
-                button24.Text = "w-Bit";
-                button7.Text = "w-byte";
+                button24.Text = "w-coil";
+                button7.Text = "w-Discr";
                 button22.Text = "w-short";
                 button21.Text = "w-ushort";
                 button20.Text = "w-int";
