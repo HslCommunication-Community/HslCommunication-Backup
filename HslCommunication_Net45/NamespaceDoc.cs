@@ -722,6 +722,14 @@ namespace HslCommunication
     ///             <item>发布官方论坛： http://bbs.hslcommunication.cn/ </item>
     ///         </list>
     ///     </revision>
+    ///     <revision date="2019-5-9" version="6.2.1" author="Richard.Hu">
+    ///         <list type="bullet">
+    ///             <item>修复三菱读写PLC位时的bug。</item>
+    ///             <item>修复Modbus读写线圈及离散的变量bug。</item>
+    ///             <item>强烈建议更新，不能使用6.2.0版本！或是回退更低的版本。</item>
+    ///             <item>有问题先上论坛： http://bbs.hslcommunication.cn/ </item>
+    ///         </list>
+    ///     </revision>
     /// </revisionHistory>
     [System.Runtime.CompilerServices.CompilerGeneratedAttribute( )]
     public class NamespaceDoc
