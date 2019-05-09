@@ -586,16 +586,16 @@ namespace HslCommunication.Profinet.Melsec
             {
                 // 位读取
                 byte[] Content = new byte[response.Length * 2];
-                for (int i = 11; i < response.Length; i++)
+                for (int i = 0; i < response.Length; i++)
                 {
                     if ((response[i] & 0x10) == 0x10)
                     {
-                        Content[(i - 11) * 2 + 0] = 0x01;
+                        Content[i * 2 + 0] = 0x01;
                     }
 
                     if ((response[i] & 0x01) == 0x01)
                     {
-                        Content[(i - 11) * 2 + 1] = 0x01;
+                        Content[i * 2 + 1] = 0x01;
                     }
                 }
 
