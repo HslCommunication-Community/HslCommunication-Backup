@@ -87,7 +87,67 @@ namespace HslCommunication.Profinet.LSIS
         #endregion
 
         #region Static Helper
+        /// <summary>
+        /// AnalysisAddress
+        /// </summary>
+        /// <param name="address"></param>
+        /// <param name="isRead"></param>
+        /// <returns></returns>
+        public static OperateResult<string> AnalysisAddress(string address, bool isRead)
+        {
+            // P,M,L,K,F,T
+            // P,M,L,K,F,T,C,D,S
+            StringBuilder sb = new StringBuilder();
+            try
+            {
+                sb.Append("%");
+                char[] types = new char[] { 'P', 'M', 'L', 'K', 'F', 'T', 'C', 'D', 'S','Q','I' };
+                bool exsist = false;
+                if (isRead)
+                {
+                    for (int i = 0; i < types.Length; i++)
+                    {
+                        if (types[i] == address[0])
+                        {
+                            sb.Append(types[i]);
+                            sb.Append("B");
+                            if (address[1] == 'B')
+                            {
+                                sb.Append(int.Parse(address.Substring(2)));
+                            }
+                            else if (address[1] == 'W')
+                            {
+                                sb.Append(int.Parse(address.Substring(2)) * 2);
+                            }
+                            else if (address[1] == 'D')
+                            {
+                                sb.Append(int.Parse(address.Substring(2)) * 4);
+                            }
+                            else
+                            {
+                                sb.Append(int.Parse(address.Substring(1)));
+                            }
 
+                            exsist = true;
+                            break;
+                        }
+                    }
+                }
+                else
+                {
+                     sb.Append(address);
+                      exsist = true;
+
+                }
+                if (!exsist) throw new Exception(StringResources.Language.NotSupportedDataType);
+            }
+            catch (Exception ex)
+            {
+                return new OperateResult<string>(ex.Message);
+            }
+
+            return OperateResult.CreateSuccessResult(sb.ToString());
+        }
         /// <summary>
         /// reading address  Type of ReadByte
         /// </summary>
@@ -97,7 +157,7 @@ namespace HslCommunication.Profinet.LSIS
         /// <returns>command bytes</returns>
         private static OperateResult<byte[]> BuildReadByteCommand(byte station ,string address, ushort length)
         {
-            var analysisResult = XGBFastEnet.AnalysisAddress(address);
+            var analysisResult = AnalysisAddress(address,true);
             if (!analysisResult.IsSuccess) return OperateResult.CreateFailedResult<byte[]>(analysisResult);
 
             List<byte> command = new List<byte>( );
@@ -130,7 +190,7 @@ namespace HslCommunication.Profinet.LSIS
         /// <returns>command bytes</returns>
         private static OperateResult<byte[]> BuildWriteByteCommand( byte station, string address, byte[] value )
         {
-            var analysisResult = XGBFastEnet.AnalysisAddress( address );
+            var analysisResult = AnalysisAddress( address ,false);
             if (!analysisResult.IsSuccess) return OperateResult.CreateFailedResult<byte[]>( analysisResult );
 
             List<byte> command = new List<byte>( );
