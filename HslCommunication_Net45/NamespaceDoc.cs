@@ -730,6 +730,13 @@ namespace HslCommunication
     ///             <item>有问题先上论坛： http://bbs.hslcommunication.cn/ </item>
     ///         </list>
     ///     </revision>
+    ///     <revision date="2019-5-10" version="6.2.2" author="Richard.Hu">
+    ///         <list type="bullet">
+    ///             <item>修复上个版本modbus的致命bug，已通过单元测试。</item>
+    ///             <item>新增松下的mc协议，demo已经新增，等待测试。</item>
+    ///             <item>github源代码里的支持的型号需要大家一起完善。</item>
+    ///         </list>
+    ///     </revision>
     /// </revisionHistory>
     [System.Runtime.CompilerServices.CompilerGeneratedAttribute( )]
     public class NamespaceDoc
