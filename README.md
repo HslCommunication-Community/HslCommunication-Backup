@@ -45,7 +45,7 @@ in addition to the implementation of cross-program, cross-language, cross-platfo
 the realization of log function, flow number generation function, mail sending function, Fourier transform function, and so on, 
 will integrate more common features of industrial environment in the future.
 
-In order not to let the industry 4 stay on the slogan, the high-rise flat up, and the cornerstone is HSL.
+In order not to let the industry 4.0 stay on the slogan, the high-rise flat up, and the cornerstone is HSL.
 
 ## What can HSL do
 HSL can connect the equipment of the industrial production site to the free transmission of data at the bottom, whether active or passive, 
@@ -81,6 +81,35 @@ Install-Package HslCommunication
 * QQ Group1：[592132877](http://shang.qq.com/wpa/qunwpa?idkey=2278cb9c2e0c04fc305c43e41acff940499a34007dfca9e83a7291e726f9c4e8)(full)   Group2：948305931
 * Email: hsl200909@163.com
 * VIP Group (Reward more than 200RMB to join): [838185568](http://shang.qq.com/wpa/qunwpa?idkey=eee02ce1acde63c6316cbb380a80e033a14170ab7ca981f1cac83e0b657c8860)
+
+## Supported Model and price [welcome to complete]
+####Siemens
+No. | Class | Model | Price | remarks
+-|-|-|-|-
+1 | ![pic](https://img.shields.io/badge/-SiemensS7Net-informational.svg) | ![pic](https://img.shields.io/badge/1215C-Good-success.svg) | ￥ | &nbsp;
+
+####Melsec
+No. | Class | Model | Price | remarks
+-|-|-|-|-
+1 | ![pic](https://img.shields.io/badge/-MelsecMcNet-informational.svg) | ![pic](https://img.shields.io/badge/QJ71E71%20100-Good-success.svg) | ￥ | &nbsp;
+2 | ![pic](https://img.shields.io/badge/-MelsecMcNet-informational.svg) | ![pic](https://img.shields.io/badge/Q02H-Good-success.svg) | ￥ | &nbsp;
+3 | ![pic](https://img.shields.io/badge/-MelsecMcNet-informational.svg) | ![pic](https://img.shields.io/badge/L02H-Good-success.svg) | ￥ | &nbsp;
+4 | ![pic](https://img.shields.io/badge/-MelsecMcNet-informational.svg) | ![pic](https://img.shields.io/badge/Fx5u-Good-success.svg) | ￥ | &nbsp;
+
+####AB plc
+No. | Class | Model | Price | remarks
+-|-|-|-|-
+1 | ![pic](https://img.shields.io/badge/-AllenBradleyNet-informational.svg) | ![pic](https://img.shields.io/badge/1769-Good-success.svg) | ￥ | &nbsp;
+
+####Omron
+No. | Class | Model | Price | remarks
+-|-|-|-|-
+1 | ![pic](https://img.shields.io/badge/-OmronFinsNet-informational.svg) | - | ￥ | &nbsp;
+
+####Keyence
+No. | Class | Model | Price | remarks
+-|-|-|-|-
+1 | ![pic](https://img.shields.io/badge/-OmronFinsNet-informational.svg) | - | ￥ | &nbsp;
 
 ## HslCommunication.dll Summary 
 When I started working on this project, I had an idea of how to easily and quickly read and write PLC data. Our code logic should be very simple, 
