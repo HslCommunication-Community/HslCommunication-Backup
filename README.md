@@ -100,6 +100,7 @@ No. | Class | Model | Price | remarks
 No. | Class | Model | Price | remarks
 -|-|-|-|-
 1 | ![pic](https://img.shields.io/badge/-AllenBradleyNet-informational.svg) | ![pic](https://img.shields.io/badge/1769-Good-success.svg) | ￥ | &nbsp;
+1 | ![pic](https://img.shields.io/badge/-AllenBradleyNet-informational.svg) | ![pic](https://img.shields.io/badge/1756-Good-success.svg) | ￥ | &nbsp;
 
 #### Omron
 No. | Class | Model | Price | remarks
@@ -110,6 +111,12 @@ No. | Class | Model | Price | remarks
 No. | Class | Model | Price | remarks
 -|-|-|-|-
 1 | ![pic](https://img.shields.io/badge/-OmronFinsNet-informational.svg) | - | ￥ | &nbsp;
+
+#### ModbusTcp
+No. | Class | Model | Price | remarks
+-|-|-|-|-
+1 | ![pic](https://img.shields.io/badge/-Modbus%20Tcp-informational.svg) | ![pic](https://img.shields.io/badge/1215C-Good-success.svg) | ￥ | &nbsp;
+4 | ![pic](https://img.shields.io/badge/-Modbus%20Tcp-informational.svg) | ![pic](https://img.shields.io/badge/Fx5u-Good-success.svg) | ￥ | &nbsp;
 
 ## HslCommunication.dll Summary 
 When I started working on this project, I had an idea of how to easily and quickly read and write PLC data. Our code logic should be very simple, 
