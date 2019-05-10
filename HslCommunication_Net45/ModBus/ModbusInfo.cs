@@ -168,12 +168,13 @@ namespace HslCommunication.ModBus
         /// </summary>
         /// <param name="address">带格式的地址，比如"100"，"x=4;100"，"s=1;100","s=1;x=4;100"</param>
         /// <param name="isStartWithZero">起始地址是否从0开始</param>
+        /// <param name="defaultFunction">默认的功能码信息</param>
         /// <returns>转换后的地址信息</returns>
-        public static OperateResult<ModbusAddress> AnalysisReadAddress( string address, bool isStartWithZero )
+        public static OperateResult<ModbusAddress> AnalysisAddress( string address, bool isStartWithZero, byte defaultFunction )
         {
             try
             {
-                ModbusAddress mAddress = new ModbusAddress( address, ModbusInfo.ReadRegister );
+                ModbusAddress mAddress = new ModbusAddress( address, defaultFunction );
                 if (!isStartWithZero)
                 {
                     if (mAddress.Address < 1) throw new Exception( StringResources.Language.ModbusAddressMustMoreThanOne );

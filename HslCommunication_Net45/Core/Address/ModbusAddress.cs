@@ -127,8 +127,8 @@ namespace HslCommunication.Core.Address
         public byte[] CreateReadCoils( byte station, ushort length )
         {
             byte[] buffer = new byte[6];
-            buffer[0] = this.Station < 0 ? station : (byte)this.Station;
-            buffer[1] = ModbusInfo.ReadCoil;
+            buffer[0] = Station < 0 ? station : (byte)this.Station;
+            buffer[1] = Function < 0 ? ModbusInfo.ReadCoil : (byte)Function;
             buffer[2] = BitConverter.GetBytes( this.Address )[1];
             buffer[3] = BitConverter.GetBytes( this.Address )[0];
             buffer[4] = BitConverter.GetBytes( length )[1];
@@ -146,7 +146,7 @@ namespace HslCommunication.Core.Address
         {
             byte[] buffer = new byte[6];
             buffer[0] = this.Station < 0 ? station : (byte)this.Station;
-            buffer[1] = ModbusInfo.ReadDiscrete;
+            buffer[1] = Function < 0 ? ModbusInfo.ReadDiscrete : (byte)Function;
             buffer[2] = BitConverter.GetBytes( this.Address )[1];
             buffer[3] = BitConverter.GetBytes( this.Address )[0];
             buffer[4] = BitConverter.GetBytes( length )[1];
@@ -182,7 +182,7 @@ namespace HslCommunication.Core.Address
         {
             byte[] buffer = new byte[6];
             buffer[0] = this.Station < 0 ? station : (byte)this.Station;
-            buffer[1] = this.Function < 1 ? ModbusInfo.WriteOneCoil : (byte)this.Function;
+            buffer[1] = Function < 0 ? ModbusInfo.WriteOneCoil : (byte)Function;
             buffer[2] = BitConverter.GetBytes( this.Address )[1];
             buffer[3] = BitConverter.GetBytes( this.Address )[0];
             buffer[4] = (byte)(value ? 0xFF : 0x00);
@@ -200,7 +200,7 @@ namespace HslCommunication.Core.Address
         {
             byte[] buffer = new byte[6];
             buffer[0] = this.Station < 0 ? station : (byte)this.Station;
-            buffer[1] = this.Function < 1 ? ModbusInfo.WriteOneRegister : (byte)this.Function;
+            buffer[1] = Function < 0 ? ModbusInfo.WriteOneRegister : (byte)Function;
             buffer[2] = BitConverter.GetBytes( this.Address )[1];
             buffer[3] = BitConverter.GetBytes( this.Address )[0];
             buffer[4] = values[0];
@@ -219,7 +219,7 @@ namespace HslCommunication.Core.Address
             byte[] data = SoftBasic.BoolArrayToByte( values );
             byte[] buffer = new byte[7 + data.Length];
             buffer[0] = this.Station < 0 ? station : (byte)this.Station;
-            buffer[1] = this.Function < 1 ? ModbusInfo.WriteCoil : (byte)this.Function;
+            buffer[1] = Function < 0 ? ModbusInfo.WriteCoil : (byte)Function;
             buffer[2] = BitConverter.GetBytes( this.Address )[1];
             buffer[3] = BitConverter.GetBytes( this.Address )[0];
             buffer[4] = (byte)(values.Length / 256);

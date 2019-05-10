@@ -145,7 +145,7 @@ namespace HslCommunication.ModBus
         /// <returns>携带有命令字节</returns>
         public OperateResult<byte[]> BuildReadCoilCommand( string address, ushort count )
         {
-            OperateResult<ModbusAddress> analysis = ModbusInfo.AnalysisReadAddress( address, isAddressStartWithZero );
+            OperateResult<ModbusAddress> analysis = ModbusInfo.AnalysisAddress( address, isAddressStartWithZero, ModbusInfo.ReadCoil );
             if (!analysis.IsSuccess) return OperateResult.CreateFailedResult<byte[]>( analysis );
             
             // 生成最终tcp指令
@@ -161,7 +161,7 @@ namespace HslCommunication.ModBus
         /// <returns>携带有命令字节</returns>
         public OperateResult<byte[]> BuildReadDiscreteCommand( string address, ushort length )
         {
-            OperateResult<ModbusAddress> analysis = ModbusInfo.AnalysisReadAddress( address, isAddressStartWithZero );
+            OperateResult<ModbusAddress> analysis = ModbusInfo.AnalysisAddress( address, isAddressStartWithZero, ModbusInfo.ReadDiscrete );
             if (!analysis.IsSuccess) return OperateResult.CreateFailedResult<byte[]>( analysis );
             
             // 生成最终tcp指令
@@ -177,7 +177,7 @@ namespace HslCommunication.ModBus
         /// <returns>携带有命令字节</returns>
         public OperateResult<byte[]> BuildReadRegisterCommand( string address, ushort length )
         {
-            OperateResult<ModbusAddress> analysis = ModbusInfo.AnalysisReadAddress( address, isAddressStartWithZero );
+            OperateResult<ModbusAddress> analysis = ModbusInfo.AnalysisAddress( address, isAddressStartWithZero, ModbusInfo.ReadRegister );
             if (!analysis.IsSuccess) return OperateResult.CreateFailedResult<byte[]>( analysis );
             
             // 生成最终rtu指令
@@ -206,7 +206,7 @@ namespace HslCommunication.ModBus
         /// <returns>包含结果对象的报文</returns>
         public OperateResult<byte[]> BuildWriteOneCoilCommand( string address, bool value )
         {
-            OperateResult<ModbusAddress> analysis = ModbusInfo.AnalysisReadAddress( address, isAddressStartWithZero );
+            OperateResult<ModbusAddress> analysis = ModbusInfo.AnalysisAddress( address, isAddressStartWithZero, ModbusInfo.WriteOneCoil );
             if (!analysis.IsSuccess) return OperateResult.CreateFailedResult<byte[]>( analysis );
             
             // 生成最终rtu指令
@@ -222,7 +222,7 @@ namespace HslCommunication.ModBus
         /// <returns>包含结果对象的报文</returns>
         public OperateResult<byte[]> BuildWriteOneRegisterCommand( string address, byte[] data )
         {
-            OperateResult<ModbusAddress> analysis = ModbusInfo.AnalysisReadAddress( address, isAddressStartWithZero );
+            OperateResult<ModbusAddress> analysis = ModbusInfo.AnalysisAddress( address, isAddressStartWithZero, ModbusInfo.WriteOneRegister );
             if (!analysis.IsSuccess) return OperateResult.CreateFailedResult<byte[]>( analysis );
             
             // 生成最终rtu指令
@@ -238,7 +238,7 @@ namespace HslCommunication.ModBus
         /// <returns>包含结果对象的报文</returns>
         public OperateResult<byte[]> BuildWriteCoilCommand( string address, bool[] values )
         {
-            OperateResult<ModbusAddress> analysis = ModbusInfo.AnalysisReadAddress( address, isAddressStartWithZero );
+            OperateResult<ModbusAddress> analysis = ModbusInfo.AnalysisAddress( address, isAddressStartWithZero, ModbusInfo.WriteCoil );
             if (!analysis.IsSuccess) return OperateResult.CreateFailedResult<byte[]>( analysis );
             
             // 生成最终rtu指令
@@ -254,7 +254,7 @@ namespace HslCommunication.ModBus
         /// <returns>包含结果对象的报文</returns>
         public OperateResult<byte[]> BuildWriteRegisterCommand( string address, byte[] values )
         {
-            OperateResult<ModbusAddress> analysis = ModbusInfo.AnalysisReadAddress( address, isAddressStartWithZero );
+            OperateResult<ModbusAddress> analysis = ModbusInfo.AnalysisAddress( address, isAddressStartWithZero, ModbusInfo.WriteRegister );
             if (!analysis.IsSuccess) return OperateResult.CreateFailedResult<byte[]>( analysis );
             
             // 生成最终rtu指令
@@ -450,7 +450,7 @@ namespace HslCommunication.ModBus
         /// </example>
         public override OperateResult<byte[]> Read( string address, ushort length )
         {
-            OperateResult<ModbusAddress> analysis = ModbusInfo.AnalysisReadAddress( address, isAddressStartWithZero );
+            OperateResult<ModbusAddress> analysis = ModbusInfo.AnalysisAddress( address, isAddressStartWithZero, ModbusInfo.ReadRegister );
             if (!analysis.IsSuccess) return OperateResult.CreateFailedResult<byte[]>( analysis );
 
             List<byte> lists = new List<byte>( );

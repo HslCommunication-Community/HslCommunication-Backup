@@ -40,15 +40,15 @@ namespace HslCommunication_Net45.Test.Documentation.Samples.Modbus
             
             modbusServer.Write( "100", (short)1234 );                                  // 往寄存器100写入1234值
             modbusServer.Write( "100", new short[] { 1234, -1234, 567 } );             // 往寄存器100-102写入1234,-1234,567
-            short reg_100 = modbusServer.ReadInt16( "100" );                           // 读取寄存器100的值
-            short[] reg_100_102 = modbusServer.ReadInt16( "100", 3 );                  // 读取寄存器100-102的值
+            short reg_100 = modbusServer.ReadInt16( "100" ).Content;                   // 读取寄存器100的值
+            short[] reg_100_102 = modbusServer.ReadInt16( "100", 3 ).Content;          // 读取寄存器100-102的值
 
 
             
             modbusServer.Write( "x=4;100", (short)1234 );                              // 往输入寄存器100写入1234值
             modbusServer.Write( "x=4;100", new short[] { 1234, -1234, 567 } );         // 往输入寄存器00-102写入1234,-1234,567
-            short intReg_100 = modbusServer.ReadInt16( "x=4;100" );                    // 读取输入寄存器100的值
-            short[] intReg_100_102 = modbusServer.ReadInt16( "x=4;100", 3 );           // 读取输入寄存器100-102的值
+            short intReg_100 = modbusServer.ReadInt16( "x=4;100" ).Content;            // 读取输入寄存器100的值
+            short[] intReg_100_102 = modbusServer.ReadInt16( "x=4;100", 3 ).Content;   // 读取输入寄存器100-102的值
 
 
             // 寄存器其他的数据类型写入，请参照Write方法的重载，支持byte数组,short,ushort,int,uint,long,ulong,float,double,string类型数据的读写
@@ -110,7 +110,7 @@ namespace HslCommunication_Net45.Test.Documentation.Samples.Modbus
         public void Example6( )
         {
             // 显示客户端发送的命令消息，这个事件调用一次即可。
-            modbusServer.OnDataReceived += ( ModbusTcpServer server, byte[] data ) =>
+            modbusServer.OnDataReceived += ( object sender, byte[] data ) =>
             {
                 Console.WriteLine( "Receive:" + HslCommunication.BasicFramework.SoftBasic.ByteToHexString( data ) );
             };

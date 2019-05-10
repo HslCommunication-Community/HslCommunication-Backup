@@ -89,7 +89,7 @@ namespace HslCommunication.Instrument.Temperature
         /// </example>
         public override OperateResult<byte[]> Read( string address, ushort length )
         {
-            OperateResult<ModbusAddress> analysis = ModbusInfo.AnalysisReadAddress( address, AddressStartWithZero );
+            OperateResult<ModbusAddress> analysis = ModbusInfo.AnalysisAddress( address, AddressStartWithZero, ModbusInfo.ReadRegister );
             if (!analysis.IsSuccess) return OperateResult.CreateFailedResult<byte[]>( analysis );
 
             return ReadModBusBase( analysis.Content, length );

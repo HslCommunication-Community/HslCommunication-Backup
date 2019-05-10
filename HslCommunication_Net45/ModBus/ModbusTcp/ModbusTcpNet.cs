@@ -163,7 +163,7 @@ namespace HslCommunication.ModBus
         public OperateResult<byte[]> BuildReadCoilCommand( string address, ushort length )
         {
             // 解析富地址
-            OperateResult<ModbusAddress> analysis = ModbusInfo.AnalysisReadAddress( address, isAddressStartWithZero );
+            OperateResult<ModbusAddress> analysis = ModbusInfo.AnalysisAddress( address, isAddressStartWithZero, ModbusInfo.ReadCoil );
             if (!analysis.IsSuccess) return OperateResult.CreateFailedResult<byte[]>( analysis );
 
             // 获取消息号
@@ -183,7 +183,7 @@ namespace HslCommunication.ModBus
         public OperateResult<byte[]> BuildReadDiscreteCommand( string address, ushort length )
         {
             // 解析富地址
-            OperateResult<ModbusAddress> analysis = ModbusInfo.AnalysisReadAddress( address, isAddressStartWithZero );
+            OperateResult<ModbusAddress> analysis = ModbusInfo.AnalysisAddress( address, isAddressStartWithZero, ModbusInfo.ReadDiscrete );
             if (!analysis.IsSuccess) return OperateResult.CreateFailedResult<byte[]>( analysis );
 
             // 获取消息号
@@ -206,7 +206,7 @@ namespace HslCommunication.ModBus
         public OperateResult<byte[]> BuildReadRegisterCommand( string address, ushort length )
         {
             // 解析富地址
-            OperateResult<ModbusAddress> analysis = ModbusInfo.AnalysisReadAddress( address, isAddressStartWithZero );
+            OperateResult<ModbusAddress> analysis = ModbusInfo.AnalysisAddress( address, isAddressStartWithZero, ModbusInfo.ReadRegister );
             if (!analysis.IsSuccess) return OperateResult.CreateFailedResult<byte[]>( analysis );
 
             // 获取消息号
@@ -244,7 +244,7 @@ namespace HslCommunication.ModBus
         public OperateResult<byte[]> BuildWriteOneCoilCommand( string address, bool value )
         {
             // 解析富地址
-            OperateResult<ModbusAddress> analysis = ModbusInfo.AnalysisReadAddress( address, isAddressStartWithZero );
+            OperateResult<ModbusAddress> analysis = ModbusInfo.AnalysisAddress( address, isAddressStartWithZero, ModbusInfo.WriteOneCoil );
             if (!analysis.IsSuccess) return OperateResult.CreateFailedResult<byte[]>( analysis );
 
             // 获取消息号
@@ -267,7 +267,7 @@ namespace HslCommunication.ModBus
         public OperateResult<byte[]> BuildWriteOneRegisterCommand( string address, byte[] values )
         {
             // 解析富地址
-            OperateResult<ModbusAddress> analysis = ModbusInfo.AnalysisReadAddress( address, isAddressStartWithZero );
+            OperateResult<ModbusAddress> analysis = ModbusInfo.AnalysisAddress( address, isAddressStartWithZero, ModbusInfo.WriteOneRegister );
             if (!analysis.IsSuccess) return OperateResult.CreateFailedResult<byte[]>( analysis );
 
             // 获取消息号
@@ -288,7 +288,7 @@ namespace HslCommunication.ModBus
         public OperateResult<byte[]> BuildWriteCoilCommand( string address, bool[] values )
         {
             // 解析富地址
-            OperateResult<ModbusAddress> analysis = ModbusInfo.AnalysisReadAddress( address, isAddressStartWithZero );
+            OperateResult<ModbusAddress> analysis = ModbusInfo.AnalysisAddress( address, isAddressStartWithZero, ModbusInfo.WriteCoil );
             if (!analysis.IsSuccess) return OperateResult.CreateFailedResult<byte[]>( analysis );
 
             // 获取消息号
@@ -308,7 +308,7 @@ namespace HslCommunication.ModBus
         public OperateResult<byte[]> BuildWriteRegisterCommand( string address, byte[] values )
         {
             // 解析富地址
-            OperateResult<ModbusAddress> analysis = ModbusInfo.AnalysisReadAddress( address, isAddressStartWithZero );
+            OperateResult<ModbusAddress> analysis = ModbusInfo.AnalysisAddress( address, isAddressStartWithZero, ModbusInfo.WriteRegister );
             if (!analysis.IsSuccess) return OperateResult.CreateFailedResult<byte[]>( analysis );
 
             // 获取消息号
@@ -503,7 +503,7 @@ namespace HslCommunication.ModBus
         /// </example>
         public override OperateResult<byte[]> Read( string address, ushort length )
         {
-            OperateResult<ModbusAddress> analysis = ModbusInfo.AnalysisReadAddress( address, isAddressStartWithZero );
+            OperateResult<ModbusAddress> analysis = ModbusInfo.AnalysisAddress( address, isAddressStartWithZero, ModbusInfo.ReadRegister );
             if (!analysis.IsSuccess) return OperateResult.CreateFailedResult<byte[]>( analysis );
 
             List<byte> lists = new List<byte>( );
@@ -639,7 +639,7 @@ namespace HslCommunication.ModBus
         /// <returns>返回写入结果</returns>
         public OperateResult Write( string address, bool[] values )
         {
-            return Write( address, BasicFramework.SoftBasic.BoolArrayToByte( values ) );
+            return Write( address, SoftBasic.BoolArrayToByte( values ) );
         }
 
 

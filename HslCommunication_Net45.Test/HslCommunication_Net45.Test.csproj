@@ -57,9 +57,6 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\HslCommunication_Net45\Profinet\Keyence\KeyenceMcNet.cs">
-      <Link>Profinet\Keyence\KeyenceMcNet.cs</Link>
-    </Compile>
     <Compile Include="BasicFramework\SoftBasicTest.cs" />
     <Compile Include="BasicFramework\SoftBufferTest.cs" />
     <Compile Include="BasicFramework\SoftSecurityTest.cs" />
@@ -113,6 +110,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Documentation\Samples\LogNet\" />
+    <Folder Include="Profinet\Keyence\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

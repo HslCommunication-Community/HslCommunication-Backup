@@ -248,7 +248,7 @@ namespace HslCommunication.ModBus
         /// <returns>byte数组值</returns>
         public override OperateResult<byte[]> Read( string address, ushort length )
         {
-            OperateResult<ModbusAddress> analysis = ModbusInfo.AnalysisReadAddress( address, true );
+            OperateResult<ModbusAddress> analysis = ModbusInfo.AnalysisAddress( address, true, ModbusInfo.ReadRegister );
             if (!analysis.IsSuccess) return OperateResult.CreateFailedResult<byte[]>( analysis );
 
             if(analysis.Content.Function == ModbusInfo.ReadRegister)
@@ -273,7 +273,7 @@ namespace HslCommunication.ModBus
         /// <returns>是否写入成功的结果对象</returns>
         public override OperateResult Write( string address, byte[] value )
         {
-            OperateResult<ModbusAddress> analysis = ModbusInfo.AnalysisReadAddress( address, true );
+            OperateResult<ModbusAddress> analysis = ModbusInfo.AnalysisAddress( address, true, ModbusInfo.ReadRegister );
             if (!analysis.IsSuccess) return OperateResult.CreateFailedResult<byte[]>( analysis );
 
             if (analysis.Content.Function == ModbusInfo.ReadRegister)
