@@ -84,37 +84,37 @@ Install-Package HslCommunication
 
 ## Supported Model and price [welcome to complete]
 #### Siemens
-No. | Class | Model | Price | remarks | contributor
+No. | Class | Model | Price | Remarks | Contributor
 -|-|-|-|-|-
 1 | ![pic](https://img.shields.io/badge/-SiemensS7Net-informational.svg) | ![pic](https://img.shields.io/badge/1215C-Good-success.svg) | ￥ | &nbsp; | [Richard Hu](https://github.com/dathlin/HslCommunication)
 
 #### Melsec
-No. | Class | Model | Price | remarks
--|-|-|-|-
+No. | Class | Model | Price | Remarks | Contributor
+-|-|-|-|-|-
 1 | ![pic](https://img.shields.io/badge/-MelsecMcNet-informational.svg) | ![pic](https://img.shields.io/badge/QJ71E71%20100-Good-success.svg) | ￥ | &nbsp; | [Richard Hu](https://github.com/dathlin/HslCommunication)
 2 | ![pic](https://img.shields.io/badge/-MelsecMcNet-informational.svg) | ![pic](https://img.shields.io/badge/Q02H-Good-success.svg) | ￥ | &nbsp; | [Richard Hu](https://github.com/dathlin/HslCommunication)
 3 | ![pic](https://img.shields.io/badge/-MelsecMcNet-informational.svg) | ![pic](https://img.shields.io/badge/L02H-Good-success.svg) | ￥ | &nbsp; | [Richard Hu](https://github.com/dathlin/HslCommunication)
 4 | ![pic](https://img.shields.io/badge/-MelsecMcNet-informational.svg) | ![pic](https://img.shields.io/badge/Fx5u-Good-success.svg) | ￥ | &nbsp; | [Richard Hu](https://github.com/dathlin/HslCommunication)
 
 #### AB plc
-No. | Class | Model | Price | remarks
--|-|-|-|-
+No. | Class | Model | Price | Remarks | Contributor
+-|-|-|-|-|-
 1 | ![pic](https://img.shields.io/badge/-AllenBradleyNet-informational.svg) | ![pic](https://img.shields.io/badge/1769-Good-success.svg) | ￥ | &nbsp; | &nbsp;
 1 | ![pic](https://img.shields.io/badge/-AllenBradleyNet-informational.svg) | ![pic](https://img.shields.io/badge/1756-Good-success.svg) | ￥ | &nbsp; | &nbsp;
 
 #### Omron
-No. | Class | Model | Price | remarks
--|-|-|-|-
+No. | Class | Model | Price | Remarks | Contributor
+-|-|-|-|-|-
 1 | ![pic](https://img.shields.io/badge/-OmronFinsNet-informational.svg) | - | ￥ | &nbsp;| &nbsp;
 
 #### Keyence
-No. | Class | Model | Price | remarks
--|-|-|-|-
+No. | Class | Model | Price | Remarks | Contributor
+-|-|-|-|-|-
 1 | ![pic](https://img.shields.io/badge/-OmronFinsNet-informational.svg) | - | ￥ | &nbsp;| &nbsp;
 
 #### ModbusTcp
-No. | Class | Model | Price | remarks
--|-|-|-|-
+No. | Class | Model | Price | Remarks | Contributor
+-|-|-|-|-|-
 1 | ![pic](https://img.shields.io/badge/-Modbus%20Tcp-informational.svg) | ![pic](https://img.shields.io/badge/1215C-Good-success.svg) | ￥ | &nbsp; | [Richard Hu](https://github.com/dathlin/HslCommunication)
 4 | ![pic](https://img.shields.io/badge/-Modbus%20Tcp-informational.svg) | ![pic](https://img.shields.io/badge/Fx5u-Good-success.svg) | ￥ | &nbsp; | [Richard Hu](https://github.com/dathlin/HslCommunication)
 
