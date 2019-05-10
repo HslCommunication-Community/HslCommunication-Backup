@@ -429,6 +429,152 @@ namespace HslCommunication.Profinet.Melsec
         }
 
         /// <summary>
+        /// 计算松下的MC协议的偏移地址的机制
+        /// </summary>
+        /// <param name="address">字符串形式的地址</param>
+        /// <returns>实际的偏移地址</returns>
+        public static int GetPanasonicAddress( string address )
+        {
+            if (address.IndexOf( '.' ) > 0)
+            {
+                string[] values = address.Split( '.' );
+                return Convert.ToInt32( values[0] ) * 16 + Convert.ToInt32( values[1] );
+            }
+            else
+            {
+                return Convert.ToInt32( address.Substring( 0, address.Length - 1 ) ) * 16 + Convert.ToInt32( address.Substring( address.Length - 1 ), 16 );
+            }
+        }
+
+        /// <summary>
+        /// 松下的解析数据地址
+        /// </summary>
+        /// <param name="address">数据地址</param>
+        /// <returns>解析值</returns>
+        public static OperateResult<MelsecMcDataType, int> PanasonicAnalysisAddress( string address )
+        {
+            var result = new OperateResult<MelsecMcDataType, int>( );
+            try
+            {
+                switch (address[0])
+                {
+                    case 'R':
+                    case 'r':
+                        {
+                            int add = GetPanasonicAddress( address.Substring( 1 ) );
+                            if (add < 14400)
+                            {
+                                result.Content1 = MelsecMcDataType.Panasonic_R;
+                                result.Content2 = add;
+                            }
+                            else
+                            {
+                                result.Content1 = MelsecMcDataType.Panasonic_SM;
+                                result.Content2 = add - 14400;
+                            }
+                            break;
+                        }
+                    case 'X':
+                    case 'x':
+                        {
+                            result.Content1 = MelsecMcDataType.Panasonic_X;
+                            result.Content2 = GetPanasonicAddress( address.Substring( 1 ) );
+                            break;
+                        }
+                    case 'Y':
+                    case 'y':
+                        {
+                            result.Content1 = MelsecMcDataType.Panasonic_Y;
+                            result.Content2 = GetPanasonicAddress( address.Substring( 1 ) );
+                            break;
+                        }
+                    case 'L':
+                    case 'l':
+                        {
+                            if (address[1] == 'D' || address[1] == 'd')
+                            {
+                                result.Content1 = MelsecMcDataType.Panasonic_LD;
+                                result.Content2 = Convert.ToUInt16( address.Substring( 2 ) );
+                                break;
+                            }
+                            else
+                            {
+                                result.Content1 = MelsecMcDataType.Panasonic_L;
+                                result.Content2 = GetPanasonicAddress( address.Substring( 1 ) );
+                            }
+                            break;
+                        }
+                    case 'D':
+                    case 'd':
+                        {
+                            int add = Convert.ToInt32( address.Substring( 1 ) );
+                            if (add < 90000)
+                            {
+                                result.Content1 = MelsecMcDataType.Panasonic_DT;
+                                result.Content2 = Convert.ToUInt16( address.Substring( 1 ) );
+                            }
+                            else
+                            {
+                                result.Content1 = MelsecMcDataType.Panasonic_SD;
+                                result.Content2 = Convert.ToUInt16( address.Substring( 1 ) );
+                            }
+                            break;
+                        }
+                    case 'T':
+                    case 't':
+                        {
+                            if (address[1] == 'N' || address[1] == 'n')
+                            {
+                                result.Content1 = MelsecMcDataType.Panasonic_TN;
+                                result.Content2 = Convert.ToUInt16( address.Substring( 2 ) );
+                                break;
+                            }
+                            else if (address[1] == 'S' || address[1] == 's')
+                            {
+                                result.Content1 = MelsecMcDataType.Panasonic_TS;
+                                result.Content2 = Convert.ToUInt16( address.Substring( 2 ) );
+                                break;
+                            }
+                            else
+                            {
+                                throw new Exception( StringResources.Language.NotSupportedDataType );
+                            }
+                        }
+                    case 'C':
+                    case 'c':
+                        {
+                            if (address[1] == 'N' || address[1] == 'n')
+                            {
+                                result.Content1 = MelsecMcDataType.Panasonic_CN;
+                                result.Content2 = Convert.ToUInt16( address.Substring( 2 ) );
+                                break;
+                            }
+                            else if (address[1] == 'S' || address[1] == 's')
+                            {
+                                result.Content1 = MelsecMcDataType.Panasonic_CS;
+                                result.Content2 = Convert.ToUInt16( address.Substring( 2 ) );
+                                break;
+                            }
+                            else
+                            {
+                                throw new Exception( StringResources.Language.NotSupportedDataType );
+                            }
+                        }
+                    default: throw new Exception( StringResources.Language.NotSupportedDataType );
+                }
+            }
+            catch (Exception ex)
+            {
+                result.Message = ex.Message;
+                return result;
+            }
+
+            result.IsSuccess = true;
+            result.Message = StringResources.Language.SuccessText;
+            return result;
+        }
+
+        /// <summary>
         /// 从地址，长度，是否位读取进行创建读取的MC的核心报文
         /// </summary>
         /// <param name="address">三菱的地址信息，具体格式参照<seealso cref="MelsecMcNet"/> 的注释说明</param>

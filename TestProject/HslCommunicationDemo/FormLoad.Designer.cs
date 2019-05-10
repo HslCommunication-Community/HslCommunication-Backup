@@ -114,8 +114,9 @@
             this.button49 = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
             this.groupBox14 = new System.Windows.Forms.GroupBox();
-            this.button55 = new System.Windows.Forms.Button();
             this.button57 = new System.Windows.Forms.Button();
+            this.button55 = new System.Windows.Forms.Button();
+            this.button58 = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -820,6 +821,7 @@
             // 
             // groupBox10
             // 
+            this.groupBox10.Controls.Add(this.button58);
             this.groupBox10.Controls.Add(this.button35);
             this.groupBox10.Location = new System.Drawing.Point(777, 29);
             this.groupBox10.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
@@ -1095,6 +1097,17 @@
             this.groupBox14.TabStop = false;
             this.groupBox14.Text = "LSIS PLC";
             // 
+            // button57
+            // 
+            this.button57.Location = new System.Drawing.Point(19, 55);
+            this.button57.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.button57.Name = "button57";
+            this.button57.Size = new System.Drawing.Size(150, 32);
+            this.button57.TabIndex = 1;
+            this.button57.Text = "XGB Cnet";
+            this.button57.UseVisualStyleBackColor = true;
+            this.button57.Click += new System.EventHandler(this.Button57_Click);
+            // 
             // button55
             // 
             this.button55.Location = new System.Drawing.Point(19, 18);
@@ -1106,16 +1119,16 @@
             this.button55.UseVisualStyleBackColor = true;
             this.button55.Click += new System.EventHandler(this.Button55_Click);
             // 
-            // button57
+            // button58
             // 
-            this.button57.Location = new System.Drawing.Point(19, 55);
-            this.button57.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.button57.Name = "button57";
-            this.button57.Size = new System.Drawing.Size(150, 32);
-            this.button57.TabIndex = 1;
-            this.button57.Text = "XGB Cnet";
-            this.button57.UseVisualStyleBackColor = true;
-            this.button57.Click += new System.EventHandler(this.Button57_Click);
+            this.button58.Location = new System.Drawing.Point(19, 64);
+            this.button58.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.button58.Name = "button58";
+            this.button58.Size = new System.Drawing.Size(150, 32);
+            this.button58.TabIndex = 3;
+            this.button58.Text = "MC-3E (Binary)";
+            this.button58.UseVisualStyleBackColor = true;
+            this.button58.Click += new System.EventHandler(this.Button58_Click);
             // 
             // FormLoad
             // 
@@ -1259,6 +1272,7 @@
         private System.Windows.Forms.Button button55;
         private System.Windows.Forms.Button button56;
         private System.Windows.Forms.Button button57;
+        private System.Windows.Forms.Button button58;
     }
 }
 

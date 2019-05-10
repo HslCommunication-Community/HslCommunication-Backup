@@ -218,5 +218,56 @@ namespace HslCommunication.Profinet.Melsec
         /// 计数器（接点）
         /// </summary>
         public readonly static MelsecMcDataType Keyence_CS = new MelsecMcDataType( 0xC4, 0x01, "CS", 10 );
+
+
+        /// <summary>
+        /// 输入继电器
+        /// </summary>
+        public readonly static MelsecMcDataType Panasonic_X = new MelsecMcDataType( 0x9C, 0x01, "X*", 10 );
+        /// <summary>
+        /// 输出继电器
+        /// </summary>
+        public readonly static MelsecMcDataType Panasonic_Y = new MelsecMcDataType( 0x9D, 0x01, "Y*", 10 );
+        /// <summary>
+        /// 链接继电器
+        /// </summary>
+        public readonly static MelsecMcDataType Panasonic_L = new MelsecMcDataType( 0xA0, 0x01, "L*", 10 );
+        /// <summary>
+        /// 内部继电器
+        /// </summary>
+        public readonly static MelsecMcDataType Panasonic_R = new MelsecMcDataType( 0x90, 0x01, "R*", 10 );
+        /// <summary>
+        /// 数据存储器
+        /// </summary>
+        public readonly static MelsecMcDataType Panasonic_DT = new MelsecMcDataType( 0xA8, 0x00, "D*", 10 );
+        /// <summary>
+        /// 链接存储器
+        /// </summary>
+        public readonly static MelsecMcDataType Panasonic_LD = new MelsecMcDataType( 0xA8, 0x00, "W*", 10 );
+        /// <summary>
+        /// 计时器（当前值）
+        /// </summary>
+        public readonly static MelsecMcDataType Panasonic_TN = new MelsecMcDataType( 0xC2, 0x00, "TN", 10 );
+        /// <summary>
+        /// 计时器（接点）
+        /// </summary>
+        public readonly static MelsecMcDataType Panasonic_TS = new MelsecMcDataType( 0xC1, 0x01, "TS", 10 );
+        /// <summary>
+        /// 计数器（当前值）
+        /// </summary>
+        public readonly static MelsecMcDataType Panasonic_CN = new MelsecMcDataType( 0xC5, 0x00, "CN", 10 );
+        /// <summary>
+        /// 计数器（接点）
+        /// </summary>
+        public readonly static MelsecMcDataType Panasonic_CS = new MelsecMcDataType( 0xC4, 0x01, "CS", 10 );
+        /// <summary>
+        /// 特殊链接继电器
+        /// </summary>
+        public readonly static MelsecMcDataType Panasonic_SM = new MelsecMcDataType( 0x91, 0x01, "SM", 10 );
+        /// <summary>
+        /// 特殊链接存储器
+        /// </summary>
+        public readonly static MelsecMcDataType Panasonic_SD = new MelsecMcDataType( 0xA9, 0x00, "SD", 10 );
+
     }
 }
