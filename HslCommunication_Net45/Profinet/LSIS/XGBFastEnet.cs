@@ -153,12 +153,22 @@ namespace HslCommunication.Profinet.LSIS
         {
             return Write(address, new byte[] { value });
         }
+        /// <summary>
+        /// WriteCoil
+        /// </summary>
+        /// <param name="address"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public OperateResult WriteCoil(string address, bool value)
+        {
+           
+            return Write(address, new byte[] { (byte)(value ? 0x01 : 0x00), 0x00 });
+        }
+            #endregion
 
-        #endregion
+            #region Private Member
 
-        #region Private Member
-
-        private byte[] PackCommand(byte[] coreCommand)
+            private byte[] PackCommand(byte[] coreCommand)
         {
             byte[] command = new byte[coreCommand.Length + 20];
             Encoding.ASCII.GetBytes(CompanyID1).CopyTo(command, 0);

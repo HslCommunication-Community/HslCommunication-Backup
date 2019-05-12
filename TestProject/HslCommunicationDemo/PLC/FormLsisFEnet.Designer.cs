@@ -29,6 +29,8 @@
         private void InitializeComponent( )
         {
             this.panel1 = new System.Windows.Forms.Panel();
+            this.textBox12 = new System.Windows.Forms.TextBox();
+            this.label15 = new System.Windows.Forms.Label();
             this.label22 = new System.Windows.Forms.Label();
             this.label21 = new System.Windows.Forms.Label();
             this.button2 = new System.Windows.Forms.Button();
@@ -91,8 +93,8 @@
             this.label4 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.label20 = new System.Windows.Forms.Label();
-            this.textBox12 = new System.Windows.Forms.TextBox();
-            this.label15 = new System.Windows.Forms.Label();
+            this.button24 = new System.Windows.Forms.Button();
+            this.label17 = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.groupBox4.SuspendLayout();
@@ -121,6 +123,23 @@
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(978, 54);
             this.panel1.TabIndex = 0;
+            // 
+            // textBox12
+            // 
+            this.textBox12.Location = new System.Drawing.Point(403, 14);
+            this.textBox12.Name = "textBox12";
+            this.textBox12.Size = new System.Drawing.Size(53, 23);
+            this.textBox12.TabIndex = 9;
+            this.textBox12.Text = "3";
+            // 
+            // label15
+            // 
+            this.label15.AutoSize = true;
+            this.label15.Location = new System.Drawing.Point(349, 17);
+            this.label15.Name = "label15";
+            this.label15.Size = new System.Drawing.Size(42, 17);
+            this.label15.TabIndex = 8;
+            this.label15.Text = "Slot：";
             // 
             // label22
             // 
@@ -183,7 +202,7 @@
             this.textBox1.Name = "textBox1";
             this.textBox1.Size = new System.Drawing.Size(141, 23);
             this.textBox1.TabIndex = 1;
-            this.textBox1.Text = "192.168.0.100";
+            this.textBox1.Text = "127.0.0.1";
             // 
             // label1
             // 
@@ -358,6 +377,8 @@
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.label17);
+            this.groupBox2.Controls.Add(this.button24);
             this.groupBox2.Controls.Add(this.label19);
             this.groupBox2.Controls.Add(this.button14);
             this.groupBox2.Controls.Add(this.button15);
@@ -750,22 +771,24 @@
             this.label20.TabIndex = 6;
             this.label20.Text = "作者：Richard Hu";
             // 
-            // textBox12
+            // button24
             // 
-            this.textBox12.Location = new System.Drawing.Point(403, 14);
-            this.textBox12.Name = "textBox12";
-            this.textBox12.Size = new System.Drawing.Size(53, 23);
-            this.textBox12.TabIndex = 9;
-            this.textBox12.Text = "3";
+            this.button24.Location = new System.Drawing.Point(226, 22);
+            this.button24.Name = "button24";
+            this.button24.Size = new System.Drawing.Size(82, 28);
+            this.button24.TabIndex = 18;
+            this.button24.Text = "w-Bit";
+            this.button24.UseVisualStyleBackColor = true;
+            this.button24.Click += new System.EventHandler(this.Button24_Click);
             // 
-            // label15
+            // label17
             // 
-            this.label15.AutoSize = true;
-            this.label15.Location = new System.Drawing.Point(349, 17);
-            this.label15.Name = "label15";
-            this.label15.Size = new System.Drawing.Size(42, 17);
-            this.label15.TabIndex = 8;
-            this.label15.Text = "Slot：";
+            this.label17.AutoSize = true;
+            this.label17.Location = new System.Drawing.Point(26, 130);
+            this.label17.Name = "label17";
+            this.label17.Size = new System.Drawing.Size(116, 17);
+            this.label17.TabIndex = 19;
+            this.label17.Text = "Address: MX  DW ";
             // 
             // FormLsisFEnet
             // 
@@ -779,7 +802,7 @@
             this.Controls.Add(this.label2);
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.panel1);
-            this.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.Font = new System.Drawing.Font("Microsoft YaHei", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.Name = "FormLsisFEnet";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
@@ -869,5 +892,7 @@
         private DemoControl.UserControlCurve userControlCurve1;
         private System.Windows.Forms.TextBox textBox12;
         private System.Windows.Forms.Label label15;
+        private System.Windows.Forms.Button button24;
+        private System.Windows.Forms.Label label17;
     }
 }

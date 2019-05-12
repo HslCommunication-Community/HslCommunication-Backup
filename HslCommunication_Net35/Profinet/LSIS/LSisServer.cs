@@ -20,7 +20,7 @@ namespace HslCommunication.Profinet.LSIS
         /// </summary>
         public LSisServer()
         {
-            // 四个数据池初始化，输入寄存器，输出寄存器，中间寄存器，DB块寄存器
+
             inputBuffer = new SoftBuffer(DataPoolLength);
             outputBuffer = new SoftBuffer(DataPoolLength);
             memeryBuffer = new SoftBuffer(DataPoolLength);
@@ -46,12 +46,12 @@ namespace HslCommunication.Profinet.LSIS
             OperateResult<string> analysis = XGBFastEnet.AnalysisAddress(address, true);
             if (!analysis.IsSuccess) return OperateResult.CreateFailedResult<byte[]>(analysis);
 
-            switch (analysis.Content[0])
+            switch (analysis.Content[1])
             {
-                case 'P': return OperateResult.CreateSuccessResult(inputBuffer.GetBytes(int.Parse(analysis.Content) / 8, length));
-                case 'Q': return OperateResult.CreateSuccessResult(outputBuffer.GetBytes(int.Parse(analysis.Content) / 8, length));
-                case 'M': return OperateResult.CreateSuccessResult(memeryBuffer.GetBytes(int.Parse(analysis.Content) / 8, length));
-                case 'D': return OperateResult.CreateSuccessResult(dbBlockBuffer.GetBytes(int.Parse(analysis.Content) / 8, length));
+                case 'P': return OperateResult.CreateSuccessResult(inputBuffer.GetBytes(int.Parse(analysis.Content.Remove(0, 3)) / 8, length));
+                case 'Q': return OperateResult.CreateSuccessResult(outputBuffer.GetBytes(int.Parse(analysis.Content.Remove(0, 3)) / 8, length));
+                case 'M': return OperateResult.CreateSuccessResult(memeryBuffer.GetBytes(int.Parse(analysis.Content.Remove(0, 3)) / 8, length));
+                case 'D': return OperateResult.CreateSuccessResult(dbBlockBuffer.GetBytes(int.Parse(analysis.Content.Remove(0, 3)) / 8, length));
                 default: return new OperateResult<byte[]>(StringResources.Language.NotSupportedDataType);
             }
         }
@@ -69,10 +69,10 @@ namespace HslCommunication.Profinet.LSIS
 
             switch (analysis.Content[0])
             {
-                case 'P': inputBuffer.SetBytes(value, int.Parse(analysis.Content) / 8); return OperateResult.CreateSuccessResult();
-                case 'Q': outputBuffer.SetBytes(value, int.Parse(analysis.Content) / 8); return OperateResult.CreateSuccessResult();
-                case 'M': memeryBuffer.SetBytes(value, int.Parse(analysis.Content) / 8); return OperateResult.CreateSuccessResult();
-                case 'D': dbBlockBuffer.SetBytes(value, int.Parse(analysis.Content) / 8); return OperateResult.CreateSuccessResult();
+                case 'P': inputBuffer.SetBytes(value, int.Parse(analysis.Content.Remove(0, 3)) / 8); return OperateResult.CreateSuccessResult();
+                case 'Q': outputBuffer.SetBytes(value, int.Parse(analysis.Content.Remove(0, 3)) / 8); return OperateResult.CreateSuccessResult();
+                case 'M': memeryBuffer.SetBytes(value, int.Parse(analysis.Content.Remove(0, 3)) / 8); return OperateResult.CreateSuccessResult();
+                case 'D': dbBlockBuffer.SetBytes(value, int.Parse(analysis.Content.Remove(0, 3)) / 8); return OperateResult.CreateSuccessResult();
                 default: return new OperateResult<byte[]>(StringResources.Language.NotSupportedDataType);
             }
         }
@@ -208,7 +208,7 @@ namespace HslCommunication.Profinet.LSIS
                         // 写数据
                         session.WorkSocket.Send(WriteByMessage(receive));
                     }
-                    
+
                     else
                     {
                         session.WorkSocket.Close();
@@ -231,10 +231,10 @@ namespace HslCommunication.Profinet.LSIS
         private byte[] ReadByMessage(byte[] packCommand)
         {
             List<byte> content = new List<byte>();
-            
-                content.AddRange(ReadByCommand(packCommand));
-          
-            
+
+            content.AddRange(ReadByCommand(packCommand));
+
+
             return content.ToArray();
         }
 
@@ -273,7 +273,7 @@ namespace HslCommunication.Profinet.LSIS
                 switch (DeviceAddress[1])
                 {
                     case 'P':
-                         data = inputBuffer.GetBool(startIndex, dbint);
+                        data = inputBuffer.GetBool(startIndex, dbint);
                         break;
                     case 'Q':
                         data = outputBuffer.GetBool(startIndex, dbint);
@@ -299,9 +299,9 @@ namespace HslCommunication.Profinet.LSIS
                 byte[] dataW = null;
                 var subAddress = int.Parse(StartAddress) / 2;
                 var sublength = RequestCount / 2;
-                
+
                 int startIndex = subAddress;
-                 switch (DeviceAddress[1])
+                switch (DeviceAddress[1])
                 {
                     case 'P':
                         dataW = inputBuffer.GetBytes(startIndex, (ushort)RequestCount);
@@ -378,36 +378,102 @@ namespace HslCommunication.Profinet.LSIS
 
         private byte[] WriteByMessage(byte[] packCommand)
         {
-            if (packCommand[22] == 0x02)
+            int NameLength = packCommand[28];
+            int RequestCount = BitConverter.ToUInt16(packCommand, 30 + NameLength);
+            int _byte2 = 12 + (int)RequestCount;
+
+            var result = new List<byte>();
+            var data5 = new byte[30];
+            Array.Copy(packCommand, 0, data5, 0, 30);
+            data5[9] = 0x11;
+            data5[10] = 0x01;
+            data5[12] = 0xA0;
+            data5[13] = 0x11;
+            data5[16] = (byte)_byte2;
+            data5[18] = 0x03;
+            data5[20] = 89;
+            data5[21] = 0;
+            data5[22] = 20;
+            data5[23] = 0;
+            data5[24] = 0x08;
+            data5[25] = 0x01;
+            data5[26] = 0;
+            data5[27] = 0;
+            data5[28] = 1;
+            data5[29] = 0;
+            result.AddRange(data5);
+            result.AddRange(BitConverter.GetBytes((ushort)RequestCount));
+           
+            var bitSelacdetAddress = 0;
+           var DeviceAddress = Encoding.ASCII.GetString(packCommand, 30, NameLength);
+           var AddressLength = BitConverter.ToUInt16(packCommand, 30 + NameLength);
+
+            var tempStrgSelacdetAddress = DeviceAddress.Remove(0, 3);
+            switch (tempStrgSelacdetAddress)
             {
-                // 字写入
-                int count = ByteTransform.TransInt16(packCommand, 23);
-                int startIndex = (packCommand[28] * 65536 + packCommand[29] * 256 + packCommand[30]) / 8;
-                byte[] data = ByteTransform.TransByte(packCommand, 35, count);
-                switch (packCommand[27])
+                case "A":
+                    bitSelacdetAddress = 10;
+                    break;
+                case "B":
+                    bitSelacdetAddress = 11;
+                    break;
+                case "C":
+                    bitSelacdetAddress = 12;
+                    break;
+                case "D":
+                    bitSelacdetAddress = 13;
+                    break;
+                case "E":
+                    bitSelacdetAddress = 14;
+                    break;
+                case "F":
+                    bitSelacdetAddress = 15;
+                    break;
+
+                default:
+                    bitSelacdetAddress = int.Parse(DeviceAddress.Remove(0, 3));
+                    break;
+            }
+
+
+
+
+
+
+
+            int startIndex = int.Parse(DeviceAddress.Remove(0, 3));
+            if (DeviceAddress.Substring(1, 2) == "DW" || DeviceAddress.Substring(1, 2) == "DB")
+            {
+                
+                //int count = ByteTransform.TransInt16(packCommand, 23);
+                
+                byte[] data = ByteTransform.TransByte(packCommand, 30 + NameLength + AddressLength, RequestCount);
+                switch (DeviceAddress[1])
                 {
-                    case 0x81: inputBuffer.SetBytes(data, startIndex); break;
-                    case 0x82: outputBuffer.SetBytes(data, startIndex); break;
-                    case 0x83: memeryBuffer.SetBytes(data, startIndex); break;
-                    case 0x84: dbBlockBuffer.SetBytes(data, startIndex); break;
+                    case 'C': inputBuffer.SetBytes(data, startIndex); break;
+                    case 'T': outputBuffer.SetBytes(data, startIndex); break;
+                    case 'M': memeryBuffer.SetBytes(data, startIndex); break;
+                    case 'D': dbBlockBuffer.SetBytes(data, startIndex); break;
                     default: throw new Exception(StringResources.Language.NotSupportedDataType);
                 }
-                return SoftBasic.HexStringToBytes("03 00 00 16 02 F0 80 32 03 00 00 00 01 00 02 00 01 00 00 05 01 FF");
+                result.AddRange(data);
+                return result.ToArray();
             }
             else
             {
-                // 位写入
-                int startIndex = packCommand[28] * 65536 + packCommand[29] * 256 + packCommand[30];
-                bool value = packCommand[35] != 0x00;
-                switch (packCommand[27])
+                 
+                bool value = BitConverter.ToBoolean(packCommand, 30 + NameLength + AddressLength);
+
+                switch (DeviceAddress[1])
                 {
-                    case 0x81: inputBuffer.SetBool(value, startIndex); break;
-                    case 0x82: outputBuffer.SetBool(value, startIndex); break;
-                    case 0x83: memeryBuffer.SetBool(value, startIndex); break;
-                    case 0x84: dbBlockBuffer.SetBool(value, startIndex); break;
+                    //case 'M': inputBuffer.SetBool(value, startIndex); break;
+                    //case 'M': outputBuffer.SetBool(value, startIndex); break;
+                    case 'M': memeryBuffer.SetBool(value, startIndex); break;
+                    case 'D': dbBlockBuffer.SetBool(value, startIndex); break;
                     default: throw new Exception(StringResources.Language.NotSupportedDataType);
                 }
-                return SoftBasic.HexStringToBytes("03 00 00 16 02 F0 80 32 03 00 00 00 01 00 02 00 01 00 00 05 01 FF");
+                result.AddRange(new byte[] { 0, 0 });
+                return result.ToArray();
             }
         }
 
