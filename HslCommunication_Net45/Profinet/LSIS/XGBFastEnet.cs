@@ -20,7 +20,7 @@ namespace HslCommunication.Profinet.LSIS
         /// <summary>
         /// Instantiate a Default object
         /// </summary>
-        public XGBFastEnet( )
+        public XGBFastEnet()
         {
             WordLength = 2;
             IpAddress = string.Empty;
@@ -32,7 +32,7 @@ namespace HslCommunication.Profinet.LSIS
         /// </summary>
         /// <param name="ipAddress">the ip address of the plc</param>
         /// <param name="port">the port of the plc, default is 2004</param>
-        public XGBFastEnet( string ipAddress, int port )
+        public XGBFastEnet(string ipAddress, int port)
         {
             WordLength = 2;
             IpAddress = ipAddress;
@@ -91,18 +91,18 @@ namespace HslCommunication.Profinet.LSIS
         /// </remarks>
         /// <example>
         /// </example>
-        public override OperateResult<byte[]> Read( string address, ushort length )
+        public override OperateResult<byte[]> Read(string address, ushort length)
         {
             // build read command
-            OperateResult<byte[]> coreResult = BuildReadByteCommand( address, length );
+            OperateResult<byte[]> coreResult = BuildReadByteCommand(address, length);
             if (!coreResult.IsSuccess) return coreResult;
 
             // communication
-            var read = ReadFromCoreServer( PackCommand( coreResult.Content ) );
-            if (!read.IsSuccess) return OperateResult.CreateFailedResult<byte[]>( read );
+            var read = ReadFromCoreServer(PackCommand(coreResult.Content));
+            if (!read.IsSuccess) return OperateResult.CreateFailedResult<byte[]>(read);
 
             // analysis read result
-            return ExtractActualData( read.Content );
+            return ExtractActualData(read.Content);
         }
 
         /// <summary>
@@ -112,18 +112,18 @@ namespace HslCommunication.Profinet.LSIS
         /// <param name="value">source dara</param>
         /// <returns>Whether to write the successful result object</returns>
         /// <exception cref="NullReferenceException"></exception>
-        public override OperateResult Write( string address, byte[] value )
+        public override OperateResult Write(string address, byte[] value)
         {
             // build write command
-            OperateResult<byte[]> coreResult = BuildWriteByteCommand( address, value );
+            OperateResult<byte[]> coreResult = BuildWriteByteCommand(address, value);
             if (!coreResult.IsSuccess) return coreResult;
 
             // communication
-            var read = ReadFromCoreServer( PackCommand( coreResult.Content ) );
-            if (!read.IsSuccess) return OperateResult.CreateFailedResult<byte[]>( read );
+            var read = ReadFromCoreServer(PackCommand(coreResult.Content));
+            if (!read.IsSuccess) return OperateResult.CreateFailedResult<byte[]>(read);
 
             // analysis read result
-            return ExtractActualData( read.Content );
+            return ExtractActualData(read.Content);
         }
 
         #endregion
@@ -135,12 +135,12 @@ namespace HslCommunication.Profinet.LSIS
         /// </summary>
         /// <param name="address">Start address</param>
         /// <returns>result</returns>
-        public OperateResult<byte> ReadByte( string address )
+        public OperateResult<byte> ReadByte(string address)
         {
-            var read = Read( address, 2 );
-            if (!read.IsSuccess) return OperateResult.CreateFailedResult<byte>( read );
+            var read = Read(address, 2);
+            if (!read.IsSuccess) return OperateResult.CreateFailedResult<byte>(read);
 
-            return OperateResult.CreateSuccessResult( read.Content[0] );
+            return OperateResult.CreateSuccessResult(read.Content[0]);
         }
 
         /// <summary>
@@ -149,19 +149,19 @@ namespace HslCommunication.Profinet.LSIS
         /// <param name="address">Start address</param>
         /// <param name="value">value</param>
         /// <returns>Whether to write the successful</returns>
-        public OperateResult Write( string address, byte value )
+        public OperateResult Write(string address, byte value)
         {
-            return Write( address, new byte[] { value } );
+            return Write(address, new byte[] { value });
         }
 
         #endregion
 
         #region Private Member
 
-        private byte[] PackCommand( byte[] coreCommand )
+        private byte[] PackCommand(byte[] coreCommand)
         {
             byte[] command = new byte[coreCommand.Length + 20];
-            Encoding.ASCII.GetBytes( CompanyID1 ).CopyTo( command, 0 );
+            Encoding.ASCII.GetBytes(CompanyID1).CopyTo(command, 0);
             switch (cpuInfo)
             {
                 case LSCpuInfo.XGK: command[12] = 0xA0; break;
@@ -172,7 +172,7 @@ namespace HslCommunication.Profinet.LSIS
                 default: break;
             }
             command[13] = 0x33;
-            BitConverter.GetBytes( (short)coreCommand.Length ).CopyTo( command, 16 );
+            BitConverter.GetBytes((short)coreCommand.Length).CopyTo(command, 16);
             command[18] = (byte)(baseNo * 16 + slotNo);
 
             int count = 0;
@@ -182,9 +182,9 @@ namespace HslCommunication.Profinet.LSIS
             }
             command[19] = (byte)count;
 
-            coreCommand.CopyTo( command, 20 );
+            coreCommand.CopyTo(command, 20);
 
-            string hex = SoftBasic.ByteToHexString( command, ' ' );
+            string hex = SoftBasic.ByteToHexString(command, ' ');
             return command;
         }
 
@@ -201,39 +201,105 @@ namespace HslCommunication.Profinet.LSIS
         #endregion
 
         #region Static Helper
+        public enum LSDataType
+        {
+            Bit, Byte, Word, DWord, LWord, Continuous
+        }
 
-        public static OperateResult<string> AnalysisAddress( string address )
+        public static OperateResult<string> AnalysisAddress(string address, bool isRead)
         {
             // P,M,L,K,F,T
             // P,M,L,K,F,T,C,D,S
-            StringBuilder sb = new StringBuilder( );
+            StringBuilder sb = new StringBuilder();
             try
             {
-                sb.Append( "%" );
-                char[] types = new char[] { 'P', 'M', 'L', 'K', 'F', 'T', 'C', 'D', 'S' };
+                sb.Append("%");
+                char[] types = new char[] { 'P', 'M', 'L', 'K', 'F', 'T', 'C', 'D', 'S', 'Q', 'I' };
+                bool exsist = false;
+                if (isRead)
+                {
+                    for (int i = 0; i < types.Length; i++)
+                    {
+                        if (types[i] == address[0])
+                        {
+                            sb.Append(types[i]);
+                            sb.Append("B");
+                            if (address[1] == 'B')
+                            {
+                                sb.Append(int.Parse(address.Substring(2)));
+                            }
+                            else if (address[1] == 'W')
+                            {
+                                sb.Append(int.Parse(address.Substring(2)) * 2);
+                            }
+                            else if (address[1] == 'D')
+                            {
+                                sb.Append(int.Parse(address.Substring(2)) * 4);
+                            }
+                            else
+                            {
+                                sb.Append(int.Parse(address.Substring(1)));
+                            }
+
+                            exsist = true;
+                            break;
+                        }
+                    }
+                }
+                else
+                {
+                    sb.Append(address);
+                    exsist = true;
+
+                }
+                if (!exsist) throw new Exception(StringResources.Language.NotSupportedDataType);
+            }
+            catch (Exception ex)
+            {
+                return new OperateResult<string>(ex.Message);
+            }
+
+            return OperateResult.CreateSuccessResult(sb.ToString());
+        }
+
+        /// <summary>
+        /// Get DataType to Address
+        /// </summary>
+        /// <param name="address"></param>
+        /// <returns></returns>
+        private static LSDataType AnalysisAddressDataType(string address)
+        {
+            LSDataType lSDataType = LSDataType.Continuous;
+            try
+            {
+
+                char[] types = new char[] { 'P', 'M', 'L', 'K', 'F', 'T', 'C', 'D', 'S', 'Q', 'I' };
                 bool exsist = false;
 
                 for (int i = 0; i < types.Length; i++)
                 {
                     if (types[i] == address[0])
                     {
-                        sb.Append( types[i] );
-                        sb.Append( "B" );
-                        if (address[1] == 'B')
+
+                        if (address[1] == 'W')
                         {
-                            sb.Append( int.Parse( address.Substring( 2 ) ) );
-                        }
-                        else if (address[1] == 'W')
-                        {
-                            sb.Append( int.Parse( address.Substring( 2 ) ) * 2 );
+                            lSDataType = LSDataType.Word;
                         }
                         else if (address[1] == 'D')
                         {
-                            sb.Append( int.Parse( address.Substring( 2 ) ) * 4 );
+                            lSDataType = LSDataType.DWord;
                         }
-                        else
+                        else if (address[1] == 'L')
                         {
-                            sb.Append( int.Parse( address.Substring( 1 ) ) );
+                            lSDataType = LSDataType.LWord;
+                        }
+                        else if (address[1] == 'B')
+                        {
+                            lSDataType = LSDataType.Continuous;
+                        }
+                        else if (address[1] == 'X')
+                        {
+                            lSDataType = LSDataType.Bit;
                         }
 
                         exsist = true;
@@ -241,20 +307,22 @@ namespace HslCommunication.Profinet.LSIS
                     }
                 }
 
-                if(!exsist) throw new Exception( StringResources.Language.NotSupportedDataType );
+                if (!exsist) throw new Exception(StringResources.Language.NotSupportedDataType);
             }
             catch (Exception ex)
             {
-                return new OperateResult<string>( ex.Message );
+                Console.WriteLine(ex.Message);
             }
 
-            return OperateResult.CreateSuccessResult( sb.ToString( ) );
-        }
 
-        private static OperateResult<byte[]> BuildReadByteCommand( string address, ushort length )
+            return lSDataType;
+
+
+        }
+        private static OperateResult<byte[]> BuildReadByteCommand(string address, ushort length)
         {
-            var analysisResult = AnalysisAddress( address );
-            if (!analysisResult.IsSuccess) return OperateResult.CreateFailedResult<byte[]>( analysisResult );
+            var analysisResult = AnalysisAddress(address, true);
+            if (!analysisResult.IsSuccess) return OperateResult.CreateFailedResult<byte[]>(analysisResult);
 
             byte[] command = new byte[12 + analysisResult.Content.Length];
             command[0] = 0x54;    // read
@@ -268,21 +336,35 @@ namespace HslCommunication.Profinet.LSIS
             command[8] = (byte)analysisResult.Content.Length;    //  Variable Length
             command[9] = 0x00;
 
-            Encoding.ASCII.GetBytes( analysisResult.Content ).CopyTo( command, 10 );
-            BitConverter.GetBytes( length ).CopyTo( command, command.Length - 2 );
+            Encoding.ASCII.GetBytes(analysisResult.Content).CopyTo(command, 10);
+            BitConverter.GetBytes(length).CopyTo(command, command.Length - 2);
 
-            return OperateResult.CreateSuccessResult( command );
+            return OperateResult.CreateSuccessResult(command);
         }
 
-        private static OperateResult<byte[]> BuildWriteByteCommand( string address, byte[] data )
+        private static OperateResult<byte[]> BuildWriteByteCommand(string address, byte[] data)
         {
-            var analysisResult = AnalysisAddress( address );
-            if (!analysisResult.IsSuccess) return OperateResult.CreateFailedResult<byte[]>( analysisResult );
+            var analysisResult = AnalysisAddress(address, false);
+            if (!analysisResult.IsSuccess) return OperateResult.CreateFailedResult<byte[]>(analysisResult);
+            LSDataType lSDataType = AnalysisAddressDataType(address);
 
             byte[] command = new byte[12 + analysisResult.Content.Length + data.Length];
+
+            switch (lSDataType)
+            {
+                case LSDataType.Bit:
+                case LSDataType.Byte:
+                    command[2] = 0x01; break;
+                case LSDataType.Word:
+                    command[2] = 0x02; break;
+                case LSDataType.DWord: command[2] = 0x04; break;
+                case LSDataType.LWord: command[2] = 0x08; break;
+                case LSDataType.Continuous: command[2] = 0x14; break;
+                default: break;
+            }
             command[0] = 0x58;    // write
             command[1] = 0x00;
-            command[2] = 0x14;    // continuous reading
+            //command[2] = 0x14;    // continuous reading
             command[3] = 0x00;
             command[4] = 0x00;    // Reserved
             command[5] = 0x00;
@@ -291,11 +373,11 @@ namespace HslCommunication.Profinet.LSIS
             command[8] = (byte)analysisResult.Content.Length;    //  Variable Length
             command[9] = 0x00;
 
-            Encoding.ASCII.GetBytes( analysisResult.Content ).CopyTo( command, 10 );
-            BitConverter.GetBytes( data.Length ).CopyTo( command, command.Length - 2 - data.Length );
-            data.CopyTo( command, command.Length - data.Length );
+            Encoding.ASCII.GetBytes(analysisResult.Content).CopyTo(command, 10);
+            BitConverter.GetBytes(data.Length).CopyTo(command, command.Length - 2 - data.Length);
+            data.CopyTo(command, command.Length - data.Length);
 
-            return OperateResult.CreateSuccessResult( command );
+            return OperateResult.CreateSuccessResult(command);
         }
 
         /// <summary>
@@ -303,12 +385,12 @@ namespace HslCommunication.Profinet.LSIS
         /// </summary>
         /// <param name="response">response data</param>
         /// <returns>real data</returns>
-        public OperateResult<byte[]> ExtractActualData( byte[] response )
+        public OperateResult<byte[]> ExtractActualData(byte[] response)
         {
-            if (response.Length < 20) return new OperateResult<byte[]>( "Length is less than 20:" + SoftBasic.ByteToHexString( response ) );
+            if (response.Length < 20) return new OperateResult<byte[]>("Length is less than 20:" + SoftBasic.ByteToHexString(response));
 
-            ushort plcInfo = BitConverter.ToUInt16( response, 10 );
-            BitArray array_plcInfo = new BitArray( BitConverter.GetBytes( plcInfo ) );
+            ushort plcInfo = BitConverter.ToUInt16(response, 10);
+            BitArray array_plcInfo = new BitArray(BitConverter.GetBytes(plcInfo));
 
             switch (plcInfo % 32)
             {
@@ -323,28 +405,28 @@ namespace HslCommunication.Profinet.LSIS
             if (array_plcInfo[10]) LSCpuStatus = LSCpuStatus.ERROR;
             if (array_plcInfo[11]) LSCpuStatus = LSCpuStatus.DEBUG;
 
-            if (response.Length < 28) return new OperateResult<byte[]>( "Length is less than 28:" + SoftBasic.ByteToHexString( response ) );
-            ushort error = BitConverter.ToUInt16( response, 26 );
-            if (error > 0) return new OperateResult<byte[]>( response[28], "Error:" + GetErrorDesciption( response[28] ) );
+            if (response.Length < 28) return new OperateResult<byte[]>("Length is less than 28:" + SoftBasic.ByteToHexString(response));
+            ushort error = BitConverter.ToUInt16(response, 26);
+            if (error > 0) return new OperateResult<byte[]>(response[28], "Error:" + GetErrorDesciption(response[28]));
 
-            if (response[20] == 0x59) return OperateResult.CreateSuccessResult( new byte[0] );  // write
+            if (response[20] == 0x59) return OperateResult.CreateSuccessResult(new byte[0]);  // write
 
             if (response[20] == 0x55)  // read
             {
                 try
                 {
-                    ushort length = BitConverter.ToUInt16( response, 30 );
+                    ushort length = BitConverter.ToUInt16(response, 30);
                     byte[] content = new byte[length];
-                    Array.Copy( response, 32, content, 0, length );
-                    return OperateResult.CreateSuccessResult( content );
+                    Array.Copy(response, 32, content, 0, length);
+                    return OperateResult.CreateSuccessResult(content);
                 }
                 catch (Exception ex)
                 {
-                    return new OperateResult<byte[]>( ex.Message );
+                    return new OperateResult<byte[]>(ex.Message);
                 }
             }
 
-            return new OperateResult<byte[]>( StringResources.Language.NotSupportedFunction );
+            return new OperateResult<byte[]>(StringResources.Language.NotSupportedFunction);
         }
 
         /// <summary>
@@ -352,7 +434,7 @@ namespace HslCommunication.Profinet.LSIS
         /// </summary>
         /// <param name="code">code value</param>
         /// <returns>string information</returns>
-        public static string GetErrorDesciption(byte code )
+        public static string GetErrorDesciption(byte code)
         {
             switch (code)
             {
@@ -388,9 +470,9 @@ namespace HslCommunication.Profinet.LSIS
         /// 返回表示当前对象的字符串
         /// </summary>
         /// <returns>字符串</returns>
-        public override string ToString( )
+        public override string ToString()
         {
-            return base.ToString( );
+            return base.ToString();
         }
 
         #endregion
