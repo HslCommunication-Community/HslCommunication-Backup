@@ -203,7 +203,12 @@ namespace HslCommunication.Profinet.LSIS
         #region Static Helper
         public enum LSDataType
         {
-            Bit, Byte, Word, DWord, LWord, Continuous
+            Bit,
+            Byte,
+            Word,
+            DWord,
+            LWord,
+            Continuous
         }
 
         public static OperateResult<string> AnalysisAddress(string address, bool isRead)
@@ -267,9 +272,9 @@ namespace HslCommunication.Profinet.LSIS
         /// </summary>
         /// <param name="address"></param>
         /// <returns></returns>
-        private static LSDataType AnalysisAddressDataType(string address)
+        private static OperateResult<string> AnalysisAddressDataType(string address)
         {
-            LSDataType lSDataType = LSDataType.Continuous;
+            string lSDataType = string.Empty; ;
             try
             {
 
@@ -283,25 +288,29 @@ namespace HslCommunication.Profinet.LSIS
 
                         if (address[1] == 'W')
                         {
-                            lSDataType = LSDataType.Word;
+                            lSDataType = "Word";
                         }
                         else if (address[1] == 'D')
                         {
-                            lSDataType = LSDataType.DWord;
+                            lSDataType = "DWord";
                         }
                         else if (address[1] == 'L')
                         {
-                            lSDataType = LSDataType.LWord;
+                            lSDataType = "LWord";
                         }
                         else if (address[1] == 'B')
                         {
-                            lSDataType = LSDataType.Continuous;
+                            lSDataType = "Continuous";
                         }
                         else if (address[1] == 'X')
                         {
-                            lSDataType = LSDataType.Bit;
+                            lSDataType = "Bit";
                         }
-
+                        else
+                        {
+                            exsist = false;
+                            break;
+                        }
                         exsist = true;
                         break;
                     }
@@ -311,11 +320,10 @@ namespace HslCommunication.Profinet.LSIS
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                return new OperateResult<string>(ex.Message);
             }
 
-
-            return lSDataType;
+            return OperateResult.CreateSuccessResult(lSDataType);
 
 
         }
@@ -346,7 +354,9 @@ namespace HslCommunication.Profinet.LSIS
         {
             var analysisResult = AnalysisAddress(address, false);
             if (!analysisResult.IsSuccess) return OperateResult.CreateFailedResult<byte[]>(analysisResult);
-            LSDataType lSDataType = AnalysisAddressDataType(address);
+            var analysisDataTypeResult = AnalysisAddressDataType(address);
+            if (!analysisDataTypeResult.IsSuccess) return OperateResult.CreateFailedResult<byte[]>(analysisDataTypeResult);
+            var lSDataType = (LSDataType)Enum.Parse(typeof(LSDataType), analysisDataTypeResult.Content);
 
             byte[] command = new byte[12 + analysisResult.Content.Length + data.Length];
 
