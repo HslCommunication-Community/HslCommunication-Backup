@@ -87,6 +87,7 @@
             this.groupBox9 = new System.Windows.Forms.GroupBox();
             this.button33 = new System.Windows.Forms.Button();
             this.groupBox10 = new System.Windows.Forms.GroupBox();
+            this.button58 = new System.Windows.Forms.Button();
             this.button35 = new System.Windows.Forms.Button();
             this.groupBox11 = new System.Windows.Forms.GroupBox();
             this.button37 = new System.Windows.Forms.Button();
@@ -116,7 +117,7 @@
             this.groupBox14 = new System.Windows.Forms.GroupBox();
             this.button57 = new System.Windows.Forms.Button();
             this.button55 = new System.Windows.Forms.Button();
-            this.button58 = new System.Windows.Forms.Button();
+            this.button59 = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -659,11 +660,11 @@
             this.groupBox7.Controls.Add(this.button51);
             this.groupBox7.Controls.Add(this.button44);
             this.groupBox7.Controls.Add(this.button23);
-            this.groupBox7.Location = new System.Drawing.Point(395, 356);
+            this.groupBox7.Location = new System.Drawing.Point(395, 396);
             this.groupBox7.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.groupBox7.Name = "groupBox7";
             this.groupBox7.Padding = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.groupBox7.Size = new System.Drawing.Size(185, 315);
+            this.groupBox7.Size = new System.Drawing.Size(185, 275);
             this.groupBox7.TabIndex = 14;
             this.groupBox7.TabStop = false;
             this.groupBox7.Text = "Robot(机器人)";
@@ -832,6 +833,17 @@
             this.groupBox10.TabStop = false;
             this.groupBox10.Text = "Panasonic(松下 PLC)";
             // 
+            // button58
+            // 
+            this.button58.Location = new System.Drawing.Point(19, 64);
+            this.button58.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.button58.Name = "button58";
+            this.button58.Size = new System.Drawing.Size(150, 32);
+            this.button58.TabIndex = 3;
+            this.button58.Text = "MC-3E (Binary)";
+            this.button58.UseVisualStyleBackColor = true;
+            this.button58.Click += new System.EventHandler(this.Button58_Click);
+            // 
             // button35
             // 
             this.button35.Location = new System.Drawing.Point(19, 24);
@@ -879,7 +891,7 @@
             this.免责条款ToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(980, 25);
+            this.menuStrip1.Size = new System.Drawing.Size(980, 24);
             this.menuStrip1.TabIndex = 26;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -893,89 +905,89 @@
             this.patronageToolStripMenuItem,
             this.rToolStripMenuItem});
             this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
-            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(55, 21);
+            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(52, 20);
             this.aboutToolStripMenuItem.Text = "About";
             // 
             // blogsToolStripMenuItem
             // 
             this.blogsToolStripMenuItem.Name = "blogsToolStripMenuItem";
-            this.blogsToolStripMenuItem.Size = new System.Drawing.Size(256, 22);
+            this.blogsToolStripMenuItem.Size = new System.Drawing.Size(247, 22);
             this.blogsToolStripMenuItem.Text = "Blogs [博客]";
             this.blogsToolStripMenuItem.Click += new System.EventHandler(this.blogsToolStripMenuItem_Click);
             // 
             // webSideToolStripMenuItem
             // 
             this.webSideToolStripMenuItem.Name = "webSideToolStripMenuItem";
-            this.webSideToolStripMenuItem.Size = new System.Drawing.Size(256, 22);
+            this.webSideToolStripMenuItem.Size = new System.Drawing.Size(247, 22);
             this.webSideToolStripMenuItem.Text = "WebSide [官网]";
             this.webSideToolStripMenuItem.Click += new System.EventHandler(this.webSideToolStripMenuItem_Click);
             // 
             // mesDemoToolStripMenuItem
             // 
             this.mesDemoToolStripMenuItem.Name = "mesDemoToolStripMenuItem";
-            this.mesDemoToolStripMenuItem.Size = new System.Drawing.Size(256, 22);
+            this.mesDemoToolStripMenuItem.Size = new System.Drawing.Size(247, 22);
             this.mesDemoToolStripMenuItem.Text = "Mes Demo [简易MES系统示例]";
             this.mesDemoToolStripMenuItem.Click += new System.EventHandler(this.mesDemoToolStripMenuItem_Click);
             // 
             // gitToolStripMenuItem
             // 
             this.gitToolStripMenuItem.Name = "gitToolStripMenuItem";
-            this.gitToolStripMenuItem.Size = new System.Drawing.Size(256, 22);
+            this.gitToolStripMenuItem.Size = new System.Drawing.Size(247, 22);
             this.gitToolStripMenuItem.Text = "Git [源代码地址]";
             this.gitToolStripMenuItem.Click += new System.EventHandler(this.gitToolStripMenuItem_Click);
             // 
             // patronageToolStripMenuItem
             // 
             this.patronageToolStripMenuItem.Name = "patronageToolStripMenuItem";
-            this.patronageToolStripMenuItem.Size = new System.Drawing.Size(256, 22);
+            this.patronageToolStripMenuItem.Size = new System.Drawing.Size(247, 22);
             this.patronageToolStripMenuItem.Text = "Patronage [开源不易，感谢赞助]";
             this.patronageToolStripMenuItem.Click += new System.EventHandler(this.patronageToolStripMenuItem_Click);
             // 
             // rToolStripMenuItem
             // 
             this.rToolStripMenuItem.Name = "rToolStripMenuItem";
-            this.rToolStripMenuItem.Size = new System.Drawing.Size(256, 22);
+            this.rToolStripMenuItem.Size = new System.Drawing.Size(247, 22);
             this.rToolStripMenuItem.Text = "Richard Hu [作者]";
             this.rToolStripMenuItem.Click += new System.EventHandler(this.rToolStripMenuItem_Click);
             // 
             // 简体中文ToolStripMenuItem
             // 
             this.简体中文ToolStripMenuItem.Name = "简体中文ToolStripMenuItem";
-            this.简体中文ToolStripMenuItem.Size = new System.Drawing.Size(68, 21);
+            this.简体中文ToolStripMenuItem.Size = new System.Drawing.Size(67, 20);
             this.简体中文ToolStripMenuItem.Text = "简体中文";
             this.简体中文ToolStripMenuItem.Click += new System.EventHandler(this.简体中文ToolStripMenuItem_Click);
             // 
             // englishToolStripMenuItem
             // 
             this.englishToolStripMenuItem.Name = "englishToolStripMenuItem";
-            this.englishToolStripMenuItem.Size = new System.Drawing.Size(61, 21);
+            this.englishToolStripMenuItem.Size = new System.Drawing.Size(57, 20);
             this.englishToolStripMenuItem.Text = "English";
             this.englishToolStripMenuItem.Click += new System.EventHandler(this.englishToolStripMenuItem_Click);
             // 
             // 论坛toolStripMenuItem
             // 
             this.论坛toolStripMenuItem.Name = "论坛toolStripMenuItem";
-            this.论坛toolStripMenuItem.Size = new System.Drawing.Size(43, 21);
+            this.论坛toolStripMenuItem.Size = new System.Drawing.Size(39, 20);
             this.论坛toolStripMenuItem.Text = "BBS";
             this.论坛toolStripMenuItem.Click += new System.EventHandler(this.论坛toolStripMenuItem_Click);
             // 
             // 日志ToolStripMenuItem
             // 
             this.日志ToolStripMenuItem.Name = "日志ToolStripMenuItem";
-            this.日志ToolStripMenuItem.Size = new System.Drawing.Size(83, 21);
+            this.日志ToolStripMenuItem.Size = new System.Drawing.Size(77, 20);
             this.日志ToolStripMenuItem.Text = "Changelog";
             this.日志ToolStripMenuItem.Click += new System.EventHandler(this.日志ToolStripMenuItem_Click);
             // 
             // verisonToolStripMenuItem
             // 
             this.verisonToolStripMenuItem.Name = "verisonToolStripMenuItem";
-            this.verisonToolStripMenuItem.Size = new System.Drawing.Size(64, 21);
+            this.verisonToolStripMenuItem.Size = new System.Drawing.Size(58, 20);
             this.verisonToolStripMenuItem.Text = "Verison";
             // 
             // 免责条款ToolStripMenuItem
             // 
             this.免责条款ToolStripMenuItem.Name = "免责条款ToolStripMenuItem";
-            this.免责条款ToolStripMenuItem.Size = new System.Drawing.Size(68, 21);
+            this.免责条款ToolStripMenuItem.Size = new System.Drawing.Size(67, 20);
             this.免责条款ToolStripMenuItem.Text = "免责条款";
             this.免责条款ToolStripMenuItem.Click += new System.EventHandler(this.免责条款ToolStripMenuItem_Click);
             // 
@@ -1086,13 +1098,14 @@
             // 
             // groupBox14
             // 
+            this.groupBox14.Controls.Add(this.button59);
             this.groupBox14.Controls.Add(this.button57);
             this.groupBox14.Controls.Add(this.button55);
             this.groupBox14.Location = new System.Drawing.Point(395, 253);
             this.groupBox14.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.groupBox14.Name = "groupBox14";
             this.groupBox14.Padding = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.groupBox14.Size = new System.Drawing.Size(185, 95);
+            this.groupBox14.Size = new System.Drawing.Size(185, 135);
             this.groupBox14.TabIndex = 30;
             this.groupBox14.TabStop = false;
             this.groupBox14.Text = "LSIS PLC";
@@ -1119,16 +1132,16 @@
             this.button55.UseVisualStyleBackColor = true;
             this.button55.Click += new System.EventHandler(this.Button55_Click);
             // 
-            // button58
+            // button59
             // 
-            this.button58.Location = new System.Drawing.Point(19, 64);
-            this.button58.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.button58.Name = "button58";
-            this.button58.Size = new System.Drawing.Size(150, 32);
-            this.button58.TabIndex = 3;
-            this.button58.Text = "MC-3E (Binary)";
-            this.button58.UseVisualStyleBackColor = true;
-            this.button58.Click += new System.EventHandler(this.Button58_Click);
+            this.button59.Location = new System.Drawing.Point(19, 95);
+            this.button59.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.button59.Name = "button59";
+            this.button59.Size = new System.Drawing.Size(150, 32);
+            this.button59.TabIndex = 8;
+            this.button59.Text = "LSis Virtual Server";
+            this.button59.UseVisualStyleBackColor = true;
+            this.button59.Click += new System.EventHandler(this.Button59_Click);
             // 
             // FormLoad
             // 
@@ -1152,7 +1165,7 @@
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.menuStrip1);
-            this.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.Font = new System.Drawing.Font("Microsoft YaHei", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.MainMenuStrip = this.menuStrip1;
             this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.Name = "FormLoad";
@@ -1273,6 +1286,7 @@
         private System.Windows.Forms.Button button56;
         private System.Windows.Forms.Button button57;
         private System.Windows.Forms.Button button58;
+        private System.Windows.Forms.Button button59;
     }
 }
 
