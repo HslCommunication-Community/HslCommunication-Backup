@@ -213,6 +213,35 @@ namespace HslCommunication.Profinet.LSIS
 
             return OperateResult.CreateSuccessResult(command.ToArray());
         }
+
+        private static OperateResult<byte[]> BuildWriteOneCommand(byte station, string address, byte[] value)
+        {
+            var analysisResult = AnalysisAddress(address, false);
+            if (!analysisResult.IsSuccess) return OperateResult.CreateFailedResult<byte[]>(analysisResult);
+
+            List<byte> command = new List<byte>();
+            command.Add(0x05);    // ENQ
+            command.AddRange(SoftBasic.BuildAsciiBytesFrom(station));
+            command.Add(0x77);    // command w
+            command.Add(0x53);    // command type: SS
+            command.Add(0x53);
+            command.Add(0x01);    // Number of blocks
+            command.Add(0x00);
+            command.AddRange(SoftBasic.BuildAsciiBytesFrom((byte)analysisResult.Content.Length));
+            command.AddRange(Encoding.ASCII.GetBytes(analysisResult.Content));
+            command.AddRange(SoftBasic.BytesToAsciiBytes(value));
+            command.Add(0x04);    // EOT
+
+            int sum = 0;
+            for (int i = 0; i < command.Count; i++)
+            {
+                sum += command[i];
+            }
+            command.AddRange(SoftBasic.BuildAsciiBytesFrom((byte)sum));
+
+            return OperateResult.CreateSuccessResult(command.ToArray());
+        }
+
         /// <summary>
         /// write data to address  Type of ReadByte
         /// </summary>
