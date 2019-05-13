@@ -29,6 +29,7 @@
         private void InitializeComponent( )
         {
             this.panel1 = new System.Windows.Forms.Panel();
+            this.label15 = new System.Windows.Forms.Label();
             this.comboBox3 = new System.Windows.Forms.ComboBox();
             this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.textBox17 = new System.Windows.Forms.TextBox();
@@ -60,6 +61,7 @@
             this.textBox6 = new System.Windows.Forms.TextBox();
             this.label11 = new System.Windows.Forms.Label();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.label17 = new System.Windows.Forms.Label();
             this.label19 = new System.Windows.Forms.Label();
             this.button14 = new System.Windows.Forms.Button();
             this.button15 = new System.Windows.Forms.Button();
@@ -96,8 +98,7 @@
             this.label4 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.label20 = new System.Windows.Forms.Label();
-            this.label15 = new System.Windows.Forms.Label();
-            this.label17 = new System.Windows.Forms.Label();
+            this.button24 = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.groupBox4.SuspendLayout();
@@ -131,6 +132,14 @@
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(978, 54);
             this.panel1.TabIndex = 0;
+            // 
+            // label15
+            // 
+            this.label15.Location = new System.Drawing.Point(594, 2);
+            this.label15.Name = "label15";
+            this.label15.Size = new System.Drawing.Size(178, 45);
+            this.label15.TabIndex = 30;
+            this.label15.Text = "M100  D100 P100 T100 C100\r\nTo Read\r\n";
             // 
             // comboBox3
             // 
@@ -424,6 +433,7 @@
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.button24);
             this.groupBox2.Controls.Add(this.label17);
             this.groupBox2.Controls.Add(this.label19);
             this.groupBox2.Controls.Add(this.button14);
@@ -445,6 +455,15 @@
             this.groupBox2.TabIndex = 1;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "单数据写入测试";
+            // 
+            // label17
+            // 
+            this.label17.AutoSize = true;
+            this.label17.Location = new System.Drawing.Point(33, 135);
+            this.label17.Name = "label17";
+            this.label17.Size = new System.Drawing.Size(162, 34);
+            this.label17.TabIndex = 20;
+            this.label17.Text = "Address: MX100  DW100  \r\nTW100  CW100  To Write";
             // 
             // label19
             // 
@@ -806,22 +825,15 @@
             this.label20.TabIndex = 6;
             this.label20.Text = "作者：Richard Hu";
             // 
-            // label15
+            // button24
             // 
-            this.label15.Location = new System.Drawing.Point(594, 2);
-            this.label15.Name = "label15";
-            this.label15.Size = new System.Drawing.Size(178, 45);
-            this.label15.TabIndex = 30;
-            this.label15.Text = "M100  D100 P100 T100 C100\r\nTo Read\r\n";
-            // 
-            // label17
-            // 
-            this.label17.AutoSize = true;
-            this.label17.Location = new System.Drawing.Point(33, 135);
-            this.label17.Name = "label17";
-            this.label17.Size = new System.Drawing.Size(162, 34);
-            this.label17.TabIndex = 20;
-            this.label17.Text = "Address: MX100  DW100  \r\nTW100  CW100  To Write";
+            this.button24.Location = new System.Drawing.Point(226, 22);
+            this.button24.Name = "button24";
+            this.button24.Size = new System.Drawing.Size(82, 28);
+            this.button24.TabIndex = 21;
+            this.button24.Text = "w-Bit";
+            this.button24.UseVisualStyleBackColor = true;
+            this.button24.Click += new System.EventHandler(this.Button24_Click);
             // 
             // FormLsisCnet
             // 
@@ -930,5 +942,6 @@
         private System.Windows.Forms.Button button_read_byte;
         private System.Windows.Forms.Label label15;
         private System.Windows.Forms.Label label17;
+        private System.Windows.Forms.Button button24;
     }
 }

@@ -416,8 +416,23 @@ namespace HslCommunicationDemo
 
         private void Button_read_byte_Click(object sender, EventArgs e)
         {
-            DemoUtils.ReadResultRender(xGBCnet.ReadInt16(textBox3.Text,1), textBox3.Text, textBox4);
+            
+            // 读取byte变量
+            DemoUtils.ReadResultRender(xGBCnet.ReadByte(textBox3.Text), textBox3.Text, textBox4);
 
+        }
+
+        private void Button24_Click(object sender, EventArgs e)
+        {
+            // Bit
+            try
+            {
+                DemoUtils.WriteResultRender(xGBCnet.WriteCoil(textBox8.Text, bool.Parse(textBox7.Text)), textBox8.Text);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
         }
     }
 }

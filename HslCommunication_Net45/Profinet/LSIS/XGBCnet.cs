@@ -34,7 +34,43 @@ namespace HslCommunication.Profinet.LSIS
         public byte Station { get; set; } = 0x05;
 
         #endregion
+        #region Read Write Byte
 
+        /// <summary>
+        /// Read single byte value from plc
+        /// </summary>
+        /// <param name="address">Start address</param>
+        /// <returns>result</returns>
+        public OperateResult<byte> ReadByte(string address)
+        {
+            var read = Read(address, 1);
+            if (!read.IsSuccess) return OperateResult.CreateFailedResult<byte>(read);
+
+            return OperateResult.CreateSuccessResult(read.Content[0]);
+        }
+
+        /// <summary>
+        /// Write single byte value to plc
+        /// </summary>
+        /// <param name="address">Start address</param>
+        /// <param name="value">value</param>
+        /// <returns>Whether to write the successful</returns>
+        public OperateResult Write(string address, byte value)
+        {
+            return Write(address, new byte[] { value });
+        }
+        /// <summary>
+        /// WriteCoil
+        /// </summary>
+        /// <param name="address"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public OperateResult WriteCoil(string address, bool value)
+        {
+
+            return Write(address, new byte[] { (byte)(value ? 0x01 : 0x00), 0x00 });
+        }
+        #endregion
         #region Read Write Support
 
         /// <summary>
