@@ -224,7 +224,54 @@ namespace HslCommunication.Profinet.LSIS
             Continuous= 0x14
         }
         /// <summary>
-        /// AnalysisAddress to Reding
+        /// CheckAddress To Address To Write
+        /// </summary>
+        /// <param name="address"></param>
+        /// <returns></returns>
+        public static bool CheckAddress(string address)
+        {
+            char[] types = new char[] { 'P', 'M', 'L', 'K', 'F', 'T', 'C', 'D', 'S', 'Q', 'I', 'N', 'U', 'Z', 'R' };
+            bool exsist = false;
+            if (address.Length >= 3 || address.Length >= 5)
+            {
+                for (int i = 0; i < types.Length; i++)
+                {
+                    if (types[i] == address[0])
+                    {
+
+
+                        if (address[1] == 'B')
+                        {
+                            exsist = true;
+                        }
+                        else if (address[1] == 'W')
+                        {
+                            exsist = true;
+                        }
+                        else if (address[1] == 'D')
+                        {
+                            exsist = true;
+                        }
+                        else if (address[1] == 'X')
+                        {
+                            exsist = true;
+                        }
+                        else
+                        {
+                            exsist = false;
+                        }
+
+
+                        break;
+                    }
+                }
+            }
+
+            return exsist;
+
+        }
+        /// <summary>
+        /// AnalysisAddress
         /// </summary>
         /// <param name="address"></param>
         /// <param name="isRead"></param>
@@ -237,7 +284,7 @@ namespace HslCommunication.Profinet.LSIS
             try
             {
                 sb.Append("%");
-                char[] types = new char[] { 'P', 'M', 'L', 'K', 'F', 'T', 'C', 'D', 'S', 'Q', 'I','R' };
+                char[] types = new char[] { 'P', 'M', 'L', 'K', 'F', 'T', 'C', 'D', 'S', 'Q', 'I', 'N', 'U', 'Z', 'R' };
                 bool exsist = false;
                 if (isRead)
                 {
@@ -271,8 +318,16 @@ namespace HslCommunication.Profinet.LSIS
                 }
                 else
                 {
-                    sb.Append(address);
-                    exsist = true;
+                    if (CheckAddress(address))
+                    {
+                        sb.Append(address);
+                        exsist = true;
+
+                    }
+                    else
+                    {
+                        exsist = false;
+                    }
 
                 }
                 if (!exsist) throw new Exception(StringResources.Language.NotSupportedDataType);

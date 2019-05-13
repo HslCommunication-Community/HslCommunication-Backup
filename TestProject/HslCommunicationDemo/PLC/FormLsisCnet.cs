@@ -413,6 +413,11 @@ namespace HslCommunicationDemo
 
 
         #endregion
-        
+
+        private void Button_read_byte_Click(object sender, EventArgs e)
+        {
+            DemoUtils.ReadResultRender(xGBCnet.ReadInt16(textBox3.Text,1), textBox3.Text, textBox4);
+
+        }
     }
 }

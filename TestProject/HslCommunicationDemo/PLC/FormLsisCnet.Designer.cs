@@ -75,6 +75,7 @@
             this.textBox8 = new System.Windows.Forms.TextBox();
             this.label10 = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.button_read_byte = new System.Windows.Forms.Button();
             this.textBox5 = new System.Windows.Forms.TextBox();
             this.button_read_string = new System.Windows.Forms.Button();
             this.button_read_double = new System.Windows.Forms.Button();
@@ -95,7 +96,8 @@
             this.label4 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.label20 = new System.Windows.Forms.Label();
-            this.button_read_byte = new System.Windows.Forms.Button();
+            this.label15 = new System.Windows.Forms.Label();
+            this.label17 = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.groupBox4.SuspendLayout();
@@ -109,6 +111,7 @@
             this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel1.Controls.Add(this.label15);
             this.panel1.Controls.Add(this.comboBox3);
             this.panel1.Controls.Add(this.comboBox1);
             this.panel1.Controls.Add(this.textBox17);
@@ -186,7 +189,7 @@
             // 
             // textBox15
             // 
-            this.textBox15.Location = new System.Drawing.Point(586, 14);
+            this.textBox15.Location = new System.Drawing.Point(551, 14);
             this.textBox15.Name = "textBox15";
             this.textBox15.Size = new System.Drawing.Size(37, 23);
             this.textBox15.TabIndex = 7;
@@ -195,7 +198,7 @@
             // label21
             // 
             this.label21.AutoSize = true;
-            this.label21.Location = new System.Drawing.Point(542, 17);
+            this.label21.Location = new System.Drawing.Point(507, 17);
             this.label21.Name = "label21";
             this.label21.Size = new System.Drawing.Size(44, 17);
             this.label21.TabIndex = 6;
@@ -421,6 +424,7 @@
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.label17);
             this.groupBox2.Controls.Add(this.label19);
             this.groupBox2.Controls.Add(this.button14);
             this.groupBox2.Controls.Add(this.button15);
@@ -600,6 +604,16 @@
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "单数据读取测试";
+            // 
+            // button_read_byte
+            // 
+            this.button_read_byte.Location = new System.Drawing.Point(317, 22);
+            this.button_read_byte.Name = "button_read_byte";
+            this.button_read_byte.Size = new System.Drawing.Size(82, 28);
+            this.button_read_byte.TabIndex = 19;
+            this.button_read_byte.Text = "byte读取";
+            this.button_read_byte.UseVisualStyleBackColor = true;
+            this.button_read_byte.Click += new System.EventHandler(this.Button_read_byte_Click);
             // 
             // textBox5
             // 
@@ -792,14 +806,22 @@
             this.label20.TabIndex = 6;
             this.label20.Text = "作者：Richard Hu";
             // 
-            // button_read_byte
+            // label15
             // 
-            this.button_read_byte.Location = new System.Drawing.Point(317, 22);
-            this.button_read_byte.Name = "button_read_byte";
-            this.button_read_byte.Size = new System.Drawing.Size(82, 28);
-            this.button_read_byte.TabIndex = 19;
-            this.button_read_byte.Text = "byte读取";
-            this.button_read_byte.UseVisualStyleBackColor = true;
+            this.label15.Location = new System.Drawing.Point(594, 2);
+            this.label15.Name = "label15";
+            this.label15.Size = new System.Drawing.Size(178, 45);
+            this.label15.TabIndex = 30;
+            this.label15.Text = "M100  D100 P100 T100 C100\r\nTo Read\r\n";
+            // 
+            // label17
+            // 
+            this.label17.AutoSize = true;
+            this.label17.Location = new System.Drawing.Point(33, 135);
+            this.label17.Name = "label17";
+            this.label17.Size = new System.Drawing.Size(162, 34);
+            this.label17.TabIndex = 20;
+            this.label17.Text = "Address: MX100  DW100  \r\nTW100  CW100  To Write";
             // 
             // FormLsisCnet
             // 
@@ -906,5 +928,7 @@
         private System.Windows.Forms.ComboBox comboBox3;
         private DemoControl.UserControlCurve userControlCurve1;
         private System.Windows.Forms.Button button_read_byte;
+        private System.Windows.Forms.Label label15;
+        private System.Windows.Forms.Label label17;
     }
 }
