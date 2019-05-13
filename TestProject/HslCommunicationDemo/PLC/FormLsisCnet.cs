@@ -70,7 +70,7 @@ namespace HslCommunicationDemo
                 label2.Text = "Blogs:";
                 label4.Text = "Protocols:";
                 label20.Text = "Author:Richard Hu";
-                label5.Text = "Modbus Rtu";
+                label5.Text = "XGB Cnet";
 
                 label1.Text = "Com:";
                 label3.Text = "baudRate:";
