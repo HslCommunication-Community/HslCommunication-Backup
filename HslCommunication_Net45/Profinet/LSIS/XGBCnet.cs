@@ -76,7 +76,7 @@ namespace HslCommunication.Profinet.LSIS
         #region Object Override
 
         /// <summary>
-        /// 返回表示当前对象的字符串
+        /// Returns a string representing the current object
         /// </summary>
         /// <returns>字符串信息</returns>
         public override string ToString()
@@ -101,7 +101,7 @@ namespace HslCommunication.Profinet.LSIS
             try
             {
                 sb.Append("%");
-                char[] types = new char[] { 'P', 'M', 'L', 'K', 'F', 'T', 'C', 'D', 'S','Q','I' };
+                char[] types = new char[] { 'P', 'M', 'L', 'K', 'F', 'T', 'C', 'D', 'S','Q','I','N','U','Z','R' };
                 bool exsist = false;
                 if (isRead)
                 {
@@ -180,7 +180,39 @@ namespace HslCommunication.Profinet.LSIS
 
             return OperateResult.CreateSuccessResult( command.ToArray( ) );
         }
+        /// <summary>
+        /// One reading address  Type of ReadByte
+        /// </summary>
+        /// <param name="station">plc station</param>
+        /// <param name="address">address, for example: MX100, DW100, TW100</param>
+        /// <param name="length">read length</param>
+        /// <returns></returns>
+        private static OperateResult<byte[]> BuildReadOneCommand(byte station, string address, ushort length)
+        {
+            var analysisResult = AnalysisAddress(address, true);
+            if (!analysisResult.IsSuccess) return OperateResult.CreateFailedResult<byte[]>(analysisResult);
 
+            List<byte> command = new List<byte>();
+            command.Add(0x05);    // ENQ
+            command.AddRange(SoftBasic.BuildAsciiBytesFrom(station));
+            command.Add(0x72);    // command r
+            command.Add(0x53);    // command type: SS
+            command.Add(0x53);
+            command.Add(0x01);    // Number of blocks
+            command.Add(0x00);
+            command.AddRange(SoftBasic.BuildAsciiBytesFrom((byte)analysisResult.Content.Length));
+            command.AddRange(Encoding.ASCII.GetBytes(analysisResult.Content));
+            command.Add(0x04);    // EOT
+
+            int sum = 0;
+            for (int i = 0; i < command.Count; i++)
+            {
+                sum += command[i];
+            }
+            command.AddRange(SoftBasic.BuildAsciiBytesFrom((byte)sum));
+
+            return OperateResult.CreateSuccessResult(command.ToArray());
+        }
         /// <summary>
         /// write data to address  Type of ReadByte
         /// </summary>

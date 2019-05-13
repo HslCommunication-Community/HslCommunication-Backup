@@ -211,16 +211,24 @@ namespace HslCommunication.Profinet.LSIS
         #endregion
 
         #region Static Helper
-        public enum LSDataType
+        /// <summary>
+        /// LSDataType to Address
+        /// </summary>
+        public enum LsDataType
         {
-            Bit,
-            Byte,
-            Word,
-            DWord,
-            LWord,
-            Continuous
+            Bit= 0x00,
+            Byte= 0x01,
+            Word= 0x02,
+            DWord= 0x04,
+            LWord= 0x08,
+            Continuous= 0x14
         }
-
+        /// <summary>
+        /// AnalysisAddress to Reding
+        /// </summary>
+        /// <param name="address"></param>
+        /// <param name="isRead"></param>
+        /// <returns></returns>
         public static OperateResult<string> AnalysisAddress(string address, bool isRead)
         {
             // P,M,L,K,F,T
@@ -229,7 +237,7 @@ namespace HslCommunication.Profinet.LSIS
             try
             {
                 sb.Append("%");
-                char[] types = new char[] { 'P', 'M', 'L', 'K', 'F', 'T', 'C', 'D', 'S', 'Q', 'I' };
+                char[] types = new char[] { 'P', 'M', 'L', 'K', 'F', 'T', 'C', 'D', 'S', 'Q', 'I','R' };
                 bool exsist = false;
                 if (isRead)
                 {
@@ -288,7 +296,7 @@ namespace HslCommunication.Profinet.LSIS
             try
             {
 
-                char[] types = new char[] { 'P', 'M', 'L', 'K', 'F', 'T', 'C', 'D', 'S', 'Q', 'I' };
+                char[] types = new char[] { 'P', 'M', 'L', 'K', 'F', 'T', 'C', 'D', 'S', 'Q', 'I','R' };
                 bool exsist = false;
 
                 for (int i = 0; i < types.Length; i++)
@@ -366,20 +374,20 @@ namespace HslCommunication.Profinet.LSIS
             if (!analysisResult.IsSuccess) return OperateResult.CreateFailedResult<byte[]>(analysisResult);
             var analysisDataTypeResult = AnalysisAddressDataType(address);
             if (!analysisDataTypeResult.IsSuccess) return OperateResult.CreateFailedResult<byte[]>(analysisDataTypeResult);
-            var lSDataType = (LSDataType)Enum.Parse(typeof(LSDataType), analysisDataTypeResult.Content);
+            var lSDataType = (LsDataType)Enum.Parse(typeof(LsDataType), analysisDataTypeResult.Content);
 
             byte[] command = new byte[12 + analysisResult.Content.Length + data.Length];
 
             switch (lSDataType)
             {
-                case LSDataType.Bit:
-                case LSDataType.Byte:
+                case LsDataType.Bit:
+                case LsDataType.Byte:
                     command[2] = 0x01; break;
-                case LSDataType.Word:
+                case LsDataType.Word:
                     command[2] = 0x02; break;
-                case LSDataType.DWord: command[2] = 0x04; break;
-                case LSDataType.LWord: command[2] = 0x08; break;
-                case LSDataType.Continuous: command[2] = 0x14; break;
+                case LsDataType.DWord: command[2] = 0x04; break;
+                case LsDataType.LWord: command[2] = 0x08; break;
+                case LsDataType.Continuous: command[2] = 0x14; break;
                 default: break;
             }
             command[0] = 0x58;    // write
@@ -401,7 +409,7 @@ namespace HslCommunication.Profinet.LSIS
         }
 
         /// <summary>
-        /// 返回真是的数据内容，支持读写返回
+        /// Returns true data content, supports read and write returns
         /// </summary>
         /// <param name="response">response data</param>
         /// <returns>real data</returns>
@@ -487,7 +495,7 @@ namespace HslCommunication.Profinet.LSIS
         #region Override
 
         /// <summary>
-        /// 返回表示当前对象的字符串
+        /// Returns a string representing the current object
         /// </summary>
         /// <returns>字符串</returns>
         public override string ToString()
