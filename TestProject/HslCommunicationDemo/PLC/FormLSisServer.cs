@@ -41,7 +41,7 @@ namespace HslCommunicationDemo
 
             if(Program.Language == 2)
             {
-                Text = "LSis Virtual Server [data support i,q,m,d block read and write, db block only one, whether it is DB1.1 or DB100.1 refers to the same]";
+                Text = "LSis Virtual Server";
                 label2.Text = "blogs:";
                 label4.Text = "Agreement";
                 linkLabel2.Text = "thanks for the reward";
