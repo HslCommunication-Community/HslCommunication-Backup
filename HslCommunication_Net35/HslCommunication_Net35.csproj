@@ -556,9 +556,6 @@
     <Compile Include="..\HslCommunication_Net45\Profinet\LSIS\LSCpuInfo.cs">
       <Link>Profinet\LSIS\LSCpuInfo.cs</Link>
     </Compile>
-    <Compile Include="..\HslCommunication_Net45\Profinet\LSIS\LSisServer.cs">
-      <Link>Profinet\LSIS\LSisServer.cs</Link>
-    </Compile>
     <Compile Include="..\HslCommunication_Net45\Profinet\LSIS\XGBCnet.cs">
       <Link>Profinet\LSIS\XGBCnet.cs</Link>
     </Compile>
@@ -664,6 +661,7 @@
     <Compile Include="..\HslCommunication_Net45\StringResources.cs">
       <Link>StringResources.cs</Link>
     </Compile>
+    <Compile Include="Profinet\LSIS\LSisServer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
