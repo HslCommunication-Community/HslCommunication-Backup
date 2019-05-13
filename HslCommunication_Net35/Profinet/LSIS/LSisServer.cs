@@ -16,7 +16,7 @@ namespace HslCommunication.Profinet.LSIS
         #region Constructor
 
         /// <summary>
-        /// 实例化一个S7协议的服务器，支持I，Q，M，DB1.X 数据区块的读写操作
+        /// LSisServer  
         /// </summary>
         public LSisServer()
         {
@@ -325,16 +325,7 @@ namespace HslCommunication.Profinet.LSIS
             }
         }
 
-        private byte[] PackReadWordCommandBack(byte[] result)
-        {
-            byte[] back = new byte[4 + result.Length];
-            back[0] = 0xFF;
-            back[1] = 0x04;
-
-            ByteTransform.TransByte((ushort)result.Length).CopyTo(back, 2);
-            result.CopyTo(back, 4);
-            return back;
-        }
+     
         /// <summary>
         /// Convert Array bool ToByteArray
         /// </summary>
@@ -365,16 +356,7 @@ namespace HslCommunication.Profinet.LSIS
             Array.Reverse(bytes);
             return bytes;
         }
-        private byte[] PackReadBitCommandBack(bool value)
-        {
-            byte[] back = new byte[5];
-            back[0] = 0xFF;
-            back[1] = 0x03;
-            back[2] = 0x00;
-            back[3] = 0x01;
-            back[4] = (byte)(value ? 0x01 : 0x00);
-            return back;
-        }
+     
 
         private byte[] WriteByMessage(byte[] packCommand)
         {
@@ -530,7 +512,7 @@ namespace HslCommunication.Profinet.LSIS
         /// <returns>字符串信息</returns>
         public override string ToString()
         {
-            return $"SiemensS7Server[{Port}]";
+            return $"LSisServer[{Port}]";
         }
 
         #endregion
