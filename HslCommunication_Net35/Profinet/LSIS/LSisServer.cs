@@ -8,9 +8,9 @@ using System.Net.Sockets;
 using System.Text;
 
 namespace HslCommunication.Profinet.LSIS
-{/// <summary>
- /// 
- /// </summary>
+{     /// <summary>
+      /// LSisServer
+      /// </summary>
     public class LSisServer : NetworkDataServerBase
     {
         #region Constructor
@@ -286,7 +286,7 @@ namespace HslCommunication.Profinet.LSIS
                         break;
                     default: throw new Exception(StringResources.Language.NotSupportedDataType);
                 }
-                var data3 = ToByteArray(data);
+                var data3 = SoftBasic.BoolArrayToByte(data);
 
                 resultLength.AddRange(data3);
                 data2[16] = (byte)resultLength.Count;
@@ -325,39 +325,8 @@ namespace HslCommunication.Profinet.LSIS
             }
         }
 
-     
-        /// <summary>
-        /// Convert Array bool ToByteArray
-        /// </summary>
-        /// <param name="bits"></param>
-        /// <returns></returns>
-        public static byte[] ToByteArray(bool[] bits)
-        {
-            var numBytes = bits.Length / 8;
-            var bitEven = bits.Length % 8;
-            if (bitEven != 0) numBytes++;
-            Array.Reverse(bits);
-            var bytes = new byte[numBytes];
-            int byteIndex = 0, bitIndex = 0;
 
-            for (var i = 0; i < bits.Length; i++)
-            {
-                if (bits[i])
-                    bytes[byteIndex] |= (byte)(1 << (7 - bitIndex));
-
-                bitIndex++;
-                if (bitIndex == 8)
-                {
-                    bitIndex = 0;
-                    byteIndex++;
-                }
-            }
-
-            Array.Reverse(bytes);
-            return bytes;
-        }
-     
-
+    
         private byte[] WriteByMessage(byte[] packCommand)
         {
             int NameLength = packCommand[28];
@@ -385,10 +354,10 @@ namespace HslCommunication.Profinet.LSIS
             data5[29] = 0;
             result.AddRange(data5);
             result.AddRange(BitConverter.GetBytes((ushort)RequestCount));
-           
+
             var bitSelacdetAddress = 0;
-           var DeviceAddress = Encoding.ASCII.GetString(packCommand, 30, NameLength);
-           var AddressLength = BitConverter.ToUInt16(packCommand, 30 + NameLength);
+            var DeviceAddress = Encoding.ASCII.GetString(packCommand, 30, NameLength);
+            var AddressLength = BitConverter.ToUInt16(packCommand, 30 + NameLength);
 
             var tempStrgSelacdetAddress = DeviceAddress.Remove(0, 3);
             switch (tempStrgSelacdetAddress)
@@ -426,9 +395,9 @@ namespace HslCommunication.Profinet.LSIS
             int startIndex = int.Parse(DeviceAddress.Remove(0, 3));
             if (DeviceAddress.Substring(1, 2) == "DW" || DeviceAddress.Substring(1, 2) == "DB")
             {
-                
+
                 //int count = ByteTransform.TransInt16(packCommand, 23);
-                
+
                 byte[] data = ByteTransform.TransByte(packCommand, 30 + NameLength + AddressLength, RequestCount);
                 switch (DeviceAddress[1])
                 {
@@ -443,7 +412,7 @@ namespace HslCommunication.Profinet.LSIS
             }
             else
             {
-                 
+
                 bool value = BitConverter.ToBoolean(packCommand, 30 + NameLength + AddressLength);
 
                 switch (DeviceAddress[1])

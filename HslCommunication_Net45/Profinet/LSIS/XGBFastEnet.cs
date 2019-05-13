@@ -166,7 +166,7 @@ namespace HslCommunication.Profinet.LSIS
         }
             #endregion
 
-            #region Private Member
+        #region Private Member
 
             private byte[] PackCommand(byte[] coreCommand)
         {
