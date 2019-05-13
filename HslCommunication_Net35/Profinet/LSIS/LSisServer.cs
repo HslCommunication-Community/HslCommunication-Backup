@@ -67,7 +67,7 @@ namespace HslCommunication.Profinet.LSIS
             OperateResult<string> analysis = XGBFastEnet.AnalysisAddress(address, false);
             if (!analysis.IsSuccess) return OperateResult.CreateFailedResult<byte[]>(analysis);
 
-            switch (analysis.Content[0])
+            switch (analysis.Content[1])
             {
                 case 'P': inputBuffer.SetBytes(value, int.Parse(analysis.Content.Remove(0, 3)) / 8); return OperateResult.CreateSuccessResult();
                 case 'Q': outputBuffer.SetBytes(value, int.Parse(analysis.Content.Remove(0, 3)) / 8); return OperateResult.CreateSuccessResult();
