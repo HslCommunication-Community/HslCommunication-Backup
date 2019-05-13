@@ -228,6 +228,12 @@
     <Compile Include="PLC\FormMcServer.Designer.cs">
       <DependentUpon>FormMcServer.cs</DependentUpon>
     </Compile>
+    <Compile Include="PLC\FormLSisServer.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="PLC\FormLSisServer.Designer.cs">
+      <DependentUpon>FormLSisServer.cs</DependentUpon>
+    </Compile>
     <Compile Include="PLC\FormS7Server.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -516,6 +522,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="PLC\FormMcServer.resx">
       <DependentUpon>FormMcServer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PLC\FormLSisServer.resx">
+      <DependentUpon>FormLSisServer.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="PLC\FormS7Server.resx">
       <DependentUpon>FormS7Server.cs</DependentUpon>

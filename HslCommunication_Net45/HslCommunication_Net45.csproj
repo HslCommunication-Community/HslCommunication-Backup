@@ -285,6 +285,7 @@
     <Compile Include="Profinet\Keyence\KeyenceNanoByteTransform.cs" />
     <Compile Include="Profinet\Keyence\KeyenceNanoSerial.cs" />
     <Compile Include="Profinet\LSIS\LSCpuInfo.cs" />
+    <Compile Include="Profinet\LSIS\LSisServer.cs" />
     <Compile Include="Profinet\LSIS\XGBCnet.cs" />
     <Compile Include="Profinet\LSIS\XGBFastEnet.cs" />
     <Compile Include="Profinet\Melsec\MelsecA1EDataType.cs" />
