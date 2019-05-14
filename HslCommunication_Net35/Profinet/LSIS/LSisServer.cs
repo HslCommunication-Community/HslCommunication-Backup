@@ -356,42 +356,16 @@ namespace HslCommunication.Profinet.LSIS
             data5[29] = 0;
             result.AddRange(data5);
             result.AddRange(BitConverter.GetBytes((ushort)RequestCount));
-            var bitSelacdetAddress = 0;
+           
             var DeviceAddress = Encoding.ASCII.GetString(packCommand, 30, NameLength);
             var AddressLength = BitConverter.ToUInt16(packCommand, 30 + NameLength);
-
-            var tempStrgSelacdetAddress = DeviceAddress.Remove(0, 3);
-            switch (tempStrgSelacdetAddress)
-            {
-                case "A":
-                    bitSelacdetAddress = 10;
-                    break;
-                case "B":
-                    bitSelacdetAddress = 11;
-                    break;
-                case "C":
-                    bitSelacdetAddress = 12;
-                    break;
-                case "D":
-                    bitSelacdetAddress = 13;
-                    break;
-                case "E":
-                    bitSelacdetAddress = 14;
-                    break;
-                case "F":
-                    bitSelacdetAddress = 15;
-                    break;
-
-                default:
-                    bitSelacdetAddress = int.Parse(DeviceAddress.Remove(0, 3));
-                    break;
-            }
-
-            int startIndex = int.Parse(DeviceAddress.Remove(0, 3));
+            var startIndex = CheckAddress(DeviceAddress.Remove(0, 3));
+            
             if (DeviceAddress.Substring(1, 2) == "DW" || DeviceAddress.Substring(1, 2) == "DB")
             {
 
                 byte[] data = ByteTransform.TransByte(packCommand, 30 + NameLength + AddressLength, RequestCount);
+
                 switch (DeviceAddress[1])
                 {
                     case 'C': inputBuffer.SetBytes(data, startIndex); break;
@@ -573,7 +547,36 @@ namespace HslCommunication.Profinet.LSIS
             }
 
         }
- 
+        public static int CheckAddress(string address)
+        {
+            int bitSelacdetAddress;
+            switch (address)
+            {
+                case "A":
+                    bitSelacdetAddress = 10;
+                    break;
+                case "B":
+                    bitSelacdetAddress = 11;
+                    break;
+                case "C":
+                    bitSelacdetAddress = 12;
+                    break;
+                case "D":
+                    bitSelacdetAddress = 13;
+                    break;
+                case "E":
+                    bitSelacdetAddress = 14;
+                    break;
+                case "F":
+                    bitSelacdetAddress = 15;
+                    break;
+
+                default:
+                    bitSelacdetAddress = int.Parse(address);
+                    break;
+            }
+            return bitSelacdetAddress;
+        }
         public static string GetValStr(byte[] Buff, int iStart, int iDataSize)
         {
             var strVal = string.Empty;
@@ -723,33 +726,8 @@ namespace HslCommunication.Profinet.LSIS
                     var wdArys = HexToBytes(Value);
                 }
 
-                int bitSelacdetAddress;
-                switch (StartAddress)
-                {
-                    case "A":
-                        bitSelacdetAddress = 10;
-                        break;
-                    case "B":
-                        bitSelacdetAddress = 11;
-                        break;
-                    case "C":
-                        bitSelacdetAddress = 12;
-                        break;
-                    case "D":
-                        bitSelacdetAddress = 13;
-                        break;
-                    case "E":
-                        bitSelacdetAddress = 14;
-                        break;
-                    case "F":
-                        bitSelacdetAddress = 15;
-                        break;
-
-                    default:
-                        bitSelacdetAddress = int.Parse(StartAddress);
-                        break;
-                }
-                var startIndex = bitSelacdetAddress;
+               
+                var startIndex = CheckAddress(StartAddress);
                 switch (DeviceAddress.Substring(1, 2))
                 {
                     case "MX": // Bit X
