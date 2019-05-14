@@ -70,7 +70,7 @@ namespace HslCommunicationDemo
                 label2.Text = "Blogs:";
                 label4.Text = "Protocols:";
                 label20.Text = "Author:Richard Hu";
-                label5.Text = "Modbus Rtu";
+                label5.Text = "XGB Cnet";
 
                 label1.Text = "Com:";
                 label3.Text = "baudRate:";
@@ -413,6 +413,26 @@ namespace HslCommunicationDemo
 
 
         #endregion
-        
+
+        private void Button_read_byte_Click(object sender, EventArgs e)
+        {
+            
+            // 读取byte变量
+            DemoUtils.ReadResultRender(xGBCnet.ReadByte(textBox3.Text), textBox3.Text, textBox4);
+
+        }
+
+        private void Button24_Click(object sender, EventArgs e)
+        {
+            // Bit
+            try
+            {
+                DemoUtils.WriteResultRender(xGBCnet.WriteCoil(textBox8.Text, bool.Parse(textBox7.Text)), textBox8.Text);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
     }
 }

@@ -41,7 +41,7 @@ namespace HslCommunicationDemo
 
             if(Program.Language == 2)
             {
-                Text = "LSis Virtual Server";
+                Text = "LSis Virtual Server" ;
                 label2.Text = "blogs:";
                 label4.Text = "Agreement";
                 linkLabel2.Text = "thanks for the reward";

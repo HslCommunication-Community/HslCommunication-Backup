@@ -4,15 +4,13 @@ using HslCommunication.Core.IMessage;
 using HslCommunication.Core.Net;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net.Sockets;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace HslCommunication.Profinet.LSIS
-{/// <summary>
- /// 
- /// </summary>
+{     /// <summary>
+      /// LSisServer
+      /// </summary>
     public class LSisServer : NetworkDataServerBase
     {
         #region Constructor
@@ -47,13 +45,13 @@ namespace HslCommunication.Profinet.LSIS
         {
             OperateResult<string> analysis = XGBFastEnet.AnalysisAddress(address, true);
             if (!analysis.IsSuccess) return OperateResult.CreateFailedResult<byte[]>(analysis);
-
+            int startIndex = int.Parse(analysis.Content.Remove(0, 3));
             switch (analysis.Content[1])
             {
-                case 'P': return OperateResult.CreateSuccessResult(inputBuffer.GetBytes(int.Parse(analysis.Content.Remove(0, 3)) / 8, length));
-                case 'Q': return OperateResult.CreateSuccessResult(outputBuffer.GetBytes(int.Parse(analysis.Content.Remove(0, 3)) / 8, length));
-                case 'M': return OperateResult.CreateSuccessResult(memeryBuffer.GetBytes(int.Parse(analysis.Content.Remove(0, 3)) / 8, length));
-                case 'D': return OperateResult.CreateSuccessResult(dbBlockBuffer.GetBytes(int.Parse(analysis.Content.Remove(0, 3)) / 8, length));
+                case 'P': return OperateResult.CreateSuccessResult(inputBuffer.GetBytes(startIndex / 8, length));
+                case 'Q': return OperateResult.CreateSuccessResult(outputBuffer.GetBytes(startIndex / 8, length));
+                case 'M': return OperateResult.CreateSuccessResult(memeryBuffer.GetBytes(startIndex / 8, length));
+                case 'D': return OperateResult.CreateSuccessResult(dbBlockBuffer.GetBytes(startIndex / 8, length));
                 default: return new OperateResult<byte[]>(StringResources.Language.NotSupportedDataType);
             }
         }
@@ -68,13 +66,13 @@ namespace HslCommunication.Profinet.LSIS
         {
             OperateResult<string> analysis = XGBFastEnet.AnalysisAddress(address, false);
             if (!analysis.IsSuccess) return OperateResult.CreateFailedResult<byte[]>(analysis);
-
+            int startIndex = int.Parse(analysis.Content.Remove(0, 3));
             switch (analysis.Content[1])
             {
-                case 'P': inputBuffer.SetBytes(value, int.Parse(analysis.Content.Remove(0, 3)) / 8); return OperateResult.CreateSuccessResult();
-                case 'Q': outputBuffer.SetBytes(value, int.Parse(analysis.Content.Remove(0, 3)) / 8); return OperateResult.CreateSuccessResult();
-                case 'M': memeryBuffer.SetBytes(value, int.Parse(analysis.Content.Remove(0, 3)) / 8); return OperateResult.CreateSuccessResult();
-                case 'D': dbBlockBuffer.SetBytes(value, int.Parse(analysis.Content.Remove(0, 3)) / 8); return OperateResult.CreateSuccessResult();
+                case 'P': inputBuffer.SetBytes(value, startIndex / 8); return OperateResult.CreateSuccessResult();
+                case 'Q': outputBuffer.SetBytes(value, startIndex / 8); return OperateResult.CreateSuccessResult();
+                case 'M': memeryBuffer.SetBytes(value, startIndex / 8); return OperateResult.CreateSuccessResult();
+                case 'D': dbBlockBuffer.SetBytes(value, startIndex / 8); return OperateResult.CreateSuccessResult();
                 default: return new OperateResult<byte[]>(StringResources.Language.NotSupportedDataType);
             }
         }
@@ -120,13 +118,13 @@ namespace HslCommunication.Profinet.LSIS
         {
             OperateResult<string> analysis = XGBFastEnet.AnalysisAddress(address, true);
             if (!analysis.IsSuccess) return OperateResult.CreateFailedResult<bool>(analysis);
-
+            int startIndex = int.Parse(analysis.Content.Remove(0, 3));
             switch (analysis.Content[1])
             {
-                case 'P': return OperateResult.CreateSuccessResult(inputBuffer.GetBool(int.Parse(analysis.Content.Remove(0, 3))));
-                case 'Q': return OperateResult.CreateSuccessResult(outputBuffer.GetBool(int.Parse(analysis.Content.Remove(0, 3))));
-                case 'M': return OperateResult.CreateSuccessResult(memeryBuffer.GetBool(int.Parse(analysis.Content.Remove(0, 3))));
-                case 'D': return OperateResult.CreateSuccessResult(dbBlockBuffer.GetBool(int.Parse(analysis.Content.Remove(0, 3))));
+                case 'P': return OperateResult.CreateSuccessResult(inputBuffer.GetBool(startIndex));
+                case 'Q': return OperateResult.CreateSuccessResult(outputBuffer.GetBool(startIndex));
+                case 'M': return OperateResult.CreateSuccessResult(memeryBuffer.GetBool(startIndex));
+                case 'D': return OperateResult.CreateSuccessResult(dbBlockBuffer.GetBool(startIndex));
                 default: return new OperateResult<bool>(StringResources.Language.NotSupportedDataType);
             }
         }
@@ -141,13 +139,13 @@ namespace HslCommunication.Profinet.LSIS
         {
             OperateResult<string> analysis = XGBFastEnet.AnalysisAddress(address, false);
             if (!analysis.IsSuccess) return analysis;
-
+            int startIndex = int.Parse(analysis.Content.Remove(0, 3));
             switch (analysis.Content[1])
             {
-                case 'P': inputBuffer.SetBool(value, int.Parse(analysis.Content.Remove(0, 3))); return OperateResult.CreateSuccessResult();
-                case 'Q': outputBuffer.SetBool(value, int.Parse(analysis.Content.Remove(0, 3))); return OperateResult.CreateSuccessResult();
-                case 'M': memeryBuffer.SetBool(value, int.Parse(analysis.Content.Remove(0, 3))); return OperateResult.CreateSuccessResult();
-                case 'D': dbBlockBuffer.SetBool(value, int.Parse(analysis.Content.Remove(0, 3))); return OperateResult.CreateSuccessResult();
+                case 'P': inputBuffer.SetBool(value, startIndex); return OperateResult.CreateSuccessResult();
+                case 'Q': outputBuffer.SetBool(value, startIndex); return OperateResult.CreateSuccessResult();
+                case 'M': memeryBuffer.SetBool(value, startIndex); return OperateResult.CreateSuccessResult();
+                case 'D': dbBlockBuffer.SetBool(value, startIndex); return OperateResult.CreateSuccessResult();
                 default: return new OperateResult(StringResources.Language.NotSupportedDataType);
             }
         }
@@ -288,8 +286,7 @@ namespace HslCommunication.Profinet.LSIS
                         break;
                     default: throw new Exception(StringResources.Language.NotSupportedDataType);
                 }
-                var data3 = ToByteArray(data);
-
+                var data3 = SoftBasic.BoolArrayToByte(data);
                 resultLength.AddRange(data3);
                 data2[16] = (byte)resultLength.Count;
                 result.AddRange(data2);
@@ -301,7 +298,6 @@ namespace HslCommunication.Profinet.LSIS
                 byte[] dataW = null;
                 var subAddress = int.Parse(StartAddress) / 2;
                 var sublength = RequestCount / 2;
-
                 int startIndex = subAddress;
                 switch (DeviceAddress[1])
                 {
@@ -328,44 +324,12 @@ namespace HslCommunication.Profinet.LSIS
         }
 
 
-        /// <summary>
-        /// Convert Array bool ToByteArray
-        /// </summary>
-        /// <param name="bits"></param>
-        /// <returns></returns>
-        public static byte[] ToByteArray(bool[] bits)
-        {
-            var numBytes = bits.Length / 8;
-            var bitEven = bits.Length % 8;
-            if (bitEven != 0) numBytes++;
-            Array.Reverse(bits);
-            var bytes = new byte[numBytes];
-            int byteIndex = 0, bitIndex = 0;
-
-            for (var i = 0; i < bits.Length; i++)
-            {
-                if (bits[i])
-                    bytes[byteIndex] |= (byte)(1 << (7 - bitIndex));
-
-                bitIndex++;
-                if (bitIndex == 8)
-                {
-                    bitIndex = 0;
-                    byteIndex++;
-                }
-            }
-
-            Array.Reverse(bytes);
-            return bytes;
-        }
-
-
+    
         private byte[] WriteByMessage(byte[] packCommand)
         {
             int NameLength = packCommand[28];
             int RequestCount = BitConverter.ToUInt16(packCommand, 30 + NameLength);
             int _byte2 = 12 + (int)RequestCount;
-
             var result = new List<byte>();
             var data5 = new byte[30];
             Array.Copy(packCommand, 0, data5, 0, 30);
@@ -387,7 +351,6 @@ namespace HslCommunication.Profinet.LSIS
             data5[29] = 0;
             result.AddRange(data5);
             result.AddRange(BitConverter.GetBytes((ushort)RequestCount));
-
             var bitSelacdetAddress = 0;
             var DeviceAddress = Encoding.ASCII.GetString(packCommand, 30, NameLength);
             var AddressLength = BitConverter.ToUInt16(packCommand, 30 + NameLength);
@@ -419,18 +382,10 @@ namespace HslCommunication.Profinet.LSIS
                     break;
             }
 
-
-
-
-
-
-
             int startIndex = int.Parse(DeviceAddress.Remove(0, 3));
             if (DeviceAddress.Substring(1, 2) == "DW" || DeviceAddress.Substring(1, 2) == "DB")
             {
-
-                //int count = ByteTransform.TransInt16(packCommand, 23);
-
+ 
                 byte[] data = ByteTransform.TransByte(packCommand, 30 + NameLength + AddressLength, RequestCount);
                 switch (DeviceAddress[1])
                 {

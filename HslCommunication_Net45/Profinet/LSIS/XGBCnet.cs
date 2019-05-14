@@ -21,7 +21,7 @@ namespace HslCommunication.Profinet.LSIS
         public XGBCnet()
         {
             WordLength = 2;
-            ByteTransform = new RegularByteTransform( );
+            ByteTransform = new RegularByteTransform();
         }
 
         #endregion
@@ -34,7 +34,43 @@ namespace HslCommunication.Profinet.LSIS
         public byte Station { get; set; } = 0x05;
 
         #endregion
+        #region Read Write Byte
 
+        /// <summary>
+        /// Read single byte value from plc
+        /// </summary>
+        /// <param name="address">Start address</param>
+        /// <returns>result</returns>
+        public OperateResult<byte> ReadByte(string address)
+        {
+            var read = Read(address, 1);
+            if (!read.IsSuccess) return OperateResult.CreateFailedResult<byte>(read);
+
+            return OperateResult.CreateSuccessResult(read.Content[0]);
+        }
+
+        /// <summary>
+        /// Write single byte value to plc
+        /// </summary>
+        /// <param name="address">Start address</param>
+        /// <param name="value">value</param>
+        /// <returns>Whether to write the successful</returns>
+        public OperateResult Write(string address, byte value)
+        {
+            return Write(address, new byte[] { value });
+        }
+        /// <summary>
+        /// WriteCoil
+        /// </summary>
+        /// <param name="address"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public OperateResult WriteCoil(string address, bool value)
+        {
+
+            return Write(address, new byte[] { (byte)(value ? 0x01 : 0x00), 0x00 });
+        }
+        #endregion
         #region Read Write Support
 
         /// <summary>
@@ -45,13 +81,13 @@ namespace HslCommunication.Profinet.LSIS
         /// <returns>result contains whether success.</returns>
         public override OperateResult<byte[]> Read(string address, ushort length)
         {
-            OperateResult<byte[]> command = BuildReadByteCommand( Station, address, length );
+            OperateResult<byte[]> command = BuildReadByteCommand(Station, address, length);
             if (!command.IsSuccess) return command;
 
-            OperateResult<byte[]> read = ReadBase( command.Content );
+            OperateResult<byte[]> read = ReadBase(command.Content);
             if (!read.IsSuccess) return read;
 
-            return ExtractActualData( read.Content, true );
+            return ExtractActualData(read.Content, true);
         }
 
         /// <summary>
@@ -62,13 +98,13 @@ namespace HslCommunication.Profinet.LSIS
         /// <returns>result contains whether success.</returns>
         public override OperateResult Write(string address, byte[] value)
         {
-            OperateResult<byte[]> command = BuildWriteByteCommand( Station, address, value );
+            OperateResult<byte[]> command = BuildWriteByteCommand(Station, address, value);
             if (!command.IsSuccess) return command;
 
-            OperateResult<byte[]> read = ReadBase( command.Content );
+            OperateResult<byte[]> read = ReadBase(command.Content);
             if (!read.IsSuccess) return read;
 
-            return ExtractActualData( read.Content, false );
+            return ExtractActualData(read.Content, false);
         }
 
         #endregion
@@ -76,7 +112,7 @@ namespace HslCommunication.Profinet.LSIS
         #region Object Override
 
         /// <summary>
-        /// 返回表示当前对象的字符串
+        /// Returns a string representing the current object
         /// </summary>
         /// <returns>字符串信息</returns>
         public override string ToString()
@@ -87,6 +123,53 @@ namespace HslCommunication.Profinet.LSIS
         #endregion
 
         #region Static Helper
+        /// <summary>
+        /// CheckAddress To Address To Write
+        /// </summary>
+        /// <param name="address"></param>
+        /// <returns></returns>
+        public static bool CheckAddress(string address)
+        {
+            char[] types = new char[] { 'P', 'M', 'L', 'K', 'F', 'T', 'C', 'D', 'S', 'Q', 'I', 'N', 'U', 'Z', 'R' };
+            bool exsist = false;
+            if (address.Length >= 3 || address.Length >= 5)
+            {
+                for (int i = 0; i < types.Length; i++)
+                {
+                    if (types[i] == address[0])
+                    {
+
+
+                        if (address[1] == 'B')
+                        {
+                            exsist = true;
+                        }
+                        else if (address[1] == 'W')
+                        {
+                            exsist = true;
+                        }
+                        else if (address[1] == 'D')
+                        {
+                            exsist = true;
+                        }
+                        else if (address[1] == 'X')
+                        {
+                            exsist = true;
+                        }
+                        else
+                        {
+                            exsist = false;
+                        }
+
+
+                        break;
+                    }
+                }
+            }
+
+            return exsist;
+
+        }
         /// <summary>
         /// AnalysisAddress
         /// </summary>
@@ -101,7 +184,7 @@ namespace HslCommunication.Profinet.LSIS
             try
             {
                 sb.Append("%");
-                char[] types = new char[] { 'P', 'M', 'L', 'K', 'F', 'T', 'C', 'D', 'S','Q','I' };
+                char[] types = new char[] { 'P', 'M', 'L', 'K', 'F', 'T', 'C', 'D', 'S', 'Q', 'I', 'N', 'U', 'Z', 'R' };
                 bool exsist = false;
                 if (isRead)
                 {
@@ -135,8 +218,16 @@ namespace HslCommunication.Profinet.LSIS
                 }
                 else
                 {
-                     sb.Append(address);
-                      exsist = true;
+                    if (CheckAddress(address))
+                    {
+                        sb.Append(address);
+                        exsist = true;
+
+                    }
+                    else
+                    {
+                        exsist = false;
+                    }
 
                 }
                 if (!exsist) throw new Exception(StringResources.Language.NotSupportedDataType);
@@ -155,30 +246,91 @@ namespace HslCommunication.Profinet.LSIS
         /// <param name="address">address, for example: M100, D100, DW100</param>
         /// <param name="length">read length</param>
         /// <returns>command bytes</returns>
-        private static OperateResult<byte[]> BuildReadByteCommand(byte station ,string address, ushort length)
+        private static OperateResult<byte[]> BuildReadByteCommand(byte station, string address, ushort length)
         {
-            var analysisResult = AnalysisAddress(address,true);
+            var analysisResult = AnalysisAddress(address, true);
             if (!analysisResult.IsSuccess) return OperateResult.CreateFailedResult<byte[]>(analysisResult);
 
-            List<byte> command = new List<byte>( );
-            command.Add( 0x05 );    // ENQ
-            command.AddRange( SoftBasic.BuildAsciiBytesFrom( station ) );
-            command.Add( 0x72 );    // command r
-            command.Add( 0x53 );    // command type: SB
-            command.Add( 0x42 );
-            command.AddRange( SoftBasic.BuildAsciiBytesFrom( (byte)analysisResult.Content.Length ) );
-            command.AddRange( Encoding.ASCII.GetBytes( analysisResult.Content ) );
-            command.AddRange( SoftBasic.BuildAsciiBytesFrom( (byte)length ) );
-            command.Add( 0x04 );    // EOT
+            List<byte> command = new List<byte>();
+            command.Add(0x05);    // ENQ
+            command.AddRange(SoftBasic.BuildAsciiBytesFrom(station));
+            command.Add(0x72);    // command r
+            command.Add(0x53);    // command type: SB
+            command.Add(0x42);
+            command.AddRange(SoftBasic.BuildAsciiBytesFrom((byte)analysisResult.Content.Length));
+            command.AddRange(Encoding.ASCII.GetBytes(analysisResult.Content));
+            command.AddRange(SoftBasic.BuildAsciiBytesFrom((byte)length));
+            command.Add(0x04);    // EOT
 
             int sum = 0;
             for (int i = 0; i < command.Count; i++)
             {
                 sum += command[i];
             }
-            command.AddRange( SoftBasic.BuildAsciiBytesFrom( (byte)sum ) );
+            command.AddRange(SoftBasic.BuildAsciiBytesFrom((byte)sum));
 
-            return OperateResult.CreateSuccessResult( command.ToArray( ) );
+            return OperateResult.CreateSuccessResult(command.ToArray());
+        }
+        /// <summary>
+        /// One reading address  Type of ReadByte
+        /// </summary>
+        /// <param name="station">plc station</param>
+        /// <param name="address">address, for example: MX100, DW100, TW100</param>
+        /// <param name="length">read length</param>
+        /// <returns></returns>
+        private static OperateResult<byte[]> BuildReadOneCommand(byte station, string address, ushort length)
+        {
+            var analysisResult = AnalysisAddress(address, true);
+            if (!analysisResult.IsSuccess) return OperateResult.CreateFailedResult<byte[]>(analysisResult);
+
+            List<byte> command = new List<byte>();
+            command.Add(0x05);    // ENQ
+            command.AddRange(SoftBasic.BuildAsciiBytesFrom(station));
+            command.Add(0x72);    // command r
+            command.Add(0x53);    // command type: SS
+            command.Add(0x53);
+            command.Add(0x01);    // Number of blocks
+            command.Add(0x00);
+            command.AddRange(SoftBasic.BuildAsciiBytesFrom((byte)analysisResult.Content.Length));
+            command.AddRange(Encoding.ASCII.GetBytes(analysisResult.Content));
+            command.Add(0x04);    // EOT
+
+            int sum = 0;
+            for (int i = 0; i < command.Count; i++)
+            {
+                sum += command[i];
+            }
+            command.AddRange(SoftBasic.BuildAsciiBytesFrom((byte)sum));
+
+            return OperateResult.CreateSuccessResult(command.ToArray());
+        }
+
+        private static OperateResult<byte[]> BuildWriteOneCommand(byte station, string address, byte[] value)
+        {
+            var analysisResult = AnalysisAddress(address, false);
+            if (!analysisResult.IsSuccess) return OperateResult.CreateFailedResult<byte[]>(analysisResult);
+
+            List<byte> command = new List<byte>();
+            command.Add(0x05);    // ENQ
+            command.AddRange(SoftBasic.BuildAsciiBytesFrom(station));
+            command.Add(0x77);    // command w
+            command.Add(0x53);    // command type: SS
+            command.Add(0x53);
+            command.Add(0x01);    // Number of blocks
+            command.Add(0x00);
+            command.AddRange(SoftBasic.BuildAsciiBytesFrom((byte)analysisResult.Content.Length));
+            command.AddRange(Encoding.ASCII.GetBytes(analysisResult.Content));
+            command.AddRange(SoftBasic.BytesToAsciiBytes(value));
+            command.Add(0x04);    // EOT
+
+            int sum = 0;
+            for (int i = 0; i < command.Count; i++)
+            {
+                sum += command[i];
+            }
+            command.AddRange(SoftBasic.BuildAsciiBytesFrom((byte)sum));
+
+            return OperateResult.CreateSuccessResult(command.ToArray());
         }
 
         /// <summary>
@@ -188,31 +340,31 @@ namespace HslCommunication.Profinet.LSIS
         /// <param name="address">address, for example: M100, D100, DW100</param>
         /// <param name="value">source value</param>
         /// <returns>command bytes</returns>
-        private static OperateResult<byte[]> BuildWriteByteCommand( byte station, string address, byte[] value )
+        private static OperateResult<byte[]> BuildWriteByteCommand(byte station, string address, byte[] value)
         {
-            var analysisResult = AnalysisAddress( address ,false);
-            if (!analysisResult.IsSuccess) return OperateResult.CreateFailedResult<byte[]>( analysisResult );
+            var analysisResult = AnalysisAddress(address, false);
+            if (!analysisResult.IsSuccess) return OperateResult.CreateFailedResult<byte[]>(analysisResult);
 
-            List<byte> command = new List<byte>( );
-            command.Add( 0x05 );    // ENQ
-            command.AddRange( SoftBasic.BuildAsciiBytesFrom( station ) );
-            command.Add( 0x77 );    // command w
-            command.Add( 0x53 );    // command type: SB
-            command.Add( 0x42 );
-            command.AddRange( SoftBasic.BuildAsciiBytesFrom( (byte)analysisResult.Content.Length ) );
-            command.AddRange( Encoding.ASCII.GetBytes( analysisResult.Content ) );
-            command.AddRange( SoftBasic.BuildAsciiBytesFrom( (byte)value.Length ) );
-            command.AddRange( SoftBasic.BytesToAsciiBytes( value ) );
-            command.Add( 0x04 );    // EOT
+            List<byte> command = new List<byte>();
+            command.Add(0x05);    // ENQ
+            command.AddRange(SoftBasic.BuildAsciiBytesFrom(station));
+            command.Add(0x77);    // command w
+            command.Add(0x53);    // command type: SB
+            command.Add(0x42);
+            command.AddRange(SoftBasic.BuildAsciiBytesFrom((byte)analysisResult.Content.Length));
+            command.AddRange(Encoding.ASCII.GetBytes(analysisResult.Content));
+            command.AddRange(SoftBasic.BuildAsciiBytesFrom((byte)value.Length));
+            command.AddRange(SoftBasic.BytesToAsciiBytes(value));
+            command.Add(0x04);    // EOT
 
             int sum = 0;
             for (int i = 0; i < command.Count; i++)
             {
                 sum += command[i];
             }
-            command.AddRange( SoftBasic.BuildAsciiBytesFrom( (byte)sum ) );
+            command.AddRange(SoftBasic.BuildAsciiBytesFrom((byte)sum));
 
-            return OperateResult.CreateSuccessResult( command.ToArray( ) );
+            return OperateResult.CreateSuccessResult(command.ToArray());
         }
 
         /// <summary>
@@ -221,45 +373,45 @@ namespace HslCommunication.Profinet.LSIS
         /// <param name="response">response data</param>
         /// <param name="isRead">read</param>
         /// <returns>result</returns>
-        public static OperateResult<byte[]> ExtractActualData( byte[] response, bool isRead )
+        public static OperateResult<byte[]> ExtractActualData(byte[] response, bool isRead)
         {
             try
             {
                 if (isRead)
                 {
-                    if(response[0] == 0x06)
+                    if (response[0] == 0x06)
                     {
                         byte[] buffer = new byte[response.Length - 13];
-                        Array.Copy( response, 10, buffer, 0, buffer.Length );
-                        return OperateResult.CreateSuccessResult( SoftBasic.AsciiBytesToBytes( buffer ) );
+                        Array.Copy(response, 10, buffer, 0, buffer.Length);
+                        return OperateResult.CreateSuccessResult(SoftBasic.AsciiBytesToBytes(buffer));
                     }
                     else
                     {
                         byte[] buffer = new byte[response.Length - 9];
-                        Array.Copy( response, 6, buffer, 0, buffer.Length );
-                        return new OperateResult<byte[]>( BitConverter.ToUInt16( SoftBasic.AsciiBytesToBytes( buffer ), 0 ), "Data:" + SoftBasic.ByteToHexString( response ) );
+                        Array.Copy(response, 6, buffer, 0, buffer.Length);
+                        return new OperateResult<byte[]>(BitConverter.ToUInt16(SoftBasic.AsciiBytesToBytes(buffer), 0), "Data:" + SoftBasic.ByteToHexString(response));
                     }
                 }
                 else
                 {
                     if (response[0] == 0x06)
                     {
-                        return OperateResult.CreateSuccessResult( new byte[0] );
+                        return OperateResult.CreateSuccessResult(new byte[0]);
                     }
                     else
                     {
                         byte[] buffer = new byte[response.Length - 9];
-                        Array.Copy( response, 6, buffer, 0, buffer.Length );
-                        return new OperateResult<byte[]>( BitConverter.ToUInt16( SoftBasic.AsciiBytesToBytes( buffer ), 0 ), "Data:" + SoftBasic.ByteToHexString( response ) );
+                        Array.Copy(response, 6, buffer, 0, buffer.Length);
+                        return new OperateResult<byte[]>(BitConverter.ToUInt16(SoftBasic.AsciiBytesToBytes(buffer), 0), "Data:" + SoftBasic.ByteToHexString(response));
                     }
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                return new OperateResult<byte[]>( ex.Message );
+                return new OperateResult<byte[]>(ex.Message);
             }
         }
 
         #endregion
-    } 
+    }
 }
