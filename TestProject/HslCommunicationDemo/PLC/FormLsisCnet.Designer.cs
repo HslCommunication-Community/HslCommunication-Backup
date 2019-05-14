@@ -61,6 +61,7 @@
             this.textBox6 = new System.Windows.Forms.TextBox();
             this.label11 = new System.Windows.Forms.Label();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.button24 = new System.Windows.Forms.Button();
             this.label17 = new System.Windows.Forms.Label();
             this.label19 = new System.Windows.Forms.Label();
             this.button14 = new System.Windows.Forms.Button();
@@ -98,7 +99,6 @@
             this.label4 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.label20 = new System.Windows.Forms.Label();
-            this.button24 = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.groupBox4.SuspendLayout();
@@ -420,7 +420,7 @@
             this.textBox6.Name = "textBox6";
             this.textBox6.Size = new System.Drawing.Size(102, 23);
             this.textBox6.TabIndex = 5;
-            this.textBox6.Text = "100";
+            this.textBox6.Text = "M100";
             // 
             // label11
             // 
@@ -455,6 +455,16 @@
             this.groupBox2.TabIndex = 1;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "单数据写入测试";
+            // 
+            // button24
+            // 
+            this.button24.Location = new System.Drawing.Point(226, 22);
+            this.button24.Name = "button24";
+            this.button24.Size = new System.Drawing.Size(82, 28);
+            this.button24.TabIndex = 21;
+            this.button24.Text = "w-Bit";
+            this.button24.UseVisualStyleBackColor = true;
+            this.button24.Click += new System.EventHandler(this.Button24_Click);
             // 
             // label17
             // 
@@ -824,16 +834,6 @@
             this.label20.Size = new System.Drawing.Size(108, 17);
             this.label20.TabIndex = 6;
             this.label20.Text = "作者：Richard Hu";
-            // 
-            // button24
-            // 
-            this.button24.Location = new System.Drawing.Point(226, 22);
-            this.button24.Name = "button24";
-            this.button24.Size = new System.Drawing.Size(82, 28);
-            this.button24.TabIndex = 21;
-            this.button24.Text = "w-Bit";
-            this.button24.UseVisualStyleBackColor = true;
-            this.button24.Click += new System.EventHandler(this.Button24_Click);
             // 
             // FormLsisCnet
             // 
