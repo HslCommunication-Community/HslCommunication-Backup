@@ -43,7 +43,7 @@ namespace HslCommunication.Profinet.LSIS
         /// <returns>result</returns>
         public OperateResult<byte> ReadByte(string address)
         {
-            var read = Read(address, 1);
+            var read = Read(address,2);
             if (!read.IsSuccess) return OperateResult.CreateFailedResult<byte>(read);
 
             return OperateResult.CreateSuccessResult(read.Content[0]);

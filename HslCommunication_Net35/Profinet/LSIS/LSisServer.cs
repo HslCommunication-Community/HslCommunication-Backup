@@ -4,6 +4,7 @@ using HslCommunication.Core.IMessage;
 using HslCommunication.Core.Net;
 using System;
 using System.Collections.Generic;
+using System.IO.Ports;
 using System.Net.Sockets;
 using System.Text;
 
@@ -28,6 +29,10 @@ namespace HslCommunication.Profinet.LSIS
 
             WordLength = 2;
             ByteTransform = new ReverseBytesTransform();
+
+#if !NETSTANDARD2_0
+            serialPort = new SerialPort();
+#endif
         }
 
         #endregion
@@ -324,7 +329,7 @@ namespace HslCommunication.Profinet.LSIS
         }
 
 
-    
+
         private byte[] WriteByMessage(byte[] packCommand)
         {
             int NameLength = packCommand[28];
@@ -351,42 +356,16 @@ namespace HslCommunication.Profinet.LSIS
             data5[29] = 0;
             result.AddRange(data5);
             result.AddRange(BitConverter.GetBytes((ushort)RequestCount));
-            var bitSelacdetAddress = 0;
+           
             var DeviceAddress = Encoding.ASCII.GetString(packCommand, 30, NameLength);
             var AddressLength = BitConverter.ToUInt16(packCommand, 30 + NameLength);
-
-            var tempStrgSelacdetAddress = DeviceAddress.Remove(0, 3);
-            switch (tempStrgSelacdetAddress)
-            {
-                case "A":
-                    bitSelacdetAddress = 10;
-                    break;
-                case "B":
-                    bitSelacdetAddress = 11;
-                    break;
-                case "C":
-                    bitSelacdetAddress = 12;
-                    break;
-                case "D":
-                    bitSelacdetAddress = 13;
-                    break;
-                case "E":
-                    bitSelacdetAddress = 14;
-                    break;
-                case "F":
-                    bitSelacdetAddress = 15;
-                    break;
-
-                default:
-                    bitSelacdetAddress = int.Parse(DeviceAddress.Remove(0, 3));
-                    break;
-            }
-
-            int startIndex = int.Parse(DeviceAddress.Remove(0, 3));
+            var startIndex = CheckAddress(DeviceAddress.Remove(0, 3));
+            
             if (DeviceAddress.Substring(1, 2) == "DW" || DeviceAddress.Substring(1, 2) == "DB")
             {
- 
+
                 byte[] data = ByteTransform.TransByte(packCommand, 30 + NameLength + AddressLength, RequestCount);
+
                 switch (DeviceAddress[1])
                 {
                     case 'C': inputBuffer.SetBytes(data, startIndex); break;
@@ -451,6 +430,7 @@ namespace HslCommunication.Profinet.LSIS
 
 
         #endregion
+
         #region Private Member
 
         private SoftBuffer inputBuffer;                // 输入寄存器的数据池
@@ -458,6 +438,338 @@ namespace HslCommunication.Profinet.LSIS
         private SoftBuffer memeryBuffer;               // 寄存器的数据池
         private SoftBuffer dbBlockBuffer;              // 输入寄存器的数据池
         private const int DataPoolLength = 65536;      // 数据的长度
+
+        #endregion
+
+        #region Serial Support
+        private int station = 1;
+#if !NETSTANDARD2_0
+
+        private SerialPort serialPort;            // 核心的串口对象
+
+        /// <summary>
+        /// 使用默认的参数进行初始化串口，9600波特率，8位数据位，无奇偶校验，1位停止位
+        /// </summary>
+        /// <param name="com">串口信息</param>
+        public void StartSerialPort(string com)
+        {
+            StartSerialPort(com, 9600);
+        }
+
+        /// <summary>
+        /// 使用默认的参数进行初始化串口，8位数据位，无奇偶校验，1位停止位
+        /// </summary>
+        /// <param name="com">串口信息</param>
+        /// <param name="baudRate">波特率</param>
+        public void StartSerialPort(string com, int baudRate)
+        {
+            StartSerialPort(sp =>
+            {
+                sp.PortName = com;
+                sp.BaudRate = baudRate;
+                sp.DataBits = 8;
+                sp.Parity = Parity.None;
+                sp.StopBits = StopBits.One;
+            });
+        }
+
+        /// <summary>
+        /// 使用自定义的初始化方法初始化串口的参数
+        /// </summary>
+        /// <param name="inni">初始化信息的委托</param>
+        public void StartSerialPort(Action<SerialPort> inni)
+        {
+            if (!serialPort.IsOpen)
+            {
+                inni?.Invoke(serialPort);
+
+                serialPort.ReadBufferSize = 1024;
+                serialPort.ReceivedBytesThreshold = 1;
+                serialPort.Open();
+                serialPort.DataReceived += SerialPort_DataReceived;
+            }
+        }
+
+        /// <summary>
+        /// 关闭串口
+        /// </summary>
+        public void CloseSerialPort()
+        {
+            if (serialPort.IsOpen)
+            {
+                serialPort.Close();
+            }
+        }
+        private byte[] bufferReceiver;
+        /// <summary>
+        /// 接收到串口数据的时候触发
+        /// </summary>
+        /// <param name="sender">串口对象</param>
+        /// <param name="e">消息</param>
+        private void SerialPort_DataReceived(object sender, SerialDataReceivedEventArgs e)
+        {
+            var sp = (SerialPort)sender;
+            if (sp.BytesToRead >= 5)
+            {
+                bufferReceiver = new byte[serialPort.BytesToRead];
+                var result = serialPort.Read(bufferReceiver, 0, serialPort.BytesToRead);
+                ProcessReceivedData(bufferReceiver);
+            }
+ 
+          
+
+             
+        }
+        private readonly object LockObject = new object();
+        public bool ResponseReceived = false;
+        private void ProcessReceivedData(byte[] receive)
+        {
+            byte[] modbusCore = SoftBasic.BytesArrayRemoveLast(receive, 2);
+            lock (LockObject)
+            {
+                var bufferMsgReceiver = string.Empty;
+
+                if (receive == null || receive.Length < 1)
+                {
+
+                    ResponseReceived = true;
+                }
+                else
+                {
+
+                    bufferMsgReceiver = Encoding.UTF8.GetString(modbusCore, 0, modbusCore.Length);
+                    byte[] copy = ReadFromModbusCore(modbusCore);
+
+                    serialPort.Write(copy, 0, copy.Length);
+                    if (IsStarted) RaiseDataReceived(receive);
+
+                }
+            }
+
+        }
+        public static int CheckAddress(string address)
+        {
+            int bitSelacdetAddress;
+            switch (address)
+            {
+                case "A":
+                    bitSelacdetAddress = 10;
+                    break;
+                case "B":
+                    bitSelacdetAddress = 11;
+                    break;
+                case "C":
+                    bitSelacdetAddress = 12;
+                    break;
+                case "D":
+                    bitSelacdetAddress = 13;
+                    break;
+                case "E":
+                    bitSelacdetAddress = 14;
+                    break;
+                case "F":
+                    bitSelacdetAddress = 15;
+                    break;
+
+                default:
+                    bitSelacdetAddress = int.Parse(address);
+                    break;
+            }
+            return bitSelacdetAddress;
+        }
+        public static string GetValStr(byte[] Buff, int iStart, int iDataSize)
+        {
+            var strVal = string.Empty;
+            var strByteVal = string.Empty;
+            var i = 0;
+
+            for (i = 0; i < iDataSize; i++)
+            {
+                strByteVal = Convert.ToString(Buff[i + iStart], 16).ToUpper();
+                if (strByteVal.Length == 1) strByteVal = "0" + strByteVal;
+                strVal = strByteVal + strVal;
+            }
+
+            return strVal;
+        }
+        public byte[] HexToBytes(string hex)
+        {
+            if (hex == null)
+                throw new ArgumentNullException("The data is null");
+
+            if (hex.Length % 2 != 0)
+                throw new FormatException("Hex Character Count Not Even");
+
+            var bytes = new byte[hex.Length / 2];
+
+            for (var i = 0; i < bytes.Length; i++)
+                bytes[i] = Convert.ToByte(hex.Substring(i * 2, 2), 16);
+
+            return bytes;
+        }
+        private byte[] ReadFromModbusCore(byte[] packet)
+        {
+            List<byte> command = new List<byte>();
+            command.Clear();
+            var StartAddress = string.Empty;
+             var station = Encoding.ASCII.GetString(packet, 1, 2);
+            var Read = Encoding.ASCII.GetString(packet, 3, 3);
+            var nameLength = Encoding.ASCII.GetString(packet, 6, 2);
+            var DeviceAddress = Encoding.ASCII.GetString(packet, 8, int.Parse(nameLength));
+            var size = Encoding.ASCII.GetString(packet, 8 + int.Parse(nameLength), 2);
+            //=====================================================================================
+            // Read Response
+            if (Read.Substring(0, 2) == "rS")
+            {
+
+                command.Add(0x06);    // ENQ
+                command.AddRange(SoftBasic.BuildAsciiBytesFrom(byte.Parse(station)));
+                command.Add(0x72);    // command r
+                command.Add(0x53);    // command type: SB
+                command.Add(0x42);
+                command.AddRange(Encoding.ASCII.GetBytes("01"));
+                StartAddress = DeviceAddress.Remove(0, 3);
+                bool[] data;
+                string txtValue;
+                switch (DeviceAddress.Substring(1, 2))
+                {
+                    case "MB":
+                    case "PB":
+                        var dbint = Convert.ToInt32(size, 16) * 8;
+                        int startIndex = int.Parse(StartAddress);
+                        switch (DeviceAddress[1])
+                        {
+                            case 'P':
+                                data = inputBuffer.GetBool(startIndex, dbint);
+                                break;
+                            case 'Q':
+                                data = outputBuffer.GetBool(startIndex, dbint);
+                                break;
+                            case 'M':
+                                data = memeryBuffer.GetBool(startIndex, dbint);
+                                break;
+                            case 'D':
+                                data = dbBlockBuffer.GetBool(startIndex, dbint);
+                                break;
+                            default: throw new Exception(StringResources.Language.NotSupportedDataType);
+                        }
+                        var data3 = SoftBasic.BoolArrayToByte(data);
+                        txtValue = GetValStr(data3, 0, Convert.ToInt32(size, 16));
+                        command.AddRange(SoftBasic.BuildAsciiBytesFrom((byte)data3.Length));
+                        command.AddRange(SoftBasic.BytesToAsciiBytes(data3));
+                        command.Add(0x03);    // ETX
+                        int sum1 = 0;
+                        for (int i = 0; i < command.Count; i++)
+                        {
+                            sum1 += command[i];
+                        }
+                        command.AddRange(SoftBasic.BuildAsciiBytesFrom((byte)sum1));
+                        break;
+                    case "DB":
+                    case "TB":
+                        var RequestCount = Convert.ToInt32(size, 16);
+                        byte[] dataW;
+                        var startIndexW = int.Parse(StartAddress);
+                        switch (DeviceAddress[1])
+                        {
+                            case 'P':
+                                dataW = inputBuffer.GetBytes(startIndexW, (ushort)RequestCount);
+                                break;
+                            case 'Q':
+                                dataW = outputBuffer.GetBytes(startIndexW, (ushort)RequestCount);
+                                break;
+                            case 'M':
+                                dataW = memeryBuffer.GetBytes(startIndexW, (ushort)RequestCount);
+                                break;
+                            case 'D':
+                                dataW = dbBlockBuffer.GetBytes(startIndexW, (ushort)RequestCount);
+                                break;
+                            default: throw new Exception(StringResources.Language.NotSupportedDataType);
+                        }
+                        txtValue = GetValStr(dataW, 0, Convert.ToInt32(size, 16));
+                        command.AddRange(SoftBasic.BuildAsciiBytesFrom((byte)dataW.Length));
+                        command.AddRange(SoftBasic.BytesToAsciiBytes(dataW));
+                        command.Add(0x03);    // ETX
+                        int sum = 0;
+                        for (int i = 0; i < command.Count; i++)
+                        {
+                            sum += command[i];
+                        }
+                        command.AddRange(SoftBasic.BuildAsciiBytesFrom((byte)sum));
+                        break;
+                }
+                return command.ToArray();
+            }
+            else
+            {
+                StartAddress = DeviceAddress.Remove(0, 3);
+                command.Add(0x06);    // ENQ
+                command.AddRange(SoftBasic.BuildAsciiBytesFrom(byte.Parse(station)));
+                command.Add(0x77);    // command w
+                command.Add(0x53);    // command type: SB
+                command.Add(0x42);
+                command.Add(0x03);    // EOT
+                string Value;
+                if (Read.Substring(0, 3) == "WSS")
+                {
+                    //nameLength = packet.Substring(8, 1);
+                    //DeviceAddress = packet.Substring(9, Convert.ToInt16(nameLength));
+                    //AddressLength = packet.Substring(9 + Convert.ToInt16(nameLength), 1);
+                    nameLength = Encoding.ASCII.GetString(packet, 8, 2);
+                    DeviceAddress = Encoding.ASCII.GetString(packet, 10, int.Parse(nameLength));
+                    Value = Encoding.ASCII.GetString(packet, 10 + int.Parse(nameLength), 2);
+                }
+                else
+                {
+                    //Value = Encoding.ASCII.GetString(packet, 10 + int.Parse(nameLength), int.Parse(size));
+                    Value = Encoding.ASCII.GetString(packet, 8 + int.Parse(nameLength)+ int.Parse(size), int.Parse(size) * 2);
+                    var wdArys = HexToBytes(Value);
+                }
+
+               
+                var startIndex = CheckAddress(StartAddress);
+                switch (DeviceAddress.Substring(1, 2))
+                {
+                    case "MX": // Bit X
+                        Value = Encoding.ASCII.GetString(packet, 8 + int.Parse(nameLength) + int.Parse(size), int.Parse(size));
+                        switch (DeviceAddress[1])
+                        {
+                            //case 'M': inputBuffer.SetBool(value, startIndex); break;
+                            //case 'M': outputBuffer.SetBool(value, startIndex); break;
+                            case 'M': memeryBuffer.SetBool(Value == "01" ? true : false, startIndex); break;
+                            case 'D': dbBlockBuffer.SetBool(Value == "01" ? true : false, startIndex); break;
+                            default: throw new Exception(StringResources.Language.NotSupportedDataType);
+                        }
+                        return command.ToArray();
+                    case "DW": //Word
+                        Value = Encoding.ASCII.GetString(packet, 8 + int.Parse(nameLength) + int.Parse(size), int.Parse(size) * 2);
+                        var wdArys = HexToBytes(Value);
+                        switch (DeviceAddress[1])
+                        {
+                            case 'C': inputBuffer.SetBytes(wdArys, startIndex); break;
+                            case 'T': outputBuffer.SetBytes(wdArys, startIndex); break;
+                            case 'M': memeryBuffer.SetBytes(wdArys, startIndex); break;
+                            case 'D': dbBlockBuffer.SetBytes(wdArys, startIndex); break;
+                            default: throw new Exception(StringResources.Language.NotSupportedDataType);
+                        }
+                        return command.ToArray();
+                    case "DD": //DWord
+
+
+                        break;
+                    case "DL": //LWord
+
+                        break;
+
+                    default:
+
+                        return null;
+                }
+            }
+            return command.ToArray();
+        }
+
+#endif
 
         #endregion
 
