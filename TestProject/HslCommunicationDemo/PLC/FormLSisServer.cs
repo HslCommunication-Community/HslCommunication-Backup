@@ -49,7 +49,7 @@ namespace HslCommunicationDemo
                 label3.Text = "port:";
                 button1.Text = "Start Server";
                 button11.Text = "Close Server";
-                label11.Text = "This server is not a strict LSis protocol and only supports perfect communication with HSL components.";
+                //label11.Text = "This server is not a strict LSis protocol and only supports perfect communication with HSL components.";
                 label19.Text = "Note: The string of values needs to be converted to the corresponding data type";
                 button4.Text = "Connecting Alien client";
                 groupBox1.Text = "Single Data Read test";
@@ -149,8 +149,8 @@ namespace HslCommunicationDemo
             {
 
                 s7NetServer = new HslCommunication.Profinet.LSIS.LSisServer( );                       // 实例化对象
-                //s7NetServer.LogNet = new HslCommunication.LogNet.LogNetSingle( "logs.txt" );                  // 配置日志信息
-                //s7NetServer.LogNet.BeforeSaveToFile += LogNet_BeforeSaveToFile;
+                s7NetServer.LogNet = new HslCommunication.LogNet.LogNetSingle( "logs.txt" );                  // 配置日志信息
+                s7NetServer.LogNet.BeforeSaveToFile += LogNet_BeforeSaveToFile;
                 s7NetServer.OnDataReceived += BusTcpServer_OnDataReceived;
                 
                 s7NetServer.ServerStart( port );
@@ -536,5 +536,25 @@ namespace HslCommunicationDemo
             timerValue++;
         }
 
+        private void Button5_Click(object sender, EventArgs e)
+        {
+            // 启动串口
+            if (s7NetServer != null)
+            {
+                try
+                {
+                    s7NetServer.StartSerialPort(textBox10.Text);
+                    button5.Enabled = false;
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Start Failed：" + ex.Message);
+                }
+            }
+            else
+            {
+                MessageBox.Show("Start tcp server first please!");
+            }
+        }
     }
 }
