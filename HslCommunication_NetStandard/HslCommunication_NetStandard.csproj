@@ -179,6 +179,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Algorithms\Alarm\" />
     <Folder Include="Algorithms\ConnectPool\" />
     <Folder Include="Algorithms\Fourier\" />
     <Folder Include="BasicFramework\" />
