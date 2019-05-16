@@ -430,27 +430,27 @@ namespace HslCommunication.LogNet
             }
         }
 
-        private string HslMessageFormate(HslMessageItem hslMessage)
+        private string HslMessageFormate( HslMessageItem hslMessage )
         {
-             StringBuilder stringBuilder = new StringBuilder();
-            if (hslMessage.Degree!= HslMessageDegree.None)
+            StringBuilder stringBuilder = new StringBuilder( );
+            if (hslMessage.Degree != HslMessageDegree.None)
             {
-                stringBuilder.Append("\u0002");
-                stringBuilder.Append("[");
-                stringBuilder.Append(LogNetManagment.GetDegreeDescription(hslMessage.Degree));
-                stringBuilder.Append("] ");
+                stringBuilder.Append( "\u0002" );
+                stringBuilder.Append( "[" );
+                stringBuilder.Append( LogNetManagment.GetDegreeDescription( hslMessage.Degree ) );
+                stringBuilder.Append( "] " );
 
-                stringBuilder.Append(hslMessage.Time.ToString("yyyy-MM-dd HH:mm:ss.fff"));
-                stringBuilder.Append(" thread:[");
-                stringBuilder.Append(hslMessage.ThreadId.ToString("D2"));
-                stringBuilder.Append("] ");
+                stringBuilder.Append( hslMessage.Time.ToString( "yyyy-MM-dd HH:mm:ss.fff" ) );
+                stringBuilder.Append( " thread:[" );
+                stringBuilder.Append( hslMessage.ThreadId.ToString( "D2" ) );
+                stringBuilder.Append( "] " );
 
-                if (!string.IsNullOrEmpty(hslMessage.KeyWord))
+                if (!string.IsNullOrEmpty( hslMessage.KeyWord ))
                 {
-                    stringBuilder.Append(hslMessage.KeyWord);
-                    stringBuilder.Append(" : ");
+                    stringBuilder.Append( hslMessage.KeyWord );
+                    stringBuilder.Append( " : " );
                 }
-            }  
+            }
             stringBuilder.Append(hslMessage.Text);
 
             return stringBuilder.ToString();

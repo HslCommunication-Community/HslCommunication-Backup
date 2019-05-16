@@ -56,6 +56,24 @@ namespace HslCommunication.Algorithms.Alarm
         /// </summary>
         public long UniqueId => uniqueId;
 
+        /// <summary>
+        /// 报警的ID信息
+        /// </summary>
+        public int AlarmCode
+        {
+            get => alarmCode;
+            set => alarmCode = value;
+        }
+
+        /// <summary>
+        /// 用户自带的标记信息，可以用来区分不同的设备的情况
+        /// </summary>
+        public int UserId
+        {
+            get => userId;
+            set => userId = value;
+        }
+
         #endregion
 
         #region Private Member
@@ -69,6 +87,7 @@ namespace HslCommunication.Algorithms.Alarm
         private bool isChecked = false;                         // 是否被检查过
         private bool isViewed = false;                          // 是否被查看过
         private string checkName = string.Empty;                // 被检查人的账户
+        private AlarmDegree alarmDegree = AlarmDegree.Hint;     // 报警的等级信息
 
         private static long AlarmIdCurrent = 0;
 
