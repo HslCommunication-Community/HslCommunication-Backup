@@ -98,7 +98,7 @@ namespace HslCommunicationDemo
 
         private void FormSiemens_FormClosing( object sender, FormClosingEventArgs e )
         {
-            s7NetServer?.ServerClose( );
+            lSisServer?.ServerClose( );
         }
 
         /// <summary>
@@ -134,7 +134,7 @@ namespace HslCommunicationDemo
         #region Server Start
 
 
-        private HslCommunication.Profinet.LSIS.LSisServer s7NetServer;
+        private HslCommunication.Profinet.LSIS.LSisServer lSisServer;
 
         private void button1_Click( object sender, EventArgs e )
         {
@@ -148,12 +148,12 @@ namespace HslCommunicationDemo
             try
             {
 
-                s7NetServer = new HslCommunication.Profinet.LSIS.LSisServer( );                       // 实例化对象
-                s7NetServer.LogNet = new HslCommunication.LogNet.LogNetSingle( "logs.txt" );                  // 配置日志信息
-                s7NetServer.LogNet.BeforeSaveToFile += LogNet_BeforeSaveToFile;
-                s7NetServer.OnDataReceived += BusTcpServer_OnDataReceived;
+                lSisServer = new HslCommunication.Profinet.LSIS.LSisServer( );                       // 实例化对象
+                lSisServer.LogNet = new HslCommunication.LogNet.LogNetSingle( "logs.txt" );                  // 配置日志信息
+                lSisServer.LogNet.BeforeSaveToFile += LogNet_BeforeSaveToFile;
+                lSisServer.OnDataReceived += BusTcpServer_OnDataReceived;
                 
-                s7NetServer.ServerStart( port );
+                lSisServer.ServerStart( port );
 
                 button1.Enabled = false;
                 panel2.Enabled = true;
@@ -176,14 +176,14 @@ namespace HslCommunicationDemo
         private void button11_Click( object sender, EventArgs e )
         {
             // 停止服务
-            s7NetServer?.ServerClose( );
+            lSisServer?.ServerClose( );
             button1.Enabled = true;
             button11.Enabled = false;
         }
 
         private void TimerSecond_Tick( object sender, EventArgs e )
         {
-            label15.Text = s7NetServer.OnlineCount.ToString( ) ;
+            label15.Text = lSisServer.OnlineCount.ToString( ) ;
         }
 
         private void BusTcpServer_OnDataReceived( object sender, byte[] receive )
@@ -232,65 +232,65 @@ namespace HslCommunicationDemo
         private void button_read_bool_Click( object sender, EventArgs e )
         {
             // 读取bool变量
-            readResultRender( s7NetServer.ReadBool( textBox3.Text  ), textBox3.Text, textBox4 );
+            readResultRender( lSisServer.ReadBool( textBox3.Text  ), textBox3.Text, textBox4 );
         }
         
         private void button6_Click( object sender, EventArgs e )
         {
             // 读取byte变量
-            readResultRender( s7NetServer.ReadByte( textBox3.Text  ), textBox3.Text, textBox4 );
+            readResultRender( lSisServer.ReadByte( textBox3.Text  ), textBox3.Text, textBox4 );
         }
 
         private void button_read_short_Click( object sender, EventArgs e )
         {
             // 读取short变量
-            readResultRender( s7NetServer.ReadInt16( textBox3.Text ), textBox3.Text, textBox4 );
+            readResultRender( lSisServer.ReadInt16( textBox3.Text ), textBox3.Text, textBox4 );
         }
 
         private void button_read_ushort_Click( object sender, EventArgs e )
         {
             // 读取ushort变量
-            readResultRender( s7NetServer.ReadUInt16( textBox3.Text ), textBox3.Text, textBox4 );
+            readResultRender( lSisServer.ReadUInt16( textBox3.Text ), textBox3.Text, textBox4 );
         }
 
         private void button_read_int_Click( object sender, EventArgs e )
         {
             // 读取int变量
-            readResultRender( s7NetServer.ReadInt32( textBox3.Text ), textBox3.Text, textBox4 );
+            readResultRender( lSisServer.ReadInt32( textBox3.Text ), textBox3.Text, textBox4 );
         }
         private void button_read_uint_Click( object sender, EventArgs e )
         {
             // 读取uint变量
-            readResultRender( s7NetServer.ReadUInt32( textBox3.Text ), textBox3.Text, textBox4 );
+            readResultRender( lSisServer.ReadUInt32( textBox3.Text ), textBox3.Text, textBox4 );
         }
         private void button_read_long_Click( object sender, EventArgs e )
         {
             // 读取long变量
-            readResultRender( s7NetServer.ReadInt64( textBox3.Text ), textBox3.Text, textBox4 );
+            readResultRender( lSisServer.ReadInt64( textBox3.Text ), textBox3.Text, textBox4 );
         }
 
         private void button_read_ulong_Click( object sender, EventArgs e )
         {
             // 读取ulong变量
-            readResultRender( s7NetServer.ReadUInt64( textBox3.Text ), textBox3.Text, textBox4 );
+            readResultRender( lSisServer.ReadUInt64( textBox3.Text ), textBox3.Text, textBox4 );
         }
 
         private void button_read_float_Click( object sender, EventArgs e )
         {
             // 读取float变量
-            readResultRender( s7NetServer.ReadFloat( textBox3.Text ), textBox3.Text, textBox4 );
+            readResultRender( lSisServer.ReadFloat( textBox3.Text ), textBox3.Text, textBox4 );
         }
 
         private void button_read_double_Click( object sender, EventArgs e )
         {
             // 读取double变量
-            readResultRender( s7NetServer.ReadDouble( textBox3.Text ), textBox3.Text, textBox4 );
+            readResultRender( lSisServer.ReadDouble( textBox3.Text ), textBox3.Text, textBox4 );
         }
 
         private void button_read_string_Click( object sender, EventArgs e )
         {
             // 读取字符串
-            readResultRender( s7NetServer.ReadString( textBox3.Text, ushort.Parse( textBox5.Text ) ), textBox3.Text, textBox4 );
+            readResultRender( lSisServer.ReadString( textBox3.Text, ushort.Parse( textBox5.Text ) ), textBox3.Text, textBox4 );
         }
 
 
@@ -304,7 +304,7 @@ namespace HslCommunicationDemo
             // bool写入
             try
             {
-                s7NetServer.Write( textBox8.Text, bool.Parse( textBox7.Text ) );
+                lSisServer.Write( textBox8.Text, bool.Parse( textBox7.Text ) );
                 writeResultRender( textBox8.Text );
             }
             catch (Exception ex)
@@ -318,7 +318,7 @@ namespace HslCommunicationDemo
             // 离散bool写入
             try
             {
-                s7NetServer.Write( textBox8.Text, byte.Parse( textBox7.Text ) );
+                lSisServer.Write( textBox8.Text, byte.Parse( textBox7.Text ) );
                 writeResultRender( textBox8.Text );
             }
             catch (Exception ex)
@@ -332,7 +332,7 @@ namespace HslCommunicationDemo
             // short写入
             try
             {
-                s7NetServer.Write( textBox8.Text, short.Parse( textBox7.Text ) );
+                lSisServer.Write( textBox8.Text, short.Parse( textBox7.Text ) );
                 writeResultRender( textBox8.Text );
             }
             catch (Exception ex)
@@ -346,7 +346,7 @@ namespace HslCommunicationDemo
             // ushort写入
             try
             {
-                s7NetServer.Write(textBox8.Text, ushort.Parse( textBox7.Text ) );
+                lSisServer.Write(textBox8.Text, ushort.Parse( textBox7.Text ) );
                 writeResultRender( textBox8.Text );
             }
             catch (Exception ex)
@@ -361,7 +361,7 @@ namespace HslCommunicationDemo
             // int写入
             try
             {
-                s7NetServer.Write( textBox8.Text, int.Parse( textBox7.Text ) );
+                lSisServer.Write( textBox8.Text, int.Parse( textBox7.Text ) );
                 writeResultRender( textBox8.Text );
             }
             catch (Exception ex)
@@ -375,7 +375,7 @@ namespace HslCommunicationDemo
             // uint写入
             try
             {
-                s7NetServer.Write( textBox8.Text , uint.Parse( textBox7.Text ) );
+                lSisServer.Write( textBox8.Text , uint.Parse( textBox7.Text ) );
                 writeResultRender( textBox8.Text );
             }
             catch (Exception ex)
@@ -389,7 +389,7 @@ namespace HslCommunicationDemo
             // long写入
             try
             {
-                s7NetServer.Write( textBox8.Text, long.Parse( textBox7.Text ) );
+                lSisServer.Write( textBox8.Text, long.Parse( textBox7.Text ) );
                 writeResultRender( textBox8.Text );
             }
             catch (Exception ex)
@@ -403,7 +403,7 @@ namespace HslCommunicationDemo
             // ulong写入
             try
             {
-                s7NetServer.Write(textBox8.Text , ulong.Parse( textBox7.Text ) );
+                lSisServer.Write(textBox8.Text , ulong.Parse( textBox7.Text ) );
                 writeResultRender( textBox8.Text );
             }
             catch (Exception ex)
@@ -417,7 +417,7 @@ namespace HslCommunicationDemo
             // float写入
             try
             {
-                s7NetServer.Write( textBox8.Text, float.Parse( textBox7.Text ) );
+                lSisServer.Write( textBox8.Text, float.Parse( textBox7.Text ) );
                 writeResultRender( textBox8.Text );
             }
             catch (Exception ex)
@@ -431,7 +431,7 @@ namespace HslCommunicationDemo
             // double写入
             try
             {
-                s7NetServer.Write( textBox8.Text, double.Parse( textBox7.Text ) );
+                lSisServer.Write( textBox8.Text, double.Parse( textBox7.Text ) );
                 writeResultRender( textBox8.Text );
             }
             catch (Exception ex)
@@ -446,7 +446,7 @@ namespace HslCommunicationDemo
             // string写入
             try
             {
-                s7NetServer.Write( textBox8.Text, textBox7.Text );
+                lSisServer.Write( textBox8.Text, textBox7.Text );
                 writeResultRender( textBox8.Text );
             }
             catch (Exception ex)
@@ -473,7 +473,7 @@ namespace HslCommunicationDemo
             {
                 if (form.ShowDialog( ) == DialogResult.OK)
                 {
-                    OperateResult connect = s7NetServer.ConnectHslAlientClient( form.IpAddress, form.Port, form.DTU );
+                    OperateResult connect = lSisServer.ConnectHslAlientClient( form.IpAddress, form.Port, form.DTU );
                     if (connect.IsSuccess)
                     {
                         MessageBox.Show( HslCommunication.StringResources.Language.ConnectedSuccess );
@@ -490,9 +490,9 @@ namespace HslCommunicationDemo
         private void button9_Click( object sender, EventArgs e )
         {
             // 将服务器的数据池存储起来
-            if (s7NetServer != null)
+            if (lSisServer != null)
             {
-                s7NetServer.SaveDataPool( "123.txt" );
+                lSisServer.SaveDataPool( "123.txt" );
                 MessageBox.Show( "Save file finish" );
             }
         }
@@ -500,11 +500,11 @@ namespace HslCommunicationDemo
         private void button8_Click( object sender, EventArgs e )
         {
             // 从文件加载服务器的数据池
-            if (s7NetServer != null)
+            if (lSisServer != null)
             {
                 if (System.IO.File.Exists( "123.txt" ))
                 {
-                    s7NetServer.LoadDataPool( "123.txt" );
+                    lSisServer.LoadDataPool( "123.txt" );
                     MessageBox.Show( "Load data finish" );
                 }
                 else
@@ -532,18 +532,18 @@ namespace HslCommunicationDemo
 
         private void TimerWrite_Tick( object sender, EventArgs e )
         {
-            s7NetServer.Write( timerAddress, timerValue );
+            lSisServer.Write( timerAddress, timerValue );
             timerValue++;
         }
 
         private void Button5_Click(object sender, EventArgs e)
         {
             // 启动串口
-            if (s7NetServer != null)
+            if (lSisServer != null)
             {
                 try
                 {
-                    s7NetServer.StartSerialPort(textBox10.Text);
+                    lSisServer.StartSerialPort(textBox10.Text);
                     button5.Enabled = false;
                 }
                 catch (Exception ex)

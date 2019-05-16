@@ -251,17 +251,14 @@ namespace HslCommunication.Profinet.LSIS
 
         private byte[] ReadByCommand( byte[] command )
         {
-            var head = new byte[20];
             var result = new List<byte>( );
 
-            Array.Copy( command, 0, head, 0, 20 );
-            head[9] = 0x11;
-            head[10] = 0x01;
-            head[12] = 0xA0;
-            head[13] = 0x11;
-            head[18] = 0x03;
-
-            result.AddRange( head );
+            result.AddRange( SoftBasic.BytesArraySelectBegin( command, 20 ) );
+            result[ 9] = 0x11;
+            result[10] = 0x01;
+            result[12] = 0xA0;
+            result[13] = 0x11;
+            result[18] = 0x03;
             result.AddRange( new byte[] { 0x55, 0x00, 0x14, 0x00, 0x08, 0x01, 0x00, 0x00, 0x01, 0x00 } );
 
             int NameLength = command[28];
@@ -280,17 +277,14 @@ namespace HslCommunication.Profinet.LSIS
 
         private byte[] WriteByMessage( byte[] packCommand )
         {
-            var head = new byte[20];
             var result = new List<byte>( );
 
-            Array.Copy( packCommand, 0, head, 0, 20 );
-            head[9] = 0x11;
-            head[10] = 0x01;
-            head[12] = 0xA0;
-            head[13] = 0x11;
-            head[18] = 0x03;
-
-            result.AddRange( head );
+            result.AddRange( SoftBasic.BytesArraySelectBegin( packCommand, 20 ) );
+            result[ 9] = 0x11;
+            result[10] = 0x01;
+            result[12] = 0xA0;
+            result[13] = 0x11;
+            result[18] = 0x03;
             result.AddRange( new byte[] { 0x59, 0x00, 0x14, 0x00, 0x08, 0x01, 0x00, 0x00, 0x01, 0x00 } );
 
             int NameLength = packCommand[28];
