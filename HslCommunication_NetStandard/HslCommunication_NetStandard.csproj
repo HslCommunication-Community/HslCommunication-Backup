@@ -144,6 +144,7 @@
     <Compile Include="..\HslCommunication_Net45\Profinet\Keyence\KeyenceMcAsciiNet.cs" Link="Profinet\Keyence\KeyenceMcAsciiNet.cs" />
     <Compile Include="..\HslCommunication_Net45\Profinet\Keyence\KeyenceMcNet.cs" Link="Profinet\Keyence\KeyenceMcNet.cs" />
     <Compile Include="..\HslCommunication_Net45\Profinet\LSIS\LSCpuInfo.cs" Link="Profinet\LSIS\LSCpuInfo.cs" />
+    <Compile Include="..\HslCommunication_Net45\Profinet\LSIS\LSisServer.cs" Link="Profinet\LSIS\LSisServer.cs" />
     <Compile Include="..\HslCommunication_Net45\Profinet\LSIS\XGBFastEnet.cs" Link="Profinet\LSIS\XGBFastEnet.cs" />
     <Compile Include="..\HslCommunication_Net45\Profinet\Melsec\MelsecA1EDataType.cs" Link="Profinet\Melsec\MelsecA1EDataType.cs" />
     <Compile Include="..\HslCommunication_Net45\Profinet\Melsec\MelsecA1ENet.cs" Link="Profinet\Melsec\MelsecA1ENet.cs" />
