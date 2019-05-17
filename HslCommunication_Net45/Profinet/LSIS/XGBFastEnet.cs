@@ -287,7 +287,7 @@ namespace HslCommunication.Profinet.LSIS
                 sb.Append("%");
                 char[] types = new char[] { 'P', 'M', 'L', 'K', 'F', 'T', 'C', 'D', 'S', 'Q', 'I', 'N', 'U', 'Z', 'R' };
                 bool exsist = false;
-                if (true)
+                if (isRead)
                 {
                     for (int i = 0; i < types.Length; i++)
                     {
@@ -319,17 +319,48 @@ namespace HslCommunication.Profinet.LSIS
                 }
                 else
                 {
-                    if (CheckAddress(address))
+                    if (address.Length >= 3 || address.Length >= 5)
                     {
-                        sb.Append(address);
-                        exsist = true;
+                        for (int i = 0; i < types.Length; i++)
+                        {
+                            if (types[i] == address[0])
+                            {
 
-                    }
-                    else
-                    {
-                        exsist = false;
-                    }
 
+                                if (address[1] == 'B')
+                                {
+                                    sb.Append(address);
+                                    exsist = true;
+                                    break;
+                                }
+                                else if (address[1] == 'W')
+                                {
+                                    sb.Append(address);
+                                    exsist = true;
+                                    break;
+                                }
+                                else if (address[1] == 'D')
+                                {
+                                    sb.Append(address);
+                                    exsist = true;
+                                    break;
+                                }
+                                else if (address[1] == 'X')
+                                {
+                                    sb.Append(address);
+                                    exsist = true;
+                                    break;
+                                }
+                                else
+                                {
+                                    exsist = false;
+                                    break;
+                                }
+
+                            }
+                        }
+                    }
+                   
                 }
                 if (!exsist) throw new Exception(StringResources.Language.NotSupportedDataType);
             }
