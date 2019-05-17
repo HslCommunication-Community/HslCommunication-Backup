@@ -224,53 +224,7 @@ namespace HslCommunication.Profinet.LSIS
             Continuous= 0x14
         }
 
-        /// <summary>
-        /// CheckAddress To Address To Write
-        /// </summary>
-        /// <param name="address"></param>
-        /// <returns></returns>
-        public static bool CheckAddress(string address)
-        {
-            char[] types = new char[] { 'P', 'M', 'L', 'K', 'F', 'T', 'C', 'D', 'S', 'Q', 'I', 'N', 'U', 'Z', 'R' };
-            bool exsist = false;
-            if (address.Length >= 3 || address.Length >= 5)
-            {
-                for (int i = 0; i < types.Length; i++)
-                {
-                    if (types[i] == address[0])
-                    {
-
-
-                        if (address[1] == 'B')
-                        {
-                            exsist = true;
-                        }
-                        else if (address[1] == 'W')
-                        {
-                            exsist = true;
-                        }
-                        else if (address[1] == 'D')
-                        {
-                            exsist = true;
-                        }
-                        else if (address[1] == 'X')
-                        {
-                            exsist = true;
-                        }
-                        else
-                        {
-                            exsist = false;
-                        }
-
-
-                        break;
-                    }
-                }
-            }
-
-            return exsist;
-
-        }
+        
         /// <summary>
         /// AnalysisAddress
         /// </summary>
@@ -377,7 +331,7 @@ namespace HslCommunication.Profinet.LSIS
         /// </summary>
         /// <param name="address"></param>
         /// <returns></returns>
-        private static OperateResult<string> AnalysisAddressDataType(string address)
+        public  static OperateResult<string> AnalysisAddressDataType(string address)
         {
             string lSDataType = string.Empty; ;
             try
