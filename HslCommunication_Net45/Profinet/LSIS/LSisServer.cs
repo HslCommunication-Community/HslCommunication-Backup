@@ -293,6 +293,7 @@ namespace HslCommunication.Profinet.LSIS
 
             byte[] data = ByteTransform.TransByte(packCommand, 32 + NameLength, RequestCount);
             Write(DeviceAddress, data);
+            result[16] = (byte)(result.Count - 20);
             return result.ToArray();
         }
 
