@@ -170,13 +170,20 @@ namespace HslCommunication.LogNet
         /// <returns>字符串信息</returns>
         public override string ToString( )
         {
-            if (string.IsNullOrEmpty( KeyWord ))
+            if (Degree != HslMessageDegree.None)
             {
-                return $"[{Degree}] {Time.ToString( "yyyy-MM-dd HH:mm:ss.fff" )} Thread [{ThreadId.ToString( "D3" )}] {Text}";
+                if (string.IsNullOrEmpty( KeyWord ))
+                {
+                    return $"[{Degree}] {Time.ToString( "yyyy-MM-dd HH:mm:ss.fff" )} Thread [{ThreadId.ToString( "D3" )}] {Text}";
+                }
+                else
+                {
+                    return $"[{Degree}] {Time.ToString( "yyyy-MM-dd HH:mm:ss.fff" )} Thread [{ThreadId.ToString( "D3" )}] {KeyWord} : {Text}";
+                }
             }
             else
             {
-                return $"[{Degree}] {Time.ToString( "yyyy-MM-dd HH:mm:ss.fff" )} Thread [{ThreadId.ToString( "D3" )}] {KeyWord} : {Text}";
+                return Text;
             }
         }
 
@@ -186,7 +193,14 @@ namespace HslCommunication.LogNet
         /// <returns>字符串信息</returns>
         public string ToStringWithoutKeyword( )
         {
-            return $"[{Degree}] {Time.ToString( "yyyy-MM-dd HH:mm:ss.fff" )} Thread [{ThreadId.ToString( "D3" )}] {Text}";
+            if (Degree != HslMessageDegree.None)
+            {
+                return $"[{Degree}] {Time.ToString( "yyyy-MM-dd HH:mm:ss.fff" )} Thread [{ThreadId.ToString( "D3" )}] {Text}";
+            }
+            else
+            {
+                return Text;
+            }
         }
     }
 
