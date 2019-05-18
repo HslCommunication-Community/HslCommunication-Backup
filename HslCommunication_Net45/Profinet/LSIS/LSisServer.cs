@@ -514,15 +514,19 @@ namespace HslCommunication.Profinet.LSIS
             List<byte> command = new List<byte>();
             command.Clear();
             var StartAddress = string.Empty;
+            var DeviceAddress = string.Empty;
+            var nameLength = string.Empty;
+            var size = string.Empty;
             var station = Encoding.ASCII.GetString(packet, 1, 2);
             var Read = Encoding.ASCII.GetString(packet, 3, 3);
-            var nameLength = Encoding.ASCII.GetString(packet, 6, 2);
-            var DeviceAddress = Encoding.ASCII.GetString(packet, 8, int.Parse(nameLength));
-            var size = Encoding.ASCII.GetString(packet, 8 + int.Parse(nameLength), 2);
             //=====================================================================================
             // Read Response
             if (Read.Substring(0, 2) == "rS")
             {
+               
+                nameLength = Encoding.ASCII.GetString(packet, 6, 2);
+                DeviceAddress = Encoding.ASCII.GetString(packet, 8, int.Parse(nameLength));
+                 size = Encoding.ASCII.GetString(packet, 8 + int.Parse(nameLength), 2);
 
                 command.Add(0x06);    // ENQ
                 command.AddRange(SoftBasic.BuildAsciiBytesFrom(byte.Parse(station)));
@@ -604,7 +608,7 @@ namespace HslCommunication.Profinet.LSIS
             }
             else
             {
-                StartAddress = DeviceAddress.Remove(0, 3);
+           
                 command.Add(0x06);    // ENQ
                 command.AddRange(SoftBasic.BuildAsciiBytesFrom(byte.Parse(station)));
                 command.Add(0x77);    // command w
@@ -612,17 +616,20 @@ namespace HslCommunication.Profinet.LSIS
                 command.Add(0x42);
                 command.Add(0x03);    // EOT
                 string Value;
-                if (Read.Substring(0, 3) == "WSS")
+                if (Read.Substring(0, 3) == "wSS")
                 {
-                    //nameLength = packet.Substring(8, 1);
-                    //DeviceAddress = packet.Substring(9, Convert.ToInt16(nameLength));
-                    //AddressLength = packet.Substring(9 + Convert.ToInt16(nameLength), 1);
+                  
                     nameLength = Encoding.ASCII.GetString(packet, 8, 2);
                     DeviceAddress = Encoding.ASCII.GetString(packet, 10, int.Parse(nameLength));
+                    StartAddress = DeviceAddress.Remove(0, 3);
                     Value = Encoding.ASCII.GetString(packet, 10 + int.Parse(nameLength), 2);
                 }
                 else
                 {
+                   
+                    nameLength = Encoding.ASCII.GetString(packet, 6, 2);
+                    DeviceAddress = Encoding.ASCII.GetString(packet, 8, int.Parse(nameLength));
+                     size = Encoding.ASCII.GetString(packet, 8 + int.Parse(nameLength), 2);
                     //Value = Encoding.ASCII.GetString(packet, 10 + int.Parse(nameLength), int.Parse(size));
                     Value = Encoding.ASCII.GetString(packet, 8 + int.Parse(nameLength) + int.Parse(size), int.Parse(size) * 2);
                     var wdArys = HexToBytes(Value);
