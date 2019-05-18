@@ -466,9 +466,7 @@ namespace HslCommunication.Profinet.LSIS
 
 
         }
-        private readonly object LockObject = new object();
-
-         
+       
         public byte[] HexToBytes(string hex)
         {
             if (hex == null)
@@ -498,10 +496,10 @@ namespace HslCommunication.Profinet.LSIS
            
 
             int NameLength =int.Parse(Encoding.ASCII.GetString(command, 6, 2));
-            string RequestCount = Encoding.ASCII.GetString(command, 8 + NameLength, 2);
+            int RequestCount = Convert.ToInt32(Encoding.ASCII.GetString(command, 8 + NameLength, 2),16);
 
             string DeviceAddress = Encoding.ASCII.GetString(command, 9, NameLength - 1);
-            byte[] data = Read(DeviceAddress,ushort.Parse(RequestCount)).Content;
+            byte[] data = Read(DeviceAddress,(ushort) RequestCount).Content;
 
             result.AddRange(SoftBasic.BuildAsciiBytesFrom((byte)data.Length));
             result.AddRange(SoftBasic.BytesToAsciiBytes(data));
@@ -510,7 +508,7 @@ namespace HslCommunication.Profinet.LSIS
             int sum1 = 0;
             for (int i = 0; i < result.Count; i++)
             {
-                sum1 += command[i];
+                sum1 += result[i];
             }
             result.AddRange(SoftBasic.BuildAsciiBytesFrom((byte)sum1));
             return result.ToArray();
@@ -527,7 +525,7 @@ namespace HslCommunication.Profinet.LSIS
             result.Add(0x42);
             result.Add(0x03);    // EOT
 
-            if (Read == "WSS")
+            if (Read == "wSS")
             {
                 NameLength = Encoding.ASCII.GetString(packCommand, 8, 2);
                 DeviceAddress = Encoding.ASCII.GetString(packCommand, 11, int.Parse(NameLength) - 1);
@@ -538,7 +536,7 @@ namespace HslCommunication.Profinet.LSIS
             else
             {
                 NameLength = Encoding.ASCII.GetString(packCommand, 6, 2);
-                DeviceAddress = Encoding.ASCII.GetString(packCommand, 8, int.Parse(NameLength));
+                DeviceAddress = Encoding.ASCII.GetString(packCommand,9, int.Parse(NameLength)-1);
                 
                 int RequestCount = int.Parse( Encoding.ASCII.GetString(packCommand, 8 + int.Parse(NameLength), 2));
                 string Value = Encoding.ASCII.GetString(packCommand, 8 + int.Parse(NameLength) +  RequestCount, RequestCount * 2);
