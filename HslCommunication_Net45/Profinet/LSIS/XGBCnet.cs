@@ -43,7 +43,7 @@ namespace HslCommunication.Profinet.LSIS
         /// <returns>result</returns>
         public OperateResult<byte> ReadByte(string address)
         {
-            var read = Read(address,2);
+            var read = Read(address, 2);
             if (!read.IsSuccess) return OperateResult.CreateFailedResult<byte>(read);
 
             return OperateResult.CreateSuccessResult(read.Content[0]);
@@ -123,8 +123,8 @@ namespace HslCommunication.Profinet.LSIS
         #endregion
 
         #region Static Helper
-       
-      
+
+
         /// <summary>
         /// reading address  Type of ReadByte
         /// </summary>
@@ -191,7 +191,7 @@ namespace HslCommunication.Profinet.LSIS
             return OperateResult.CreateSuccessResult(command.ToArray());
         }
 
-       
+
 
         /// <summary>
         /// write data to address  Type of ReadByte
@@ -208,40 +208,33 @@ namespace HslCommunication.Profinet.LSIS
             if (!analysisDataTypeResult.IsSuccess) return OperateResult.CreateFailedResult<byte[]>(analysisDataTypeResult);
             var lSDataType = (XGBFastEnet.LsDataType)Enum.Parse(typeof(XGBFastEnet.LsDataType), analysisDataTypeResult.Content);
             List<byte> command = new List<byte>();
+            command.Add(0x05);    // ENQ
+            command.AddRange(SoftBasic.BuildAsciiBytesFrom(station));
+            command.Add(0x77);    // command w
+            command.Add(0x53);    // command type: S
             switch (lSDataType)
             {
                 case XGBFastEnet.LsDataType.Bit:
                 case XGBFastEnet.LsDataType.Byte:
-                    command.Add(0x05);    // ENQ
-                    command.AddRange(SoftBasic.BuildAsciiBytesFrom(station));
-                    command.Add(0x77);    // command w
-                    command.Add(0x53);    // command type: SS
-                    command.Add(0x53);
-                    command.Add(0x01);    // Number of blocks
-                    command.Add(0x00);
+                    command.Add(0x53);     // command type: SS
+                    command.Add(0x30);    // Number of blocks
+                    command.Add(0x31);
                     command.AddRange(SoftBasic.BuildAsciiBytesFrom((byte)analysisResult.Content.Length));
                     command.AddRange(Encoding.ASCII.GetBytes(analysisResult.Content));
-                    command.AddRange(SoftBasic.BytesToAsciiBytes(value));
-                    command.Add(0x04);    // EOT
                     break;
                 case XGBFastEnet.LsDataType.Word:
                 case XGBFastEnet.LsDataType.DWord:
                 case XGBFastEnet.LsDataType.LWord:
                 case XGBFastEnet.LsDataType.Continuous:
-            command.Add(0x05);    // ENQ
-            command.AddRange(SoftBasic.BuildAsciiBytesFrom(station));
-            command.Add(0x77);    // command w
-            command.Add(0x53);    // command type: SB
-            command.Add(0x42);
-            command.AddRange(SoftBasic.BuildAsciiBytesFrom((byte)analysisResult.Content.Length));
-            command.AddRange(Encoding.ASCII.GetBytes(analysisResult.Content));
-            command.AddRange(SoftBasic.BuildAsciiBytesFrom((byte)value.Length));
-            command.AddRange(SoftBasic.BytesToAsciiBytes(value));
-            command.Add(0x04);    // EOT
+                    command.Add(0x42);       // command type: SB
+                    command.AddRange(SoftBasic.BuildAsciiBytesFrom((byte)analysisResult.Content.Length));
+                    command.AddRange(Encoding.ASCII.GetBytes(analysisResult.Content));
+                    command.AddRange(SoftBasic.BuildAsciiBytesFrom((byte)value.Length));
                     break;
                 default: break;
             }
-
+            command.AddRange(SoftBasic.BytesToAsciiBytes(value));
+            command.Add(0x04);    // EOT
             int sum = 0;
             for (int i = 0; i < command.Count; i++)
             {
