@@ -34,6 +34,7 @@
             this.linkLabel1 = new System.Windows.Forms.LinkLabel();
             this.label2 = new System.Windows.Forms.Label();
             this.panel2 = new System.Windows.Forms.Panel();
+            this.button4 = new System.Windows.Forms.Button();
             this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
@@ -46,7 +47,8 @@
             this.label6 = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
             this.label1 = new System.Windows.Forms.Label();
-            this.button4 = new System.Windows.Forms.Button();
+            this.checkBox2 = new System.Windows.Forms.CheckBox();
+            this.label8 = new System.Windows.Forms.Label();
             this.panel2.SuspendLayout();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
@@ -106,6 +108,7 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.panel2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel2.Controls.Add(this.checkBox2);
             this.panel2.Controls.Add(this.button4);
             this.panel2.Controls.Add(this.checkBox1);
             this.panel2.Controls.Add(this.textBox1);
@@ -122,6 +125,16 @@
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(978, 537);
             this.panel2.TabIndex = 8;
+            // 
+            // button4
+            // 
+            this.button4.Location = new System.Drawing.Point(774, 20);
+            this.button4.Name = "button4";
+            this.button4.Size = new System.Drawing.Size(132, 26);
+            this.button4.TabIndex = 12;
+            this.button4.Text = "删除验证";
+            this.button4.UseVisualStyleBackColor = true;
+            this.button4.Click += new System.EventHandler(this.button4_Click);
             // 
             // checkBox1
             // 
@@ -221,6 +234,7 @@
             this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel1.Controls.Add(this.label8);
             this.panel1.Controls.Add(this.label1);
             this.panel1.Location = new System.Drawing.Point(13, 34);
             this.panel1.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
@@ -231,21 +245,31 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(8, 17);
+            this.label1.Location = new System.Drawing.Point(3, 10);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(485, 17);
+            this.label1.Size = new System.Drawing.Size(809, 17);
             this.label1.TabIndex = 3;
-            this.label1.Text = "注册码的生成和测试，原理获取cpu号，内存号，硬盘号生成，不适用批量采购的计算机。";
+            this.label1.Text = "注册码的生成和测试，原理获取cpu号，内存号，硬盘号，主板号，SMBIOS号生成，作为改进后的版本已经在一定程度上能够分别批量采购的计算机。";
             // 
-            // button4
+            // checkBox2
             // 
-            this.button4.Location = new System.Drawing.Point(774, 20);
-            this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(132, 26);
-            this.button4.TabIndex = 12;
-            this.button4.Text = "删除验证";
-            this.button4.UseVisualStyleBackColor = true;
-            this.button4.Click += new System.EventHandler(this.button4_Click);
+            this.checkBox2.AutoSize = true;
+            this.checkBox2.Location = new System.Drawing.Point(513, 63);
+            this.checkBox2.Name = "checkBox2";
+            this.checkBox2.Size = new System.Drawing.Size(135, 21);
+            this.checkBox2.TabIndex = 13;
+            this.checkBox2.Text = "是否使用管理员模式";
+            this.checkBox2.UseVisualStyleBackColor = true;
+            this.checkBox2.CheckedChanged += new System.EventHandler(this.checkBox2_CheckedChanged);
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(3, 27);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(417, 17);
+            this.label8.TabIndex = 4;
+            this.label8.Text = "如果使用管理员模式则读取物理硬盘号(设置/取消管理员模式后需要重启软件)";
             // 
             // FormRegister
             // 
@@ -295,5 +319,7 @@
         private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Button button4;
+        private System.Windows.Forms.CheckBox checkBox2;
+        private System.Windows.Forms.Label label8;
     }
 }

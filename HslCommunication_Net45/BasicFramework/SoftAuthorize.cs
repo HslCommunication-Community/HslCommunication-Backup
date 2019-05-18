@@ -22,9 +22,10 @@ namespace HslCommunication.BasicFramework
         /// <summary>
         /// 实例化一个软件授权类
         /// </summary>
-        public SoftAuthorize()
+        /// <param name="UseAdmin">是否使用管理员模式</param>
+        public SoftAuthorize(bool UseAdmin=false)
         {
-            machine_code = GetInfo();
+            machine_code = GetInfo(UseAdmin);
             LogHeaderText = "SoftAuthorize";
         }
 
@@ -176,7 +177,7 @@ namespace HslCommunication.BasicFramework
         /// 获取本计算机唯一的机器码  
         /// </summary>
         /// <returns>字符串形式的机器码</returns>
-        public static string GetInfo()
+        public static string GetInfo(bool UseAdmin)
         {
             //说明 这个方法所有的获取hwid的行为均在Ring3模式下获取 方法前半部分为WMI 后半部分为S.M.A.R.T.(DeviceIoControl())
             //程序依赖kernel32.dll不能运行在wince下 纯c#解决方案几乎不可能在Ring0模式下获取 如果有更高的要求建议加密狗
@@ -214,16 +215,33 @@ namespace HslCommunication.BasicFramework
                 break;
             }
             unique += "|";
-
-            WindowsIdentity current = WindowsIdentity.GetCurrent();
-            WindowsPrincipal windowsPrincipal = new WindowsPrincipal(current);
-            bool IsAdmin =windowsPrincipal.IsInRole(WindowsBuiltInRole.Administrator);
-            //硬盘物理id
-            if (IsAdmin)
+            //如果启用了管理员模式 则读取hwid
+            if (UseAdmin)
             {
-                var HddInfo = GetHddInfo();
-                unique += HddInfo.SerialNumber;
+                WindowsIdentity current = WindowsIdentity.GetCurrent();
+                WindowsPrincipal windowsPrincipal = new WindowsPrincipal(current);
+                bool IsAdmin = windowsPrincipal.IsInRole(WindowsBuiltInRole.Administrator);
+                //硬盘物理id
+                if (IsAdmin)
+                {
+                    var HddInfo = GetHddInfo();
+                    unique += HddInfo.SerialNumber;
+                }
+                else
+                {
+                    //创建启动对象
+                    System.Diagnostics.ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo();
+                    //设置运行文件
+                    startInfo.FileName = System.Windows.Forms.Application.ExecutablePath;
+                    //设置启动动作,确保以管理员身份运行
+                    startInfo.Verb = "runas";
+                    //如果不是管理员，则启动UAC
+                    System.Diagnostics.Process.Start(startInfo);
+                    //退出
+                    System.Windows.Forms.Application.Exit();
+                }
             }
+          
             SHA1CryptoServiceProvider SHA1 = new SHA1CryptoServiceProvider();
             var md5= SoftBasic.ByteToHexString(SHA1.ComputeHash(Encoding.Unicode.GetBytes(unique)));
             return md5.Substring(0, 25);
