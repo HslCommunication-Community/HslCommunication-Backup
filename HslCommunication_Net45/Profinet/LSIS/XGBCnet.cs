@@ -123,122 +123,8 @@ namespace HslCommunication.Profinet.LSIS
         #endregion
 
         #region Static Helper
-        /// <summary>
-        /// CheckAddress To Address To Write
-        /// </summary>
-        /// <param name="address"></param>
-        /// <returns></returns>
-        public static bool CheckAddress(string address)
-        {
-            char[] types = new char[] { 'P', 'M', 'L', 'K', 'F', 'T', 'C', 'D', 'S', 'Q', 'I', 'N', 'U', 'Z', 'R' };
-            bool exsist = false;
-            if (address.Length >= 3 || address.Length >= 5)
-            {
-                for (int i = 0; i < types.Length; i++)
-                {
-                    if (types[i] == address[0])
-                    {
-
-
-                        if (address[1] == 'B')
-                        {
-                            exsist = true;
-                        }
-                        else if (address[1] == 'W')
-                        {
-                            exsist = true;
-                        }
-                        else if (address[1] == 'D')
-                        {
-                            exsist = true;
-                        }
-                        else if (address[1] == 'X')
-                        {
-                            exsist = true;
-                        }
-                        else
-                        {
-                            exsist = false;
-                        }
-
-
-                        break;
-                    }
-                }
-            }
-
-            return exsist;
-
-        }
-        /// <summary>
-        /// AnalysisAddress
-        /// </summary>
-        /// <param name="address"></param>
-        /// <param name="isRead"></param>
-        /// <returns></returns>
-        public static OperateResult<string> AnalysisAddress(string address, bool isRead)
-        {
-            // P,M,L,K,F,T
-            // P,M,L,K,F,T,C,D,S
-            StringBuilder sb = new StringBuilder();
-            try
-            {
-                sb.Append("%");
-                char[] types = new char[] { 'P', 'M', 'L', 'K', 'F', 'T', 'C', 'D', 'S', 'Q', 'I', 'N', 'U', 'Z', 'R' };
-                bool exsist = false;
-                if (isRead)
-                {
-                    for (int i = 0; i < types.Length; i++)
-                    {
-                        if (types[i] == address[0])
-                        {
-                            sb.Append(types[i]);
-                            sb.Append("B");
-                            if (address[1] == 'B')
-                            {
-                                sb.Append(int.Parse(address.Substring(2)));
-                            }
-                            else if (address[1] == 'W')
-                            {
-                                sb.Append(int.Parse(address.Substring(2)) * 2);
-                            }
-                            else if (address[1] == 'D')
-                            {
-                                sb.Append(int.Parse(address.Substring(2)) * 4);
-                            }
-                            else
-                            {
-                                sb.Append(int.Parse(address.Substring(1)));
-                            }
-
-                            exsist = true;
-                            break;
-                        }
-                    }
-                }
-                else
-                {
-                    if (CheckAddress(address))
-                    {
-                        sb.Append(address);
-                        exsist = true;
-
-                    }
-                    else
-                    {
-                        exsist = false;
-                    }
-
-                }
-                if (!exsist) throw new Exception(StringResources.Language.NotSupportedDataType);
-            }
-            catch (Exception ex)
-            {
-                return new OperateResult<string>(ex.Message);
-            }
-
-            return OperateResult.CreateSuccessResult(sb.ToString());
-        }
+       
+      
         /// <summary>
         /// reading address  Type of ReadByte
         /// </summary>
@@ -248,7 +134,7 @@ namespace HslCommunication.Profinet.LSIS
         /// <returns>command bytes</returns>
         private static OperateResult<byte[]> BuildReadByteCommand(byte station, string address, ushort length)
         {
-            var analysisResult = AnalysisAddress(address, true);
+            var analysisResult = XGBFastEnet.AnalysisAddress(address, true);
             if (!analysisResult.IsSuccess) return OperateResult.CreateFailedResult<byte[]>(analysisResult);
 
             List<byte> command = new List<byte>();
@@ -280,7 +166,7 @@ namespace HslCommunication.Profinet.LSIS
         /// <returns></returns>
         private static OperateResult<byte[]> BuildReadOneCommand(byte station, string address, ushort length)
         {
-            var analysisResult = AnalysisAddress(address, true);
+            var analysisResult = XGBFastEnet.AnalysisAddress(address, true);
             if (!analysisResult.IsSuccess) return OperateResult.CreateFailedResult<byte[]>(analysisResult);
 
             List<byte> command = new List<byte>();
@@ -305,33 +191,7 @@ namespace HslCommunication.Profinet.LSIS
             return OperateResult.CreateSuccessResult(command.ToArray());
         }
 
-        private static OperateResult<byte[]> BuildWriteOneCommand(byte station, string address, byte[] value)
-        {
-            var analysisResult = AnalysisAddress(address, false);
-            if (!analysisResult.IsSuccess) return OperateResult.CreateFailedResult<byte[]>(analysisResult);
-
-            List<byte> command = new List<byte>();
-            command.Add(0x05);    // ENQ
-            command.AddRange(SoftBasic.BuildAsciiBytesFrom(station));
-            command.Add(0x77);    // command w
-            command.Add(0x53);    // command type: SS
-            command.Add(0x53);
-            command.Add(0x01);    // Number of blocks
-            command.Add(0x00);
-            command.AddRange(SoftBasic.BuildAsciiBytesFrom((byte)analysisResult.Content.Length));
-            command.AddRange(Encoding.ASCII.GetBytes(analysisResult.Content));
-            command.AddRange(SoftBasic.BytesToAsciiBytes(value));
-            command.Add(0x04);    // EOT
-
-            int sum = 0;
-            for (int i = 0; i < command.Count; i++)
-            {
-                sum += command[i];
-            }
-            command.AddRange(SoftBasic.BuildAsciiBytesFrom((byte)sum));
-
-            return OperateResult.CreateSuccessResult(command.ToArray());
-        }
+       
 
         /// <summary>
         /// write data to address  Type of ReadByte
@@ -342,10 +202,32 @@ namespace HslCommunication.Profinet.LSIS
         /// <returns>command bytes</returns>
         private static OperateResult<byte[]> BuildWriteByteCommand(byte station, string address, byte[] value)
         {
-            var analysisResult = AnalysisAddress(address, false);
+            var analysisResult = XGBFastEnet.AnalysisAddress(address, false);
             if (!analysisResult.IsSuccess) return OperateResult.CreateFailedResult<byte[]>(analysisResult);
-
+            var analysisDataTypeResult = XGBFastEnet.AnalysisAddressDataType(address);
+            if (!analysisDataTypeResult.IsSuccess) return OperateResult.CreateFailedResult<byte[]>(analysisDataTypeResult);
+            var lSDataType = (XGBFastEnet.LsDataType)Enum.Parse(typeof(XGBFastEnet.LsDataType), analysisDataTypeResult.Content);
             List<byte> command = new List<byte>();
+            switch (lSDataType)
+            {
+                case XGBFastEnet.LsDataType.Bit:
+                case XGBFastEnet.LsDataType.Byte:
+                    command.Add(0x05);    // ENQ
+                    command.AddRange(SoftBasic.BuildAsciiBytesFrom(station));
+                    command.Add(0x77);    // command w
+                    command.Add(0x53);    // command type: SS
+                    command.Add(0x53);
+                    command.Add(0x01);    // Number of blocks
+                    command.Add(0x00);
+                    command.AddRange(SoftBasic.BuildAsciiBytesFrom((byte)analysisResult.Content.Length));
+                    command.AddRange(Encoding.ASCII.GetBytes(analysisResult.Content));
+                    command.AddRange(SoftBasic.BytesToAsciiBytes(value));
+                    command.Add(0x04);    // EOT
+                    break;
+                case XGBFastEnet.LsDataType.Word:
+                case XGBFastEnet.LsDataType.DWord:
+                case XGBFastEnet.LsDataType.LWord:
+                case XGBFastEnet.LsDataType.Continuous:
             command.Add(0x05);    // ENQ
             command.AddRange(SoftBasic.BuildAsciiBytesFrom(station));
             command.Add(0x77);    // command w
@@ -356,6 +238,9 @@ namespace HslCommunication.Profinet.LSIS
             command.AddRange(SoftBasic.BuildAsciiBytesFrom((byte)value.Length));
             command.AddRange(SoftBasic.BytesToAsciiBytes(value));
             command.Add(0x04);    // EOT
+                    break;
+                default: break;
+            }
 
             int sum = 0;
             for (int i = 0; i < command.Count; i++)
