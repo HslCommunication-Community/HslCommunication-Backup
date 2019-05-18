@@ -429,7 +429,7 @@ namespace HslCommunication.Profinet.LSIS
                 serialPort.Close();
             }
         }
-        private byte[] bufferReceiver;
+       
         /// <summary>
         /// 接收到串口数据的时候触发
         /// </summary>
@@ -437,36 +437,46 @@ namespace HslCommunication.Profinet.LSIS
         /// <param name="e">消息</param>
         private void SerialPort_DataReceived(object sender, SerialDataReceivedEventArgs e)
         {
-            byte[] copy = null;
+           
               var sp = (SerialPort)sender;
-            if (sp.BytesToRead >= 5)
-            {
-                bufferReceiver = new byte[serialPort.BytesToRead];
-                var result = serialPort.Read(bufferReceiver, 0, serialPort.BytesToRead);
-                byte[] modbusCore = SoftBasic.BytesArrayRemoveLast(bufferReceiver, 2);
 
-                if (bufferReceiver[3] == 0x72)
-                {
-                    // 读数据
-                    copy= ReadSerialByCommand(modbusCore);
-                }
-                else if (bufferReceiver[3] == 0x77)
-                {
-                    // 写数据
-                    copy = WriteSerialByMessage(modbusCore);
-                }
-                else
-                {
-                    
-                }
+            int rCount = 0;
+            byte[] buffer = new byte[1024];
+            byte[] receive = null;
+
+            while (true)
+            {
+                System.Threading.Thread.Sleep(20);           
+                int count = sp.Read(buffer, rCount, sp.BytesToRead);
+                rCount += count;
+                if (count == 0) break;
+
+                receive = new byte[rCount];
+                Array.Copy(buffer, 0, receive, 0, count);
             }
 
-            serialPort.Write(copy, 0, copy.Length);
-            if (IsStarted) RaiseDataReceived(bufferReceiver);
+            if (receive == null) return;
+            byte[] modbusCore = SoftBasic.BytesArrayRemoveLast(receive, 2);
+            if (modbusCore[3] == 0x72)
+            {
+                // Read
 
+                serialPort.Write(ReadSerialByCommand(modbusCore), 0, ReadSerialByCommand(modbusCore).Length);
 
+            }
+            else if (modbusCore[3] == 0x77)
+            {
+                // Write
+                serialPort.Write(WriteSerialByMessage(modbusCore),0,WriteSerialByMessage(modbusCore).Length);
+            }
+            else
+            {
+                serialPort.Close();
+            }
+           
+            if (IsStarted) RaiseDataReceived(receive);
+            
         }
-       
         public byte[] HexToBytes(string hex)
         {
             if (hex == null)
