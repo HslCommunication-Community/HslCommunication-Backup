@@ -34,5 +34,17 @@ namespace HslCommunicationDemo {
                 this["language"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool UseAdmin {
+            get {
+                return ((bool)(this["UseAdmin"]));
+            }
+            set {
+                this["UseAdmin"] = value;
+            }
+        }
     }
 }
