@@ -149,8 +149,8 @@ namespace HslCommunicationDemo
             {
 
                 lSisServer = new HslCommunication.Profinet.LSIS.LSisServer( );                       // 实例化对象
-                lSisServer.LogNet = new HslCommunication.LogNet.LogNetSingle( "logs.txt" );                  // 配置日志信息
-                lSisServer.LogNet.BeforeSaveToFile += LogNet_BeforeSaveToFile;
+                //lSisServer.LogNet = new HslCommunication.LogNet.LogNetSingle( "logs.txt" );                  // 配置日志信息
+                //lSisServer.LogNet.BeforeSaveToFile += LogNet_BeforeSaveToFile;
                 lSisServer.OnDataReceived += BusTcpServer_OnDataReceived;
                 
                 lSisServer.ServerStart( port );
