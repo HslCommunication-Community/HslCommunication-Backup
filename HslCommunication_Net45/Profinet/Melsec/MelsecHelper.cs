@@ -95,21 +95,21 @@ namespace HslCommunication.Profinet.Melsec
                     case 'm':
                         {
                             result.Content1 = MelsecMcDataType.M;
-                            result.Content2 = Convert.ToUInt16( address.Substring( 1 ), MelsecMcDataType.M.FromBase );
+                            result.Content2 = Convert.ToInt32( address.Substring( 1 ), MelsecMcDataType.M.FromBase );
                             break;
                         }
                     case 'X':
                     case 'x':
                         {
                             result.Content1 = MelsecMcDataType.X;
-                            result.Content2 = Convert.ToUInt16( address.Substring( 1 ), MelsecMcDataType.X.FromBase );
+                            result.Content2 = Convert.ToInt32( address.Substring( 1 ), MelsecMcDataType.X.FromBase );
                             break;
                         }
                     case 'Y':
                     case 'y':
                         {
                             result.Content1 = MelsecMcDataType.Y;
-                            result.Content2 = Convert.ToUInt16( address.Substring( 1 ), MelsecMcDataType.Y.FromBase );
+                            result.Content2 = Convert.ToInt32( address.Substring( 1 ), MelsecMcDataType.Y.FromBase );
                             break;
                         }
                     case 'D':
@@ -130,21 +130,21 @@ namespace HslCommunication.Profinet.Melsec
                     case 'l':
                         {
                             result.Content1 = MelsecMcDataType.L;
-                            result.Content2 = Convert.ToUInt16( address.Substring( 1 ), MelsecMcDataType.L.FromBase );
+                            result.Content2 = Convert.ToInt32( address.Substring( 1 ), MelsecMcDataType.L.FromBase );
                             break;
                         }
                     case 'F':
                     case 'f':
                         {
                             result.Content1 = MelsecMcDataType.F;
-                            result.Content2 = Convert.ToUInt16( address.Substring( 1 ), MelsecMcDataType.F.FromBase );
+                            result.Content2 = Convert.ToInt32( address.Substring( 1 ), MelsecMcDataType.F.FromBase );
                             break;
                         }
                     case 'V':
                     case 'v':
                         {
                             result.Content1 = MelsecMcDataType.V;
-                            result.Content2 = Convert.ToUInt16( address.Substring( 1 ), MelsecMcDataType.V.FromBase );
+                            result.Content2 = Convert.ToInt32( address.Substring( 1 ), MelsecMcDataType.V.FromBase );
                             break;
                         }
                     case 'B':
@@ -158,7 +158,7 @@ namespace HslCommunication.Profinet.Melsec
                     case 'r':
                         {
                             result.Content1 = MelsecMcDataType.R;
-                            result.Content2 = Convert.ToUInt16( address.Substring( 1 ), MelsecMcDataType.R.FromBase );
+                            result.Content2 = Convert.ToInt32( address.Substring( 1 ), MelsecMcDataType.R.FromBase );
                             break;
                         }
                     case 'S':
@@ -167,25 +167,25 @@ namespace HslCommunication.Profinet.Melsec
                             if (address[1] == 'N' || address[1] == 'n')
                             {
                                 result.Content1 = MelsecMcDataType.SN;
-                                result.Content2 = Convert.ToUInt16( address.Substring( 2 ), MelsecMcDataType.SN.FromBase );
+                                result.Content2 = Convert.ToInt32( address.Substring( 2 ), MelsecMcDataType.SN.FromBase );
                                 break;
                             }
                             else if (address[1] == 'S' || address[1] == 's')
                             {
                                 result.Content1 = MelsecMcDataType.SS;
-                                result.Content2 = Convert.ToUInt16( address.Substring( 2 ), MelsecMcDataType.SS.FromBase );
+                                result.Content2 = Convert.ToInt32( address.Substring( 2 ), MelsecMcDataType.SS.FromBase );
                                 break;
                             }
                             else if (address[1] == 'C' || address[1] == 'c')
                             {
                                 result.Content1 = MelsecMcDataType.SC;
-                                result.Content2 = Convert.ToUInt16( address.Substring( 2 ), MelsecMcDataType.SC.FromBase );
+                                result.Content2 = Convert.ToInt32( address.Substring( 2 ), MelsecMcDataType.SC.FromBase );
                                 break;
                             }
                             else
                             {
                                 result.Content1 = MelsecMcDataType.S;
-                                result.Content2 = Convert.ToUInt16( address.Substring( 1 ), MelsecMcDataType.S.FromBase );
+                                result.Content2 = Convert.ToInt32( address.Substring( 1 ), MelsecMcDataType.S.FromBase );
                                 break;
                             }
                         }
@@ -201,7 +201,7 @@ namespace HslCommunication.Profinet.Melsec
                             else
                             {
                                 result.Content1 = MelsecMcDataType.Z;
-                                result.Content2 = Convert.ToUInt16( address.Substring( 1 ), MelsecMcDataType.Z.FromBase );
+                                result.Content2 = Convert.ToInt32( address.Substring( 1 ), MelsecMcDataType.Z.FromBase );
                                 break;
                             }
                         }
@@ -211,19 +211,19 @@ namespace HslCommunication.Profinet.Melsec
                             if (address[1] == 'N' || address[1] == 'n')
                             {
                                 result.Content1 = MelsecMcDataType.TN;
-                                result.Content2 = Convert.ToUInt16( address.Substring( 2 ), MelsecMcDataType.TN.FromBase );
+                                result.Content2 = Convert.ToInt32( address.Substring( 2 ), MelsecMcDataType.TN.FromBase );
                                 break;
                             }
                             else if (address[1] == 'S' || address[1] == 's')
                             {
                                 result.Content1 = MelsecMcDataType.TS;
-                                result.Content2 = Convert.ToUInt16( address.Substring( 2 ), MelsecMcDataType.TS.FromBase );
+                                result.Content2 = Convert.ToInt32( address.Substring( 2 ), MelsecMcDataType.TS.FromBase );
                                 break;
                             }
                             else if (address[1] == 'C' || address[1] == 'c')
                             {
                                 result.Content1 = MelsecMcDataType.TC;
-                                result.Content2 = Convert.ToUInt16( address.Substring( 2 ), MelsecMcDataType.TC.FromBase );
+                                result.Content2 = Convert.ToInt32( address.Substring( 2 ), MelsecMcDataType.TC.FromBase );
                                 break;
                             }
                             else
@@ -237,19 +237,19 @@ namespace HslCommunication.Profinet.Melsec
                             if (address[1] == 'N' || address[1] == 'n')
                             {
                                 result.Content1 = MelsecMcDataType.CN;
-                                result.Content2 = Convert.ToUInt16( address.Substring( 2 ), MelsecMcDataType.CN.FromBase );
+                                result.Content2 = Convert.ToInt32( address.Substring( 2 ), MelsecMcDataType.CN.FromBase );
                                 break;
                             }
                             else if (address[1] == 'S' || address[1] == 's')
                             {
                                 result.Content1 = MelsecMcDataType.CS;
-                                result.Content2 = Convert.ToUInt16( address.Substring( 2 ), MelsecMcDataType.CS.FromBase );
+                                result.Content2 = Convert.ToInt32( address.Substring( 2 ), MelsecMcDataType.CS.FromBase );
                                 break;
                             }
                             else if (address[1] == 'C' || address[1] == 'c')
                             {
                                 result.Content1 = MelsecMcDataType.CC;
-                                result.Content2 = Convert.ToUInt16( address.Substring( 2 ), MelsecMcDataType.CC.FromBase );
+                                result.Content2 = Convert.ToInt32( address.Substring( 2 ), MelsecMcDataType.CC.FromBase );
                                 break;
                             }
                             else
@@ -288,35 +288,35 @@ namespace HslCommunication.Profinet.Melsec
                     case 'm':
                         {
                             result.Content1 = MelsecMcDataType.Keyence_M;
-                            result.Content2 = Convert.ToUInt16( address.Substring( 1 ), MelsecMcDataType.Keyence_M.FromBase );
+                            result.Content2 = Convert.ToInt32( address.Substring( 1 ), MelsecMcDataType.Keyence_M.FromBase );
                             break;
                         }
                     case 'X':
                     case 'x':
                         {
                             result.Content1 = MelsecMcDataType.Keyence_X;
-                            result.Content2 = Convert.ToUInt16( address.Substring( 1 ), MelsecMcDataType.Keyence_X.FromBase );
+                            result.Content2 = Convert.ToInt32( address.Substring( 1 ), MelsecMcDataType.Keyence_X.FromBase );
                             break;
                         }
                     case 'Y':
                     case 'y':
                         {
                             result.Content1 = MelsecMcDataType.Keyence_Y;
-                            result.Content2 = Convert.ToUInt16( address.Substring( 1 ), MelsecMcDataType.Keyence_Y.FromBase );
+                            result.Content2 = Convert.ToInt32( address.Substring( 1 ), MelsecMcDataType.Keyence_Y.FromBase );
                             break;
                         }
                     case 'B':
                     case 'b':
                         {
                             result.Content1 = MelsecMcDataType.Keyence_B;
-                            result.Content2 = Convert.ToUInt16( address.Substring( 1 ), MelsecMcDataType.Keyence_B.FromBase );
+                            result.Content2 = Convert.ToInt32( address.Substring( 1 ), MelsecMcDataType.Keyence_B.FromBase );
                             break;
                         }
                     case 'L':
                     case 'l':
                         {
                             result.Content1 = MelsecMcDataType.Keyence_L;
-                            result.Content2 = Convert.ToUInt16( address.Substring( 1 ), MelsecMcDataType.Keyence_L.FromBase );
+                            result.Content2 = Convert.ToInt32( address.Substring( 1 ), MelsecMcDataType.Keyence_L.FromBase );
                             break;
                         }
                     case 'S':
@@ -325,13 +325,13 @@ namespace HslCommunication.Profinet.Melsec
                             if (address[1] == 'M' || address[1] == 'm')
                             {
                                 result.Content1 = MelsecMcDataType.Keyence_SM;
-                                result.Content2 = Convert.ToUInt16( address.Substring( 2 ), MelsecMcDataType.Keyence_SM.FromBase );
+                                result.Content2 = Convert.ToInt32( address.Substring( 2 ), MelsecMcDataType.Keyence_SM.FromBase );
                                 break;
                             }
                             else if (address[1] == 'D' || address[1] == 'd')
                             {
                                 result.Content1 = MelsecMcDataType.Keyence_SD;
-                                result.Content2 = Convert.ToUInt16( address.Substring( 2 ), MelsecMcDataType.Keyence_SD.FromBase );
+                                result.Content2 = Convert.ToInt32( address.Substring( 2 ), MelsecMcDataType.Keyence_SD.FromBase );
                                 break;
                             }
                             else
@@ -350,7 +350,7 @@ namespace HslCommunication.Profinet.Melsec
                     case 'r':
                         {
                             result.Content1 = MelsecMcDataType.Keyence_R;
-                            result.Content2 = Convert.ToUInt16( address.Substring( 1 ), MelsecMcDataType.Keyence_R.FromBase );
+                            result.Content2 = Convert.ToInt32( address.Substring( 1 ), MelsecMcDataType.Keyence_R.FromBase );
                             break;
                         }
                     case 'Z':
@@ -371,7 +371,7 @@ namespace HslCommunication.Profinet.Melsec
                     case 'w':
                         {
                             result.Content1 = MelsecMcDataType.Keyence_W;
-                            result.Content2 = Convert.ToUInt16( address.Substring( 1 ), MelsecMcDataType.Keyence_W.FromBase );
+                            result.Content2 = Convert.ToInt32( address.Substring( 1 ), MelsecMcDataType.Keyence_W.FromBase );
                             break;
                         }
                     case 'T':
@@ -380,13 +380,13 @@ namespace HslCommunication.Profinet.Melsec
                             if (address[1] == 'N' || address[1] == 'n')
                             {
                                 result.Content1 = MelsecMcDataType.Keyence_TN;
-                                result.Content2 = Convert.ToUInt16( address.Substring( 2 ), MelsecMcDataType.Keyence_TN.FromBase );
+                                result.Content2 = Convert.ToInt32( address.Substring( 2 ), MelsecMcDataType.Keyence_TN.FromBase );
                                 break;
                             }
                             else if (address[1] == 'S' || address[1] == 's')
                             {
                                 result.Content1 = MelsecMcDataType.Keyence_TS;
-                                result.Content2 = Convert.ToUInt16( address.Substring( 2 ), MelsecMcDataType.Keyence_TS.FromBase );
+                                result.Content2 = Convert.ToInt32( address.Substring( 2 ), MelsecMcDataType.Keyence_TS.FromBase );
                                 break;
                             }
                             else
@@ -400,13 +400,13 @@ namespace HslCommunication.Profinet.Melsec
                             if (address[1] == 'N' || address[1] == 'n')
                             {
                                 result.Content1 = MelsecMcDataType.Keyence_CN;
-                                result.Content2 = Convert.ToUInt16( address.Substring( 2 ), MelsecMcDataType.Keyence_CN.FromBase );
+                                result.Content2 = Convert.ToInt32( address.Substring( 2 ), MelsecMcDataType.Keyence_CN.FromBase );
                                 break;
                             }
                             else if (address[1] == 'S' || address[1] == 's')
                             {
                                 result.Content1 = MelsecMcDataType.Keyence_CS;
-                                result.Content2 = Convert.ToUInt16( address.Substring( 2 ), MelsecMcDataType.Keyence_CS.FromBase );
+                                result.Content2 = Convert.ToInt32( address.Substring( 2 ), MelsecMcDataType.Keyence_CS.FromBase );
                                 break;
                             }
                             else
