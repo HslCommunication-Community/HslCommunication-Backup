@@ -118,6 +118,12 @@ No. | Class | Model | Price | Remarks | Contributor
 1 | ![pic](https://img.shields.io/badge/-Modbus%20Tcp-informational.svg) | ![pic](https://img.shields.io/badge/1215C-Good-success.svg) | ￥ | &nbsp; | [Richard Hu](https://github.com/dathlin/HslCommunication)
 4 | ![pic](https://img.shields.io/badge/-Modbus%20Tcp-informational.svg) | ![pic](https://img.shields.io/badge/Fx5u-Good-success.svg) | ￥ | &nbsp; | [Richard Hu](https://github.com/dathlin/HslCommunication)
 
+#### Panasonic
+No. | Class | Model | Price | Remarks | Contributor
+-|-|-|-|-|-
+1 | ![pic](https://img.shields.io/badge/-PanasonicMcNet-informational.svg) | ![pic](https://img.shields.io/badge/FP7%20CPS31E-Good-success.svg) | ￥ | &nbsp;| 镇江-Relax;
+
+
 ## HslCommunication.dll Summary 
 When I started working on this project, I had an idea of how to easily and quickly read and write PLC data. Our code logic should be very simple, 
 and it only takes one or two lines of code to implement this feature. Like this
