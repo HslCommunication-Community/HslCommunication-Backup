@@ -494,7 +494,7 @@ namespace HslCommunication.Profinet.Melsec
                             if (address[1] == 'D' || address[1] == 'd')
                             {
                                 result.Content1 = MelsecMcDataType.Panasonic_LD;
-                                result.Content2 = Convert.ToUInt16( address.Substring( 2 ) );
+                                result.Content2 = Convert.ToInt32( address.Substring( 2 ) );
                                 break;
                             }
                             else
@@ -511,12 +511,12 @@ namespace HslCommunication.Profinet.Melsec
                             if (add < 90000)
                             {
                                 result.Content1 = MelsecMcDataType.Panasonic_DT;
-                                result.Content2 = Convert.ToUInt16( address.Substring( 1 ) );
+                                result.Content2 = Convert.ToInt32( address.Substring( 1 ) );
                             }
                             else
                             {
                                 result.Content1 = MelsecMcDataType.Panasonic_SD;
-                                result.Content2 = Convert.ToUInt16( address.Substring( 1 ) );
+                                result.Content2 = Convert.ToInt32( address.Substring( 1 ) ) - 90000;
                             }
                             break;
                         }
@@ -526,13 +526,13 @@ namespace HslCommunication.Profinet.Melsec
                             if (address[1] == 'N' || address[1] == 'n')
                             {
                                 result.Content1 = MelsecMcDataType.Panasonic_TN;
-                                result.Content2 = Convert.ToUInt16( address.Substring( 2 ) );
+                                result.Content2 = Convert.ToInt32( address.Substring( 2 ) );
                                 break;
                             }
                             else if (address[1] == 'S' || address[1] == 's')
                             {
                                 result.Content1 = MelsecMcDataType.Panasonic_TS;
-                                result.Content2 = Convert.ToUInt16( address.Substring( 2 ) );
+                                result.Content2 = Convert.ToInt32( address.Substring( 2 ) );
                                 break;
                             }
                             else
@@ -546,13 +546,13 @@ namespace HslCommunication.Profinet.Melsec
                             if (address[1] == 'N' || address[1] == 'n')
                             {
                                 result.Content1 = MelsecMcDataType.Panasonic_CN;
-                                result.Content2 = Convert.ToUInt16( address.Substring( 2 ) );
+                                result.Content2 = Convert.ToInt32( address.Substring( 2 ) );
                                 break;
                             }
                             else if (address[1] == 'S' || address[1] == 's')
                             {
                                 result.Content1 = MelsecMcDataType.Panasonic_CS;
-                                result.Content2 = Convert.ToUInt16( address.Substring( 2 ) );
+                                result.Content2 = Convert.ToInt32( address.Substring( 2 ) );
                                 break;
                             }
                             else
