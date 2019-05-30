@@ -243,7 +243,7 @@ namespace HslCommunication.Profinet.Melsec
         /// <summary>
         /// 链接存储器
         /// </summary>
-        public readonly static MelsecMcDataType Panasonic_LD = new MelsecMcDataType( 0xA8, 0x00, "W*", 10 );
+        public readonly static MelsecMcDataType Panasonic_LD = new MelsecMcDataType( 0xB4, 0x00, "W*", 10 );
         /// <summary>
         /// 计时器（当前值）
         /// </summary>
