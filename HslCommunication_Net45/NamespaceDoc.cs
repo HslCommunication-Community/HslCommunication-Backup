@@ -766,5 +766,5 @@ namespace HslCommunication
 
 
     // bugs
-    // 文件引擎，上传文件的时候，如果客户端上传到一半，直接关闭客户端，服务器端会认为是成功的
+    // IReadWriteNet接口可以读取数据可以，Write方法写入西门子数据不管赋值什么值写入都是0，强制转换成simenss7net 又可以正常写入
 }
