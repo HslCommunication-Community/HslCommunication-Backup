@@ -302,5 +302,32 @@ namespace HslCommunicationDemo.Redis
                 }
             }
         }
+
+        private void Button4_Click( object sender, EventArgs e )
+        {
+            // delete key
+            OperateResult delete = redisClient.DeleteKey( textBox4.Text );
+            if (delete.IsSuccess)
+            {
+                MessageBox.Show( "Delect Success!" );
+            }
+            else
+            {
+                MessageBox.Show( "Delect Failed:" + delete.Message );
+            }
+        }
+
+        private void Button5_Click( object sender, EventArgs e )
+        {
+            OperateResult delete = redisClient.DeleteKey( textBox6.Text );
+            if (delete.IsSuccess)
+            {
+                MessageBox.Show( "Delect Success!" );
+            }
+            else
+            {
+                MessageBox.Show( "Delect Failed:" + delete.Message );
+            }
+        }
     }
 }
