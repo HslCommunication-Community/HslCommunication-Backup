@@ -28,20 +28,20 @@
         /// </summary>
         private void InitializeComponent( )
         {
-            System.Windows.Forms.TreeNode treeNode14 = new System.Windows.Forms.TreeNode("db0");
-            System.Windows.Forms.TreeNode treeNode15 = new System.Windows.Forms.TreeNode("db1");
-            System.Windows.Forms.TreeNode treeNode16 = new System.Windows.Forms.TreeNode("db2");
-            System.Windows.Forms.TreeNode treeNode17 = new System.Windows.Forms.TreeNode("db3");
-            System.Windows.Forms.TreeNode treeNode18 = new System.Windows.Forms.TreeNode("db4");
-            System.Windows.Forms.TreeNode treeNode19 = new System.Windows.Forms.TreeNode("db5");
-            System.Windows.Forms.TreeNode treeNode20 = new System.Windows.Forms.TreeNode("db6");
-            System.Windows.Forms.TreeNode treeNode21 = new System.Windows.Forms.TreeNode("db7");
-            System.Windows.Forms.TreeNode treeNode22 = new System.Windows.Forms.TreeNode("db8");
-            System.Windows.Forms.TreeNode treeNode23 = new System.Windows.Forms.TreeNode("db9");
-            System.Windows.Forms.TreeNode treeNode24 = new System.Windows.Forms.TreeNode("db10");
-            System.Windows.Forms.TreeNode treeNode25 = new System.Windows.Forms.TreeNode("db11");
-            System.Windows.Forms.TreeNode treeNode26 = new System.Windows.Forms.TreeNode("db12");
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.TreeNode treeNode27 = new System.Windows.Forms.TreeNode("db0");
+            System.Windows.Forms.TreeNode treeNode28 = new System.Windows.Forms.TreeNode("db1");
+            System.Windows.Forms.TreeNode treeNode29 = new System.Windows.Forms.TreeNode("db2");
+            System.Windows.Forms.TreeNode treeNode30 = new System.Windows.Forms.TreeNode("db3");
+            System.Windows.Forms.TreeNode treeNode31 = new System.Windows.Forms.TreeNode("db4");
+            System.Windows.Forms.TreeNode treeNode32 = new System.Windows.Forms.TreeNode("db5");
+            System.Windows.Forms.TreeNode treeNode33 = new System.Windows.Forms.TreeNode("db6");
+            System.Windows.Forms.TreeNode treeNode34 = new System.Windows.Forms.TreeNode("db7");
+            System.Windows.Forms.TreeNode treeNode35 = new System.Windows.Forms.TreeNode("db8");
+            System.Windows.Forms.TreeNode treeNode36 = new System.Windows.Forms.TreeNode("db9");
+            System.Windows.Forms.TreeNode treeNode37 = new System.Windows.Forms.TreeNode("db10");
+            System.Windows.Forms.TreeNode treeNode38 = new System.Windows.Forms.TreeNode("db11");
+            System.Windows.Forms.TreeNode treeNode39 = new System.Windows.Forms.TreeNode("db12");
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
             this.panel1 = new System.Windows.Forms.Panel();
             this.textBox3 = new System.Windows.Forms.TextBox();
             this.label6 = new System.Windows.Forms.Label();
@@ -217,46 +217,46 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.treeView1.Location = new System.Drawing.Point(3, 32);
             this.treeView1.Name = "treeView1";
-            treeNode14.Name = "节点0";
-            treeNode14.Text = "db0";
-            treeNode15.Name = "节点1";
-            treeNode15.Text = "db1";
-            treeNode16.Name = "节点2";
-            treeNode16.Text = "db2";
-            treeNode17.Name = "节点3";
-            treeNode17.Text = "db3";
-            treeNode18.Name = "节点4";
-            treeNode18.Text = "db4";
-            treeNode19.Name = "节点5";
-            treeNode19.Text = "db5";
-            treeNode20.Name = "节点6";
-            treeNode20.Text = "db6";
-            treeNode21.Name = "节点7";
-            treeNode21.Text = "db7";
-            treeNode22.Name = "节点8";
-            treeNode22.Text = "db8";
-            treeNode23.Name = "节点9";
-            treeNode23.Text = "db9";
-            treeNode24.Name = "节点10";
-            treeNode24.Text = "db10";
-            treeNode25.Name = "节点11";
-            treeNode25.Text = "db11";
-            treeNode26.Name = "节点12";
-            treeNode26.Text = "db12";
+            treeNode27.Name = "节点0";
+            treeNode27.Text = "db0";
+            treeNode28.Name = "节点1";
+            treeNode28.Text = "db1";
+            treeNode29.Name = "节点2";
+            treeNode29.Text = "db2";
+            treeNode30.Name = "节点3";
+            treeNode30.Text = "db3";
+            treeNode31.Name = "节点4";
+            treeNode31.Text = "db4";
+            treeNode32.Name = "节点5";
+            treeNode32.Text = "db5";
+            treeNode33.Name = "节点6";
+            treeNode33.Text = "db6";
+            treeNode34.Name = "节点7";
+            treeNode34.Text = "db7";
+            treeNode35.Name = "节点8";
+            treeNode35.Text = "db8";
+            treeNode36.Name = "节点9";
+            treeNode36.Text = "db9";
+            treeNode37.Name = "节点10";
+            treeNode37.Text = "db10";
+            treeNode38.Name = "节点11";
+            treeNode38.Text = "db11";
+            treeNode39.Name = "节点12";
+            treeNode39.Text = "db12";
             this.treeView1.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
-            treeNode14,
-            treeNode15,
-            treeNode16,
-            treeNode17,
-            treeNode18,
-            treeNode19,
-            treeNode20,
-            treeNode21,
-            treeNode22,
-            treeNode23,
-            treeNode24,
-            treeNode25,
-            treeNode26});
+            treeNode27,
+            treeNode28,
+            treeNode29,
+            treeNode30,
+            treeNode31,
+            treeNode32,
+            treeNode33,
+            treeNode34,
+            treeNode35,
+            treeNode36,
+            treeNode37,
+            treeNode38,
+            treeNode39});
             this.treeView1.Size = new System.Drawing.Size(276, 499);
             this.treeView1.TabIndex = 0;
             this.treeView1.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeView1_AfterSelect);
@@ -329,8 +329,8 @@
             // 
             this.dataGridView1.AllowUserToAddRows = false;
             this.dataGridView1.AllowUserToDeleteRows = false;
-            dataGridViewCellStyle2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(192)))), ((int)(((byte)(255)))));
-            this.dataGridView1.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(192)))), ((int)(((byte)(255)))));
+            this.dataGridView1.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle3;
             this.dataGridView1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
@@ -483,6 +483,7 @@
             // 
             // button4
             // 
+            this.button4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.button4.Location = new System.Drawing.Point(116, 5);
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(57, 26);
@@ -493,6 +494,7 @@
             // 
             // button5
             // 
+            this.button5.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.button5.Location = new System.Drawing.Point(433, 3);
             this.button5.Name = "button5";
             this.button5.Size = new System.Drawing.Size(57, 26);
