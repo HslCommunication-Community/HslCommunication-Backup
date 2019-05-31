@@ -737,6 +737,19 @@ namespace HslCommunication
     ///             <item>github源代码里的支持的型号需要大家一起完善。</item>
     ///         </list>
     ///     </revision>
+    ///     <revision date="2019-5-31" version="6.2.3" author="Richard.Hu">
+    ///         <list type="bullet">
+    ///             <item>Ls的Fast Enet协议问题修复，感谢来自埃及朋友。</item>
+    ///             <item>Ls的CEnet协议问题修复，感谢来自埃及朋友。</item>
+    ///             <item>Ls新增虚拟的PLC服务器，感谢来自埃及朋友。</item>
+    ///             <item>改进了机器码获取的方法，获取实际的硬盘串号。</item>
+    ///             <item>日志的等级为None的情况，不再格式化字符串，原生写入日志。</item>
+    ///             <item>IReadWriteNet接口测试西门子的写入，没有问题。</item>
+    ///             <term>三菱及松下，基恩士的地址都调整为最大20亿长度，实际取决于PLC本身。</term>
+    ///             <item>松下MC协议修复LD数据库的读写bug。</item>
+    ///             <item>Redis的DEMO界面新增删除key功能。</item>
+    ///         </list>
+    ///     </revision>
     /// </revisionHistory>
     [System.Runtime.CompilerServices.CompilerGeneratedAttribute( )]
     public class NamespaceDoc
