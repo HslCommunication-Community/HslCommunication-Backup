@@ -28,20 +28,20 @@
         /// </summary>
         private void InitializeComponent( )
         {
-            System.Windows.Forms.TreeNode treeNode27 = new System.Windows.Forms.TreeNode("db0");
-            System.Windows.Forms.TreeNode treeNode28 = new System.Windows.Forms.TreeNode("db1");
-            System.Windows.Forms.TreeNode treeNode29 = new System.Windows.Forms.TreeNode("db2");
-            System.Windows.Forms.TreeNode treeNode30 = new System.Windows.Forms.TreeNode("db3");
-            System.Windows.Forms.TreeNode treeNode31 = new System.Windows.Forms.TreeNode("db4");
-            System.Windows.Forms.TreeNode treeNode32 = new System.Windows.Forms.TreeNode("db5");
-            System.Windows.Forms.TreeNode treeNode33 = new System.Windows.Forms.TreeNode("db6");
-            System.Windows.Forms.TreeNode treeNode34 = new System.Windows.Forms.TreeNode("db7");
-            System.Windows.Forms.TreeNode treeNode35 = new System.Windows.Forms.TreeNode("db8");
-            System.Windows.Forms.TreeNode treeNode36 = new System.Windows.Forms.TreeNode("db9");
-            System.Windows.Forms.TreeNode treeNode37 = new System.Windows.Forms.TreeNode("db10");
-            System.Windows.Forms.TreeNode treeNode38 = new System.Windows.Forms.TreeNode("db11");
-            System.Windows.Forms.TreeNode treeNode39 = new System.Windows.Forms.TreeNode("db12");
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.TreeNode treeNode1 = new System.Windows.Forms.TreeNode("db0");
+            System.Windows.Forms.TreeNode treeNode2 = new System.Windows.Forms.TreeNode("db1");
+            System.Windows.Forms.TreeNode treeNode3 = new System.Windows.Forms.TreeNode("db2");
+            System.Windows.Forms.TreeNode treeNode4 = new System.Windows.Forms.TreeNode("db3");
+            System.Windows.Forms.TreeNode treeNode5 = new System.Windows.Forms.TreeNode("db4");
+            System.Windows.Forms.TreeNode treeNode6 = new System.Windows.Forms.TreeNode("db5");
+            System.Windows.Forms.TreeNode treeNode7 = new System.Windows.Forms.TreeNode("db6");
+            System.Windows.Forms.TreeNode treeNode8 = new System.Windows.Forms.TreeNode("db7");
+            System.Windows.Forms.TreeNode treeNode9 = new System.Windows.Forms.TreeNode("db8");
+            System.Windows.Forms.TreeNode treeNode10 = new System.Windows.Forms.TreeNode("db9");
+            System.Windows.Forms.TreeNode treeNode11 = new System.Windows.Forms.TreeNode("db10");
+            System.Windows.Forms.TreeNode treeNode12 = new System.Windows.Forms.TreeNode("db11");
+            System.Windows.Forms.TreeNode treeNode13 = new System.Windows.Forms.TreeNode("db12");
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             this.panel1 = new System.Windows.Forms.Panel();
             this.textBox3 = new System.Windows.Forms.TextBox();
             this.label6 = new System.Windows.Forms.Label();
@@ -56,6 +56,7 @@
             this.treeView1 = new System.Windows.Forms.TreeView();
             this.panel2 = new System.Windows.Forms.Panel();
             this.panel5 = new System.Windows.Forms.Panel();
+            this.button5 = new System.Windows.Forms.Button();
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
             this.label13 = new System.Windows.Forms.Label();
             this.label11 = new System.Windows.Forms.Label();
@@ -68,14 +69,16 @@
             this.label7 = new System.Windows.Forms.Label();
             this.textBox6 = new System.Windows.Forms.TextBox();
             this.panel4 = new System.Windows.Forms.Panel();
+            this.button4 = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.textBox4 = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
             this.textBox5 = new System.Windows.Forms.TextBox();
             this.panel3 = new System.Windows.Forms.Panel();
-            this.button4 = new System.Windows.Forms.Button();
-            this.button5 = new System.Windows.Forms.Button();
+            this.statusStrip1 = new System.Windows.Forms.StatusStrip();
+            this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
+            this.button6 = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -88,6 +91,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.panel4.SuspendLayout();
             this.panel3.SuspendLayout();
+            this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // panel1
@@ -190,13 +194,14 @@
             // 
             // splitContainer1.Panel1
             // 
+            this.splitContainer1.Panel1.Controls.Add(this.button6);
             this.splitContainer1.Panel1.Controls.Add(this.button3);
             this.splitContainer1.Panel1.Controls.Add(this.treeView1);
             // 
             // splitContainer1.Panel2
             // 
             this.splitContainer1.Panel2.Controls.Add(this.panel2);
-            this.splitContainer1.Size = new System.Drawing.Size(974, 534);
+            this.splitContainer1.Size = new System.Drawing.Size(974, 514);
             this.splitContainer1.SplitterDistance = 282;
             this.splitContainer1.TabIndex = 9;
             // 
@@ -217,47 +222,47 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.treeView1.Location = new System.Drawing.Point(3, 32);
             this.treeView1.Name = "treeView1";
-            treeNode27.Name = "节点0";
-            treeNode27.Text = "db0";
-            treeNode28.Name = "节点1";
-            treeNode28.Text = "db1";
-            treeNode29.Name = "节点2";
-            treeNode29.Text = "db2";
-            treeNode30.Name = "节点3";
-            treeNode30.Text = "db3";
-            treeNode31.Name = "节点4";
-            treeNode31.Text = "db4";
-            treeNode32.Name = "节点5";
-            treeNode32.Text = "db5";
-            treeNode33.Name = "节点6";
-            treeNode33.Text = "db6";
-            treeNode34.Name = "节点7";
-            treeNode34.Text = "db7";
-            treeNode35.Name = "节点8";
-            treeNode35.Text = "db8";
-            treeNode36.Name = "节点9";
-            treeNode36.Text = "db9";
-            treeNode37.Name = "节点10";
-            treeNode37.Text = "db10";
-            treeNode38.Name = "节点11";
-            treeNode38.Text = "db11";
-            treeNode39.Name = "节点12";
-            treeNode39.Text = "db12";
+            treeNode1.Name = "节点0";
+            treeNode1.Text = "db0";
+            treeNode2.Name = "节点1";
+            treeNode2.Text = "db1";
+            treeNode3.Name = "节点2";
+            treeNode3.Text = "db2";
+            treeNode4.Name = "节点3";
+            treeNode4.Text = "db3";
+            treeNode5.Name = "节点4";
+            treeNode5.Text = "db4";
+            treeNode6.Name = "节点5";
+            treeNode6.Text = "db5";
+            treeNode7.Name = "节点6";
+            treeNode7.Text = "db6";
+            treeNode8.Name = "节点7";
+            treeNode8.Text = "db7";
+            treeNode9.Name = "节点8";
+            treeNode9.Text = "db8";
+            treeNode10.Name = "节点9";
+            treeNode10.Text = "db9";
+            treeNode11.Name = "节点10";
+            treeNode11.Text = "db10";
+            treeNode12.Name = "节点11";
+            treeNode12.Text = "db11";
+            treeNode13.Name = "节点12";
+            treeNode13.Text = "db12";
             this.treeView1.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
-            treeNode27,
-            treeNode28,
-            treeNode29,
-            treeNode30,
-            treeNode31,
-            treeNode32,
-            treeNode33,
-            treeNode34,
-            treeNode35,
-            treeNode36,
-            treeNode37,
-            treeNode38,
-            treeNode39});
-            this.treeView1.Size = new System.Drawing.Size(276, 499);
+            treeNode1,
+            treeNode2,
+            treeNode3,
+            treeNode4,
+            treeNode5,
+            treeNode6,
+            treeNode7,
+            treeNode8,
+            treeNode9,
+            treeNode10,
+            treeNode11,
+            treeNode12,
+            treeNode13});
+            this.treeView1.Size = new System.Drawing.Size(276, 479);
             this.treeView1.TabIndex = 0;
             this.treeView1.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeView1_AfterSelect);
             // 
@@ -268,7 +273,7 @@
             this.panel2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel2.Location = new System.Drawing.Point(0, 0);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(688, 534);
+            this.panel2.Size = new System.Drawing.Size(688, 514);
             this.panel2.TabIndex = 0;
             // 
             // panel5
@@ -282,6 +287,17 @@
             this.panel5.Size = new System.Drawing.Size(496, 333);
             this.panel5.TabIndex = 6;
             this.panel5.SizeChanged += new System.EventHandler(this.panel5_SizeChanged);
+            // 
+            // button5
+            // 
+            this.button5.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.button5.Location = new System.Drawing.Point(433, 3);
+            this.button5.Name = "button5";
+            this.button5.Size = new System.Drawing.Size(57, 26);
+            this.button5.TabIndex = 16;
+            this.button5.Text = "delete";
+            this.button5.UseVisualStyleBackColor = true;
+            this.button5.Click += new System.EventHandler(this.Button5_Click);
             // 
             // splitContainer2
             // 
@@ -329,8 +345,8 @@
             // 
             this.dataGridView1.AllowUserToAddRows = false;
             this.dataGridView1.AllowUserToDeleteRows = false;
-            dataGridViewCellStyle3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(192)))), ((int)(((byte)(255)))));
-            this.dataGridView1.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(192)))), ((int)(((byte)(255)))));
+            this.dataGridView1.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
             this.dataGridView1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
@@ -422,6 +438,17 @@
             this.panel4.Size = new System.Drawing.Size(176, 175);
             this.panel4.TabIndex = 5;
             // 
+            // button4
+            // 
+            this.button4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.button4.Location = new System.Drawing.Point(116, 5);
+            this.button4.Name = "button4";
+            this.button4.Size = new System.Drawing.Size(57, 26);
+            this.button4.TabIndex = 5;
+            this.button4.Text = "delete";
+            this.button4.UseVisualStyleBackColor = true;
+            this.button4.Click += new System.EventHandler(this.Button4_Click);
+            // 
             // label2
             // 
             this.label2.AutoSize = true;
@@ -478,36 +505,41 @@
             this.panel3.Controls.Add(this.splitContainer1);
             this.panel3.Location = new System.Drawing.Point(12, 103);
             this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(980, 540);
+            this.panel3.Size = new System.Drawing.Size(980, 520);
             this.panel3.TabIndex = 10;
             // 
-            // button4
+            // statusStrip1
             // 
-            this.button4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.button4.Location = new System.Drawing.Point(116, 5);
-            this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(57, 26);
-            this.button4.TabIndex = 5;
-            this.button4.Text = "delete";
-            this.button4.UseVisualStyleBackColor = true;
-            this.button4.Click += new System.EventHandler(this.Button4_Click);
+            this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripStatusLabel1});
+            this.statusStrip1.Location = new System.Drawing.Point(0, 623);
+            this.statusStrip1.Name = "statusStrip1";
+            this.statusStrip1.Size = new System.Drawing.Size(1004, 22);
+            this.statusStrip1.TabIndex = 11;
+            this.statusStrip1.Text = "statusStrip1";
             // 
-            // button5
+            // toolStripStatusLabel1
             // 
-            this.button5.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.button5.Location = new System.Drawing.Point(433, 3);
-            this.button5.Name = "button5";
-            this.button5.Size = new System.Drawing.Size(57, 26);
-            this.button5.TabIndex = 16;
-            this.button5.Text = "delete";
-            this.button5.UseVisualStyleBackColor = true;
-            this.button5.Click += new System.EventHandler(this.Button5_Click);
+            this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
+            this.toolStripStatusLabel1.Size = new System.Drawing.Size(32, 17);
+            this.toolStripStatusLabel1.Text = "就绪";
+            // 
+            // button6
+            // 
+            this.button6.Location = new System.Drawing.Point(84, 5);
+            this.button6.Name = "button6";
+            this.button6.Size = new System.Drawing.Size(75, 23);
+            this.button6.TabIndex = 2;
+            this.button6.Text = "Time";
+            this.button6.UseVisualStyleBackColor = true;
+            this.button6.Click += new System.EventHandler(this.Button6_Click);
             // 
             // RedisBrowser
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 17F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1004, 645);
+            this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.panel3);
             this.Controls.Add(this.panel1);
             this.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
@@ -533,7 +565,10 @@
             this.panel4.ResumeLayout(false);
             this.panel4.PerformLayout();
             this.panel3.ResumeLayout(false);
+            this.statusStrip1.ResumeLayout(false);
+            this.statusStrip1.PerformLayout();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -573,5 +608,8 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn Column2;
         private System.Windows.Forms.Button button5;
         private System.Windows.Forms.Button button4;
+        private System.Windows.Forms.Button button6;
+        private System.Windows.Forms.StatusStrip statusStrip1;
+        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
     }
 }

@@ -329,5 +329,18 @@ namespace HslCommunicationDemo.Redis
                 MessageBox.Show( "Delect Failed:" + delete.Message );
             }
         }
+
+        private void Button6_Click( object sender, EventArgs e )
+        {
+            OperateResult<DateTime> read = redisClient.ReadServerTime( );
+            if (read.IsSuccess)
+            {
+                toolStripStatusLabel1.Text = "ServerTime: " + read.Content.ToString( "yyyy-MM-dd HH:mm:ss" );
+            }
+            else
+            {
+                MessageBox.Show( "ReadTime Failed:" + read.Message );
+            }
+        }
     }
 }

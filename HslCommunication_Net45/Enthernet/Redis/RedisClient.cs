@@ -1041,6 +1041,20 @@ namespace HslCommunication.Enthernet.Redis
             return OperateStatusFromServer( new string[] { "BGSAVE" } );
         }
 
+        /// <summary>
+        /// 获取服务器的时间戳信息，可用于本地时间的数据同步问题
+        /// </summary>
+        /// <returns>带有服务器时间的结果对象</returns>
+        public OperateResult<DateTime> ReadServerTime( )
+        {
+            OperateResult<string[]> times = OperateStringsFromServer( new string[] { "TIME" } );
+            if (!times.IsSuccess) return OperateResult.CreateFailedResult<DateTime>( times );
+
+            long timeTick = long.Parse( times.Content[0] );
+            DateTime dateTime = new DateTime( 1970, 1, 1, 8, 0, 0 ).AddSeconds( timeTick );
+            return OperateResult.CreateSuccessResult( dateTime );
+        }
+
         #endregion
 
         #region Publish
