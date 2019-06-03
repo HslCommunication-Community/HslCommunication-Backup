@@ -750,6 +750,11 @@ namespace HslCommunication
     ///             <item>Redis的DEMO界面新增删除key功能。</item>
     ///         </list>
     ///     </revision>
+    ///     <revision date="2019-6-3" version="6.2.4" author="Richard.Hu">
+    ///         <list type="bullet">
+    ///             <item>Redis新增读取服务器的时间接口，可用于客户端的时间同步。</item>
+    ///         </list>
+    ///     </revision>
     /// </revisionHistory>
     [System.Runtime.CompilerServices.CompilerGeneratedAttribute( )]
     public class NamespaceDoc
