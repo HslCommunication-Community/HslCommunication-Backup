@@ -785,4 +785,18 @@ namespace HslCommunication
 
     // bugs
     // IReadWriteNet接口可以读取数据可以，Write方法写入西门子数据不管赋值什么值写入都是0，强制转换成simenss7net 又可以正常写入
+
+
+
+
+    //git checkout A
+    //git log
+    //找出要合并的commit ID :
+    //例如
+    //0128660c08e325d410cb845616af355c0c19c6fe
+    //然后切换到B分支上
+    //git checkout B
+    //git cherry-pick  0128660c08e325d410cb845616af355c0c19c6fe
+
+    //然后就将A分支的某个commit合并到了B分支了
 }
