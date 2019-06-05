@@ -413,11 +413,10 @@
             // 
             // label74
             // 
-            this.label74.AutoSize = true;
             this.label74.ForeColor = System.Drawing.Color.Red;
-            this.label74.Location = new System.Drawing.Point(516, 14);
+            this.label74.Location = new System.Drawing.Point(510, 0);
             this.label74.Name = "label74";
-            this.label74.Size = new System.Drawing.Size(68, 17);
+            this.label74.Size = new System.Drawing.Size(463, 37);
             this.label74.TabIndex = 108;
             this.label74.Text = "异常信息：";
             // 
