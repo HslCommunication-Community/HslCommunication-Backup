@@ -20,7 +20,9 @@ namespace HslCommunication.Robot.YASKAWA
         /// <summary>
         /// 实例化一个默认的对象
         /// </summary>
-        public YRC1000TcpNet( )
+        /// <param name="ipAddress">Ip地址</param>
+        /// <param name="port">端口号</param>
+        public YRC1000TcpNet( string ipAddress, int port )
         {
 
         }
