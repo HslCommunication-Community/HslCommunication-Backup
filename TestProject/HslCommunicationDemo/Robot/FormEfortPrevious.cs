@@ -221,7 +221,7 @@ namespace HslCommunicationDemo.Robot
             textBox43.Text = efortData.DbAxisAcc[3].ToString( );
             textBox42.Text = efortData.DbAxisAcc[4].ToString( );
             textBox41.Text = efortData.DbAxisAcc[5].ToString( );
-            textBox40.Text = efortData.DbAxisAcc[6].ToString( );
+            textBox37.Text = efortData.DbAxisAcc[6].ToString( );
 
             textBox53.Text = efortData.DbAxisAccAcc[0].ToString( );
             textBox52.Text = efortData.DbAxisAccAcc[1].ToString( );
