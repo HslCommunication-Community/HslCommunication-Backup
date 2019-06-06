@@ -208,6 +208,7 @@ namespace HslCommunication.Language
         public virtual string SiemensReadLengthCannotLargerThan19 => "读取的数组数量不允许大于19";
         public virtual string SiemensDataLengthCheckFailed => "数据块长度校验失败，请检查是否开启put/get以及关闭db块优化";
         public virtual string SiemensFWError => "发生了异常，具体信息查找Fetch/Write协议文档";
+        public virtual string SiemensReadLengthOverPlcAssign => "读取的数据范围超出了PLC的设定";
 
         /***********************************************************************************
          * 
