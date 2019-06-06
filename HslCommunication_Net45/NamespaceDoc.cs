@@ -755,6 +755,11 @@ namespace HslCommunication
     ///             <item>Redis新增读取服务器的时间接口，可用于客户端的时间同步。</item>
     ///         </list>
     ///     </revision>
+    ///     <revision date="2019-6-6" version="6.2.5" author="Richard.Hu">
+    ///         <list type="bullet">
+    ///             <item>西门子的SiemensS7Net类当读取PLC配置长度的DB块数据时，将提示错误信息。</item>
+    ///         </list>
+    ///     </revision>
     /// </revisionHistory>
     [System.Runtime.CompilerServices.CompilerGeneratedAttribute( )]
     public class NamespaceDoc
