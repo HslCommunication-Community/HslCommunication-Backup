@@ -435,6 +435,11 @@ namespace HslCommunication.Profinet.Siemens
                             ll += length[kk];
                             kk++;
                         }
+                        else if(read.Content[ii] == 0x05 &&
+                            read.Content[ii + 1] == 0x00)
+                        {
+                            return new OperateResult<byte[]>( read.Content[ii], StringResources.Language.SiemensReadLengthOverPlcAssign );
+                        }
                     }
                 }
 

@@ -209,6 +209,7 @@ namespace HslCommunication.Language
         public override string SiemensReadLengthCannotLargerThan19 => "The number of arrays read does not allow greater than 19";
         public override string SiemensDataLengthCheckFailed => "Block length checksum failed, please check if Put/get is turned on and DB block optimization is turned off";
         public override string SiemensFWError => "An exception occurred, the specific information to find the Fetch/write protocol document";
+        public override string SiemensReadLengthOverPlcAssign => "The range of data read exceeds the setting of the PLC";
 
         /***********************************************************************************
          * 
