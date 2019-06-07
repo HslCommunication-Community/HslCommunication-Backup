@@ -118,6 +118,7 @@
             this.button59 = new System.Windows.Forms.Button();
             this.button57 = new System.Windows.Forms.Button();
             this.button55 = new System.Windows.Forms.Button();
+            this.button60 = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -657,6 +658,7 @@
             // 
             // groupBox7
             // 
+            this.groupBox7.Controls.Add(this.button60);
             this.groupBox7.Controls.Add(this.button51);
             this.groupBox7.Controls.Add(this.button44);
             this.groupBox7.Controls.Add(this.button23);
@@ -1143,6 +1145,16 @@
             this.button55.UseVisualStyleBackColor = true;
             this.button55.Click += new System.EventHandler(this.Button55_Click);
             // 
+            // button60
+            // 
+            this.button60.Location = new System.Drawing.Point(19, 143);
+            this.button60.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.button60.Name = "button60";
+            this.button60.Size = new System.Drawing.Size(150, 32);
+            this.button60.TabIndex = 3;
+            this.button60.Text = "YRC1000(YASKAWA)";
+            this.button60.UseVisualStyleBackColor = true;
+            // 
             // FormLoad
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 17F);
@@ -1287,6 +1299,7 @@
         private System.Windows.Forms.Button button57;
         private System.Windows.Forms.Button button58;
         private System.Windows.Forms.Button button59;
+        private System.Windows.Forms.Button button60;
     }
 }
 

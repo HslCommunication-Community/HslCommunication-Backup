@@ -416,6 +416,12 @@
     <Compile Include="Robot\FormEfort.Designer.cs">
       <DependentUpon>FormEfort.cs</DependentUpon>
     </Compile>
+    <Compile Include="Robot\FormYRC1000.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Robot\FormYRC1000.Designer.cs">
+      <DependentUpon>FormYRC1000.cs</DependentUpon>
+    </Compile>
     <Compile Include="Robot\FormKuka.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -625,6 +631,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Robot\FormEfort.resx">
       <DependentUpon>FormEfort.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Robot\FormYRC1000.resx">
+      <DependentUpon>FormYRC1000.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Robot\FormKuka.resx">
       <DependentUpon>FormKuka.cs</DependentUpon>

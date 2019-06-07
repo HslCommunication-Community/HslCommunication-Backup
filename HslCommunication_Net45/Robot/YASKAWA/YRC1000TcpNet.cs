@@ -12,7 +12,6 @@ namespace HslCommunication.Robot.YASKAWA
     /// <summary>
     /// 安川机器人的Ethernet 服务器功能的通讯类
     /// </summary>
-    [Obsolete( "还没有完成" )]
     public class YRC1000TcpNet : NetworkDoubleBase<HslMessage, ReverseWordTransform>, IRobotNet
     {
         #region Constructor
@@ -38,7 +37,10 @@ namespace HslCommunication.Robot.YASKAWA
         /// <returns>带有成功标识的byte[]数组</returns>
         public OperateResult<byte[]> Read( string address )
         {
-            throw new NotImplementedException( );
+            OperateResult<string> read = ReadString( address );
+            if (!read.IsSuccess) return OperateResult.CreateFailedResult<byte[]>( read );
+
+            return OperateResult.CreateSuccessResult( Encoding.ASCII.GetBytes( read.Content ) );
         }
 
         /// <summary>
@@ -48,7 +50,15 @@ namespace HslCommunication.Robot.YASKAWA
         /// <returns>带有成功标识的字符串数据</returns>
         public OperateResult<string> ReadString( string address )
         {
-            throw new NotImplementedException( );
+            if (address.IndexOf( '.' ) >= 0 || address.IndexOf( ':' ) >= 0 || address.IndexOf( ';' ) >= 0)
+            {
+                string[] commands = address.Split( new char[] { '.', ':', ';' } );
+                return ReadByCommand( commands[0], commands[1] );
+            }
+            else
+            {
+                return ReadByCommand( address, null );
+            }
         }
 
         /// <summary>
@@ -59,7 +69,7 @@ namespace HslCommunication.Robot.YASKAWA
         /// <returns>是否成功的写入</returns>
         public OperateResult Write( string address, byte[] value )
         {
-            throw new NotImplementedException( );
+            return Write( address, Encoding.ASCII.GetString( value ) );
         }
 
         /// <summary>
@@ -70,7 +80,7 @@ namespace HslCommunication.Robot.YASKAWA
         /// <returns>是否成功的写入</returns>
         public OperateResult Write( string address, string value )
         {
-            throw new NotImplementedException( );
+            return ReadByCommand( address, value );
         }
 
         #endregion
@@ -235,7 +245,18 @@ namespace HslCommunication.Robot.YASKAWA
 
         #endregion
 
-        #region Private Member
+        #region Public Method
+
+        public OperateResult<string> ReadRALARM( )
+        {
+            return ReadByCommand( "RALARM", null );
+        }
+
+        public OperateResult<string> ReadRPOSJ( )
+        {
+            return ReadByCommand( "RPOSJ", null );
+        }
+
 
         #endregion
 
