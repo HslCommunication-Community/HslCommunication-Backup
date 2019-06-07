@@ -153,6 +153,21 @@ namespace HslCommunication_Net45.Test.Documentation.Samples.BasicFramework
             #endregion
         }
 
+        public void ArraySplitByLengthExample( )
+        {
+            #region ArraySplitByLengthExample
+
+            int[] b1 = new int[10] { 12341, -2324, 84646, 324245, 352, 654332, 7687632, 435, 234, 3434 };
+            List<int[]> b2 = SoftBasic.ArraySplitByLength( b1, 4 );
+
+            // b2 共有3个数组
+            // 数组1   [12341, -2324, 84646, 324245]
+            // 数组2   [352, 654332, 7687632, 435]
+            // 数组3   [234, 3434]
+
+            #endregion
+        }
+
         public void IsTwoBytesEquelExample1( )
         {
             #region IsTwoBytesEquelExample1

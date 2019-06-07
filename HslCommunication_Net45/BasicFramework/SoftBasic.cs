@@ -284,6 +284,42 @@ namespace HslCommunication.BasicFramework
             }
         }
 
+        /// <summary>
+        /// 将指定的数据按照指定长度进行分割，例如int[10]，指定长度4，就分割成int[4],int[4],int[2]，然后拼接list
+        /// </summary>
+        /// <typeparam name="T">数组的类型</typeparam>
+        /// <param name="array">等待分割的数组</param>
+        /// <param name="length">指定的长度信息</param>
+        /// <returns>分割后结果内容</returns>
+        /// <example>
+        /// <code lang="cs" source="HslCommunication_Net45.Test\Documentation\Samples\BasicFramework\SoftBasicExample.cs" region="ArraySplitByLengthExample" title="ArraySplitByLength示例" />
+        /// </example>
+        public static List<T[]> ArraySplitByLength<T>(T[] array, int length )
+        {
+            if (array == null) return new List<T[]>( );
+
+            List<T[]> result = new List<T[]>( );
+            int index = 0;
+            while (index < array.Length)
+            {
+                if (index + length < array.Length)
+                {
+                    T[] tmp = new T[length];
+                    Array.Copy( array, index, tmp, 0, length );
+                    index += length;
+                    result.Add( tmp );
+                }
+                else
+                {
+                    T[] tmp = new T[array.Length - index];
+                    Array.Copy( array, index, tmp, 0, tmp.Length );
+                    index += length;
+                    result.Add( tmp );
+                }
+            }
+            return result;
+        }
+
         #endregion
 
         #region Byte Array compare
