@@ -12,8 +12,8 @@ namespace HslCommunication.Robot.YASKAWA
     /// <summary>
     /// 安川机器人的Ethernet 服务器功能的通讯类
     /// </summary>
-    [Obsolete("还没有完成")]
-    public class YRC1000TcpNet : NetworkDoubleBase<KukaVarProxyMessage, ReverseWordTransform>, IRobotNet
+    [Obsolete( "还没有完成" )]
+    public class YRC1000TcpNet : NetworkDoubleBase<HslMessage, ReverseWordTransform>, IRobotNet
     {
         #region Constructor
 
@@ -120,7 +120,7 @@ namespace HslCommunication.Robot.YASKAWA
             // receive msg
             OperateResult<byte[]> resultReceive = NetSupport.ReceiveCommandLineFromSocket( socket, (byte)'\r', (byte)'\n' );
             if (!resultReceive.IsSuccess) return new OperateResult<byte[]>( StringResources.Language.ReceiveDataTimeout + ReceiveTimeOut );
-            
+
             LogNet?.WriteDebug( ToString( ), StringResources.Language.Receive + " : " + BasicFramework.SoftBasic.ByteToHexString( resultReceive.Content, ' ' ) );
 
             // Success
@@ -133,7 +133,7 @@ namespace HslCommunication.Robot.YASKAWA
         /// <param name="socket">connected socket</param>
         /// <param name="send">string value</param>
         /// <returns>received string value with is successfully</returns>
-        public OperateResult<string> ReadFromCoreServer( Socket socket, string send )
+        protected OperateResult<string> ReadFromCoreServer( Socket socket, string send )
         {
             var read = ReadFromCoreServer( socket, Encoding.Default.GetBytes( send ) );
             if (!read.IsSuccess) return OperateResult.CreateFailedResult<string>( read );
@@ -141,9 +141,119 @@ namespace HslCommunication.Robot.YASKAWA
             return OperateResult.CreateSuccessResult( Encoding.Default.GetString( read.Content ) );
         }
 
+        /// <summary>
+        /// 根据指令来读取设备的信息，如果命令数据为空，则传入null即可，注意，所有的命令不带换行符
+        /// </summary>
+        /// <param name="command">命令的内容</param>
+        /// <param name="commandData">命令数据内容</param>
+        /// <returns>最终的结果内容，需要对IsSuccess进行验证</returns>
+        public OperateResult<string> ReadByCommand( string command, string commandData )
+        {
+            InteractiveLock.Enter( );
+
+            // 获取有用的网络通道，如果没有，就建立新的连接
+            OperateResult<Socket> resultSocket = GetAvailableSocket( );
+            if (!resultSocket.IsSuccess)
+            {
+                IsSocketError = true;
+                if (AlienSession != null) AlienSession.IsStatusOk = false;
+                InteractiveLock.Leave( );
+                return OperateResult.CreateFailedResult<string>( resultSocket );
+            }
+
+            // 先发送命令
+            string sendCommand = string.IsNullOrEmpty( commandData ) ? $"HOSTCTRL_REQUEST {command} 0\r\n" : $"HOSTCTRL_REQUEST {command} {commandData.Length}\r\n";
+            OperateResult<string> readCommand = ReadFromCoreServer( resultSocket.Content, sendCommand );
+            if (!readCommand.IsSuccess)
+            {
+                IsSocketError = true;
+                if (AlienSession != null) AlienSession.IsStatusOk = false;
+                InteractiveLock.Leave( );
+                return OperateResult.CreateFailedResult<string>( readCommand );
+            }
+
+            // 检查命令是否返回成功的状态
+            if (!readCommand.Content.StartsWith( "OK:" ))
+            {
+                if (!isPersistentConn) resultSocket.Content?.Close( );
+                InteractiveLock.Leave( );
+                return new OperateResult<string>( readCommand.Content.Remove( readCommand.Content.Length - 2 ) );
+            }
+
+            // 在必要的情况下发送命令数据
+            if(!string.IsNullOrEmpty( commandData ))
+            {
+                byte[] send2 = Encoding.ASCII.GetBytes( $"{commandData}\r" );
+                LogNet?.WriteDebug( ToString( ), StringResources.Language.Send + " : " + BasicFramework.SoftBasic.ByteToHexString( send2, ' ' ) );
+
+                OperateResult sendResult2 = Send( resultSocket.Content, send2 );
+                if (!sendResult2.IsSuccess)
+                {
+                    resultSocket.Content?.Close( );
+                    IsSocketError = true;
+                    if (AlienSession != null) AlienSession.IsStatusOk = false;
+                    InteractiveLock.Leave( );
+                    return OperateResult.CreateFailedResult<string>( sendResult2 );
+                }
+            }
+
+            // 接收数据信息，先接收到\r为止，再根据实际情况决定是否接收\r
+            OperateResult<byte[]> resultReceive2 = NetSupport.ReceiveCommandLineFromSocket( resultSocket.Content, (byte)'\r' );
+            if (!resultReceive2.IsSuccess)
+            {
+                IsSocketError = true;
+                if (AlienSession != null) AlienSession.IsStatusOk = false;
+                InteractiveLock.Leave( );
+                return OperateResult.CreateFailedResult<string>( resultReceive2 );
+            }
+
+            string commandDataReturn = Encoding.ASCII.GetString( resultReceive2.Content );
+            if (commandDataReturn.StartsWith( "ERROR:" ))
+            {
+                if (!isPersistentConn) resultSocket.Content?.Close( );
+                InteractiveLock.Leave( );
+                NetSupport.ReadBytesFromSocket( resultSocket.Content, 1 );
+
+                return new OperateResult<string>( commandDataReturn );
+            }
+            else if (commandDataReturn.StartsWith( "0000\r" ))
+            {
+                if (!isPersistentConn) resultSocket.Content?.Close( );
+                NetSupport.ReadBytesFromSocket( resultSocket.Content, 1 );
+
+                InteractiveLock.Leave( );
+                return OperateResult.CreateSuccessResult( "0000" );
+            }
+            else
+            {
+                if (!isPersistentConn) resultSocket.Content?.Close( );
+
+                InteractiveLock.Leave( );
+                return OperateResult.CreateSuccessResult( commandDataReturn.Remove( commandDataReturn.Length - 1 ) );
+            }
+        }
+
         #endregion
 
         #region Private Member
+
+        #endregion
+
+        #region Object Override
+
+        /// <summary>
+        /// 返回表示当前对象的字符串
+        /// </summary>
+        /// <returns>字符串信息</returns>
+        public override string ToString( )
+        {
+            return base.ToString( );
+        }
+
+        #endregion
+
+        #region Static Member
+
 
         #endregion
     }
