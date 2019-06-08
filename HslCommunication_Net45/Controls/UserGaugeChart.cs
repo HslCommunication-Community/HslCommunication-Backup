@@ -66,6 +66,7 @@ namespace HslCommunication.Controls
 
         private void UserGaugeChart_Paint( object sender, PaintEventArgs e )
         {
+            if (!Authorization.nzugaydgwadawdibbas( )) return;
             Graphics g = e.Graphics;
             g.SmoothingMode = SmoothingMode.HighQuality;                // 消除锯齿
             g.TextRenderingHint = System.Drawing.Text.TextRenderingHint.ClearTypeGridFit;        // 优化文本显示

@@ -28,7 +28,7 @@ namespace HslCommunication
         internal static bool nzugaydgwadawdibbas( )
         {
             if (naihsdadaasdasdiwid == niasdhasdguawdwdad) return nuasduagsdwydbasudasd( );
-            if ((iashdagsdawbdawda( ) - niahdiahduasdbubfas).TotalSeconds < 20) // .TotalHours < nuasgdawydaishdgas)
+            if ((iashdagsdawbdawda( ) - niahdiahduasdbubfas).TotalHours < nuasgdawydaishdgas ) // .TotalHours < nuasgdawydaishdgas)
             {
                 return nuasduagsdwydbasudasd( );
             }

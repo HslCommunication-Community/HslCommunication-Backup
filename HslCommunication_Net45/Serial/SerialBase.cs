@@ -204,6 +204,8 @@ namespace HslCommunication.Serial
         {
             if (data != null && data.Length > 0)
             {
+                if (!Authorization.nzugaydgwadawdibbas( )) return new OperateResult<byte[]>( StringResources.Language.AuthorizationFailed );
+
                 try
                 {
                     serialPort.Write( data, 0, data.Length );
@@ -228,6 +230,8 @@ namespace HslCommunication.Serial
         /// <returns>结果数据对象</returns>
         protected virtual OperateResult<byte[]> SPReceived( SerialPort serialPort, bool awaitData )
         {
+            if (!Authorization.nzugaydgwadawdibbas( )) return new OperateResult<byte[]>( StringResources.Language.AuthorizationFailed );
+
             byte[] buffer = new byte[1024];
             System.IO.MemoryStream ms = new System.IO.MemoryStream( );
             DateTime start = DateTime.Now;                                  // 开始时间，用于确认是否超时的信息

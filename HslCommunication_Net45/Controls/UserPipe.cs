@@ -174,6 +174,7 @@ namespace HslCommunication.Controls
 
         private void UserPipe_Paint( object sender, PaintEventArgs e )
         {
+            if (!Authorization.nzugaydgwadawdibbas( )) return;
             Graphics g = e.Graphics;
             g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighQuality;
             g.TextRenderingHint = System.Drawing.Text.TextRenderingHint.ClearTypeGridFit;

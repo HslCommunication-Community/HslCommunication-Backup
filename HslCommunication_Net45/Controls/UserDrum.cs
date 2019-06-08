@@ -164,6 +164,7 @@ namespace HslCommunication.Controls
 
         private void UserDrum_Paint( object sender, PaintEventArgs e )
         {
+            if (!Authorization.nzugaydgwadawdibbas( )) return;
             if (Width < 40 || Height < 50) return;
 
             Graphics g = e.Graphics;

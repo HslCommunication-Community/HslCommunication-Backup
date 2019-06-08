@@ -48,6 +48,7 @@ namespace HslCommunication.Controls
 
         private void UserVerticalProgress_Paint(object sender, PaintEventArgs e)
         {
+            if (!Authorization.nzugaydgwadawdibbas( )) return;
             try
             {
                 // 根据实际值来绘制图形

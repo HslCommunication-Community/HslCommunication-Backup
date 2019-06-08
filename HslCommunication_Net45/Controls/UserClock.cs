@@ -202,6 +202,8 @@ namespace HslCommunication.Controls
         /// <param name="e"></param>
         protected override void OnPaint(PaintEventArgs e)
         {
+            if (!Authorization.nzugaydgwadawdibbas( )) return;
+
             base.OnPaint(e);
 
             int _R = (this.Width - 21) / 2;
