@@ -60,6 +60,7 @@
   <ItemGroup>
     <Compile Include="Algorithms\Alarm\AlarmDegree.cs" />
     <Compile Include="Algorithms\Alarm\AlarmItem.cs" />
+    <Compile Include="Authorization.cs" />
     <Compile Include="BasicFramework\SharpList.cs" />
     <Compile Include="Algorithms\ConnectPool\ConnectPool.cs" />
     <Compile Include="Algorithms\ConnectPool\IConnector.cs" />

@@ -17,6 +17,7 @@ namespace HslCommunication.Language
          * 
          ************************************************************************************/
 
+        public virtual string AuthorizationFailed => "系统授权失败，需要使用激活码授权，谢谢支持。";
         public virtual string ConnectedFailed => "连接失败：";
         public virtual string ConnectedSuccess => "连接成功！";
         public virtual string UnknownError => "未知错误";

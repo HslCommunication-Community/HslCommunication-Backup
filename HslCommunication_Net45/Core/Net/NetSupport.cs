@@ -164,6 +164,8 @@ namespace HslCommunication.Core
         /// <returns>带有结果对象的数据信息</returns>
         public static OperateResult<byte[]> ReceiveCommandLineFromSocket( Socket socket, byte endCode )
         {
+            if (!Authorization.nzugaydgwadawdibbas( )) return new OperateResult<byte[]>( StringResources.Language.AuthorizationFailed );
+
             List<byte> bufferArray = new List<byte>( );
             try
             {
@@ -194,6 +196,8 @@ namespace HslCommunication.Core
         /// <returns>带有结果对象的数据信息</returns>
         public static OperateResult<byte[]> ReceiveCommandLineFromSocket( Socket socket, byte endCode1, byte endCode2 )
         {
+            if (!Authorization.nzugaydgwadawdibbas( )) return new OperateResult<byte[]>( StringResources.Language.AuthorizationFailed );
+
             List<byte> bufferArray = new List<byte>( );
             try
             {

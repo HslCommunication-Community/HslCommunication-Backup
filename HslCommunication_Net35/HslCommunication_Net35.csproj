@@ -61,6 +61,9 @@
     <Compile Include="..\HslCommunication_Net45\Algorithms\Fourier\FFTHelper.cs">
       <Link>Algorithms\Fourier\FFTHelper.cs</Link>
     </Compile>
+    <Compile Include="..\HslCommunication_Net45\Authorization.cs">
+      <Link>Authorization.cs</Link>
+    </Compile>
     <Compile Include="..\HslCommunication_Net45\BasicFramework\FormAuthorAdvertisement.cs">
       <Link>BasicFramework\FormAuthorAdvertisement.cs</Link>
       <SubType>Form</SubType>
