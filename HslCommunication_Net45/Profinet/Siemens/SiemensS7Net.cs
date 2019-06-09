@@ -6,8 +6,8 @@ using System.Text;
 using HslCommunication.Core;
 using HslCommunication.Core.IMessage;
 using HslCommunication.Core.Net;
-
-
+using HslCommunication.Core.Address;
+using HslCommunication.BasicFramework;
 
 /********************************************************************************
  * 
@@ -312,7 +312,7 @@ namespace HslCommunication.Profinet.Siemens
         /// </example>
         public override OperateResult<byte[]> Read( string address, ushort length )
         {
-            OperateResult<byte, int, ushort> addressResult = AnalysisAddress( address );
+            OperateResult<S7AddressData> addressResult = S7AddressData.ParseFrom( address, length );
             if (!addressResult.IsSuccess) return OperateResult.CreateFailedResult<byte[]>( addressResult );
 
             // 如果长度超过200，分批次读取 -> If the length is more than 200, read in batches
@@ -321,12 +321,12 @@ namespace HslCommunication.Profinet.Siemens
             while (alreadyFinished < length)
             {
                 ushort readLength = (ushort)Math.Min( length - alreadyFinished, 200 );
-                OperateResult<byte[]> read = Read( new OperateResult<byte, int, ushort>[] { addressResult }, new ushort[] { readLength } );
+                OperateResult<byte[]> read = Read( new S7AddressData[] { addressResult.Content } );
                 if (!read.IsSuccess) return read;
 
                 bytesContent.AddRange( read.Content );
                 alreadyFinished += readLength;
-                addressResult.Content2 += readLength * 8;
+                addressResult.Content.AddressStart += readLength * 8;
             }
 
             return OperateResult.CreateSuccessResult( bytesContent.ToArray( ) );
@@ -389,22 +389,43 @@ namespace HslCommunication.Profinet.Siemens
         /// </example>
         public OperateResult<byte[]> Read( string[] address, ushort[] length )
         {
-            OperateResult<byte, int, ushort>[] addressResult = new OperateResult<byte, int, ushort>[address.Length];
+            S7AddressData[] addressResult = new S7AddressData[address.Length];
             for (int i = 0; i < address.Length; i++)
             {
-                OperateResult<byte, int, ushort> tmp = AnalysisAddress( address[i] );
-                if (!tmp.IsSuccess) return OperateResult.CreateFailedResult<byte[]>( addressResult[i] );
+                OperateResult<S7AddressData> tmp = S7AddressData.ParseFrom( address[i], length[i] ) ;
+                if (!tmp.IsSuccess) return OperateResult.CreateFailedResult<byte[]>( tmp );
 
-                addressResult[i] = tmp;
+                addressResult[i] = tmp.Content;
             }
 
-            return Read( addressResult, length );
+            return Read( addressResult );
         }
 
-        private OperateResult<byte[]> Read( OperateResult<byte, int, ushort>[] address, ushort[] length )
+        public OperateResult<byte[]> Read( S7AddressData[] s7Addresses )
+        {
+            if (s7Addresses.Length > 19)
+            {
+                List<byte> bytes = new List<byte>( );
+                List<S7AddressData[]> groups = SoftBasic.ArraySplitByLength<S7AddressData>( s7Addresses, 19 );
+                for (int i = 0; i < groups.Count; i++)
+                {
+                    OperateResult<byte[]> read = Read( groups[i] );
+                    if (!read.IsSuccess) return read;
+
+                    bytes.AddRange( read.Content );
+                }
+                return OperateResult.CreateSuccessResult( bytes.ToArray( ) );
+            }
+            else
+            {
+                return ReadS7AddressData( s7Addresses );
+            }
+        }
+
+        private OperateResult<byte[]> ReadS7AddressData( S7AddressData[] s7Addresses )
         {
             // 构建指令 -> Build read command
-            OperateResult<byte[]> command = BuildReadCommand( address, length );
+            OperateResult<byte[]> command = BuildReadCommand( s7Addresses );
             if (!command.IsSuccess) return command;
 
             // 核心交互 -> Core Interactions
@@ -413,12 +434,12 @@ namespace HslCommunication.Profinet.Siemens
 
             // 分析结果 -> Analysis results
             int receiveCount = 0;
-            for (int i = 0; i < length.Length; i++)
+            for (int i = 0; i < s7Addresses.Length; i++)
             {
-                receiveCount += length[i];
+                receiveCount += s7Addresses[i].Length;
             }
 
-            if (read.Content.Length >= 21 && read.Content[20] == length.Length)
+            if (read.Content.Length >= 21 && read.Content[20] == s7Addresses.Length)
             {
                 byte[] buffer = new byte[receiveCount];
                 int kk = 0;
@@ -430,9 +451,9 @@ namespace HslCommunication.Profinet.Siemens
                         if (read.Content[ii] == 0xFF &&
                             read.Content[ii + 1] == 0x04)
                         {
-                            Array.Copy( read.Content, ii + 4, buffer, ll, length[kk] );
-                            ii += length[kk] + 3;
-                            ll += length[kk];
+                            Array.Copy( read.Content, ii + 4, buffer, ll, s7Addresses[kk].Length );
+                            ii += s7Addresses[kk].Length + 3;
+                            ll += s7Addresses[kk].Length;
                             kk++;
                         }
                         else if(read.Content[ii] == 0x05 &&
@@ -526,7 +547,7 @@ namespace HslCommunication.Profinet.Siemens
         /// </example>
         public override OperateResult Write( string address, byte[] value )
         {
-            OperateResult<byte, int, ushort> analysis = AnalysisAddress( address );
+            OperateResult<S7AddressData> analysis = S7AddressData.ParseFrom( address, 1 );
             if (!analysis.IsSuccess) return OperateResult.CreateFailedResult<byte[]>( analysis );
             
             int length = value.Length;
@@ -543,7 +564,7 @@ namespace HslCommunication.Profinet.Siemens
                 if (!write.IsSuccess) return write;
                 
                 alreadyFinished += writeLength;
-                analysis.Content2 += writeLength * 8;
+                analysis.Content.AddressStart += writeLength * 8;
             }
 
             return OperateResult.CreateSuccessResult( );
@@ -569,10 +590,6 @@ namespace HslCommunication.Profinet.Siemens
 
             return WriteBase( command.Content );
         }
-        
-        #endregion
-
-        #region Write bool[]
 
         /// <summary>
         /// 向PLC中写入bool数组，比如你写入M100,那么data[0]对应M100.0 ->
@@ -588,7 +605,7 @@ namespace HslCommunication.Profinet.Siemens
         /// </remarks>
         public OperateResult Write(string address, bool[] values)
         {
-            return Write( address, BasicFramework.SoftBasic.BoolArrayToByte( values ) );
+            return Write( address, SoftBasic.BoolArrayToByte( values ) );
         }
 
 
@@ -636,11 +653,11 @@ namespace HslCommunication.Profinet.Siemens
                 if (readLength.Content[0] == 0) readLength.Content[0] = 254; // allow to create new string
                 if (value.Length > readLength.Content[0]) return new OperateResult<string>( "String length is too long than plc defined" );
 
-                return Write( address, BasicFramework.SoftBasic.SpliceTwoByteArray( new byte[] { readLength.Content[0], (byte)buffer.Length }, buffer ) );
+                return Write( address, SoftBasic.SpliceTwoByteArray( new byte[] { readLength.Content[0], (byte)buffer.Length }, buffer ) );
             }
             else
             {
-                return Write( address, BasicFramework.SoftBasic.SpliceTwoByteArray( new byte[] { (byte)buffer.Length }, buffer ) );
+                return Write( address, SoftBasic.SpliceTwoByteArray( new byte[] { (byte)buffer.Length }, buffer ) );
             }
         }
 
@@ -763,142 +780,19 @@ namespace HslCommunication.Profinet.Siemens
 
         #endregion
 
-        #region Static Method Helper
-        
-        /// <summary>
-        /// 计算特殊的地址信息 -> Calculate Special Address information
-        /// </summary>
-        /// <param name="address">字符串地址 -> String address</param>
-        /// <returns>实际值 -> Actual value</returns>
-        public static int CalculateAddressStarted( string address )
-        {
-            if (address.IndexOf( '.' ) < 0)
-            {
-                return Convert.ToInt32( address ) * 8;
-            }
-            else
-            {
-                string[] temp = address.Split( '.' );
-                return Convert.ToInt32( temp[0] ) * 8 + Convert.ToInt32( temp[1] );
-            }
-        }
-
-        /// <summary>
-        /// 解析数据地址，解析出地址类型，起始地址，DB块的地址 ->
-        /// Parse data address, parse out address type, start address, db block address
-        /// </summary>
-        /// <param name="address">起始地址，例如M100，I0，Q0，DB2.100 ->
-        /// Start address, such as M100,I0,Q0,DB2.100</param>
-        /// <returns>解析数据地址，解析出地址类型，起始地址，DB块的地址 ->
-        /// Parse data address, parse out address type, start address, db block address</returns>
-        public static OperateResult<byte, int, ushort> AnalysisAddress( string address )
-        {
-            var result = new OperateResult<byte, int, ushort>( );
-            try
-            {
-                result.Content3 = 0;
-                if (address[0] == 'I')
-                {
-                    result.Content1 = 0x81;
-                    result.Content2 = CalculateAddressStarted( address.Substring( 1 ) );
-                }
-                else if (address[0] == 'Q')
-                {
-                    result.Content1 = 0x82;
-                    result.Content2 = CalculateAddressStarted( address.Substring( 1 ) );
-                }
-                else if (address[0] == 'M')
-                {
-                    result.Content1 = 0x83;
-                    result.Content2 = CalculateAddressStarted( address.Substring( 1 ) );
-                }
-                else if (address[0] == 'D' || address.Substring( 0, 2 ) == "DB")
-                {
-                    result.Content1 = 0x84;
-                    string[] adds = address.Split( '.' );
-                    if (address[1] == 'B')
-                    {
-                        result.Content3 = Convert.ToUInt16( adds[0].Substring( 2 ) );
-                    }
-                    else
-                    {
-                        result.Content3 = Convert.ToUInt16( adds[0].Substring( 1 ) );
-                    }
-
-                    result.Content2 = CalculateAddressStarted( address.Substring( address.IndexOf( '.' ) + 1 ) );
-                }
-                else if (address[0] == 'T')
-                {
-                    result.Content1 = 0x1D;
-                    result.Content2 = CalculateAddressStarted( address.Substring( 1 ) );
-                }
-                else if (address[0] == 'C')
-                {
-                    result.Content1 = 0x1C;
-                    result.Content2 = CalculateAddressStarted( address.Substring( 1 ) );
-                }
-                else if (address[0] == 'V')
-                {
-                    result.Content1 = 0x84;
-                    result.Content3 = 1;
-                    result.Content2 = CalculateAddressStarted( address.Substring( 1 ) );
-                }
-                else
-                {
-                    result.Message = StringResources.Language.NotSupportedDataType;
-                    result.Content1 = 0;
-                    result.Content2 = 0;
-                    result.Content3 = 0;
-                    return result;
-                }
-            }
-            catch (Exception ex)
-            {
-                result.Message = ex.Message;
-                return result;
-            }
-
-            result.IsSuccess = true;
-            return result;
-        }
-
-
-        #endregion
-
         #region Build Command
         
         /// <summary>
-        /// 生成一个读取字数据指令头的通用方法 ->
         /// A general method for generating a command header to read a Word data
         /// </summary>
-        /// <param name="address">起始地址，例如M100，I0，Q0，DB2.100 ->
-        /// Start address, such as M100,I0,Q0,DB2.100</param>
-        /// <param name="length">读取数据长度 -> Read Data length</param>
-        /// <returns>包含结果对象的报文 -> Message containing the result object</returns>
-        public static OperateResult<byte[]> BuildReadCommand( string address, ushort length )
+        /// <param name="s7Addresses">siemens address</param>
+        /// <returns>Message containing the result object</returns>
+        public static OperateResult<byte[]> BuildReadCommand( S7AddressData[] s7Addresses )
         {
-            OperateResult<byte, int, ushort> analysis = AnalysisAddress( address );
-            if (!analysis.IsSuccess) return OperateResult.CreateFailedResult<byte[]>( analysis );
+            if (s7Addresses == null) throw new NullReferenceException( "s7Addresses" );
+            if (s7Addresses.Length > 19) throw new Exception( StringResources.Language.SiemensReadLengthCannotLargerThan19 );
 
-            return BuildReadCommand( new OperateResult<byte, int, ushort>[] { analysis }, new ushort[] { length } );
-        }
-
-        /// <summary>
-        /// 生成一个读取字数据指令头的通用方法 ->
-        /// A general method for generating a command header to read a Word data
-        /// </summary>
-        /// <param name="address">起始地址，例如M100，I0，Q0，DB2.100 ->
-        /// Start address, such as M100,I0,Q0,DB2.100</param>
-        /// <param name="length">读取数据长度 -> Read Data length</param>
-        /// <returns>包含结果对象的报文 -> Message containing the result object</returns>
-        public static OperateResult<byte[]> BuildReadCommand( OperateResult<byte, int, ushort>[] address, ushort[] length )
-        {
-            if (address == null) throw new NullReferenceException( "address" );
-            if (length == null) throw new NullReferenceException( "count" );
-            if (address.Length != length.Length) throw new Exception( StringResources.Language.TwoParametersLengthIsNotSame );
-            if (length.Length > 19) throw new Exception( StringResources.Language.SiemensReadLengthCannotLargerThan19 );
-
-            int readCount = length.Length;
+            int readCount = s7Addresses.Length;
             byte[] _PLCCommand = new byte[19 + readCount * 12];
             // ======================================================================================
             _PLCCommand[0] = 0x03;                                                // 报文头 -> Head
@@ -934,17 +828,17 @@ namespace HslCommunication.Profinet.Siemens
                 // 按字为单位 -> by word
                 _PLCCommand[22 + ii * 12] = 0x02; // (byte)(address[ii].Content1 == 0x1D ? 0x1D : address[ii].Content1 == 0x1C ? 0x1C : 0x02);
                 // 访问数据的个数 -> Number of Access data
-                _PLCCommand[23 + ii * 12] = (byte)(length[ii] / 256);
-                _PLCCommand[24 + ii * 12] = (byte)(length[ii] % 256);
+                _PLCCommand[23 + ii * 12] = (byte)(s7Addresses[ii].Length / 256);
+                _PLCCommand[24 + ii * 12] = (byte)(s7Addresses[ii].Length % 256);
                 // DB块编号，如果访问的是DB块的话 -> DB block number, if you are accessing a DB block
-                _PLCCommand[25 + ii * 12] = (byte)(address[ii].Content3 / 256);
-                _PLCCommand[26 + ii * 12] = (byte)(address[ii].Content3 % 256);
+                _PLCCommand[25 + ii * 12] = (byte)(s7Addresses[ii].DbBlock / 256);
+                _PLCCommand[26 + ii * 12] = (byte)(s7Addresses[ii].DbBlock % 256);
                 // 访问数据类型 -> Accessing data types
-                _PLCCommand[27 + ii * 12] = address[ii].Content1;
+                _PLCCommand[27 + ii * 12] = s7Addresses[ii].DataCode;
                 // 偏移位置 -> Offset position
-                _PLCCommand[28 + ii * 12] = (byte)(address[ii].Content2 / 256 / 256 % 256);
-                _PLCCommand[29 + ii * 12] = (byte)(address[ii].Content2 / 256 % 256);
-                _PLCCommand[30 + ii * 12] = (byte)(address[ii].Content2 % 256);
+                _PLCCommand[28 + ii * 12] = (byte)(s7Addresses[ii].AddressStart / 256 / 256 % 256);
+                _PLCCommand[29 + ii * 12] = (byte)(s7Addresses[ii].AddressStart / 256 % 256);
+                _PLCCommand[30 + ii * 12] = (byte)(s7Addresses[ii].AddressStart % 256);
             }
 
             return OperateResult.CreateSuccessResult( _PLCCommand );
@@ -960,7 +854,7 @@ namespace HslCommunication.Profinet.Siemens
         /// <returns>包含结果对象的报文 -> Message containing the result object</returns>
         public static OperateResult<byte[]> BuildBitReadCommand( string address )
         {
-            OperateResult<byte, int, ushort> analysis = AnalysisAddress( address );
+            OperateResult<S7AddressData> analysis = S7AddressData.ParseFrom( address, 1 );
             if (!analysis.IsSuccess) return OperateResult.CreateFailedResult<byte[]>( analysis );
             
             byte[] _PLCCommand = new byte[31];
@@ -1004,33 +898,16 @@ namespace HslCommunication.Profinet.Siemens
             _PLCCommand[23] = 0x00;
             _PLCCommand[24] = 0x01;
             // DB块编号，如果访问的是DB块的话 -> DB block number, if you are accessing a DB block
-            _PLCCommand[25] = (byte)(analysis.Content3 / 256);
-            _PLCCommand[26] = (byte)(analysis.Content3 % 256);
+            _PLCCommand[25] = (byte)(analysis.Content.DbBlock / 256);
+            _PLCCommand[26] = (byte)(analysis.Content.DbBlock % 256);
             // 访问数据类型 -> Types of reading data
-            _PLCCommand[27] = analysis.Content1;
+            _PLCCommand[27] = analysis.Content.DataCode;
             // 偏移位置 -> Offset position
-            _PLCCommand[28] = (byte)(analysis.Content2 / 256 / 256 % 256);
-            _PLCCommand[29] = (byte)(analysis.Content2 / 256 % 256);
-            _PLCCommand[30] = (byte)(analysis.Content2 % 256);
+            _PLCCommand[28] = (byte)(analysis.Content.AddressStart / 256 / 256 % 256);
+            _PLCCommand[29] = (byte)(analysis.Content.AddressStart / 256 % 256);
+            _PLCCommand[30] = (byte)(analysis.Content.AddressStart % 256);
 
             return OperateResult.CreateSuccessResult( _PLCCommand );
-        }
-
-
-        /// <summary>
-        /// 生成一个写入字节数据的指令 -> Generate an instruction to write byte data
-        /// </summary>
-        /// <param name="address">起始地址，示例M100,I100,Q100,DB1.100 -> Start Address, example M100,I100,Q100,DB1.100</param>
-        /// <param name="data">原始的字节数据 -> Raw byte data</param>
-        /// <returns>包含结果对象的报文 -> Message containing the result object</returns>
-        public static OperateResult<byte[]> BuildWriteByteCommand( string address, byte[] data )
-        {
-            if (data == null) data = new byte[0];
-
-            OperateResult<byte, int, ushort> analysis = AnalysisAddress( address );
-            if (!analysis.IsSuccess) return OperateResult.CreateFailedResult<byte[]>( analysis );
-
-            return BuildWriteByteCommand( analysis, data );
         }
 
         /// <summary>
@@ -1039,7 +916,7 @@ namespace HslCommunication.Profinet.Siemens
         /// <param name="analysis">起始地址，示例M100,I100,Q100,DB1.100 -> Start Address, example M100,I100,Q100,DB1.100</param>
         /// <param name="data">原始的字节数据 -> Raw byte data</param>
         /// <returns>包含结果对象的报文 -> Message containing the result object</returns>
-        public static OperateResult<byte[]> BuildWriteByteCommand( OperateResult<byte, int, ushort> analysis, byte[] data )
+        public static OperateResult<byte[]> BuildWriteByteCommand( OperateResult<S7AddressData> analysis, byte[] data )
         {
             byte[] _PLCCommand = new byte[35 + data.Length];
             _PLCCommand[0] = 0x03;
@@ -1079,14 +956,14 @@ namespace HslCommunication.Profinet.Siemens
             _PLCCommand[23] = (byte)(data.Length / 256);
             _PLCCommand[24] = (byte)(data.Length % 256);
             // DB块编号，如果访问的是DB块的话 -> DB block number, if you are accessing a DB block
-            _PLCCommand[25] = (byte)(analysis.Content3 / 256);
-            _PLCCommand[26] = (byte)(analysis.Content3 % 256);
+            _PLCCommand[25] = (byte)(analysis.Content.DbBlock / 256);
+            _PLCCommand[26] = (byte)(analysis.Content.DbBlock % 256);
             // 写入数据的类型 -> Types of writing data
-            _PLCCommand[27] = analysis.Content1;
+            _PLCCommand[27] = analysis.Content.DataCode;
             // 偏移位置 -> Offset position
-            _PLCCommand[28] = (byte)(analysis.Content2 / 256 / 256 % 256); ;
-            _PLCCommand[29] = (byte)(analysis.Content2 / 256 % 256);
-            _PLCCommand[30] = (byte)(analysis.Content2 % 256);
+            _PLCCommand[28] = (byte)(analysis.Content.AddressStart / 256 / 256 % 256); ;
+            _PLCCommand[29] = (byte)(analysis.Content.AddressStart / 256 % 256);
+            _PLCCommand[30] = (byte)(analysis.Content.AddressStart % 256);
             // 按字写入 -> Write by Word
             _PLCCommand[31] = 0x00;
             _PLCCommand[32] = 0x04;
@@ -1107,9 +984,8 @@ namespace HslCommunication.Profinet.Siemens
         /// <returns>包含结果对象的报文 -> Message containing the result object</returns>
         public static OperateResult<byte[]> BuildWriteBitCommand( string address, bool data )
         {
-            OperateResult<byte, int, ushort> analysis = AnalysisAddress( address );
+            OperateResult<S7AddressData> analysis = S7AddressData.ParseFrom( address, 1 );
             if (!analysis.IsSuccess) return OperateResult.CreateFailedResult<byte[]>( analysis );
-
 
             byte[] buffer = new byte[1];
             buffer[0] = data ? (byte)0x01 : (byte)0x00;
@@ -1151,14 +1027,14 @@ namespace HslCommunication.Profinet.Siemens
             _PLCCommand[23] = (byte)(buffer.Length / 256);
             _PLCCommand[24] = (byte)(buffer.Length % 256);
             // DB块编号，如果访问的是DB块的话 -> DB block number, if you are accessing a DB block
-            _PLCCommand[25] = (byte)(analysis.Content3 / 256);
-            _PLCCommand[26] = (byte)(analysis.Content3 % 256);
+            _PLCCommand[25] = (byte)(analysis.Content.DbBlock / 256);
+            _PLCCommand[26] = (byte)(analysis.Content.DbBlock % 256);
             // 写入数据的类型 -> Types of writing data
-            _PLCCommand[27] = analysis.Content1;
+            _PLCCommand[27] = analysis.Content.DataCode;
             // 偏移位置 -> Offset position
-            _PLCCommand[28] = (byte)(analysis.Content2 / 256 / 256);
-            _PLCCommand[29] = (byte)(analysis.Content2 / 256);
-            _PLCCommand[30] = (byte)(analysis.Content2 % 256);
+            _PLCCommand[28] = (byte)(analysis.Content.AddressStart / 256 / 256);
+            _PLCCommand[29] = (byte)(analysis.Content.AddressStart / 256);
+            _PLCCommand[30] = (byte)(analysis.Content.AddressStart % 256);
             // 按位写入 -> Bitwise Write
             _PLCCommand[31] = 0x00;
             _PLCCommand[32] = 0x03;

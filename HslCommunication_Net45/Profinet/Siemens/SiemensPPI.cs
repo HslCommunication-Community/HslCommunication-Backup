@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using HslCommunication.Serial;
+using HslCommunication.Core.Address;
 #if Net45
 using System.Threading.Tasks;
 #endif
@@ -316,47 +317,47 @@ namespace HslCommunication.Profinet.Siemens
                 if(address.Substring(0,2) == "AI")
                 {
                     result.Content1 = 0x06;
-                    result.Content2 = SiemensS7Net.CalculateAddressStarted( address.Substring( 2 ) );
+                    result.Content2 = S7AddressData.CalculateAddressStarted( address.Substring( 2 ) );
                 }
                 else if (address.Substring( 0, 2 ) == "AQ")
                 {
                     result.Content1 = 0x07;
-                    result.Content2 = SiemensS7Net.CalculateAddressStarted( address.Substring( 2 ) );
+                    result.Content2 = S7AddressData.CalculateAddressStarted( address.Substring( 2 ) );
                 }
                 else if (address[0] == 'T')
                 {
                     result.Content1 = 0x1F;
-                    result.Content2 = SiemensS7Net.CalculateAddressStarted( address.Substring( 1 ) );
+                    result.Content2 = S7AddressData.CalculateAddressStarted( address.Substring( 1 ) );
                 }
                 else if (address[0] == 'C')
                 {
                     result.Content1 = 0x1E;
-                    result.Content2 = SiemensS7Net.CalculateAddressStarted( address.Substring( 1 ) );
+                    result.Content2 = S7AddressData.CalculateAddressStarted( address.Substring( 1 ) );
                 }
                 else if (address.Substring( 0, 2 ) == "SM")
                 {
                     result.Content1 = 0x05;
-                    result.Content2 = SiemensS7Net.CalculateAddressStarted( address.Substring( 2 ) );
+                    result.Content2 = S7AddressData.CalculateAddressStarted( address.Substring( 2 ) );
                 }
                 else if (address[0] == 'S')
                 {
                     result.Content1 = 0x04;
-                    result.Content2 = SiemensS7Net.CalculateAddressStarted( address.Substring( 1 ) );
+                    result.Content2 = S7AddressData.CalculateAddressStarted( address.Substring( 1 ) );
                 }
                 else if (address[0] == 'I')
                 {
                     result.Content1 = 0x81;
-                    result.Content2 = SiemensS7Net.CalculateAddressStarted( address.Substring( 1 ) );
+                    result.Content2 = S7AddressData.CalculateAddressStarted( address.Substring( 1 ) );
                 }
                 else if (address[0] == 'Q')
                 {
                     result.Content1 = 0x82;
-                    result.Content2 = SiemensS7Net.CalculateAddressStarted( address.Substring( 1 ) );
+                    result.Content2 = S7AddressData.CalculateAddressStarted( address.Substring( 1 ) );
                 }
                 else if (address[0] == 'M')
                 {
                     result.Content1 = 0x83;
-                    result.Content2 = SiemensS7Net.CalculateAddressStarted( address.Substring( 1 ) );
+                    result.Content2 = S7AddressData.CalculateAddressStarted( address.Substring( 1 ) );
                 }
                 else if (address[0] == 'D' || address.Substring( 0, 2 ) == "DB")
                 {
@@ -371,13 +372,13 @@ namespace HslCommunication.Profinet.Siemens
                         result.Content3 = Convert.ToUInt16( adds[0].Substring( 1 ) );
                     }
 
-                    result.Content2 = SiemensS7Net.CalculateAddressStarted( address.Substring( address.IndexOf( '.' ) + 1 ) );
+                    result.Content2 = S7AddressData.CalculateAddressStarted( address.Substring( address.IndexOf( '.' ) + 1 ) );
                 }
                 else if (address[0] == 'V')
                 {
                     result.Content1 = 0x84;
                     result.Content3 = 1;
-                    result.Content2 = SiemensS7Net.CalculateAddressStarted( address.Substring( 1 ) );
+                    result.Content2 = S7AddressData.CalculateAddressStarted( address.Substring( 1 ) );
                 }
                 else
                 {
