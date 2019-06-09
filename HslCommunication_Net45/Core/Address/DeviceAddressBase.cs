@@ -26,7 +26,7 @@ namespace HslCommunication.Core.Address
         /// 解析字符串的地址
         /// </summary>
         /// <param name="address">地址信息</param>
-        public virtual void AnalysisAddress( string address )
+        public virtual void Parse( string address )
         {
             Address = ushort.Parse( address );
         }

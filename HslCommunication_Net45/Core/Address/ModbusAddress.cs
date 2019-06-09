@@ -33,7 +33,7 @@ namespace HslCommunication.Core.Address
             Station = -1;
             Function = -1;
             Address = 0;
-            AnalysisAddress( address );
+            Parse( address );
         }
 
         /// <summary>
@@ -46,7 +46,7 @@ namespace HslCommunication.Core.Address
             Station = -1;
             Function = function;
             Address = 0;
-            AnalysisAddress( address );
+            Parse( address );
         }
 
         /// <summary>
@@ -84,7 +84,7 @@ namespace HslCommunication.Core.Address
         /// 解析Modbus的地址码
         /// </summary>
         /// <param name="address">地址数据信息</param>
-        public override void AnalysisAddress( string address )
+        public override void Parse( string address )
         {
             if (address.IndexOf( ';' ) < 0)
             {
