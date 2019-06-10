@@ -373,7 +373,7 @@ namespace HslCommunication.Profinet.Siemens
 
 
         /// <summary>
-        /// 一次性从PLC获取所有的数据，按照先后顺序返回一个统一的Buffer，需要按照顺序处理，两个数组长度必须一致 ->
+        /// 一次性从PLC获取所有的数据，按照先后顺序返回一个统一的Buffer，需要按照顺序处理，两个数组长度必须一致，数组长度无限制 ->
         /// One-time from the PLC to obtain all the data, in order to return a unified buffer, need to be processed sequentially, two array length must be consistent
         /// </summary>
         /// <param name="address">起始地址，格式为I100，M100，Q100，DB20.100 ->
@@ -382,7 +382,7 @@ namespace HslCommunication.Profinet.Siemens
         /// <returns>是否读取成功的结果对象 -> Whether to read the successful result object</returns>
         /// <exception cref="NullReferenceException"></exception>
         /// <remarks>
-        /// <note type="warning">批量读取的长度有限制，最大为19个地址</note>
+        /// <note type="warning">原先的批量的长度为19，现在已经内部自动处理整合，目前的长度为任意和长度。</note>
         /// </remarks>
         /// <example>
         /// 参照<see cref="Read(string, ushort)"/>
@@ -401,6 +401,12 @@ namespace HslCommunication.Profinet.Siemens
             return Read( addressResult );
         }
 
+        /// <summary>
+        /// 读取西门子的地址数据信息，支持任意个数的数据读取 ->
+        /// Read Siemens address data information, support any number of data reading
+        /// </summary>
+        /// <param name="s7Addresses">西门子的数据地址 -> Siemens data address</param>
+        /// <returns>返回的结果对象信息 -> Whether to read the successful result object</returns>
         public OperateResult<byte[]> Read( S7AddressData[] s7Addresses )
         {
             if (s7Addresses.Length > 19)
@@ -422,6 +428,11 @@ namespace HslCommunication.Profinet.Siemens
             }
         }
 
+        /// <summary>
+        /// 单次的读取，只能读取最多19个数组的长度，所以不再对外公开该方法
+        /// </summary>
+        /// <param name="s7Addresses">西门子的地址对象</param>
+        /// <returns>返回的结果对象信息</returns>
         private OperateResult<byte[]> ReadS7AddressData( S7AddressData[] s7Addresses )
         {
             // 构建指令 -> Build read command

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using HslCommunication.BasicFramework;
 
 namespace HslCommunication.Core.Address
 {
@@ -56,12 +57,6 @@ namespace HslCommunication.Core.Address
                 return Convert.ToInt32( temp[0] ) * 8 + Convert.ToInt32( temp[1] );
             }
         }
-
-        public static S7AddressData[] SplitFrom( S7AddressData s7Address )
-        {
-            return null;
-        }
-
 
         /// <summary>
         /// 从实际的西门子的地址里面
