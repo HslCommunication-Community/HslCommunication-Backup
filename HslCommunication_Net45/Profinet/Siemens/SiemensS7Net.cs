@@ -547,7 +547,7 @@ namespace HslCommunication.Profinet.Siemens
         /// </example>
         public override OperateResult Write( string address, byte[] value )
         {
-            OperateResult<S7AddressData> analysis = S7AddressData.ParseFrom( address, 1 );
+            OperateResult<S7AddressData> analysis = S7AddressData.ParseFrom( address );
             if (!analysis.IsSuccess) return OperateResult.CreateFailedResult<byte[]>( analysis );
             
             int length = value.Length;
@@ -854,7 +854,7 @@ namespace HslCommunication.Profinet.Siemens
         /// <returns>包含结果对象的报文 -> Message containing the result object</returns>
         public static OperateResult<byte[]> BuildBitReadCommand( string address )
         {
-            OperateResult<S7AddressData> analysis = S7AddressData.ParseFrom( address, 1 );
+            OperateResult<S7AddressData> analysis = S7AddressData.ParseFrom( address );
             if (!analysis.IsSuccess) return OperateResult.CreateFailedResult<byte[]>( analysis );
             
             byte[] _PLCCommand = new byte[31];
@@ -984,7 +984,7 @@ namespace HslCommunication.Profinet.Siemens
         /// <returns>包含结果对象的报文 -> Message containing the result object</returns>
         public static OperateResult<byte[]> BuildWriteBitCommand( string address, bool data )
         {
-            OperateResult<S7AddressData> analysis = S7AddressData.ParseFrom( address, 1 );
+            OperateResult<S7AddressData> analysis = S7AddressData.ParseFrom( address );
             if (!analysis.IsSuccess) return OperateResult.CreateFailedResult<byte[]>( analysis );
 
             byte[] buffer = new byte[1];

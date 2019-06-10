@@ -30,30 +30,5 @@ namespace HslCommunication.Core.Address
 
         }
 
-        /// <summary>
-        /// 将数组进行有效的拆分
-        /// </summary>
-        /// <param name="length"></param>
-        /// <param name="everyLength"></param>
-        /// <returns></returns>
-        public static int[] SplitLength( int length, int everyLength )
-        {
-            int start = 0;
-            List<int> result = new List<int>( );
-            while (start < length)
-            {
-                if(length - start > everyLength)
-                {
-                    result.Add( everyLength );
-                    start += everyLength;
-                }
-                else
-                {
-                    result.Add( length - start );
-                    start += length - start;
-                }
-            }
-            return result.ToArray( );
-        }
     }
 }

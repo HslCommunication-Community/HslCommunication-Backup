@@ -168,6 +168,22 @@ namespace HslCommunication_Net45.Test.Documentation.Samples.BasicFramework
             #endregion
         }
 
+        public void SplitIntegerToArrayExample( )
+        {
+            #region SplitIntegerToArrayExample
+
+            int[] b1 = SoftBasic.SplitIntegerToArray( 10, 10 );
+            // b1为 [10]
+
+            int[] b2 = SoftBasic.SplitIntegerToArray( 10, 5 );
+            // b2为 [5,5]
+
+            int[] b3 = SoftBasic.SplitIntegerToArray( 10, 4 );
+            // b3为 [4,4,2]
+
+            #endregion
+        }
+
         public void IsTwoBytesEquelExample1( )
         {
             #region IsTwoBytesEquelExample1

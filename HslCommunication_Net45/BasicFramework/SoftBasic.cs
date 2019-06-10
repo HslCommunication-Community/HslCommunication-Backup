@@ -320,6 +320,33 @@ namespace HslCommunication.BasicFramework
             return result;
         }
 
+
+        /// <summary>
+        /// 将整数进行有效的拆分成数组
+        /// </summary>
+        /// <param name="integer">整数信息</param>
+        /// <param name="everyLength">单个的数组长度</param>
+        /// <returns>拆分后的数组长度</returns>
+        /// <example>
+        /// <code lang="cs" source="HslCommunication_Net45.Test\Documentation\Samples\BasicFramework\SoftBasicExample.cs" region="SplitIntegerToArrayExample" title="SplitIntegerToArray示例" />
+        /// </example>
+        public static int[] SplitIntegerToArray( int integer, int everyLength )
+        {
+            int[] result = new int[(integer / everyLength) + ((integer % everyLength) == 0 ? 0 : 1)];
+            for (int i = 0; i < result.Length; i++)
+            {
+                if (i == result.Length - 1)
+                {
+                    result[i] = (integer % everyLength) == 0 ? everyLength : (integer % everyLength);
+                }
+                else
+                {
+                    result[i] = everyLength;
+                }
+            }
+            return result;
+        }
+
         #endregion
 
         #region Byte Array compare

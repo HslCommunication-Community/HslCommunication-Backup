@@ -96,6 +96,25 @@ namespace HslCommunication_Net45.Test.BasicFramework
         }
 
         [TestMethod]
+        public void SplitIntegerToArrayTest( )
+        {
+            int[] b1 = SoftBasic.SplitIntegerToArray( 10, 10 );
+            Assert.IsTrue( b1.Length == 1 );
+            Assert.IsTrue( b1[0] == 10 );
+
+            int[] b2 = SoftBasic.SplitIntegerToArray( 10, 5 );
+            Assert.IsTrue( b2.Length == 2 );
+            Assert.IsTrue( b2[0] == 5 );
+            Assert.IsTrue( b2[1] == 5 );
+
+            int[] b3 = SoftBasic.SplitIntegerToArray( 10, 4 );
+            Assert.IsTrue( b3.Length == 3 );
+            Assert.IsTrue( b3[0] == 4 );
+            Assert.IsTrue( b3[1] == 4 );
+            Assert.IsTrue( b3[2] == 2 );
+        }
+
+        [TestMethod]
         public void IsTwoBytesEquelTest1( )
         {
             byte[] b1 = new byte[] { 0x13, 0xA6, 0x15, 0x85, 0x5B, 0x05, 0x12, 0x36, 0xF2, 0x27 };

@@ -156,7 +156,7 @@ namespace HslCommunication.Profinet.Siemens
         /// <returns>是否写入成功的结果对象</returns>
         public override OperateResult Write( string address, byte[] value )
         {
-            OperateResult<S7AddressData> analysis = S7AddressData.ParseFrom( address, 1 );
+            OperateResult<S7AddressData> analysis = S7AddressData.ParseFrom( address );
             if (!analysis.IsSuccess) return OperateResult.CreateFailedResult<byte[]>( analysis );
 
             switch (analysis.Content.DataCode)
@@ -208,7 +208,7 @@ namespace HslCommunication.Profinet.Siemens
         /// <returns>带有成功标志的结果对象</returns>
         public OperateResult<bool> ReadBool(string address )
         {
-            OperateResult<S7AddressData> analysis = S7AddressData.ParseFrom( address, 1 );
+            OperateResult<S7AddressData> analysis = S7AddressData.ParseFrom( address );
             if (!analysis.IsSuccess) return OperateResult.CreateFailedResult<bool>( analysis );
 
             switch (analysis.Content.DataCode)
@@ -229,7 +229,7 @@ namespace HslCommunication.Profinet.Siemens
         /// <returns>是否成功的结果</returns>
         public OperateResult Write(string address, bool value )
         {
-            OperateResult<S7AddressData> analysis = S7AddressData.ParseFrom( address, 1 );
+            OperateResult<S7AddressData> analysis = S7AddressData.ParseFrom( address );
             if (!analysis.IsSuccess) return analysis;
 
             switch (analysis.Content.DataCode)

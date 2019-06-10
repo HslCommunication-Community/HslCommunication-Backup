@@ -30,10 +30,10 @@ namespace HslCommunication.Core.Address
             OperateResult<S7AddressData> addressData = ParseFrom( address, length );
             if (addressData.IsSuccess)
             {
-                AddressStart    = addressData.Content.AddressStart;
-                Length          = addressData.Content.Length;
-                DataCode        = addressData.Content.DataCode;
-                DbBlock         = addressData.Content.DbBlock;
+                AddressStart = addressData.Content.AddressStart;
+                Length = addressData.Content.Length;
+                DataCode = addressData.Content.DataCode;
+                DbBlock = addressData.Content.DbBlock;
             }
         }
 
@@ -62,13 +62,25 @@ namespace HslCommunication.Core.Address
             return null;
         }
 
+
         /// <summary>
         /// 从实际的西门子的地址里面
         /// </summary>
         /// <param name="address">西门子的地址数据信息</param>
         /// <param name="length">读取的数据长度</param>
         /// <returns>是否成功的结果对象</returns>
-        public static OperateResult<S7AddressData> ParseFrom(string address, ushort length )
+        public static OperateResult<S7AddressData> ParseFrom( string address )
+        {
+            return ParseFrom( address, 0 );
+        }
+
+        /// <summary>
+        /// 从实际的西门子的地址里面
+        /// </summary>
+        /// <param name="address">西门子的地址数据信息</param>
+        /// <param name="length">读取的数据长度</param>
+        /// <returns>是否成功的结果对象</returns>
+        public static OperateResult<S7AddressData> ParseFrom( string address, ushort length )
         {
             S7AddressData addressData = new S7AddressData( );
             try
