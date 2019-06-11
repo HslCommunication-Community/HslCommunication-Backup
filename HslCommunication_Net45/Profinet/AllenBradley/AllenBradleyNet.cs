@@ -162,20 +162,20 @@ namespace HslCommunication.Profinet.AllenBradley
         #region Override Read
 
         /// <summary>
-        /// 读取数据信息，数据长度为读取的数组长度信息 -> Read data information, data length for read array length information
+        /// Read data information, data length for read array length information
         /// </summary>
-        /// <param name="address">节点的地址格式 -> Address format of the node</param>
-        /// <param name="length">如果是数组，就为数组长度 -> In the case of arrays, the length of the array </param>
-        /// <returns>带有结果对象的结果数据 -> Result data with result object </returns>
+        /// <param name="address">Address format of the node</param>
+        /// <param name="length">In the case of arrays, the length of the array </param>
+        /// <returns>Result data with result object </returns>
         public override OperateResult<byte[]> Read( string address, ushort length )
         {
             return Read( new string[] { address }, new int[] { length } );
         }
 
         /// <summary>
-        /// 批量读取数据信息 -> Bulk read Data information
+        /// Bulk read Data information
         /// </summary>
-        /// <param name="address">节点的名称 -> Name of the node </param>
+        /// <param name="address">Name of the node </param>
         /// <returns>带有结果对象的结果数据 -> Result data with result object </returns>
         public OperateResult<byte[]> Read( string[] address )
         {
@@ -471,9 +471,9 @@ namespace HslCommunication.Profinet.AllenBradley
         /// <summary>
         /// Writes an array of float to the PLC to return whether the write was successful
         /// </summary>
-        /// <param name="address">节点的名称 -> Name of the node </param>
-        /// <param name="values">实际数据 -> Actual data </param>
-        /// <returns>是否写入成功 -> Whether to write successfully</returns>
+        /// <param name="address">Name of the node </param>
+        /// <param name="values">Actual data </param>
+        /// <returns>Whether to write successfully</returns>
         /// <example>
         /// 以下为三菱的连接对象示例，其他的设备读写情况参照下面的代码：
         /// <code lang="cs" source="HslCommunication_Net45.Test\Documentation\Samples\Core\NetworkDeviceBase.cs" region="WriteFloatArray" title="Float类型示例" />
@@ -483,6 +483,35 @@ namespace HslCommunication.Profinet.AllenBradley
             return WriteTag( address, AllenBradleyHelper.CIP_Type_Real, ByteTransform.TransByte( values ), values.Length );
         }
 
+        /// <summary>
+        /// Writes an array of long to the PLC to return whether the write was successful
+        /// </summary>
+        /// <param name="address">Name of the node </param>
+        /// <param name="values">Actual data </param>
+        /// <returns>Whether to write successfully</returns>
+        /// <example>
+        /// 以下为三菱的连接对象示例，其他的设备读写情况参照下面的代码：
+        /// <code lang="cs" source="HslCommunication_Net45.Test\Documentation\Samples\Core\NetworkDeviceBase.cs" region="WriteInt64Array" title="Int64类型示例" />
+        /// </example>
+        public override OperateResult Write( string address, long[] values )
+        {
+            return WriteTag( address, AllenBradleyHelper.CIP_Type_LInt, ByteTransform.TransByte( values ), values.Length );
+        }
+
+        /// <summary>
+        /// Writes an array of ulong to the PLC to return whether the write was successful
+        /// </summary>
+        /// <param name="address">Name of the node </param>
+        /// <param name="values">Actual data </param>
+        /// <returns>Whether to write successfully</returns>
+        /// <example>
+        /// 以下为三菱的连接对象示例，其他的设备读写情况参照下面的代码：
+        /// <code lang="cs" source="HslCommunication_Net45.Test\Documentation\Samples\Core\NetworkDeviceBase.cs" region="WriteUInt64Array" title="UInt64类型示例" />
+        /// </example>
+        public override OperateResult Write( string address, ulong[] values )
+        {
+            return WriteTag( address, AllenBradleyHelper.CIP_Type_LInt, ByteTransform.TransByte( values ), values.Length );
+        }
 
         /// <summary>
         /// 向PLC中写入string数据，返回是否写入成功，该string类型是针对PLC的DINT类型，长度自动扩充到8
