@@ -1,4 +1,5 @@
-﻿using System;
+﻿using HslCommunication.Core.Address;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -575,46 +576,36 @@ namespace HslCommunication.Profinet.Melsec
         }
 
         /// <summary>
-        /// 从地址，长度，是否位读取进行创建读取的MC的核心报文
+        /// 从三菱地址，是否位读取进行创建读取的MC的核心报文
         /// </summary>
-        /// <param name="address">三菱的地址信息，具体格式参照<seealso cref="MelsecMcNet"/> 的注释说明</param>
-        /// <param name="length">读取的长度信息</param>
         /// <param name="isBit">是否进行了位读取操作</param>
-        /// <param name="analysisAddress">对地址分析的委托方法</param>
+        /// <param name="addressData">三菱Mc协议的数据地址</param>
         /// <returns>带有成功标识的报文对象</returns>
-        public static OperateResult<byte[]> BuildReadMcCoreCommand(string address, ushort length, bool isBit, Func<string, OperateResult<MelsecMcDataType, int>> analysisAddress)
+        public static byte[] BuildReadMcCoreCommand( McAddressData addressData, bool isBit)
         {
-            OperateResult<MelsecMcDataType, int> analysis = analysisAddress( address );
-            if (!analysis.IsSuccess) return OperateResult.CreateFailedResult<byte[]>( analysis );
-
             byte[] command = new byte[10];
-            command[0] = 0x01;                                               // 批量读取数据命令
+            command[0] = 0x01;                                                      // 批量读取数据命令
             command[1] = 0x04;
-            command[2] = isBit ? (byte)0x01 : (byte)0x00;                    // 以点为单位还是字为单位成批读取
+            command[2] = isBit ? (byte)0x01 : (byte)0x00;                           // 以点为单位还是字为单位成批读取
             command[3] = 0x00;
-            command[4] = BitConverter.GetBytes( analysis.Content2 )[0];      // 起始地址的地位
-            command[5] = BitConverter.GetBytes( analysis.Content2 )[1];
-            command[6] = BitConverter.GetBytes( analysis.Content2 )[2];
-            command[7] = analysis.Content1.DataCode;                         // 指明读取的数据
-            command[8] = (byte)(length % 256);                               // 软元件的长度
-            command[9] = (byte)(length / 256);
+            command[4] = BitConverter.GetBytes( addressData.AddressStart )[0];      // 起始地址的地位
+            command[5] = BitConverter.GetBytes( addressData.AddressStart )[1];
+            command[6] = BitConverter.GetBytes( addressData.AddressStart )[2];
+            command[7] = addressData.McDataType.DataCode;                           // 指明读取的数据
+            command[8] = (byte)(addressData.Length % 256);                          // 软元件的长度
+            command[9] = (byte)(addressData.Length / 256);
 
-            return OperateResult.CreateSuccessResult( command );
+            return command;
         }
 
         /// <summary>
-        /// 从地址，长度，是否位读取进行创建读取Ascii格式的MC的核心报文
+        /// 从三菱地址，是否位读取进行创建读取Ascii格式的MC的核心报文
         /// </summary>
-        /// <param name="address">三菱的地址信息，具体格式参照<seealso cref="MelsecMcNet"/> 的注释说明</param>
-        /// <param name="length">读取的长度信息</param>
+        /// <param name="addressData">三菱Mc协议的数据地址</param>
         /// <param name="isBit">是否进行了位读取操作</param>
-        /// <param name="analysisAddress">对地址分析的委托方法</param>
         /// <returns>带有成功标识的报文对象</returns>
-        public static OperateResult<byte[]> BuildAsciiReadMcCoreCommand(string address, ushort length, bool isBit, Func<string, OperateResult<MelsecMcDataType, int>> analysisAddress )
+        public static byte[] BuildAsciiReadMcCoreCommand( McAddressData addressData, bool isBit )
         {
-            OperateResult<MelsecMcDataType, int> analysis = analysisAddress( address );
-            if (!analysis.IsSuccess) return OperateResult.CreateFailedResult<byte[]>( analysis );
-
             byte[] command = new byte[20];
             command[ 0] = 0x30;                                                               // 批量读取数据命令
             command[ 1] = 0x34;
@@ -624,63 +615,55 @@ namespace HslCommunication.Profinet.Melsec
             command[ 5] = 0x30;
             command[ 6] = 0x30;
             command[ 7] = isBit ? (byte)0x31 : (byte)0x30;
-            command[ 8] = Encoding.ASCII.GetBytes( analysis.Content1.AsciiCode )[0];          // 软元件类型
-            command[ 9] = Encoding.ASCII.GetBytes( analysis.Content1.AsciiCode )[1];
-            command[10] = MelsecHelper.BuildBytesFromAddress( analysis.Content2, analysis.Content1 )[0];            // 起始地址的地位
-            command[11] = MelsecHelper.BuildBytesFromAddress( analysis.Content2, analysis.Content1 )[1];
-            command[12] = MelsecHelper.BuildBytesFromAddress( analysis.Content2, analysis.Content1 )[2];
-            command[13] = MelsecHelper.BuildBytesFromAddress( analysis.Content2, analysis.Content1 )[3];
-            command[14] = MelsecHelper.BuildBytesFromAddress( analysis.Content2, analysis.Content1 )[4];
-            command[15] = MelsecHelper.BuildBytesFromAddress( analysis.Content2, analysis.Content1 )[5];
-            command[16] = MelsecHelper.BuildBytesFromData( length )[0];                                             // 软元件点数
-            command[17] = MelsecHelper.BuildBytesFromData( length )[1];
-            command[18] = MelsecHelper.BuildBytesFromData( length )[2];
-            command[19] = MelsecHelper.BuildBytesFromData( length )[3];
+            command[ 8] = Encoding.ASCII.GetBytes( addressData.McDataType.AsciiCode )[0];          // 软元件类型
+            command[ 9] = Encoding.ASCII.GetBytes( addressData.McDataType.AsciiCode )[1];
+            command[10] = MelsecHelper.BuildBytesFromAddress( addressData.AddressStart, addressData.McDataType )[0];            // 起始地址的地位
+            command[11] = MelsecHelper.BuildBytesFromAddress( addressData.AddressStart, addressData.McDataType )[1];
+            command[12] = MelsecHelper.BuildBytesFromAddress( addressData.AddressStart, addressData.McDataType )[2];
+            command[13] = MelsecHelper.BuildBytesFromAddress( addressData.AddressStart, addressData.McDataType )[3];
+            command[14] = MelsecHelper.BuildBytesFromAddress( addressData.AddressStart, addressData.McDataType )[4];
+            command[15] = MelsecHelper.BuildBytesFromAddress( addressData.AddressStart, addressData.McDataType )[5];
+            command[16] = MelsecHelper.BuildBytesFromData( addressData.Length )[0];                                             // 软元件点数
+            command[17] = MelsecHelper.BuildBytesFromData( addressData.Length )[1];
+            command[18] = MelsecHelper.BuildBytesFromData( addressData.Length )[2];
+            command[19] = MelsecHelper.BuildBytesFromData( addressData.Length )[3];
 
-            return OperateResult.CreateSuccessResult( command );
+            return command;
         }
 
         /// <summary>
         /// 以字为单位，创建数据写入的核心报文
         /// </summary>
-        /// <param name="address">三菱的地址信息，具体格式参照<seealso cref="MelsecMcNet"/> 的注释说明</param>
+        /// <param name="addressData">三菱Mc协议的数据地址</param>
         /// <param name="value">实际的原始数据信息</param>
-        /// <param name="analysisAddress">对地址分析的委托方法</param>
         /// <returns>带有成功标识的报文对象</returns>
-        public static OperateResult<byte[]> BuildWriteWordCoreCommand(string address, byte[] value, Func<string, OperateResult<MelsecMcDataType, int>> analysisAddress )
+        public static byte[] BuildWriteWordCoreCommand( McAddressData addressData, byte[] value )
         {
-            OperateResult<MelsecMcDataType, int> analysis = analysisAddress( address );
-            if (!analysis.IsSuccess) return OperateResult.CreateFailedResult<byte[]>( analysis );
-
             if (value == null) value = new byte[0];
             byte[] command = new byte[10 + value.Length];
-            command[0] = 0x01;                                                        // 批量读取数据命令
+            command[0] = 0x01;                                                        // 批量写入数据命令
             command[1] = 0x14;
             command[2] = 0x00;                                                        // 以字为单位成批读取
             command[3] = 0x00;
-            command[4] = BitConverter.GetBytes( analysis.Content2 )[0];               // 起始地址的地位
-            command[5] = BitConverter.GetBytes( analysis.Content2 )[1];
-            command[6] = BitConverter.GetBytes( analysis.Content2 )[2];
-            command[7] = analysis.Content1.DataCode;                                  // 指明写入的数据
+            command[4] = BitConverter.GetBytes( addressData.AddressStart )[0];        // 起始地址的地位
+            command[5] = BitConverter.GetBytes( addressData.AddressStart )[1];
+            command[6] = BitConverter.GetBytes( addressData.AddressStart )[2];
+            command[7] = addressData.McDataType.DataCode;                             // 指明写入的数据
             command[8] = (byte)(value.Length / 2 % 256);                              // 软元件长度的地位
             command[9] = (byte)(value.Length / 2 / 256);
             value.CopyTo( command, 10 );
 
-            return OperateResult.CreateSuccessResult( command );
+            return command;
         }
 
         /// <summary>
         /// 以字为单位，创建ASCII数据写入的核心报文
         /// </summary>
-        /// <param name="address">三菱的地址信息，具体格式参照<seealso cref="MelsecMcNet"/> 的注释说明</param>
+        /// <param name="addressData">三菱Mc协议的数据地址</param>
         /// <param name="value">实际的原始数据信息</param>
-        /// <param name="analysisAddress">对地址分析的委托方法</param>
         /// <returns>带有成功标识的报文对象</returns>
-        public static OperateResult<byte[]> BuildAsciiWriteWordCoreCommand(string address, byte[] value, Func<string, OperateResult<MelsecMcDataType, int>> analysisAddress )
+        public static byte[] BuildAsciiWriteWordCoreCommand( McAddressData addressData, byte[] value )
         {
-            OperateResult<MelsecMcDataType, int> analysis = analysisAddress( address );
-            if (!analysis.IsSuccess) return OperateResult.CreateFailedResult<byte[]>( analysis );
-
             if (value == null) value = new byte[0];
             byte[] buffer = new byte[value.Length * 2];
             for (int i = 0; i < value.Length / 2; i++)
@@ -690,43 +673,39 @@ namespace HslCommunication.Profinet.Melsec
             value = buffer;
             
             byte[] command = new byte[20 + value.Length];
-            command[ 0] = 0x31;                                                                              // 批量写入的命令
+            command[ 0] = 0x31;                                                                                          // 批量写入的命令
             command[ 1] = 0x34;
             command[ 2] = 0x30;
             command[ 3] = 0x31;
-            command[ 4] = 0x30;                                                                              // 子命令
+            command[ 4] = 0x30;                                                                                          // 子命令
             command[ 5] = 0x30;
             command[ 6] = 0x30;
             command[ 7] = 0x30;
-            command[ 8] = Encoding.ASCII.GetBytes( analysis.Content1.AsciiCode )[0];                         // 软元件类型
-            command[ 9] = Encoding.ASCII.GetBytes( analysis.Content1.AsciiCode )[1];
-            command[10] = MelsecHelper.BuildBytesFromAddress( analysis.Content2, analysis.Content1 )[0];     // 起始地址的地位
-            command[11] = MelsecHelper.BuildBytesFromAddress( analysis.Content2, analysis.Content1 )[1];
-            command[12] = MelsecHelper.BuildBytesFromAddress( analysis.Content2, analysis.Content1 )[2];
-            command[13] = MelsecHelper.BuildBytesFromAddress( analysis.Content2, analysis.Content1 )[3];
-            command[14] = MelsecHelper.BuildBytesFromAddress( analysis.Content2, analysis.Content1 )[4];
-            command[15] = MelsecHelper.BuildBytesFromAddress( analysis.Content2, analysis.Content1 )[5];
-            command[16] = MelsecHelper.BuildBytesFromData( (ushort)(value.Length / 4) )[0];              // 软元件点数
+            command[ 8] = Encoding.ASCII.GetBytes( addressData.McDataType.AsciiCode )[0];                                // 软元件类型
+            command[ 9] = Encoding.ASCII.GetBytes( addressData.McDataType.AsciiCode )[1];
+            command[10] = MelsecHelper.BuildBytesFromAddress( addressData.AddressStart, addressData.McDataType )[0];     // 起始地址的地位
+            command[11] = MelsecHelper.BuildBytesFromAddress( addressData.AddressStart, addressData.McDataType )[1];
+            command[12] = MelsecHelper.BuildBytesFromAddress( addressData.AddressStart, addressData.McDataType )[2];
+            command[13] = MelsecHelper.BuildBytesFromAddress( addressData.AddressStart, addressData.McDataType )[3];
+            command[14] = MelsecHelper.BuildBytesFromAddress( addressData.AddressStart, addressData.McDataType )[4];
+            command[15] = MelsecHelper.BuildBytesFromAddress( addressData.AddressStart, addressData.McDataType )[5];
+            command[16] = MelsecHelper.BuildBytesFromData( (ushort)(value.Length / 4) )[0];                              // 软元件点数
             command[17] = MelsecHelper.BuildBytesFromData( (ushort)(value.Length / 4) )[1];
             command[18] = MelsecHelper.BuildBytesFromData( (ushort)(value.Length / 4) )[2];
             command[19] = MelsecHelper.BuildBytesFromData( (ushort)(value.Length / 4) )[3];
             value.CopyTo( command, 20 );
 
-            return OperateResult.CreateSuccessResult( command );
+            return command;
         }
 
         /// <summary>
         /// 以位为单位，创建数据写入的核心报文
         /// </summary>
-        /// <param name="address">三菱的地址信息，具体格式参照<seealso cref="MelsecMcNet"/> 的注释说明</param>
+        /// <param name="addressData">三菱Mc协议的数据地址</param>
         /// <param name="value">原始的bool数组数据</param>
-        /// <param name="analysisAddress">对地址分析的委托方法</param>
         /// <returns>带有成功标识的报文对象</returns>
-        public static OperateResult<byte[]> BuildWriteBitCoreCommand( string address, bool[] value, Func<string, OperateResult<MelsecMcDataType, int>> analysisAddress )
+        public static byte[] BuildWriteBitCoreCommand( McAddressData addressData, bool[] value )
         {
-            OperateResult<MelsecMcDataType, int> analysis = analysisAddress( address );
-            if (!analysis.IsSuccess) return OperateResult.CreateFailedResult<byte[]>( analysis );
-
             if (value == null) value = new bool[0];
             byte[] buffer = MelsecHelper.TransBoolArrayToByteData( value );
             byte[] command = new byte[10 + buffer.Length];
@@ -734,56 +713,52 @@ namespace HslCommunication.Profinet.Melsec
             command[1] = 0x14;
             command[2] = 0x01;                                                        // 以位为单位成批写入
             command[3] = 0x00;
-            command[4] = BitConverter.GetBytes( analysis.Content2 )[0];               // 起始地址的地位
-            command[5] = BitConverter.GetBytes( analysis.Content2 )[1];
-            command[6] = BitConverter.GetBytes( analysis.Content2 )[2];
-            command[7] = analysis.Content1.DataCode;                                  // 指明写入的数据
+            command[4] = BitConverter.GetBytes( addressData.AddressStart )[0];        // 起始地址的地位
+            command[5] = BitConverter.GetBytes( addressData.AddressStart )[1];
+            command[6] = BitConverter.GetBytes( addressData.AddressStart )[2];
+            command[7] = addressData.McDataType.DataCode;                             // 指明写入的数据
             command[8] = (byte)(value.Length % 256);                                  // 软元件长度的地位
             command[9] = (byte)(value.Length / 256);
             buffer.CopyTo( command, 10 );
 
-            return OperateResult.CreateSuccessResult( command );
+            return command;
         }
 
         /// <summary>
         /// 以位为单位，创建ASCII数据写入的核心报文
         /// </summary>
-        /// <param name="address">三菱的地址信息，具体格式参照<seealso cref="MelsecMcNet"/> 的注释说明</param>
+        /// <param name="addressData">三菱Mc协议的数据地址</param>
         /// <param name="value">原始的bool数组数据</param>
-        /// <param name="analysisAddress">对地址分析的委托方法</param>
         /// <returns>带有成功标识的报文对象</returns>
-        public static OperateResult<byte[]> BuildAsciiWriteBitCoreCommand( string address, bool[] value, Func<string, OperateResult<MelsecMcDataType, int>> analysisAddress )
+        public static byte[] BuildAsciiWriteBitCoreCommand( McAddressData addressData, bool[] value )
         {
-            OperateResult<MelsecMcDataType, int> analysis = analysisAddress( address );
-            if (!analysis.IsSuccess) return OperateResult.CreateFailedResult<byte[]>( analysis );
-
             if (value == null) value = new bool[0];
             byte[] buffer = value.Select( m => m ? (byte)0x31 : (byte)0x30 ).ToArray( );
             
             byte[] command = new byte[20 + buffer.Length];
-            command[0] = 0x31;                                                                              // 批量写入的命令
-            command[1] = 0x34;
-            command[2] = 0x30;
-            command[3] = 0x31;
-            command[4] = 0x30;                                                                              // 子命令
-            command[5] = 0x30;
-            command[6] = 0x30;
-            command[7] = 0x31;
-            command[8] = Encoding.ASCII.GetBytes( analysis.Content1.AsciiCode )[0];                         // 软元件类型
-            command[9] = Encoding.ASCII.GetBytes( analysis.Content1.AsciiCode )[1];
-            command[10] = MelsecHelper.BuildBytesFromAddress( analysis.Content2, analysis.Content1 )[0];     // 起始地址的地位
-            command[11] = MelsecHelper.BuildBytesFromAddress( analysis.Content2, analysis.Content1 )[1];
-            command[12] = MelsecHelper.BuildBytesFromAddress( analysis.Content2, analysis.Content1 )[2];
-            command[13] = MelsecHelper.BuildBytesFromAddress( analysis.Content2, analysis.Content1 )[3];
-            command[14] = MelsecHelper.BuildBytesFromAddress( analysis.Content2, analysis.Content1 )[4];
-            command[15] = MelsecHelper.BuildBytesFromAddress( analysis.Content2, analysis.Content1 )[5];
+            command[ 0] = 0x31;                                                                              // 批量写入的命令
+            command[ 1] = 0x34;
+            command[ 2] = 0x30;
+            command[ 3] = 0x31;
+            command[ 4] = 0x30;                                                                              // 子命令
+            command[ 5] = 0x30;
+            command[ 6] = 0x30;
+            command[ 7] = 0x31;
+            command[ 8] = Encoding.ASCII.GetBytes( addressData.McDataType.AsciiCode )[0];                         // 软元件类型
+            command[ 9] = Encoding.ASCII.GetBytes( addressData.McDataType.AsciiCode )[1];
+            command[10] = MelsecHelper.BuildBytesFromAddress( addressData.AddressStart, addressData.McDataType )[0];     // 起始地址的地位
+            command[11] = MelsecHelper.BuildBytesFromAddress( addressData.AddressStart, addressData.McDataType )[1];
+            command[12] = MelsecHelper.BuildBytesFromAddress( addressData.AddressStart, addressData.McDataType )[2];
+            command[13] = MelsecHelper.BuildBytesFromAddress( addressData.AddressStart, addressData.McDataType )[3];
+            command[14] = MelsecHelper.BuildBytesFromAddress( addressData.AddressStart, addressData.McDataType )[4];
+            command[15] = MelsecHelper.BuildBytesFromAddress( addressData.AddressStart, addressData.McDataType )[5];
             command[16] = MelsecHelper.BuildBytesFromData( (ushort)(value.Length) )[0];              // 软元件点数
             command[17] = MelsecHelper.BuildBytesFromData( (ushort)(value.Length) )[1];
             command[18] = MelsecHelper.BuildBytesFromData( (ushort)(value.Length) )[2];
             command[19] = MelsecHelper.BuildBytesFromData( (ushort)(value.Length) )[3];
             buffer.CopyTo( command, 20 );
 
-            return OperateResult.CreateSuccessResult( command );
+            return command;
         }
 
         #endregion

@@ -52,6 +52,7 @@
     <Compile Include="..\HslCommunication_Net45\BasicFramework\SoftZipped.cs" Link="BasicFramework\SoftZipped.cs" />
     <Compile Include="..\HslCommunication_Net45\Core\Address\DeviceAddressBase.cs" Link="Core\Address\DeviceAddressBase.cs" />
     <Compile Include="..\HslCommunication_Net45\Core\Address\DeviceAddressDataBase.cs" Link="Core\Address\DeviceAddressDataBase.cs" />
+    <Compile Include="..\HslCommunication_Net45\Core\Address\MelsecMcAddressData.cs" Link="Core\Address\MelsecMcAddressData.cs" />
     <Compile Include="..\HslCommunication_Net45\Core\Address\ModbusAddress.cs" Link="Core\Address\ModbusAddress.cs" />
     <Compile Include="..\HslCommunication_Net45\Core\Address\S7AddressData.cs" Link="Core\Address\S7AddressData.cs" />
     <Compile Include="..\HslCommunication_Net45\Core\IMessage\AlienMessage.cs" Link="Core\IMessage\AlienMessage.cs" />

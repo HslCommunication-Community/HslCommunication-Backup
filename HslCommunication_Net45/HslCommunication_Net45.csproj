@@ -178,6 +178,7 @@
     </Compile>
     <Compile Include="Core\Address\DeviceAddressBase.cs" />
     <Compile Include="Core\Address\DeviceAddressDataBase.cs" />
+    <Compile Include="Core\Address\MelsecMcAddressData.cs" />
     <Compile Include="Core\Address\S7AddressData.cs" />
     <Compile Include="Core\IMessage\AlienMessage.cs" />
     <Compile Include="Core\IMessage\AllenBradleyMessage.cs" />

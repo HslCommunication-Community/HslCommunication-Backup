@@ -246,6 +246,9 @@
     <Compile Include="..\HslCommunication_Net45\Core\Address\DeviceAddressDataBase.cs">
       <Link>Core\Address\DeviceAddressDataBase.cs</Link>
     </Compile>
+    <Compile Include="..\HslCommunication_Net45\Core\Address\MelsecMcAddressData.cs">
+      <Link>Core\Address\MelsecMcAddressData.cs</Link>
+    </Compile>
     <Compile Include="..\HslCommunication_Net45\Core\Address\ModbusAddress.cs">
       <Link>Core\Address\ModbusAddress.cs</Link>
     </Compile>
