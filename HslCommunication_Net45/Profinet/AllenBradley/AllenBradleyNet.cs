@@ -142,6 +142,22 @@ namespace HslCommunication.Profinet.AllenBradley
         }
 
         /// <summary>
+        /// Build a read segment command bytes
+        /// </summary>
+        /// <param name="address">The address of the tag name </param>
+        /// <param name="startIndex">start index of the data in array</param>
+        /// <param name="length">array length</param>
+        /// <returns>Message information that contains the result object </returns>
+        public byte[] BuildReadSegmentCommand(string address, int startIndex, int length )
+        {
+            List<byte[]> cips = new List<byte[]>( );
+            cips.Add( AllenBradleyHelper.PackRequestReadSegment( address, startIndex, length ) );
+            byte[] commandSpecificData = AllenBradleyHelper.PackCommandSpecificData( Slot, cips.ToArray( ) );
+
+            return AllenBradleyHelper.PackRequestHeader( 0x6F, SessionHandle, commandSpecificData );
+        }
+
+        /// <summary>
         /// Create a written message instruction
         /// </summary>
         /// <param name="address">The address of the tag name </param>
@@ -214,6 +230,48 @@ namespace HslCommunication.Profinet.AllenBradley
             return AllenBradleyHelper.ExtractActualData( read.Content, true );
         }
 
+        /// <summary>
+        /// Read Segment Data Array form plc, use address tag name
+        /// </summary>
+        /// <param name="address"></param>
+        /// <param name="startIndex"></param>
+        /// <param name="length"></param>
+        /// <returns></returns>
+        public OperateResult<byte[]> ReadSegment( string address, int startIndex, int length )
+        {
+            return ReadByCips( BuildReadSegmentCommand( address, startIndex, length ) );
+        }
+
+
+        private OperateResult<byte[]> ReadByCips( params byte[][] cips )
+        {
+            OperateResult<byte[]> read = ReadCipFromServer( cips );
+            if (!read.IsSuccess) return read;
+
+            // 提取数据 -> Extracting data
+            return AllenBradleyHelper.ExtractActualData( read.Content, true );
+        }
+
+        /// <summary>
+        /// 使用CIP报文和服务器进行核心的数据交换
+        /// </summary>
+        /// <param name="cips"></param>
+        /// <returns></returns>
+        public OperateResult<byte[]> ReadCipFromServer( params byte[][] cips )
+        {
+            byte[] commandSpecificData = AllenBradleyHelper.PackCommandSpecificData( Slot, cips );
+            byte[] command = AllenBradleyHelper.PackRequestHeader( 0x6F, SessionHandle, commandSpecificData );
+
+            // 核心交互 -> Core Interactions
+            OperateResult<byte[]> read = ReadFromCoreServer( command );
+            if (!read.IsSuccess) return read;
+
+            // 检查反馈 -> Check Feedback
+            OperateResult check = CheckResponse( read.Content );
+            if (!check.IsSuccess) return OperateResult.CreateFailedResult<byte[]>( check );
+
+            return OperateResult.CreateSuccessResult( read.Content );
+        }
 
         /// <summary>
         /// 读取单个的bool数据信息 -> Read a single BOOL data information

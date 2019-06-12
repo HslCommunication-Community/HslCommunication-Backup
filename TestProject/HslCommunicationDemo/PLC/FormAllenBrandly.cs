@@ -107,7 +107,7 @@ namespace HslCommunicationDemo
                 groupBox1.Text = "Single Data Read test";
                 groupBox2.Text = "Single Data Write test";
                 groupBox3.Text = "Bulk Read test";
-                groupBox4.Text = "Message reading test, hex string needs to be filled in";
+                groupBox4.Text = "CIP reading test, hex string needs to be filled in";
 
                 button23.Text = "w-byte";
                 label22.Text = "plc tag name";
@@ -378,7 +378,7 @@ namespace HslCommunicationDemo
 
         private void button26_Click( object sender, EventArgs e )
         {
-            OperateResult<byte[]> read = allenBradleyNet.ReadFromCoreServer( HslCommunication.BasicFramework.SoftBasic.HexStringToBytes( textBox13.Text ) );
+            OperateResult<byte[]> read = allenBradleyNet.ReadCipFromServer( HslCommunication.BasicFramework.SoftBasic.HexStringToBytes( textBox13.Text ) );
             if (read.IsSuccess)
             {
                 textBox11.Text = "Result：" + HslCommunication.BasicFramework.SoftBasic.ByteToHexString( read.Content );

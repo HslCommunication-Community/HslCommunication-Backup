@@ -40,6 +40,7 @@
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.panel2 = new System.Windows.Forms.Panel();
+            this.userControlCurve1 = new HslCommunicationDemo.DemoControl.UserControlCurve();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.textBox11 = new System.Windows.Forms.TextBox();
             this.label14 = new System.Windows.Forms.Label();
@@ -94,7 +95,6 @@
             this.label4 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.label20 = new System.Windows.Forms.Label();
-            this.userControlCurve1 = new HslCommunicationDemo.DemoControl.UserControlCurve();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.groupBox4.SuspendLayout();
@@ -230,6 +230,15 @@
             this.panel2.Size = new System.Drawing.Size(978, 537);
             this.panel2.TabIndex = 1;
             // 
+            // userControlCurve1
+            // 
+            this.userControlCurve1.AddressExample = "A1";
+            this.userControlCurve1.Location = new System.Drawing.Point(545, 242);
+            this.userControlCurve1.Name = "userControlCurve1";
+            this.userControlCurve1.ReadWriteNet = null;
+            this.userControlCurve1.Size = new System.Drawing.Size(420, 279);
+            this.userControlCurve1.TabIndex = 4;
+            // 
             // groupBox4
             // 
             this.groupBox4.Controls.Add(this.textBox11);
@@ -242,7 +251,7 @@
             this.groupBox4.Size = new System.Drawing.Size(518, 118);
             this.groupBox4.TabIndex = 3;
             this.groupBox4.TabStop = false;
-            this.groupBox4.Text = "报文读取测试，此处需要填入完整的16进制报文字符串";
+            this.groupBox4.Text = "CIP报文读取测试，此处需要填入完整的16进制报文字符串";
             // 
             // textBox11
             // 
@@ -781,15 +790,6 @@
             this.label20.Size = new System.Drawing.Size(108, 17);
             this.label20.TabIndex = 6;
             this.label20.Text = "作者：Richard Hu";
-            // 
-            // userControlCurve1
-            // 
-            this.userControlCurve1.AddressExample = "A1";
-            this.userControlCurve1.Location = new System.Drawing.Point(545, 242);
-            this.userControlCurve1.Name = "userControlCurve1";
-            this.userControlCurve1.ReadWriteNet = null;
-            this.userControlCurve1.Size = new System.Drawing.Size(420, 279);
-            this.userControlCurve1.TabIndex = 4;
             // 
             // FormAllenBrandly
             // 
