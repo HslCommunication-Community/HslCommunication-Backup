@@ -21,6 +21,7 @@ namespace HslCommunicationDemo
 
         private void FormImage_Load( object sender, EventArgs e )
         {
+            label1.BackColor = FormLoad.ThemeColor;
             pictureBox1.Image = bitmap;
         }
     }

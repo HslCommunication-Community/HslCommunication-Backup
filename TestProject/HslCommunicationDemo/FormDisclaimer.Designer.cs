@@ -45,12 +45,14 @@
             // 
             // label1
             // 
-            this.label1.Location = new System.Drawing.Point(29, 22);
+            this.label1.Dock = System.Windows.Forms.DockStyle.Top;
+            this.label1.Location = new System.Drawing.Point(0, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(866, 60);
+            this.label1.Size = new System.Drawing.Size(907, 50);
             this.label1.TabIndex = 0;
             this.label1.Text = "本程序在开启时，会进行版本更新检测，服务器会搜集客户端的ip地址信息，仅用于统计分析各个城市的Demo使用情况，仅仅公开统计信息，如果您不同意该声明，请立即关闭程" +
     "序，并不再运行，一旦使用则视为同意上述的声明，谢谢合作。";
+            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // dataGridView1
             // 

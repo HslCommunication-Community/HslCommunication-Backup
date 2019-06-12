@@ -24,6 +24,7 @@ namespace HslCommunicationDemo
 
         private void FormSeqCreate_Load( object sender, EventArgs e )
         {
+            label1.BackColor = FormLoad.ThemeColor;
             softNumericalOrder = new HslCommunication.BasicFramework.SoftNumericalOrder(
                    "ABC",              // "ABC201711090000001" 中的ABC前缀，代码中仍然可以更改ABC
                    "yyyyMMdd",         // "ABC201711090000001" 中的20171109，可以格式化时间，也可以为""，也可以设置为"yyyyMMddHHmmss";

@@ -25,17 +25,7 @@ namespace HslCommunicationDemo
             textBox15.Text = Guid.Empty.ToString( );
             panel2.Enabled = false;
 
-
-            if (!Program.ShowAuthorInfomation)
-            {
-                label2.Visible = false;
-                linkLabel1.Visible = false;
-                label20.Visible = false;
-            }
         }
-
-
-
 
 
         private NetPushClient pushClient;
@@ -91,17 +81,6 @@ namespace HslCommunicationDemo
             button2.Enabled = false;
         }
 
-        private void linkLabel1_LinkClicked( object sender, LinkLabelLinkClickedEventArgs e )
-        {
-            try
-            {
-                System.Diagnostics.Process.Start( linkLabel1.Text );
-            }
-            catch (Exception ex)
-            {
-                HslCommunication.BasicFramework.SoftBasic.ShowExceptionMessage( ex );
-            }
-        }
     }
 
 

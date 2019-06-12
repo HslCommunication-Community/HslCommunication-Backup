@@ -36,18 +36,18 @@
             // 
             // label1
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(12, 20);
+            this.label1.Location = new System.Drawing.Point(0, -1);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(80, 17);
+            this.label1.Size = new System.Drawing.Size(536, 27);
             this.label1.TabIndex = 0;
             this.label1.Text = "作者：胡少林";
+            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // label2
             // 
-            this.label2.Location = new System.Drawing.Point(12, 46);
+            this.label2.Location = new System.Drawing.Point(3, 26);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(510, 200);
+            this.label2.Size = new System.Drawing.Size(519, 220);
             this.label2.TabIndex = 1;
             this.label2.Text = "        2013年毕业于中国计量大学自动化专业，学历本科";
             // 

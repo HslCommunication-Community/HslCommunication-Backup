@@ -13,6 +13,8 @@ namespace HslCommunicationDemo
 {
     public partial class FormLoad : Form
     {
+        public static Color ThemeColor = Color.AliceBlue;
+
         public FormLoad( )
         {
             InitializeComponent( );
@@ -280,6 +282,7 @@ namespace HslCommunicationDemo
 
         private void FormLoad_Load( object sender, EventArgs e )
         {
+            ThemeColor = menuStrip1.BackColor;
             verisonToolStripMenuItem.Text = "Version: " + HslCommunication.BasicFramework.SoftBasic.FrameworkVersion.ToString( );
 
             if (Settings1.Default.language == 1)
