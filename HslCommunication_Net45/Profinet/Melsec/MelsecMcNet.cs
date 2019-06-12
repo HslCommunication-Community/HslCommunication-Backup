@@ -6,6 +6,7 @@ using HslCommunication.BasicFramework;
 using HslCommunication.Core;
 using HslCommunication.Core.IMessage;
 using HslCommunication.Core.Net;
+using HslCommunication.Core.Address;
 
 namespace HslCommunication.Profinet.Melsec
 {
@@ -289,10 +290,11 @@ namespace HslCommunication.Profinet.Melsec
         /// 分析地址的方法，允许派生类里进行重写操作
         /// </summary>
         /// <param name="address">地址信息</param>
+        /// <param name="length">数据长度</param>
         /// <returns>解析后的数据信息</returns>
-        protected virtual OperateResult<MelsecMcDataType, int> McAnalysisAddress( string address )
+        protected virtual OperateResult<McAddressData> McAnalysisAddress( string address, ushort length )
         {
-            return MelsecHelper.McAnalysisAddress( address );
+            return McAddressData.ParseMelsecFrom( address, length );
         }
 
         #endregion
@@ -317,11 +319,36 @@ namespace HslCommunication.Profinet.Melsec
         public override OperateResult<byte[]> Read( string address, ushort length )
         {
             // 分析地址
-            OperateResult<byte[]> coreResult = MelsecHelper.BuildReadMcCoreCommand( address, length, false, McAnalysisAddress );
-            if (!coreResult.IsSuccess) return coreResult;
-            
+            OperateResult<McAddressData> addressResult = McAnalysisAddress( address, length );
+            if (!addressResult.IsSuccess) return OperateResult.CreateFailedResult<byte[]>( addressResult );
+
+            List<byte> bytesContent = new List<byte>( );
+            ushort alreadyFinished = 0;
+            while (alreadyFinished < length)
+            {
+                ushort readLength = (ushort)Math.Min( length - alreadyFinished, 900 );
+                addressResult.Content.Length = readLength;
+                OperateResult<byte[]> read = ReadAddressData( addressResult.Content );
+                if (!read.IsSuccess) return read;
+
+                bytesContent.AddRange( read.Content );
+                alreadyFinished += readLength;
+
+                // 字的话就是正常的便宜位置，如果是位的话，就转到位的数据
+                if (addressResult.Content.McDataType.DataType == 0)
+                    addressResult.Content.AddressStart += readLength;
+                else
+                    addressResult.Content.AddressStart += readLength * 16;
+            }
+            return OperateResult.CreateSuccessResult( bytesContent.ToArray( ) );
+        }
+
+        private OperateResult<byte[]> ReadAddressData( McAddressData addressData )
+        {
+            byte[] coreResult = MelsecHelper.BuildReadMcCoreCommand( addressData, false );
+
             // 核心交互
-            var read = ReadFromCoreServer( PackMcCommand( coreResult.Content, this.NetworkNumber, this.NetworkStationNumber ) );
+            var read = ReadFromCoreServer( PackMcCommand( coreResult, this.NetworkNumber, this.NetworkStationNumber ) );
             if (!read.IsSuccess) return OperateResult.CreateFailedResult<byte[]>( read );
 
             // 错误代码验证
@@ -347,11 +374,19 @@ namespace HslCommunication.Profinet.Melsec
         public override OperateResult Write( string address, byte[] value )
         {
             // 分析地址
-            OperateResult<byte[]> coreResult = MelsecHelper.BuildWriteWordCoreCommand( address, value, McAnalysisAddress );
-            if (!coreResult.IsSuccess) return coreResult;
+            OperateResult<McAddressData> addressResult = McAnalysisAddress( address, 0 );
+            if (!addressResult.IsSuccess) return OperateResult.CreateFailedResult<byte[]>( addressResult );
+
+            return WriteAddressData( addressResult.Content, value );
+        }
+
+        private OperateResult WriteAddressData( McAddressData addressData, byte[] value )
+        {
+            // 创建核心报文
+            byte[] coreResult = MelsecHelper.BuildWriteWordCoreCommand( addressData, value );
 
             // 核心交互
-            OperateResult<byte[]> read = ReadFromCoreServer( PackMcCommand( coreResult.Content, NetworkNumber, NetworkStationNumber ) );
+            OperateResult<byte[]> read = ReadFromCoreServer( PackMcCommand( coreResult, NetworkNumber, NetworkStationNumber ) );
             if (!read.IsSuccess) return read;
 
             // 错误码校验
@@ -380,12 +415,15 @@ namespace HslCommunication.Profinet.Melsec
         /// </example>
         public OperateResult<bool[]> ReadBool( string address, ushort length )
         {
+            // 分析地址
+            OperateResult<McAddressData> addressResult = McAnalysisAddress( address, length );
+            if (!addressResult.IsSuccess) return OperateResult.CreateFailedResult<bool[]>( addressResult );
+
             // 获取指令
-            OperateResult<byte[]> coreResult = MelsecHelper.BuildReadMcCoreCommand( address, length, true, McAnalysisAddress );
-            if (!coreResult.IsSuccess) return OperateResult.CreateFailedResult<bool[]>( coreResult );
+            byte[] coreResult = MelsecHelper.BuildReadMcCoreCommand( addressResult.Content, true );
 
             // 核心交互
-            var read = ReadFromCoreServer( PackMcCommand( coreResult.Content, NetworkNumber, NetworkStationNumber ) );
+            var read = ReadFromCoreServer( PackMcCommand( coreResult, NetworkNumber, NetworkStationNumber ) );
             if (!read.IsSuccess) return OperateResult.CreateFailedResult<bool[]>( read );
 
             // 错误代码验证
@@ -440,11 +478,14 @@ namespace HslCommunication.Profinet.Melsec
         /// <returns>返回写入结果</returns>
         public OperateResult Write( string address, bool[] values )
         {
-            OperateResult<byte[]> coreResult = MelsecHelper.BuildWriteBitCoreCommand( address, values, McAnalysisAddress );
-            if (!coreResult.IsSuccess) return coreResult;
+            // 分析地址
+            OperateResult<McAddressData> addressResult = McAnalysisAddress( address, 0 );
+            if (!addressResult.IsSuccess) return addressResult;
+
+            byte[] coreResult = MelsecHelper.BuildWriteBitCoreCommand( addressResult.Content, values );
 
             // 核心交互
-            OperateResult<byte[]> read = ReadFromCoreServer( PackMcCommand( coreResult.Content, NetworkNumber, NetworkStationNumber ) );
+            OperateResult<byte[]> read = ReadFromCoreServer( PackMcCommand( coreResult, NetworkNumber, NetworkStationNumber ) );
             if (!read.IsSuccess) return read;
 
             // 错误码校验

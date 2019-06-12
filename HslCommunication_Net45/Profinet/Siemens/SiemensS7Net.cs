@@ -321,6 +321,7 @@ namespace HslCommunication.Profinet.Siemens
             while (alreadyFinished < length)
             {
                 ushort readLength = (ushort)Math.Min( length - alreadyFinished, 200 );
+                addressResult.Content.Length = readLength;
                 OperateResult<byte[]> read = Read( new S7AddressData[] { addressResult.Content } );
                 if (!read.IsSuccess) return read;
 

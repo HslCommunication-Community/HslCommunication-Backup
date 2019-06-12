@@ -150,22 +150,35 @@ namespace HslCommunication_Net45.Test.Profinet.Siemens
             {
                 shortValues[i] = (short)(i * 5 - 3);
             }
-            Assert.IsTrue( plc.Write( "M0", shortValues ).IsSuccess );
+            Assert.IsTrue( plc.Write( "M300", shortValues ).IsSuccess );
 
             string[] addresses = new string[50];
             ushort[] lengths = new ushort[50];
 
             for (int i = 0; i < 50; i++)
             {
-                addresses[i] = "M" + i * 2;
+                addresses[i] = "M" + (i * 2 + 300);
                 lengths[i] = 2;
             }
             OperateResult<byte[]> readBytes = plc.Read( addresses, lengths );
+
             Assert.IsTrue( readBytes.IsSuccess );
+            Assert.IsTrue( readBytes.Content.Length == 100 );
             for (int i = 0; i < 50; i++)
             {
-                Assert.IsTrue( shortValues[i] == plc.ByteTransform.TransInt16( readBytes.Content, i * 2 ) );
+                short shortTmp1 = plc.ByteTransform.TransInt16( readBytes.Content, i * 2 );
+                Assert.IsTrue( shortValues[i] == shortTmp1 );
             }
+
+            // 大数据写入测试
+            Assert.IsTrue( plc.Write( "M100", (short)12345 ).IsSuccess );
+            Assert.IsTrue( plc.Write( "M500", (short)12345 ).IsSuccess );
+            Assert.IsTrue( plc.Write( "M800", (short)12345 ).IsSuccess );
+            OperateResult<short[]> readBatchResult = plc.ReadInt16( "M100", 351 );
+            Assert.IsTrue( readBatchResult.IsSuccess );
+            Assert.IsTrue( readBatchResult.Content[0] == 12345 );
+            Assert.IsTrue( readBatchResult.Content[200] == 12345 );
+            Assert.IsTrue( readBatchResult.Content[350] == 12345 );
 
             plc.ConnectClose( );
         }

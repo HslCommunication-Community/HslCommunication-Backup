@@ -7,6 +7,7 @@ using HslCommunication.BasicFramework;
 using HslCommunication.Core;
 using HslCommunication.Core.Net;
 using HslCommunication.Core.IMessage;
+using HslCommunication.Core.Address;
 
 namespace HslCommunication.Profinet.Melsec
 {
@@ -46,31 +47,32 @@ namespace HslCommunication.Profinet.Melsec
         /// <returns>byte数组值</returns>
         public override OperateResult<byte[]> Read( string address, ushort length )
         {
-            OperateResult<MelsecMcDataType, int> analysis = MelsecHelper.McAnalysisAddress( address );
+            // 分析地址
+            OperateResult<McAddressData> analysis = McAddressData.ParseMelsecFrom( address, length );
             if (!analysis.IsSuccess) return OperateResult.CreateFailedResult<byte[]>( analysis );
 
-            if(analysis.Content1.DataCode == MelsecMcDataType.M.DataCode)
+            if(analysis.Content.McDataType.DataCode == MelsecMcDataType.M.DataCode)
             {
-                bool[] buffer = mBuffer.GetBytes( analysis.Content2, length * 16 ).Select( m => m != 0x00 ).ToArray( );
+                bool[] buffer = mBuffer.GetBytes( analysis.Content.AddressStart, length * 16 ).Select( m => m != 0x00 ).ToArray( );
                 return OperateResult.CreateSuccessResult( SoftBasic.BoolArrayToByte( buffer ) );
             }
-            else if(analysis.Content1.DataCode == MelsecMcDataType.X.DataCode)
+            else if(analysis.Content.McDataType.DataCode == MelsecMcDataType.X.DataCode)
             {
-                bool[] buffer = xBuffer.GetBytes( analysis.Content2, length * 16 ).Select( m => m != 0x00 ).ToArray( );
+                bool[] buffer = xBuffer.GetBytes( analysis.Content.AddressStart, length * 16 ).Select( m => m != 0x00 ).ToArray( );
                 return OperateResult.CreateSuccessResult( SoftBasic.BoolArrayToByte( buffer ) );
             }
-            else if (analysis.Content1.DataCode == MelsecMcDataType.Y.DataCode)
+            else if (analysis.Content.McDataType.DataCode == MelsecMcDataType.Y.DataCode)
             {
-                bool[] buffer = yBuffer.GetBytes( analysis.Content2, length * 16 ).Select( m => m != 0x00 ).ToArray( );
+                bool[] buffer = yBuffer.GetBytes( analysis.Content.AddressStart, length * 16 ).Select( m => m != 0x00 ).ToArray( );
                 return OperateResult.CreateSuccessResult( SoftBasic.BoolArrayToByte( buffer ) );
             }
-            else if (analysis.Content1.DataCode == MelsecMcDataType.D.DataCode)
+            else if (analysis.Content.McDataType.DataCode == MelsecMcDataType.D.DataCode)
             {
-                return OperateResult.CreateSuccessResult( dBuffer.GetBytes( analysis.Content2 * 2, length * 2 ) );
+                return OperateResult.CreateSuccessResult( dBuffer.GetBytes( analysis.Content.AddressStart * 2, length * 2 ) );
             }
-            else if (analysis.Content1.DataCode == MelsecMcDataType.W.DataCode)
+            else if (analysis.Content.McDataType.DataCode == MelsecMcDataType.W.DataCode)
             {
-                return OperateResult.CreateSuccessResult( wBuffer.GetBytes( analysis.Content2 * 2, length * 2 ) );
+                return OperateResult.CreateSuccessResult( wBuffer.GetBytes( analysis.Content.AddressStart * 2, length * 2 ) );
             }
             else
             {
@@ -86,35 +88,36 @@ namespace HslCommunication.Profinet.Melsec
         /// <returns>是否写入成功的结果对象</returns>
         public override OperateResult Write( string address, byte[] value )
         {
-            OperateResult<MelsecMcDataType, int> analysis = MelsecHelper.McAnalysisAddress( address );
+            // 分析地址
+            OperateResult<McAddressData> analysis = McAddressData.ParseMelsecFrom( address, 0 );
             if (!analysis.IsSuccess) return OperateResult.CreateFailedResult<byte[]>( analysis );
 
-            if (analysis.Content1.DataCode == MelsecMcDataType.M.DataCode)
+            if (analysis.Content.McDataType.DataCode == MelsecMcDataType.M.DataCode)
             {
                 byte[] buffer = SoftBasic.ByteToBoolArray( value ).Select( m => m ? (byte)1 : (byte)0 ).ToArray( );
-                mBuffer.SetBytes( buffer, analysis.Content2 );
+                mBuffer.SetBytes( buffer, analysis.Content.AddressStart );
                 return OperateResult.CreateSuccessResult( );
             }
-            else if (analysis.Content1.DataCode == MelsecMcDataType.X.DataCode)
+            else if (analysis.Content.McDataType.DataCode == MelsecMcDataType.X.DataCode)
             {
                 byte[] buffer = SoftBasic.ByteToBoolArray( value ).Select( m => m ? (byte)1 : (byte)0 ).ToArray( );
-                xBuffer.SetBytes( buffer, analysis.Content2 );
+                xBuffer.SetBytes( buffer, analysis.Content.AddressStart );
                 return OperateResult.CreateSuccessResult( );
             }
-            else if (analysis.Content1.DataCode == MelsecMcDataType.Y.DataCode)
+            else if (analysis.Content.McDataType.DataCode == MelsecMcDataType.Y.DataCode)
             {
                 byte[] buffer = SoftBasic.ByteToBoolArray( value ).Select( m => m ? (byte)1 : (byte)0 ).ToArray( );
-                yBuffer.SetBytes( buffer, analysis.Content2 );
+                yBuffer.SetBytes( buffer, analysis.Content.AddressStart );
                 return OperateResult.CreateSuccessResult( );
             }
-            else if (analysis.Content1.DataCode == MelsecMcDataType.D.DataCode)
+            else if (analysis.Content.McDataType.DataCode == MelsecMcDataType.D.DataCode)
             {
-                dBuffer.SetBytes( value, analysis.Content2 * 2 );
+                dBuffer.SetBytes( value, analysis.Content.AddressStart * 2 );
                 return OperateResult.CreateSuccessResult( );
             }
-            else if (analysis.Content1.DataCode == MelsecMcDataType.W.DataCode)
+            else if (analysis.Content.McDataType.DataCode == MelsecMcDataType.W.DataCode)
             {
-                wBuffer.SetBytes( value, analysis.Content2 * 2 );
+                wBuffer.SetBytes( value, analysis.Content.AddressStart * 2 );
                 return OperateResult.CreateSuccessResult( );
             }
             else
@@ -148,22 +151,23 @@ namespace HslCommunication.Profinet.Melsec
         /// <returns>带有成功标志的结果对象</returns>
         public OperateResult<bool[]> ReadBool( string address, ushort length )
         {
-            OperateResult<MelsecMcDataType, int> analysis = MelsecHelper.McAnalysisAddress( address );
+            // 分析地址
+            OperateResult<McAddressData> analysis = McAddressData.ParseMelsecFrom( address, 0 );
             if (!analysis.IsSuccess) return OperateResult.CreateFailedResult<bool[]>( analysis );
 
-            if (analysis.Content1.DataType == 0) return new OperateResult<bool[]>( StringResources.Language.MelsecCurrentTypeNotSupportedWordOperate );
+            if (analysis.Content.McDataType.DataType == 0) return new OperateResult<bool[]>( StringResources.Language.MelsecCurrentTypeNotSupportedWordOperate );
 
-            if (analysis.Content1.DataCode == MelsecMcDataType.M.DataCode)
+            if (analysis.Content.McDataType.DataCode == MelsecMcDataType.M.DataCode)
             {
-                return OperateResult.CreateSuccessResult( mBuffer.GetBytes( analysis.Content2, length ).Select( m => m != 0x00 ).ToArray( ) );
+                return OperateResult.CreateSuccessResult( mBuffer.GetBytes( analysis.Content.AddressStart, length ).Select( m => m != 0x00 ).ToArray( ) );
             }
-            else if (analysis.Content1.DataCode == MelsecMcDataType.X.DataCode)
+            else if (analysis.Content.McDataType.DataCode == MelsecMcDataType.X.DataCode)
             {
-                return OperateResult.CreateSuccessResult( xBuffer.GetBytes( analysis.Content2, length ).Select( m => m != 0x00 ).ToArray( ) );
+                return OperateResult.CreateSuccessResult( xBuffer.GetBytes( analysis.Content.AddressStart, length ).Select( m => m != 0x00 ).ToArray( ) );
             }
-            else if (analysis.Content1.DataCode == MelsecMcDataType.Y.DataCode)
+            else if (analysis.Content.McDataType.DataCode == MelsecMcDataType.Y.DataCode)
             {
-                return OperateResult.CreateSuccessResult( yBuffer.GetBytes( analysis.Content2, length ).Select( m => m != 0x00 ).ToArray( ) );
+                return OperateResult.CreateSuccessResult( yBuffer.GetBytes( analysis.Content.AddressStart, length ).Select( m => m != 0x00 ).ToArray( ) );
             }
             else
             {
@@ -190,24 +194,25 @@ namespace HslCommunication.Profinet.Melsec
         /// <returns>是否成功的结果</returns>
         public OperateResult Write( string address, bool[] value )
         {
-            OperateResult<MelsecMcDataType, int> analysis = MelsecHelper.McAnalysisAddress( address );
+            // 分析地址
+            OperateResult<McAddressData> analysis = McAddressData.ParseMelsecFrom( address, 0 );
             if (!analysis.IsSuccess) return OperateResult.CreateFailedResult<bool[]>( analysis );
 
-            if (analysis.Content1.DataType == 0) return new OperateResult<bool[]>( StringResources.Language.MelsecCurrentTypeNotSupportedWordOperate );
+            if (analysis.Content.McDataType.DataType == 0) return new OperateResult<bool[]>( StringResources.Language.MelsecCurrentTypeNotSupportedWordOperate );
 
-            if (analysis.Content1.DataCode == MelsecMcDataType.M.DataCode)
+            if (analysis.Content.McDataType.DataCode == MelsecMcDataType.M.DataCode)
             {
-                mBuffer.SetBytes( value.Select( m => m ? (byte)1 : (byte)0 ).ToArray( ), analysis.Content2 );
+                mBuffer.SetBytes( value.Select( m => m ? (byte)1 : (byte)0 ).ToArray( ), analysis.Content.AddressStart );
                 return OperateResult.CreateSuccessResult( );
             }
-            else if (analysis.Content1.DataCode == MelsecMcDataType.X.DataCode)
+            else if (analysis.Content.McDataType.DataCode == MelsecMcDataType.X.DataCode)
             {
-                xBuffer.SetBytes( value.Select( m => m ? (byte)1 : (byte)0 ).ToArray( ), analysis.Content2 );
+                xBuffer.SetBytes( value.Select( m => m ? (byte)1 : (byte)0 ).ToArray( ), analysis.Content.AddressStart );
                 return OperateResult.CreateSuccessResult( );
             }
-            else if (analysis.Content1.DataCode == MelsecMcDataType.Y.DataCode)
+            else if (analysis.Content.McDataType.DataCode == MelsecMcDataType.Y.DataCode)
             {
-                yBuffer.SetBytes( value.Select( m => m ? (byte)1 : (byte)0 ).ToArray( ), analysis.Content2 );
+                yBuffer.SetBytes( value.Select( m => m ? (byte)1 : (byte)0 ).ToArray( ), analysis.Content.AddressStart );
                 return OperateResult.CreateSuccessResult( );
             }
             else
