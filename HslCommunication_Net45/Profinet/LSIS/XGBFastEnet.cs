@@ -211,20 +211,7 @@ namespace HslCommunication.Profinet.LSIS
         #endregion
 
         #region Static Helper
-        /// <summary>
-        /// LSDataType to Address
-        /// </summary>
-        public enum LsDataType
-        {
-            Bit= 0x00,
-            Byte= 0x01,
-            Word= 0x02,
-            DWord= 0x04,
-            LWord= 0x08,
-            Continuous= 0x14
-        }
-
-        
+         
         /// <summary>
         /// AnalysisAddress
         /// </summary>
@@ -331,7 +318,7 @@ namespace HslCommunication.Profinet.LSIS
         /// </summary>
         /// <param name="address"></param>
         /// <returns></returns>
-        public  static OperateResult<string> AnalysisAddressDataType(string address)
+        public  static OperateResult<string> GetDataTypeToAddress(string address)
         {
             string lSDataType = string.Empty; ;
             try
@@ -413,22 +400,21 @@ namespace HslCommunication.Profinet.LSIS
         {
             var analysisResult = AnalysisAddress(address, false);
             if (!analysisResult.IsSuccess) return OperateResult.CreateFailedResult<byte[]>(analysisResult);
-            var analysisDataTypeResult = AnalysisAddressDataType(address);
-            if (!analysisDataTypeResult.IsSuccess) return OperateResult.CreateFailedResult<byte[]>(analysisDataTypeResult);
-            var lSDataType = (LsDataType)Enum.Parse(typeof(LsDataType), analysisDataTypeResult.Content);
+            var DataTypeResult = GetDataTypeToAddress(address);
+            if (!DataTypeResult.IsSuccess) return OperateResult.CreateFailedResult<byte[]>(DataTypeResult);
 
             byte[] command = new byte[12 + analysisResult.Content.Length + data.Length];
 
-            switch (lSDataType)
+            switch (DataTypeResult.Content)
             {
-                case LsDataType.Bit:
-                case LsDataType.Byte:
+                case "Bit":
+                case "Byte":
                     command[2] = 0x01; break;
-                case LsDataType.Word:
+                case "Word":
                     command[2] = 0x02; break;
-                case LsDataType.DWord: command[2] = 0x04; break;
-                case LsDataType.LWord: command[2] = 0x08; break;
-                case LsDataType.Continuous: command[2] = 0x14; break;
+                case "DWord": command[2] = 0x04; break;
+                case "LWord": command[2] = 0x08; break;
+                case "Continuous": command[2] = 0x14; break;
                 default: break;
             }
             command[0] = 0x58;    // write
