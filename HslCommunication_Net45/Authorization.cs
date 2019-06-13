@@ -27,6 +27,7 @@ namespace HslCommunication
 
         internal static bool nzugaydgwadawdibbas( )
         {
+            moashdawidaisaosdas++;
             if (naihsdadaasdasdiwid == niasdhasdguawdwdad) return nuasduagsdwydbasudasd( );
             if ((iashdagsdawbdawda( ) - niahdiahduasdbubfas).TotalHours < nuasgdawydaishdgas ) // .TotalHours < nuasgdawydaishdgas)
             {
@@ -94,6 +95,7 @@ namespace HslCommunication
 
         private static DateTime niahdiahduasdbubfas = DateTime.Now;
         internal static long naihsdadaasdasdiwid = 0;
+        internal static long moashdawidaisaosdas = 0;
         internal static int nuasgdawydaishdgas = 8;
         internal static int nasidhadguawdbasd = 1000;
         internal static int niasdhasdguawdwdad = 12345;

@@ -11,6 +11,7 @@ using System.Text;
 /*********************************************************************************************
  * 
  *    thanks: 江阴-  ∮溪风-⊙_⌒ 提供了测试的PLC
+ *    thanks: 
  *    
  *    感谢一个开源的java项目支持才使得本项目顺利开发：https://github.com/Tulioh/Ethernetip4j
  * 
@@ -21,6 +22,10 @@ namespace HslCommunication.Profinet.AllenBradley
     /// <summary>
     /// AB PLC Data communication class, support read and write PLC node data
     /// </summary>
+    /// <remarks>
+    /// thanks 江阴-  ∮溪风-⊙_⌒ help test the dll
+    /// thanks 上海-null 测试了这个dll
+    /// </remarks>
     public class AllenBradleyNet : NetworkDeviceBase<AllenBradleyMessage, RegularByteTransform>
     {
         #region Constructor
