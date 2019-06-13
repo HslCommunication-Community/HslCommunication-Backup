@@ -80,7 +80,7 @@ namespace HslCommunication.Profinet.AllenBradley
 
             // Extract session ID
             SessionHandle = ByteTransform.TransUInt32( read.Content, 4 );
-            
+
             return OperateResult.CreateSuccessResult( );
         }
 
@@ -113,14 +113,21 @@ namespace HslCommunication.Profinet.AllenBradley
             if (address == null || length == null) return new OperateResult<byte[]>( "address or length is null" );
             if (address.Length != length.Length) return new OperateResult<byte[]>( "address and length is not same array" );
 
-            List<byte[]> cips = new List<byte[]>( );
-            for (int i = 0; i < address.Length; i++)
+            try
             {
-                cips.Add( AllenBradleyHelper.PackRequsetRead( address[i], length[i] ) );
+                List<byte[]> cips = new List<byte[]>( );
+                for (int i = 0; i < address.Length; i++)
+                {
+                    cips.Add( AllenBradleyHelper.PackRequsetRead( address[i], length[i] ) );
+                }
+                byte[] commandSpecificData = AllenBradleyHelper.PackCommandSpecificData( Slot, cips.ToArray( ) );
+
+                return OperateResult.CreateSuccessResult( AllenBradleyHelper.PackRequestHeader( 0x6F, SessionHandle, commandSpecificData ) );
             }
-            byte[] commandSpecificData = AllenBradleyHelper.PackCommandSpecificData( Slot, cips.ToArray( ) );
-            
-            return OperateResult.CreateSuccessResult( AllenBradleyHelper.PackRequestHeader( 0x6F, SessionHandle, commandSpecificData ) );
+            catch(Exception ex)
+            {
+                return new OperateResult<byte[]>( "Address Wrong:" + ex.Message );
+            }
         }
 
         /// <summary>
@@ -142,22 +149,6 @@ namespace HslCommunication.Profinet.AllenBradley
         }
 
         /// <summary>
-        /// Build a read segment command bytes
-        /// </summary>
-        /// <param name="address">The address of the tag name </param>
-        /// <param name="startIndex">start index of the data in array</param>
-        /// <param name="length">array length</param>
-        /// <returns>Message information that contains the result object </returns>
-        public byte[] BuildReadSegmentCommand(string address, int startIndex, int length )
-        {
-            List<byte[]> cips = new List<byte[]>( );
-            cips.Add( AllenBradleyHelper.PackRequestReadSegment( address, startIndex, length ) );
-            byte[] commandSpecificData = AllenBradleyHelper.PackCommandSpecificData( Slot, cips.ToArray( ) );
-
-            return AllenBradleyHelper.PackRequestHeader( 0x6F, SessionHandle, commandSpecificData );
-        }
-
-        /// <summary>
         /// Create a written message instruction
         /// </summary>
         /// <param name="address">The address of the tag name </param>
@@ -167,10 +158,17 @@ namespace HslCommunication.Profinet.AllenBradley
         /// <returns>Message information that contains the result object</returns>
         public OperateResult<byte[]> BuildWriteCommand( string address, ushort typeCode, byte[] data, int length = 1 )
         {
-            byte[] cip = AllenBradleyHelper.PackRequestWrite( address, typeCode, data, length );
-            byte[] commandSpecificData = AllenBradleyHelper.PackCommandSpecificData( Slot, cip );
-            
-            return OperateResult.CreateSuccessResult( AllenBradleyHelper.PackRequestHeader( 0x6F, SessionHandle, commandSpecificData ) );
+            try
+            {
+                byte[] cip = AllenBradleyHelper.PackRequestWrite( address, typeCode, data, length );
+                byte[] commandSpecificData = AllenBradleyHelper.PackCommandSpecificData( Slot, cip );
+
+                return OperateResult.CreateSuccessResult( AllenBradleyHelper.PackRequestHeader( 0x6F, SessionHandle, commandSpecificData ) );
+            }
+            catch (Exception ex)
+            {
+                return new OperateResult<byte[]>( "Address Wrong:" + ex.Message );
+            }
         }
 
         #endregion
@@ -185,14 +183,21 @@ namespace HslCommunication.Profinet.AllenBradley
         /// <returns>Result data with result object </returns>
         public override OperateResult<byte[]> Read( string address, ushort length )
         {
-            return Read( new string[] { address }, new int[] { length } );
+            if (length > 1)
+            {
+                return ReadSegment( address, 0, length );
+            }
+            else
+            {
+                return Read( new string[] { address }, new int[] { length } );
+            }
         }
 
         /// <summary>
         /// Bulk read Data information
         /// </summary>
         /// <param name="address">Name of the node </param>
-        /// <returns>带有结果对象的结果数据 -> Result data with result object </returns>
+        /// <returns>Result data with result object </returns>
         public OperateResult<byte[]> Read( string[] address )
         {
             if (address == null) return new OperateResult<byte[]>( "address can not be null" );
@@ -233,13 +238,32 @@ namespace HslCommunication.Profinet.AllenBradley
         /// <summary>
         /// Read Segment Data Array form plc, use address tag name
         /// </summary>
-        /// <param name="address"></param>
-        /// <param name="startIndex"></param>
-        /// <param name="length"></param>
-        /// <returns></returns>
+        /// <param name="address">Tag name in plc</param>
+        /// <param name="startIndex">array start index</param>
+        /// <param name="length">array length</param>
+        /// <returns>Results Bytes</returns>
         public OperateResult<byte[]> ReadSegment( string address, int startIndex, int length )
         {
-            return ReadByCips( BuildReadSegmentCommand( address, startIndex, length ) );
+            try
+            {
+                List<byte> bytesContent = new List<byte>( );
+                ushort alreadyFinished = 0;
+                while (alreadyFinished < length)
+                {
+                    ushort readLength = (ushort)Math.Min( length - alreadyFinished, 100 );
+                    OperateResult<byte[]> read = ReadByCips( AllenBradleyHelper.PackRequestReadSegment( address, startIndex + alreadyFinished, readLength ) );
+                    if (!read.IsSuccess) return read;
+
+                    bytesContent.AddRange( read.Content );
+                    alreadyFinished += readLength;
+                }
+
+                return OperateResult.CreateSuccessResult( bytesContent.ToArray( ) );
+            }
+            catch (Exception ex)
+            {
+                return new OperateResult<byte[]>( "Address Wrong:" + ex.Message );
+            }
         }
 
 
@@ -255,8 +279,8 @@ namespace HslCommunication.Profinet.AllenBradley
         /// <summary>
         /// 使用CIP报文和服务器进行核心的数据交换
         /// </summary>
-        /// <param name="cips"></param>
-        /// <returns></returns>
+        /// <param name="cips">Cip commands</param>
+        /// <returns>Results Bytes</returns>
         public OperateResult<byte[]> ReadCipFromServer( params byte[][] cips )
         {
             byte[] commandSpecificData = AllenBradleyHelper.PackCommandSpecificData( Slot, cips );

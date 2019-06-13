@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.IO;
 
 namespace HslCommunication.Profinet.AllenBradley
 {
@@ -83,6 +84,54 @@ namespace HslCommunication.Profinet.AllenBradley
 
         #endregion
 
+        private static byte[] BuildRequestPathCommand( string address )
+        {
+            using (MemoryStream ms = new MemoryStream( ))
+            {
+                string[] tagNames = address.Split( new char[] { '.' }, StringSplitOptions.RemoveEmptyEntries );
+
+                for (int i = 0; i < tagNames.Length; i++)
+                {
+                    string strIndex = string.Empty;
+                    int indexFirst = tagNames[i].IndexOf( '[' );
+                    int indexSecond = tagNames[i].IndexOf( ']' );
+                    if (indexFirst > 0 && indexSecond > 0 && indexSecond > indexFirst)
+                    {
+                        strIndex = tagNames[i].Substring( indexFirst + 1, indexSecond - indexFirst - 1 );
+                        tagNames[i] = tagNames[i].Substring( 0, indexFirst );
+                    }
+
+                    ms.WriteByte( 0x91 );                        // 固定
+                    ms.WriteByte( (byte)tagNames[i].Length );    // 节点的长度值
+                    byte[] nameBytes = Encoding.ASCII.GetBytes( tagNames[i] );
+                    ms.Write( nameBytes, 0, nameBytes.Length );
+                    if (nameBytes.Length % 2 == 1) ms.WriteByte( 0x00 );
+
+                    if (!string.IsNullOrEmpty( strIndex ))
+                    {
+                        string[] indexs = strIndex.Split( new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries );
+                        for (int j = 0; j < indexs.Length; j++)
+                        {
+                            int index = Convert.ToInt32( indexs[j] );
+                            if (index < 256)
+                            {
+                                ms.WriteByte( 0x28 );
+                                ms.WriteByte( (byte)index );
+                            }
+                            else
+                            {
+                                ms.WriteByte( 0x29 );
+                                ms.WriteByte( 0x00 );
+                                ms.WriteByte( BitConverter.GetBytes( index )[0] );
+                                ms.WriteByte( BitConverter.GetBytes( index )[1] );
+                            }
+                        }
+                    }
+                }
+
+                return ms.ToArray( );
+            }
+        }
 
         /// <summary>
         /// 将CommandSpecificData的命令，打包成可发送的数据指令
@@ -111,19 +160,12 @@ namespace HslCommunication.Profinet.AllenBradley
         {
             byte[] buffer = new byte[1024];
             int offect = 0;
-            string[] tagNames = address.Split( new char[] { '.' }, StringSplitOptions.RemoveEmptyEntries );
             buffer[offect++] = CIP_READ_DATA;
             offect++;
 
-            for (int i = 0; i < tagNames.Length; i++)
-            {
-                buffer[offect++] = 0x91;                        // 固定
-                buffer[offect++] = (byte)tagNames[i].Length;    // 节点的长度值
-                byte[] nameBytes = Encoding.ASCII.GetBytes( tagNames[i] );
-                nameBytes.CopyTo( buffer, offect );
-                offect += nameBytes.Length;
-                if (nameBytes.Length % 2 == 1) offect++;
-            }
+            byte[] requestPath = BuildRequestPathCommand( address );
+            requestPath.CopyTo( buffer, offect );
+            offect += requestPath.Length;
 
             buffer[1] = (byte)((offect - 2) / 2);
             buffer[offect++] = BitConverter.GetBytes( length )[0];
@@ -145,19 +187,12 @@ namespace HslCommunication.Profinet.AllenBradley
         {
             byte[] buffer = new byte[1024];
             int offect = 0;
-            string[] tagNames = address.Split( new char[] { '.' }, StringSplitOptions.RemoveEmptyEntries );
             buffer[offect++] = CIP_READ_FRAGMENT;
             offect++;
 
-            for (int i = 0; i < tagNames.Length; i++)
-            {
-                buffer[offect++] = 0x91;                        // 固定
-                buffer[offect++] = (byte)tagNames[i].Length;    // 节点的长度值
-                byte[] nameBytes = Encoding.ASCII.GetBytes( tagNames[i] );
-                nameBytes.CopyTo( buffer, offect );
-                offect += nameBytes.Length;
-                if (nameBytes.Length % 2 == 1) offect++;
-            }
+            byte[] requestPath = BuildRequestPathCommand( address );
+            requestPath.CopyTo( buffer, offect );
+            offect += requestPath.Length;
 
             buffer[1] = (byte)((offect - 2) / 2);
             buffer[offect++] = BitConverter.GetBytes( length )[0];
@@ -184,19 +219,12 @@ namespace HslCommunication.Profinet.AllenBradley
         {
             byte[] buffer = new byte[1024];
             int offect = 0;
-            string[] tagNames = address.Split( new char[] { '.' }, StringSplitOptions.RemoveEmptyEntries );
             buffer[offect++] = CIP_WRITE_DATA;
             offect++;
 
-            for (int i = 0; i < tagNames.Length; i++)
-            {
-                buffer[offect++] = 0x91;                                 // 固定
-                buffer[offect++] = (byte)tagNames[i].Length;             // 节点的长度值
-                byte[] nameBytes = Encoding.ASCII.GetBytes( tagNames[i] );
-                nameBytes.CopyTo( buffer, offect );
-                offect += nameBytes.Length;
-                if (nameBytes.Length % 2 == 1) offect++;
-            }
+            byte[] requestPath = BuildRequestPathCommand( address );
+            requestPath.CopyTo( buffer, offect );
+            offect += requestPath.Length;
 
             buffer[1] = (byte)((offect - 2) / 2);
 

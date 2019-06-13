@@ -91,6 +91,9 @@
             this.label6 = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
             this.userControlHead1 = new HslCommunicationDemo.DemoControl.UserControlHead();
+            this.textBox12 = new System.Windows.Forms.TextBox();
+            this.label2 = new System.Windows.Forms.Label();
+            this.button3 = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.groupBox4.SuspendLayout();
@@ -295,6 +298,9 @@
             // 
             // groupBox3
             // 
+            this.groupBox3.Controls.Add(this.button3);
+            this.groupBox3.Controls.Add(this.textBox12);
+            this.groupBox3.Controls.Add(this.label2);
             this.groupBox3.Controls.Add(this.textBox9);
             this.groupBox3.Controls.Add(this.label12);
             this.groupBox3.Controls.Add(this.textBox10);
@@ -311,16 +317,16 @@
             // 
             // textBox9
             // 
-            this.textBox9.Location = new System.Drawing.Point(294, 27);
+            this.textBox9.Location = new System.Drawing.Point(320, 27);
             this.textBox9.Name = "textBox9";
-            this.textBox9.Size = new System.Drawing.Size(105, 23);
+            this.textBox9.Size = new System.Drawing.Size(35, 23);
             this.textBox9.TabIndex = 12;
             this.textBox9.Text = "1";
             // 
             // label12
             // 
             this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(240, 30);
+            this.label12.Location = new System.Drawing.Point(266, 30);
             this.label12.Name = "label12";
             this.label12.Size = new System.Drawing.Size(44, 17);
             this.label12.TabIndex = 11;
@@ -346,11 +352,11 @@
             // 
             // button25
             // 
-            this.button25.Location = new System.Drawing.Point(426, 24);
+            this.button25.Location = new System.Drawing.Point(361, 24);
             this.button25.Name = "button25";
-            this.button25.Size = new System.Drawing.Size(82, 28);
+            this.button25.Size = new System.Drawing.Size(62, 28);
             this.button25.TabIndex = 8;
-            this.button25.Text = "批量读取";
+            this.button25.Text = "读取";
             this.button25.UseVisualStyleBackColor = true;
             this.button25.Click += new System.EventHandler(this.button25_Click);
             // 
@@ -358,7 +364,7 @@
             // 
             this.textBox6.Location = new System.Drawing.Point(63, 27);
             this.textBox6.Name = "textBox6";
-            this.textBox6.Size = new System.Drawing.Size(170, 23);
+            this.textBox6.Size = new System.Drawing.Size(111, 23);
             this.textBox6.TabIndex = 5;
             this.textBox6.Text = "A1;A2";
             // 
@@ -752,6 +758,33 @@
             this.userControlHead1.Size = new System.Drawing.Size(1004, 32);
             this.userControlHead1.TabIndex = 2;
             // 
+            // textBox12
+            // 
+            this.textBox12.Location = new System.Drawing.Point(229, 27);
+            this.textBox12.Name = "textBox12";
+            this.textBox12.Size = new System.Drawing.Size(34, 23);
+            this.textBox12.TabIndex = 14;
+            this.textBox12.Text = "0";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(178, 30);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(44, 17);
+            this.label2.TabIndex = 13;
+            this.label2.Text = "起始：";
+            // 
+            // button3
+            // 
+            this.button3.Location = new System.Drawing.Point(426, 24);
+            this.button3.Name = "button3";
+            this.button3.Size = new System.Drawing.Size(82, 28);
+            this.button3.TabIndex = 15;
+            this.button3.Text = "报文生成";
+            this.button3.UseVisualStyleBackColor = true;
+            this.button3.Click += new System.EventHandler(this.Button3_Click);
+            // 
             // FormAllenBrandly
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 17F);
@@ -847,5 +880,8 @@
         private System.Windows.Forms.Label label23;
         private DemoControl.UserControlCurve userControlCurve1;
         private DemoControl.UserControlHead userControlHead1;
+        private System.Windows.Forms.TextBox textBox12;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Button button3;
     }
 }

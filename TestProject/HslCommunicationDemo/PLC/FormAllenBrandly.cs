@@ -64,6 +64,8 @@ namespace HslCommunicationDemo
                 label16.Text = "Message:";
                 label14.Text = "Results:";
                 button26.Text = "Read";
+                button3.Text = "Build";
+                label2.Text = "Start:";
 
                 label10.Text = "Address:";
                 label9.Text = "Value:";
@@ -93,10 +95,10 @@ namespace HslCommunicationDemo
         {
 
         }
-        
+
         #region Connect And Close
 
-        
+
         private void button1_Click( object sender, EventArgs e )
         {
             // 连接
@@ -107,13 +109,13 @@ namespace HslCommunicationDemo
             }
 
 
-            if(!int.TryParse(textBox2.Text,out int port ))
+            if (!int.TryParse( textBox2.Text, out int port ))
             {
                 MessageBox.Show( DemoUtils.PortInputWrong );
                 return;
             }
 
-            if(!byte.TryParse(textBox15.Text, out byte slot ))
+            if (!byte.TryParse( textBox15.Text, out byte slot ))
             {
                 MessageBox.Show( DemoUtils.SlotInputWrong );
                 return;
@@ -239,69 +241,69 @@ namespace HslCommunicationDemo
             // bool写入
             //MessageBox.Show( HslCommunication.BasicFramework.SoftBasic.ByteToHexString( allenBradleyNet.BuildWriteCommand( textBox8.Text, AllenBradleyHelper.CIP_Type_Bool, (bool.Parse( textBox7.Text ) ?
             //   new byte[] { 0xFF } : new byte[] { 0x00 }) ).Content , ' ') );
-            DemoUtils.WriteResultRender( () => allenBradleyNet.Write( textBox8.Text, bool.Parse( textBox7.Text ) ), textBox8.Text );
+            DemoUtils.WriteResultRender( ( ) => allenBradleyNet.Write( textBox8.Text, bool.Parse( textBox7.Text ) ), textBox8.Text );
         }
 
         private void button23_Click( object sender, EventArgs e )
         {
             // byte写入
-            DemoUtils.WriteResultRender( () => allenBradleyNet.Write( textBox8.Text, byte.Parse( textBox7.Text ) ), textBox8.Text );
+            DemoUtils.WriteResultRender( ( ) => allenBradleyNet.Write( textBox8.Text, byte.Parse( textBox7.Text ) ), textBox8.Text );
         }
 
         private void button22_Click( object sender, EventArgs e )
         {
             // short写入
-            DemoUtils.WriteResultRender( () => allenBradleyNet.Write( textBox8.Text, short.Parse( textBox7.Text ) ), textBox8.Text );
+            DemoUtils.WriteResultRender( ( ) => allenBradleyNet.Write( textBox8.Text, short.Parse( textBox7.Text ) ), textBox8.Text );
         }
 
         private void button21_Click( object sender, EventArgs e )
         {
             // ushort写入
-            DemoUtils.WriteResultRender( () => allenBradleyNet.Write( textBox8.Text, ushort.Parse( textBox7.Text ) ), textBox8.Text );
+            DemoUtils.WriteResultRender( ( ) => allenBradleyNet.Write( textBox8.Text, ushort.Parse( textBox7.Text ) ), textBox8.Text );
         }
 
 
         private void button20_Click( object sender, EventArgs e )
         {
             // int写入
-            DemoUtils.WriteResultRender( () => allenBradleyNet.Write( textBox8.Text, int.Parse( textBox7.Text ) ), textBox8.Text );
+            DemoUtils.WriteResultRender( ( ) => allenBradleyNet.Write( textBox8.Text, int.Parse( textBox7.Text ) ), textBox8.Text );
         }
 
         private void button19_Click( object sender, EventArgs e )
         {
             // uint写入
-            DemoUtils.WriteResultRender( () => allenBradleyNet.Write( textBox8.Text, uint.Parse( textBox7.Text ) ), textBox8.Text );
+            DemoUtils.WriteResultRender( ( ) => allenBradleyNet.Write( textBox8.Text, uint.Parse( textBox7.Text ) ), textBox8.Text );
         }
 
         private void button18_Click( object sender, EventArgs e )
         {
             // long写入
-            DemoUtils.WriteResultRender( () => allenBradleyNet.Write( textBox8.Text, long.Parse( textBox7.Text ) ), textBox8.Text );
+            DemoUtils.WriteResultRender( ( ) => allenBradleyNet.Write( textBox8.Text, long.Parse( textBox7.Text ) ), textBox8.Text );
         }
 
         private void button17_Click( object sender, EventArgs e )
         {
             // ulong写入
-            DemoUtils.WriteResultRender( () => allenBradleyNet.Write( textBox8.Text, ulong.Parse( textBox7.Text ) ), textBox8.Text );
+            DemoUtils.WriteResultRender( ( ) => allenBradleyNet.Write( textBox8.Text, ulong.Parse( textBox7.Text ) ), textBox8.Text );
         }
 
         private void button16_Click( object sender, EventArgs e )
         {
             // float写入
-            DemoUtils.WriteResultRender( () => allenBradleyNet.Write( textBox8.Text, float.Parse( textBox7.Text ) ), textBox8.Text );
+            DemoUtils.WriteResultRender( ( ) => allenBradleyNet.Write( textBox8.Text, float.Parse( textBox7.Text ) ), textBox8.Text );
         }
 
         private void button15_Click( object sender, EventArgs e )
         {
             // double写入
-            DemoUtils.WriteResultRender( () => allenBradleyNet.Write( textBox8.Text, double.Parse( textBox7.Text ) ), textBox8.Text );
+            DemoUtils.WriteResultRender( ( ) => allenBradleyNet.Write( textBox8.Text, double.Parse( textBox7.Text ) ), textBox8.Text );
         }
 
 
         private void button14_Click( object sender, EventArgs e )
         {
             // string写入
-            DemoUtils.WriteResultRender( () => allenBradleyNet.Write( textBox8.Text, textBox7.Text ), textBox8.Text );
+            DemoUtils.WriteResultRender( ( ) => allenBradleyNet.Write( textBox8.Text, textBox7.Text ), textBox8.Text );
         }
 
 
@@ -315,7 +317,7 @@ namespace HslCommunicationDemo
         {
             try
             {
-            //    OperateResult write = allenBradleyNet.Write( "Array", new short[] { 101, 102, 103, 104, 105, 106 } );
+                //    OperateResult write = allenBradleyNet.Write( "Array", new short[] { 101, 102, 103, 104, 105, 106 } );
 
                 // OperateResult<short[]> readResult = allenBradleyNet.ReadInt16( "Array", 300 );
 
@@ -323,12 +325,12 @@ namespace HslCommunicationDemo
                 if (!textBox6.Text.Contains( ";" ))
                 {
                     //MessageBox.Show( HslCommunication.BasicFramework.SoftBasic.ByteToHexString( allenBradleyNet.BuildReadCommand( new string[] { textBox6.Text }, new int[] { int.Parse(textBox9.Text) } ).Content , ' ') );
-                    read = allenBradleyNet.Read( textBox6.Text, ushort.Parse( textBox9.Text ) );
+                    read = allenBradleyNet.ReadSegment( textBox6.Text, ushort.Parse( textBox12.Text ), ushort.Parse( textBox9.Text ) );
                 }
                 else
                 {
                     //MessageBox.Show( HslCommunication.BasicFramework.SoftBasic.ByteToHexString( allenBradleyNet.BuildReadCommand( textBox6.Text.Split( ';' ) ).Content, ' ' ) );
-                    read = allenBradleyNet.Read( textBox6.Text.Split(';' ));
+                    read = allenBradleyNet.Read( textBox6.Text.Split( ';' ) );
                 }
 
                 if (read.IsSuccess)
@@ -366,6 +368,24 @@ namespace HslCommunicationDemo
 
 
         #endregion
-        
+
+        private void Button3_Click( object sender, EventArgs e )
+        {
+            try
+            {
+                //    OperateResult write = allenBradleyNet.Write( "Array", new short[] { 101, 102, 103, 104, 105, 106 } );
+
+                // OperateResult<short[]> readResult = allenBradleyNet.ReadInt16( "Array", 300 );
+
+                //MessageBox.Show( HslCommunication.BasicFramework.SoftBasic.ByteToHexString( allenBradleyNet.BuildReadCommand( new string[] { textBox6.Text }, new int[] { int.Parse(textBox9.Text) } ).Content , ' ') );
+                byte[] read = AllenBradleyHelper.PackRequestReadSegment( textBox6.Text, ushort.Parse( textBox12.Text ), ushort.Parse( textBox9.Text ) );
+
+                textBox10.Text = "Result：" + HslCommunication.BasicFramework.SoftBasic.ByteToHexString( read, ' ' );
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show( "Build failed：" + ex.Message );
+            }
+        }
     }
 }
