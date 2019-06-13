@@ -23,18 +23,6 @@ namespace HslCommunicationDemo
 
         private ModbusTcpNet busTcpClient = null;
 
-        private void linkLabel1_LinkClicked( object sender, LinkLabelLinkClickedEventArgs e )
-        {
-            try
-            {
-                System.Diagnostics.Process.Start( linkLabel1.Text );
-            }
-            catch (Exception ex) 
-            {
-                MessageBox.Show( ex.Message );
-            }
-        }
-
         private void FormSiemens_Load( object sender, EventArgs e )
         {
             panel2.Enabled = false;
@@ -45,13 +33,6 @@ namespace HslCommunicationDemo
             checkBox3.CheckedChanged += CheckBox3_CheckedChanged;
 
             Language( Program.Language );
-
-            if (!Program.ShowAuthorInfomation)
-            {
-                label2.Visible = false;
-                linkLabel1.Visible = false;
-                label20.Visible = false;
-            }
         }
 
 
@@ -60,10 +41,6 @@ namespace HslCommunicationDemo
             if (language == 2)
             {
                 Text = "Modbus Tcp Read Demo";
-                label2.Text = "Blogs:";
-                label4.Text = "Protocols:";
-                label20.Text = "Author:Richard Hu";
-                label5.Text = "Modbus Tcp";
 
                 label1.Text = "Ip:";
                 label3.Text = "Port:";

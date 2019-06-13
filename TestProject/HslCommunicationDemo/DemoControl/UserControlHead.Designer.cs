@@ -64,9 +64,9 @@
             this.label20.ForeColor = System.Drawing.Color.White;
             this.label20.Location = new System.Drawing.Point(886, 6);
             this.label20.Name = "label20";
-            this.label20.Size = new System.Drawing.Size(108, 17);
+            this.label20.Size = new System.Drawing.Size(94, 17);
             this.label20.TabIndex = 16;
-            this.label20.Text = "作者：Richard Hu";
+            this.label20.Text = "Version: V1.0.0";
             // 
             // label4
             // 

@@ -42,6 +42,15 @@ namespace HslCommunicationDemo.DemoControl
                 label4.Text = "Protocols:";
                 label20.Text = "Author:Richard Hu";
             }
+
+            label20.Text = "Version: V" + HslCommunication.BasicFramework.SoftBasic.FrameworkVersion.ToString( );
+
+            if (!Program.ShowAuthorInfomation)
+            {
+                label2.Visible = false;
+                linkLabel1.Visible = false;
+                label20.Visible = false;
+            }
         }
 
         [Browsable(true)]

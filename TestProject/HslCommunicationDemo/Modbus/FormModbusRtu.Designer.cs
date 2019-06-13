@@ -96,11 +96,7 @@
             this.textBox3 = new System.Windows.Forms.TextBox();
             this.label6 = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
-            this.linkLabel1 = new System.Windows.Forms.LinkLabel();
-            this.label4 = new System.Windows.Forms.Label();
-            this.label5 = new System.Windows.Forms.Label();
-            this.label20 = new System.Windows.Forms.Label();
+            this.userControlHead1 = new HslCommunicationDemo.DemoControl.UserControlHead();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.groupBox4.SuspendLayout();
@@ -131,7 +127,7 @@
             this.panel1.Controls.Add(this.label1);
             this.panel1.Controls.Add(this.label24);
             this.panel1.Controls.Add(this.checkBox3);
-            this.panel1.Location = new System.Drawing.Point(14, 32);
+            this.panel1.Location = new System.Drawing.Point(14, 42);
             this.panel1.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(978, 54);
@@ -312,7 +308,7 @@
             this.panel2.Controls.Add(this.groupBox3);
             this.panel2.Controls.Add(this.groupBox2);
             this.panel2.Controls.Add(this.groupBox1);
-            this.panel2.Location = new System.Drawing.Point(14, 95);
+            this.panel2.Location = new System.Drawing.Point(14, 102);
             this.panel2.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(978, 537);
@@ -820,65 +816,26 @@
             this.label8.TabIndex = 18;
             this.label8.Text = "长度：";
             // 
-            // label2
+            // userControlHead1
             // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(11, 9);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(68, 17);
-            this.label2.TabIndex = 2;
-            this.label2.Text = "博客地址：";
-            // 
-            // linkLabel1
-            // 
-            this.linkLabel1.AutoSize = true;
-            this.linkLabel1.Location = new System.Drawing.Point(74, 9);
-            this.linkLabel1.Name = "linkLabel1";
-            this.linkLabel1.Size = new System.Drawing.Size(287, 17);
-            this.linkLabel1.TabIndex = 3;
-            this.linkLabel1.TabStop = true;
-            this.linkLabel1.Text = "http://www.cnblogs.com/dathlin/p/8974215.html";
-            this.linkLabel1.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel1_LinkClicked);
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(466, 9);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(68, 17);
-            this.label4.TabIndex = 4;
-            this.label4.Text = "使用协议：";
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.ForeColor = System.Drawing.Color.Red;
-            this.label5.Location = new System.Drawing.Point(540, 9);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(104, 17);
-            this.label5.TabIndex = 5;
-            this.label5.Text = "Modbus Rtu协议";
-            // 
-            // label20
-            // 
-            this.label20.AutoSize = true;
-            this.label20.ForeColor = System.Drawing.Color.Green;
-            this.label20.Location = new System.Drawing.Point(887, 9);
-            this.label20.Name = "label20";
-            this.label20.Size = new System.Drawing.Size(108, 17);
-            this.label20.TabIndex = 6;
-            this.label20.Text = "作者：Richard Hu";
+            this.userControlHead1.BackColor = System.Drawing.Color.MediumPurple;
+            this.userControlHead1.Dock = System.Windows.Forms.DockStyle.Top;
+            this.userControlHead1.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.userControlHead1.HelpLink = "http://www.cnblogs.com/dathlin/p/8974215.html";
+            this.userControlHead1.Location = new System.Drawing.Point(0, 0);
+            this.userControlHead1.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.userControlHead1.MinimumSize = new System.Drawing.Size(800, 32);
+            this.userControlHead1.Name = "userControlHead1";
+            this.userControlHead1.ProtocolInfo = "Modbus Rtu";
+            this.userControlHead1.Size = new System.Drawing.Size(1004, 32);
+            this.userControlHead1.TabIndex = 2;
             // 
             // FormModbusRtu
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 17F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1004, 645);
-            this.Controls.Add(this.label20);
-            this.Controls.Add(this.label5);
-            this.Controls.Add(this.label4);
-            this.Controls.Add(this.linkLabel1);
-            this.Controls.Add(this.label2);
+            this.Controls.Add(this.userControlHead1);
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.panel1);
             this.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
@@ -900,7 +857,6 @@
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
@@ -909,14 +865,10 @@
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Panel panel2;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.LinkLabel linkLabel1;
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.TextBox textBox2;
         private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.Label label5;
         private System.Windows.Forms.GroupBox groupBox4;
         private System.Windows.Forms.TextBox textBox11;
         private System.Windows.Forms.Label label14;
@@ -964,7 +916,6 @@
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.Label label19;
-        private System.Windows.Forms.Label label20;
         private System.Windows.Forms.TextBox textBox15;
         private System.Windows.Forms.Label label21;
         private System.Windows.Forms.CheckBox checkBox1;
@@ -979,5 +930,6 @@
         private System.Windows.Forms.ComboBox comboBox2;
         private System.Windows.Forms.ComboBox comboBox3;
         private DemoControl.UserControlCurve userControlCurve1;
+        private DemoControl.UserControlHead userControlHead1;
     }
 }
