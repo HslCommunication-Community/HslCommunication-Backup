@@ -204,28 +204,28 @@ namespace HslCommunication.Profinet.LSIS
         {
             var analysisResult = XGBFastEnet.AnalysisAddress(address, false);
             if (!analysisResult.IsSuccess) return OperateResult.CreateFailedResult<byte[]>(analysisResult);
-            var analysisDataTypeResult = XGBFastEnet.AnalysisAddressDataType(address);
-            if (!analysisDataTypeResult.IsSuccess) return OperateResult.CreateFailedResult<byte[]>(analysisDataTypeResult);
-            var lSDataType = (XGBFastEnet.LsDataType)Enum.Parse(typeof(XGBFastEnet.LsDataType), analysisDataTypeResult.Content);
+            var DataTypeResult = XGBFastEnet.GetDataTypeToAddress(address);
+            if (!DataTypeResult.IsSuccess) return OperateResult.CreateFailedResult<byte[]>(DataTypeResult);
+
             List<byte> command = new List<byte>();
             command.Add(0x05);    // ENQ
             command.AddRange(SoftBasic.BuildAsciiBytesFrom(station));
             command.Add(0x77);    // command w
             command.Add(0x53);    // command type: S
-            switch (lSDataType)
+            switch (DataTypeResult.Content)
             {
-                case XGBFastEnet.LsDataType.Bit:
-                case XGBFastEnet.LsDataType.Byte:
+                case "Bit":
+                case "Byte":
                     command.Add(0x53);     // command type: SS
                     command.Add(0x30);    // Number of blocks
                     command.Add(0x31);
                     command.AddRange(SoftBasic.BuildAsciiBytesFrom((byte)analysisResult.Content.Length));
                     command.AddRange(Encoding.ASCII.GetBytes(analysisResult.Content));
                     break;
-                case XGBFastEnet.LsDataType.Word:
-                case XGBFastEnet.LsDataType.DWord:
-                case XGBFastEnet.LsDataType.LWord:
-                case XGBFastEnet.LsDataType.Continuous:
+                case "Word":
+                case "DWord":
+                case "LWord":
+                case "Continuous":
                     command.Add(0x42);       // command type: SB
                     command.AddRange(SoftBasic.BuildAsciiBytesFrom((byte)analysisResult.Content.Length));
                     command.AddRange(Encoding.ASCII.GetBytes(analysisResult.Content));
