@@ -130,7 +130,14 @@ namespace HslCommunicationDemo
                 return;
             }
 
+            if(!int.TryParse(textBox2.Text, out int port ))
+            {
+                MessageBox.Show( DemoUtils.PortInputWrong );
+                return;
+            }
+
             siemensTcpNet.IpAddress = textBox1.Text;
+            siemensTcpNet.Port = port;
             try
             {
                 if (siemensPLCSelected != SiemensPLCS.S200Smart)
