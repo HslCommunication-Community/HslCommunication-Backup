@@ -158,6 +158,7 @@
     <Compile Include="..\HslCommunication_Net45\Profinet\Melsec\MelsecMcNet.cs" Link="Profinet\Melsec\MelsecMcNet.cs" />
     <Compile Include="..\HslCommunication_Net45\Profinet\Melsec\MelsecMcServer.cs" Link="Profinet\Melsec\MelsecMcServer.cs" />
     <Compile Include="..\HslCommunication_Net45\Profinet\Melsec\MelsecNetMultiAsync.cs" Link="Profinet\Melsec\MelsecNetMultiAsync.cs" />
+    <Compile Include="..\HslCommunication_Net45\Profinet\Omron\OmronCipNet.cs" Link="Profinet\Omron\OmronCipNet.cs" />
     <Compile Include="..\HslCommunication_Net45\Profinet\Omron\OmronFinsDataType.cs" Link="Profinet\Omron\OmronFinsDataType.cs" />
     <Compile Include="..\HslCommunication_Net45\Profinet\Omron\OmronFinsNet.cs" Link="Profinet\Omron\OmronFinsNet.cs" />
     <Compile Include="..\HslCommunication_Net45\Profinet\Omron\OmronFinsNetHelper.cs" Link="Profinet\Omron\OmronFinsNetHelper.cs" />

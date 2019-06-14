@@ -98,6 +98,7 @@
             this.webSideToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mesDemoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.rToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.support赞助ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.简体中文ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.englishToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.论坛toolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -118,7 +119,7 @@
             this.button59 = new System.Windows.Forms.Button();
             this.button57 = new System.Windows.Forms.Button();
             this.button55 = new System.Windows.Forms.Button();
-            this.support赞助ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.button61 = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -518,6 +519,7 @@
             // 
             // groupBox5
             // 
+            this.groupBox5.Controls.Add(this.button61);
             this.groupBox5.Controls.Add(this.button52);
             this.groupBox5.Controls.Add(this.button48);
             this.groupBox5.Controls.Add(this.button11);
@@ -532,10 +534,10 @@
             // 
             // button52
             // 
-            this.button52.Location = new System.Drawing.Point(19, 104);
+            this.button52.Location = new System.Drawing.Point(97, 24);
             this.button52.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.button52.Name = "button52";
-            this.button52.Size = new System.Drawing.Size(150, 32);
+            this.button52.Size = new System.Drawing.Size(72, 32);
             this.button52.TabIndex = 2;
             this.button52.Text = "Fins Udp";
             this.button52.UseVisualStyleBackColor = true;
@@ -557,7 +559,7 @@
             this.button11.Location = new System.Drawing.Point(19, 24);
             this.button11.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.button11.Name = "button11";
-            this.button11.Size = new System.Drawing.Size(150, 32);
+            this.button11.Size = new System.Drawing.Size(75, 32);
             this.button11.TabIndex = 0;
             this.button11.Text = "Fins Tcp";
             this.button11.UseVisualStyleBackColor = true;
@@ -948,6 +950,12 @@
             this.rToolStripMenuItem.Text = "Richard Hu [作者]";
             this.rToolStripMenuItem.Click += new System.EventHandler(this.rToolStripMenuItem_Click);
             // 
+            // support赞助ToolStripMenuItem
+            // 
+            this.support赞助ToolStripMenuItem.Name = "support赞助ToolStripMenuItem";
+            this.support赞助ToolStripMenuItem.Size = new System.Drawing.Size(250, 22);
+            this.support赞助ToolStripMenuItem.Text = "Support [赞助]";
+            // 
             // 简体中文ToolStripMenuItem
             // 
             this.简体中文ToolStripMenuItem.Name = "简体中文ToolStripMenuItem";
@@ -1147,11 +1155,16 @@
             this.button55.UseVisualStyleBackColor = true;
             this.button55.Click += new System.EventHandler(this.Button55_Click);
             // 
-            // support赞助ToolStripMenuItem
+            // button61
             // 
-            this.support赞助ToolStripMenuItem.Name = "support赞助ToolStripMenuItem";
-            this.support赞助ToolStripMenuItem.Size = new System.Drawing.Size(250, 22);
-            this.support赞助ToolStripMenuItem.Text = "Support [赞助]";
+            this.button61.Location = new System.Drawing.Point(19, 104);
+            this.button61.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.button61.Name = "button61";
+            this.button61.Size = new System.Drawing.Size(150, 32);
+            this.button61.TabIndex = 3;
+            this.button61.Text = "CIP net";
+            this.button61.UseVisualStyleBackColor = true;
+            this.button61.Click += new System.EventHandler(this.Button61_Click);
             // 
             // FormLoad
             // 
@@ -1298,6 +1311,7 @@
         private System.Windows.Forms.Button button60;
         private System.Windows.Forms.ToolStripMenuItem 授权ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem support赞助ToolStripMenuItem;
+        private System.Windows.Forms.Button button61;
     }
 }
 

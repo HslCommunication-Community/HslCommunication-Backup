@@ -285,6 +285,7 @@
     <Compile Include="NamespaceDoc.cs" />
     <Compile Include="Profinet\AllenBradley\AllenBradleyHelper.cs" />
     <Compile Include="Profinet\AllenBradley\AllenBradleyNet.cs" />
+    <Compile Include="Profinet\FATEK\FatekProgram.cs" />
     <Compile Include="Profinet\Keyence\KeyenceDataType.cs" />
     <Compile Include="Profinet\Keyence\KeyenceMcAsciiNet.cs" />
     <Compile Include="Profinet\Keyence\KeyenceMcNet.cs" />
@@ -305,6 +306,7 @@
     <Compile Include="Profinet\Melsec\MelsecMcServer.cs" />
     <Compile Include="Profinet\Melsec\MelsecNetMultiAsync.cs" />
     <Compile Include="Profinet\Melsec\MelsecFxSerial.cs" />
+    <Compile Include="Profinet\Omron\OmronCipNet.cs" />
     <Compile Include="Profinet\Omron\OmronFinsDataType.cs" />
     <Compile Include="Profinet\Omron\OmronFinsNet.cs" />
     <Compile Include="Profinet\Omron\OmronFinsNetHelper.cs" />

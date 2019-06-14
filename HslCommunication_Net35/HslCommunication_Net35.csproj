@@ -550,6 +550,9 @@
     <Compile Include="..\HslCommunication_Net45\Profinet\AllenBradley\AllenBradleyNet.cs">
       <Link>Profinet\AllenBradley\AllenBradleyNet.cs</Link>
     </Compile>
+    <Compile Include="..\HslCommunication_Net45\Profinet\FATEK\FatekProgram.cs">
+      <Link>Profinet\FATEK\FatekProgram.cs</Link>
+    </Compile>
     <Compile Include="..\HslCommunication_Net45\Profinet\Keyence\KeyenceDataType.cs">
       <Link>Profinet\Keyence\KeyenceDataType.cs</Link>
     </Compile>
@@ -609,6 +612,9 @@
     </Compile>
     <Compile Include="..\HslCommunication_Net45\Profinet\Melsec\MelsecNetMultiAsync.cs">
       <Link>Profinet\Melsec\MelsecNetMultiAsync.cs</Link>
+    </Compile>
+    <Compile Include="..\HslCommunication_Net45\Profinet\Omron\OmronCipNet.cs">
+      <Link>Profinet\Omron\OmronCipNet.cs</Link>
     </Compile>
     <Compile Include="..\HslCommunication_Net45\Profinet\Omron\OmronFinsDataType.cs">
       <Link>Profinet\Omron\OmronFinsDataType.cs</Link>
