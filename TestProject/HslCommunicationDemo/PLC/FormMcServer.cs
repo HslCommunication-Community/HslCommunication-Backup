@@ -22,18 +22,6 @@ namespace HslCommunicationDemo
 
 
 
-        private void linkLabel1_LinkClicked( object sender, LinkLabelLinkClickedEventArgs e )
-        {
-            try
-            {
-                System.Diagnostics.Process.Start( linkLabel1.Text );
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show( ex.Message );
-            }
-        }
-
         private void FormSiemens_Load( object sender, EventArgs e )
         {
             panel2.Enabled = false;
@@ -42,10 +30,6 @@ namespace HslCommunicationDemo
             if(Program.Language == 2)
             {
                 Text = "MC Virtual Server [data support, bool: x,y,m   word: x,y,m,d,w]";
-                label2.Text = "blogs:";
-                label4.Text = "Agreement";
-                linkLabel2.Text = "thanks for the reward";
-                label20.Text = "Author:Hsl";
                 label3.Text = "port:";
                 button1.Text = "Start Server";
                 button11.Text = "Close Server";
@@ -493,9 +477,9 @@ namespace HslCommunicationDemo
         }
 
 
-
+        private Random random = new Random( );
         private string timerAddress = string.Empty;
-        private ushort timerValue = 0;
+        private short timerValue = 100;
         private System.Windows.Forms.Timer timerWrite = null;
         private void button10_Click( object sender, EventArgs e )
         {
@@ -511,7 +495,9 @@ namespace HslCommunicationDemo
         private void TimerWrite_Tick( object sender, EventArgs e )
         {
             mcNetServer.Write( timerAddress, timerValue );
-            timerValue++;
+            timerValue = (short)(timerValue + random.Next( 11 ) - 5);
+            if (timerValue < 10) timerValue = 100;
+            if (timerValue > 200) timerValue = 100;
         }
 
     }

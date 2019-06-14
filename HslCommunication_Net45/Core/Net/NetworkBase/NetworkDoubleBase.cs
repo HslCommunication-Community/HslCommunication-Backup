@@ -33,15 +33,15 @@ namespace HslCommunication.Core.Net
         #endregion
 
         #region Private Member
-        
+
         private TTransform byteTransform;                // 数据变换的接口
         private string ipAddress = "127.0.0.1";          // 连接的IP地址
         private int port = 10000;                        // 端口号
         private int connectTimeOut = 10000;              // 连接超时时间设置
-        private int receiveTimeOut = 10000;              // 数据接收的超时时间
-        private bool isPersistentConn = false;           // 是否处于长连接的状态
-        private SimpleHybirdLock InteractiveLock;        // 一次正常的交互的互斥锁
-        private bool IsSocketError = false;              // 指示长连接的套接字是否处于错误的状态
+        protected int receiveTimeOut = 10000;            // 数据接收的超时时间
+        protected bool isPersistentConn = false;         // 是否处于长连接的状态
+        protected SimpleHybirdLock InteractiveLock;      // 一次正常的交互的互斥锁
+        protected bool IsSocketError = false;            // 指示长连接的套接字是否处于错误的状态
         private bool isUseSpecifiedSocket = false;       // 指示是否使用指定的网络套接字访问数据
         private string connectionId = string.Empty;      // 当前连接
 
@@ -353,7 +353,7 @@ namespace HslCommunication.Core.Net
         /// 获取本次操作的可用的网络套接字
         /// </summary>
         /// <returns>是否成功，如果成功，使用这个套接字</returns>
-        private OperateResult<Socket> GetAvailableSocket( )
+        protected OperateResult<Socket> GetAvailableSocket( )
         {
             if (isPersistentConn)
             {

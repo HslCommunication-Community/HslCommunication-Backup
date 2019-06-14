@@ -34,14 +34,6 @@ namespace HslCommunicationDemo
             }
 
             Language( Program.Language );
-
-
-            if (!Program.ShowAuthorInfomation)
-            {
-                label2.Visible = false;
-                linkLabel1.Visible = false;
-                label20.Visible = false;
-            }
         }
 
         private void Language( int language )
@@ -49,10 +41,6 @@ namespace HslCommunicationDemo
             if (language == 1)
             {
                 Text = "串口调试助手";
-                label2.Text = "博客地址：";
-                label4.Text = "使用协议：";
-                label20.Text = "作者：Richard Hu";
-                label5.Text = "串口，无协议";
                 label1.Text = "Com口：";
                 label3.Text = "波特率:";
                 label22.Text = "数据位:";
@@ -72,10 +60,6 @@ namespace HslCommunicationDemo
             else
             {
                 Text = "Serial Debug Tools";
-                label2.Text = "Blogs:";
-                label4.Text = "Protocols:";
-                label20.Text = "Author:Richard Hu";
-                label5.Text = "Serial,no protocol";
                 label1.Text = "Com:";
                 label3.Text = "Baud rate:";
                 label22.Text = "Data bits:";
@@ -260,16 +244,5 @@ namespace HslCommunicationDemo
             }
         }
 
-        private void linkLabel1_LinkClicked( object sender, LinkLabelLinkClickedEventArgs e )
-        {
-            try
-            {
-                System.Diagnostics.Process.Start( linkLabel1.Text );
-            }
-            catch (Exception ex)
-            {
-                HslCommunication.BasicFramework.SoftBasic.ShowExceptionMessage( ex );
-            }
-        }
     }
 }

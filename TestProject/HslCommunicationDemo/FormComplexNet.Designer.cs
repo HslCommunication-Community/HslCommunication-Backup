@@ -41,11 +41,6 @@
             this.label8 = new System.Windows.Forms.Label();
             this.textBox5 = new System.Windows.Forms.TextBox();
             this.label7 = new System.Windows.Forms.Label();
-            this.label20 = new System.Windows.Forms.Label();
-            this.label5 = new System.Windows.Forms.Label();
-            this.label4 = new System.Windows.Forms.Label();
-            this.linkLabel1 = new System.Windows.Forms.LinkLabel();
-            this.label2 = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
             this.button5 = new System.Windows.Forms.Button();
             this.textBox9 = new System.Windows.Forms.TextBox();
@@ -59,6 +54,7 @@
             this.label3 = new System.Windows.Forms.Label();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
+            this.userControlHead1 = new HslCommunicationDemo.DemoControl.UserControlHead();
             this.panel2.SuspendLayout();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
@@ -191,55 +187,6 @@
             this.label7.TabIndex = 7;
             this.label7.Text = "指令头：";
             // 
-            // label20
-            // 
-            this.label20.AutoSize = true;
-            this.label20.ForeColor = System.Drawing.Color.Green;
-            this.label20.Location = new System.Drawing.Point(886, 7);
-            this.label20.Name = "label20";
-            this.label20.Size = new System.Drawing.Size(108, 17);
-            this.label20.TabIndex = 19;
-            this.label20.Text = "作者：Richard Hu";
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.ForeColor = System.Drawing.Color.Red;
-            this.label5.Location = new System.Drawing.Point(539, 7);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(50, 17);
-            this.label5.TabIndex = 18;
-            this.label5.Text = "Hsl协议";
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(465, 7);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(68, 17);
-            this.label4.TabIndex = 17;
-            this.label4.Text = "使用协议：";
-            // 
-            // linkLabel1
-            // 
-            this.linkLabel1.AutoSize = true;
-            this.linkLabel1.Location = new System.Drawing.Point(73, 7);
-            this.linkLabel1.Name = "linkLabel1";
-            this.linkLabel1.Size = new System.Drawing.Size(287, 17);
-            this.linkLabel1.TabIndex = 16;
-            this.linkLabel1.TabStop = true;
-            this.linkLabel1.Text = "http://www.cnblogs.com/dathlin/p/7697782.html";
-            this.linkLabel1.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel1_LinkClicked);
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(10, 7);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(68, 17);
-            this.label2.TabIndex = 15;
-            this.label2.Text = "博客地址：";
-            // 
             // panel1
             // 
             this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
@@ -257,16 +204,16 @@
             this.panel1.Controls.Add(this.label3);
             this.panel1.Controls.Add(this.textBox1);
             this.panel1.Controls.Add(this.label1);
-            this.panel1.Location = new System.Drawing.Point(13, 30);
+            this.panel1.Location = new System.Drawing.Point(13, 40);
             this.panel1.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(978, 83);
+            this.panel1.Size = new System.Drawing.Size(978, 73);
             this.panel1.TabIndex = 14;
             // 
             // button5
             // 
             this.button5.Enabled = false;
-            this.button5.Location = new System.Drawing.Point(833, 39);
+            this.button5.Location = new System.Drawing.Point(833, 35);
             this.button5.Name = "button5";
             this.button5.Size = new System.Drawing.Size(140, 28);
             this.button5.TabIndex = 12;
@@ -276,7 +223,7 @@
             // 
             // textBox9
             // 
-            this.textBox9.Location = new System.Drawing.Point(444, 14);
+            this.textBox9.Location = new System.Drawing.Point(444, 10);
             this.textBox9.Name = "textBox9";
             this.textBox9.Size = new System.Drawing.Size(107, 23);
             this.textBox9.TabIndex = 11;
@@ -285,7 +232,7 @@
             // label13
             // 
             this.label13.AutoSize = true;
-            this.label13.Location = new System.Drawing.Point(390, 17);
+            this.label13.Location = new System.Drawing.Point(390, 13);
             this.label13.Name = "label13";
             this.label13.Size = new System.Drawing.Size(44, 17);
             this.label13.TabIndex = 10;
@@ -293,14 +240,14 @@
             // 
             // textBox3
             // 
-            this.textBox3.Location = new System.Drawing.Point(62, 47);
+            this.textBox3.Location = new System.Drawing.Point(62, 43);
             this.textBox3.Name = "textBox3";
             this.textBox3.Size = new System.Drawing.Size(489, 23);
             this.textBox3.TabIndex = 7;
             // 
             // button6
             // 
-            this.button6.Location = new System.Drawing.Point(833, 11);
+            this.button6.Location = new System.Drawing.Point(833, 7);
             this.button6.Name = "button6";
             this.button6.Size = new System.Drawing.Size(140, 28);
             this.button6.TabIndex = 9;
@@ -311,7 +258,7 @@
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(8, 50);
+            this.label6.Location = new System.Drawing.Point(8, 46);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(44, 17);
             this.label6.TabIndex = 6;
@@ -320,7 +267,7 @@
             // button2
             // 
             this.button2.Enabled = false;
-            this.button2.Location = new System.Drawing.Point(683, 9);
+            this.button2.Location = new System.Drawing.Point(683, 5);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(91, 28);
             this.button2.TabIndex = 5;
@@ -330,7 +277,7 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(586, 9);
+            this.button1.Location = new System.Drawing.Point(586, 5);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(91, 28);
             this.button1.TabIndex = 4;
@@ -340,7 +287,7 @@
             // 
             // textBox2
             // 
-            this.textBox2.Location = new System.Drawing.Point(277, 14);
+            this.textBox2.Location = new System.Drawing.Point(277, 10);
             this.textBox2.Name = "textBox2";
             this.textBox2.Size = new System.Drawing.Size(85, 23);
             this.textBox2.TabIndex = 3;
@@ -349,7 +296,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(219, 17);
+            this.label3.Location = new System.Drawing.Point(219, 13);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(56, 17);
             this.label3.TabIndex = 2;
@@ -357,7 +304,7 @@
             // 
             // textBox1
             // 
-            this.textBox1.Location = new System.Drawing.Point(62, 14);
+            this.textBox1.Location = new System.Drawing.Point(62, 10);
             this.textBox1.Name = "textBox1";
             this.textBox1.Size = new System.Drawing.Size(141, 23);
             this.textBox1.TabIndex = 1;
@@ -366,23 +313,32 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(8, 17);
+            this.label1.Location = new System.Drawing.Point(8, 13);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(56, 17);
             this.label1.TabIndex = 0;
             this.label1.Text = "Ip地址：";
+            // 
+            // userControlHead1
+            // 
+            this.userControlHead1.BackColor = System.Drawing.Color.MediumPurple;
+            this.userControlHead1.Dock = System.Windows.Forms.DockStyle.Top;
+            this.userControlHead1.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.userControlHead1.HelpLink = "http://www.cnblogs.com/dathlin/p/7697782.html";
+            this.userControlHead1.Location = new System.Drawing.Point(0, 0);
+            this.userControlHead1.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.userControlHead1.MinimumSize = new System.Drawing.Size(800, 32);
+            this.userControlHead1.Name = "userControlHead1";
+            this.userControlHead1.Size = new System.Drawing.Size(1004, 32);
+            this.userControlHead1.TabIndex = 21;
             // 
             // FormComplexNet
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 17F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1004, 645);
+            this.Controls.Add(this.userControlHead1);
             this.Controls.Add(this.panel2);
-            this.Controls.Add(this.label20);
-            this.Controls.Add(this.label5);
-            this.Controls.Add(this.label4);
-            this.Controls.Add(this.linkLabel1);
-            this.Controls.Add(this.label2);
             this.Controls.Add(this.panel1);
             this.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
@@ -395,7 +351,6 @@
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
@@ -413,11 +368,6 @@
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.TextBox textBox5;
         private System.Windows.Forms.Label label7;
-        private System.Windows.Forms.Label label20;
-        private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.LinkLabel linkLabel1;
-        private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.TextBox textBox9;
         private System.Windows.Forms.Label label13;
@@ -432,5 +382,6 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button button5;
         private System.Windows.Forms.Label label11;
+        private DemoControl.UserControlHead userControlHead1;
     }
 }

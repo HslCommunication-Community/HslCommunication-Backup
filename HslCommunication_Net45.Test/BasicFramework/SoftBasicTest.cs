@@ -73,6 +73,48 @@ namespace HslCommunication_Net45.Test.BasicFramework
         }
 
         [TestMethod]
+        public void ArraySplitByLengthTest( )
+        {
+            int[] b1 = new int[10] { 12341, -2324, 84646, 324245, 352, 654332, 7687632, 435, 234, 3434 };
+            List<int[]> b2 = SoftBasic.ArraySplitByLength( b1, 4 );
+
+            Assert.IsTrue( b2[0].Length == 4 );
+            Assert.IsTrue( b2[0][0] == 12341 );
+            Assert.IsTrue( b2[0][1] == -2324 );
+            Assert.IsTrue( b2[0][2] == 84646 );
+            Assert.IsTrue( b2[0][3] == 324245 );
+
+            Assert.IsTrue( b2[1].Length == 4 );
+            Assert.IsTrue( b2[1][0] == 352 );
+            Assert.IsTrue( b2[1][1] == 654332 );
+            Assert.IsTrue( b2[1][2] == 7687632 );
+            Assert.IsTrue( b2[1][3] == 435 );
+
+            Assert.IsTrue( b2[2].Length == 2 );
+            Assert.IsTrue( b2[2][0] == 234 );
+            Assert.IsTrue( b2[2][1] == 3434 );
+        }
+
+        [TestMethod]
+        public void SplitIntegerToArrayTest( )
+        {
+            int[] b1 = SoftBasic.SplitIntegerToArray( 10, 10 );
+            Assert.IsTrue( b1.Length == 1 );
+            Assert.IsTrue( b1[0] == 10 );
+
+            int[] b2 = SoftBasic.SplitIntegerToArray( 10, 5 );
+            Assert.IsTrue( b2.Length == 2 );
+            Assert.IsTrue( b2[0] == 5 );
+            Assert.IsTrue( b2[1] == 5 );
+
+            int[] b3 = SoftBasic.SplitIntegerToArray( 10, 4 );
+            Assert.IsTrue( b3.Length == 3 );
+            Assert.IsTrue( b3[0] == 4 );
+            Assert.IsTrue( b3[1] == 4 );
+            Assert.IsTrue( b3[2] == 2 );
+        }
+
+        [TestMethod]
         public void IsTwoBytesEquelTest1( )
         {
             byte[] b1 = new byte[] { 0x13, 0xA6, 0x15, 0x85, 0x5B, 0x05, 0x12, 0x36, 0xF2, 0x27 };

@@ -73,6 +73,7 @@
             this.button17 = new System.Windows.Forms.Button();
             this.button16 = new System.Windows.Forms.Button();
             this.groupBox7 = new System.Windows.Forms.GroupBox();
+            this.button60 = new System.Windows.Forms.Button();
             this.button51 = new System.Windows.Forms.Button();
             this.button44 = new System.Windows.Forms.Button();
             this.button23 = new System.Windows.Forms.Button();
@@ -96,8 +97,6 @@
             this.blogsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.webSideToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mesDemoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.gitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.patronageToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.rToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.简体中文ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.englishToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -105,6 +104,7 @@
             this.日志ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.verisonToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.免责条款ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.授权ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.groupBox12 = new System.Windows.Forms.GroupBox();
             this.button43 = new System.Windows.Forms.Button();
             this.button42 = new System.Windows.Forms.Button();
@@ -118,6 +118,7 @@
             this.button59 = new System.Windows.Forms.Button();
             this.button57 = new System.Windows.Forms.Button();
             this.button55 = new System.Windows.Forms.Button();
+            this.support赞助ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -657,6 +658,7 @@
             // 
             // groupBox7
             // 
+            this.groupBox7.Controls.Add(this.button60);
             this.groupBox7.Controls.Add(this.button51);
             this.groupBox7.Controls.Add(this.button44);
             this.groupBox7.Controls.Add(this.button23);
@@ -668,6 +670,16 @@
             this.groupBox7.TabIndex = 14;
             this.groupBox7.TabStop = false;
             this.groupBox7.Text = "Robot(机器人)";
+            // 
+            // button60
+            // 
+            this.button60.Location = new System.Drawing.Point(19, 143);
+            this.button60.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.button60.Name = "button60";
+            this.button60.Size = new System.Drawing.Size(150, 32);
+            this.button60.TabIndex = 3;
+            this.button60.Text = "YRC1000(YASKAWA)";
+            this.button60.UseVisualStyleBackColor = true;
             // 
             // button51
             // 
@@ -880,7 +892,7 @@
             // 
             // menuStrip1
             // 
-            this.menuStrip1.BackColor = System.Drawing.Color.LightSeaGreen;
+            this.menuStrip1.BackColor = System.Drawing.Color.MediumPurple;
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.aboutToolStripMenuItem,
             this.简体中文ToolStripMenuItem,
@@ -888,7 +900,8 @@
             this.论坛toolStripMenuItem,
             this.日志ToolStripMenuItem,
             this.verisonToolStripMenuItem,
-            this.免责条款ToolStripMenuItem});
+            this.免责条款ToolStripMenuItem,
+            this.授权ToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(980, 25);
@@ -901,9 +914,8 @@
             this.blogsToolStripMenuItem,
             this.webSideToolStripMenuItem,
             this.mesDemoToolStripMenuItem,
-            this.gitToolStripMenuItem,
-            this.patronageToolStripMenuItem,
-            this.rToolStripMenuItem});
+            this.rToolStripMenuItem,
+            this.support赞助ToolStripMenuItem});
             this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
             this.aboutToolStripMenuItem.Size = new System.Drawing.Size(55, 21);
             this.aboutToolStripMenuItem.Text = "About";
@@ -911,42 +923,28 @@
             // blogsToolStripMenuItem
             // 
             this.blogsToolStripMenuItem.Name = "blogsToolStripMenuItem";
-            this.blogsToolStripMenuItem.Size = new System.Drawing.Size(256, 22);
+            this.blogsToolStripMenuItem.Size = new System.Drawing.Size(250, 22);
             this.blogsToolStripMenuItem.Text = "Blogs [博客]";
             this.blogsToolStripMenuItem.Click += new System.EventHandler(this.blogsToolStripMenuItem_Click);
             // 
             // webSideToolStripMenuItem
             // 
             this.webSideToolStripMenuItem.Name = "webSideToolStripMenuItem";
-            this.webSideToolStripMenuItem.Size = new System.Drawing.Size(256, 22);
+            this.webSideToolStripMenuItem.Size = new System.Drawing.Size(250, 22);
             this.webSideToolStripMenuItem.Text = "WebSide [官网]";
             this.webSideToolStripMenuItem.Click += new System.EventHandler(this.webSideToolStripMenuItem_Click);
             // 
             // mesDemoToolStripMenuItem
             // 
             this.mesDemoToolStripMenuItem.Name = "mesDemoToolStripMenuItem";
-            this.mesDemoToolStripMenuItem.Size = new System.Drawing.Size(256, 22);
+            this.mesDemoToolStripMenuItem.Size = new System.Drawing.Size(250, 22);
             this.mesDemoToolStripMenuItem.Text = "Mes Demo [简易MES系统示例]";
             this.mesDemoToolStripMenuItem.Click += new System.EventHandler(this.mesDemoToolStripMenuItem_Click);
-            // 
-            // gitToolStripMenuItem
-            // 
-            this.gitToolStripMenuItem.Name = "gitToolStripMenuItem";
-            this.gitToolStripMenuItem.Size = new System.Drawing.Size(256, 22);
-            this.gitToolStripMenuItem.Text = "Git [源代码地址]";
-            this.gitToolStripMenuItem.Click += new System.EventHandler(this.gitToolStripMenuItem_Click);
-            // 
-            // patronageToolStripMenuItem
-            // 
-            this.patronageToolStripMenuItem.Name = "patronageToolStripMenuItem";
-            this.patronageToolStripMenuItem.Size = new System.Drawing.Size(256, 22);
-            this.patronageToolStripMenuItem.Text = "Patronage [开源不易，感谢赞助]";
-            this.patronageToolStripMenuItem.Click += new System.EventHandler(this.patronageToolStripMenuItem_Click);
             // 
             // rToolStripMenuItem
             // 
             this.rToolStripMenuItem.Name = "rToolStripMenuItem";
-            this.rToolStripMenuItem.Size = new System.Drawing.Size(256, 22);
+            this.rToolStripMenuItem.Size = new System.Drawing.Size(250, 22);
             this.rToolStripMenuItem.Text = "Richard Hu [作者]";
             this.rToolStripMenuItem.Click += new System.EventHandler(this.rToolStripMenuItem_Click);
             // 
@@ -990,6 +988,12 @@
             this.免责条款ToolStripMenuItem.Size = new System.Drawing.Size(68, 21);
             this.免责条款ToolStripMenuItem.Text = "免责条款";
             this.免责条款ToolStripMenuItem.Click += new System.EventHandler(this.免责条款ToolStripMenuItem_Click);
+            // 
+            // 授权ToolStripMenuItem
+            // 
+            this.授权ToolStripMenuItem.Name = "授权ToolStripMenuItem";
+            this.授权ToolStripMenuItem.Size = new System.Drawing.Size(44, 21);
+            this.授权ToolStripMenuItem.Text = "授权";
             // 
             // groupBox12
             // 
@@ -1087,8 +1091,8 @@
             // 
             // label2
             // 
-            this.label2.BackColor = System.Drawing.Color.LightSeaGreen;
-            this.label2.ForeColor = System.Drawing.Color.Yellow;
+            this.label2.BackColor = System.Drawing.Color.MediumPurple;
+            this.label2.ForeColor = System.Drawing.Color.White;
             this.label2.Location = new System.Drawing.Point(486, 0);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(494, 25);
@@ -1142,6 +1146,12 @@
             this.button55.Text = "XGB Fast Enet";
             this.button55.UseVisualStyleBackColor = true;
             this.button55.Click += new System.EventHandler(this.Button55_Click);
+            // 
+            // support赞助ToolStripMenuItem
+            // 
+            this.support赞助ToolStripMenuItem.Name = "support赞助ToolStripMenuItem";
+            this.support赞助ToolStripMenuItem.Size = new System.Drawing.Size(250, 22);
+            this.support赞助ToolStripMenuItem.Text = "Support [赞助]";
             // 
             // FormLoad
             // 
@@ -1252,8 +1262,6 @@
         private System.Windows.Forms.ToolStripMenuItem blogsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem webSideToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem mesDemoToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem gitToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem patronageToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem rToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem 简体中文ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem englishToolStripMenuItem;
@@ -1287,6 +1295,9 @@
         private System.Windows.Forms.Button button57;
         private System.Windows.Forms.Button button58;
         private System.Windows.Forms.Button button59;
+        private System.Windows.Forms.Button button60;
+        private System.Windows.Forms.ToolStripMenuItem 授权ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem support赞助ToolStripMenuItem;
     }
 }
 

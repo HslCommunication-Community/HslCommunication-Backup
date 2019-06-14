@@ -77,6 +77,12 @@
     <Compile Include="Control\FormPipe.Designer.cs">
       <DependentUpon>FormPipe.cs</DependentUpon>
     </Compile>
+    <Compile Include="DemoControl\UserControlHead.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="DemoControl\UserControlHead.Designer.cs">
+      <DependentUpon>UserControlHead.cs</DependentUpon>
+    </Compile>
     <Compile Include="DemoUtils.cs" />
     <Compile Include="FormAuthor.cs">
       <SubType>Form</SubType>
@@ -416,6 +422,12 @@
     <Compile Include="Robot\FormEfort.Designer.cs">
       <DependentUpon>FormEfort.cs</DependentUpon>
     </Compile>
+    <Compile Include="Robot\FormYRC1000.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Robot\FormYRC1000.Designer.cs">
+      <DependentUpon>FormYRC1000.cs</DependentUpon>
+    </Compile>
     <Compile Include="Robot\FormKuka.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -447,6 +459,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="DemoControl\UserControlCurve.resx">
       <DependentUpon>UserControlCurve.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DemoControl\UserControlHead.resx">
+      <DependentUpon>UserControlHead.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FormAuthor.resx">
       <DependentUpon>FormAuthor.cs</DependentUpon>
@@ -625,6 +640,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Robot\FormEfort.resx">
       <DependentUpon>FormEfort.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Robot\FormYRC1000.resx">
+      <DependentUpon>FormYRC1000.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Robot\FormKuka.resx">
       <DependentUpon>FormKuka.cs</DependentUpon>

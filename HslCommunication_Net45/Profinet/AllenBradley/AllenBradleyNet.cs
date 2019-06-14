@@ -11,6 +11,7 @@ using System.Text;
 /*********************************************************************************************
  * 
  *    thanks: 江阴-  ∮溪风-⊙_⌒ 提供了测试的PLC
+ *    thanks: 
  *    
  *    感谢一个开源的java项目支持才使得本项目顺利开发：https://github.com/Tulioh/Ethernetip4j
  * 
@@ -21,6 +22,10 @@ namespace HslCommunication.Profinet.AllenBradley
     /// <summary>
     /// AB PLC Data communication class, support read and write PLC node data
     /// </summary>
+    /// <remarks>
+    /// thanks 江阴-  ∮溪风-⊙_⌒ help test the dll
+    /// thanks 上海-null 测试了这个dll
+    /// </remarks>
     public class AllenBradleyNet : NetworkDeviceBase<AllenBradleyMessage, RegularByteTransform>
     {
         #region Constructor
@@ -59,6 +64,11 @@ namespace HslCommunication.Profinet.AllenBradley
         /// </summary>
         public byte Slot { get; set; } = 0;
 
+        /// <summary>
+        /// when read array type, this means the segment length. when data type is 8-byte data, it should set to be 50
+        /// </summary>
+        public int ArraySegment { get; set; } = 100;
+
         #endregion
 
         #region Double Mode Override
@@ -80,7 +90,7 @@ namespace HslCommunication.Profinet.AllenBradley
 
             // Extract session ID
             SessionHandle = ByteTransform.TransUInt32( read.Content, 4 );
-            
+
             return OperateResult.CreateSuccessResult( );
         }
 
@@ -113,14 +123,21 @@ namespace HslCommunication.Profinet.AllenBradley
             if (address == null || length == null) return new OperateResult<byte[]>( "address or length is null" );
             if (address.Length != length.Length) return new OperateResult<byte[]>( "address and length is not same array" );
 
-            List<byte[]> cips = new List<byte[]>( );
-            for (int i = 0; i < address.Length; i++)
+            try
             {
-                cips.Add( AllenBradleyHelper.PackRequsetRead( address[i], length[i] ) );
+                List<byte[]> cips = new List<byte[]>( );
+                for (int i = 0; i < address.Length; i++)
+                {
+                    cips.Add( AllenBradleyHelper.PackRequsetRead( address[i], length[i] ) );
+                }
+                byte[] commandSpecificData = AllenBradleyHelper.PackCommandSpecificData( Slot, cips.ToArray( ) );
+
+                return OperateResult.CreateSuccessResult( AllenBradleyHelper.PackRequestHeader( 0x6F, SessionHandle, commandSpecificData ) );
             }
-            byte[] commandSpecificData = AllenBradleyHelper.PackCommandSpecificData( Slot, cips.ToArray( ) );
-            
-            return OperateResult.CreateSuccessResult( AllenBradleyHelper.PackRequestHeader( 0x6F, SessionHandle, commandSpecificData ) );
+            catch(Exception ex)
+            {
+                return new OperateResult<byte[]>( "Address Wrong:" + ex.Message );
+            }
         }
 
         /// <summary>
@@ -151,10 +168,17 @@ namespace HslCommunication.Profinet.AllenBradley
         /// <returns>Message information that contains the result object</returns>
         public OperateResult<byte[]> BuildWriteCommand( string address, ushort typeCode, byte[] data, int length = 1 )
         {
-            byte[] cip = AllenBradleyHelper.PackRequestWrite( address, typeCode, data, length );
-            byte[] commandSpecificData = AllenBradleyHelper.PackCommandSpecificData( Slot, cip );
-            
-            return OperateResult.CreateSuccessResult( AllenBradleyHelper.PackRequestHeader( 0x6F, SessionHandle, commandSpecificData ) );
+            try
+            {
+                byte[] cip = AllenBradleyHelper.PackRequestWrite( address, typeCode, data, length );
+                byte[] commandSpecificData = AllenBradleyHelper.PackCommandSpecificData( Slot, cip );
+
+                return OperateResult.CreateSuccessResult( AllenBradleyHelper.PackRequestHeader( 0x6F, SessionHandle, commandSpecificData ) );
+            }
+            catch (Exception ex)
+            {
+                return new OperateResult<byte[]>( "Address Wrong:" + ex.Message );
+            }
         }
 
         #endregion
@@ -162,21 +186,28 @@ namespace HslCommunication.Profinet.AllenBradley
         #region Override Read
 
         /// <summary>
-        /// 读取数据信息，数据长度为读取的数组长度信息 -> Read data information, data length for read array length information
+        /// Read data information, data length for read array length information
         /// </summary>
-        /// <param name="address">节点的地址格式 -> Address format of the node</param>
-        /// <param name="length">如果是数组，就为数组长度 -> In the case of arrays, the length of the array </param>
-        /// <returns>带有结果对象的结果数据 -> Result data with result object </returns>
+        /// <param name="address">Address format of the node</param>
+        /// <param name="length">In the case of arrays, the length of the array </param>
+        /// <returns>Result data with result object </returns>
         public override OperateResult<byte[]> Read( string address, ushort length )
         {
-            return Read( new string[] { address }, new int[] { length } );
+            if (length > 1)
+            {
+                return ReadSegment( address, 0, length );
+            }
+            else
+            {
+                return Read( new string[] { address }, new int[] { length } );
+            }
         }
 
         /// <summary>
-        /// 批量读取数据信息 -> Bulk read Data information
+        /// Bulk read Data information
         /// </summary>
-        /// <param name="address">节点的名称 -> Name of the node </param>
-        /// <returns>带有结果对象的结果数据 -> Result data with result object </returns>
+        /// <param name="address">Name of the node </param>
+        /// <returns>Result data with result object </returns>
         public OperateResult<byte[]> Read( string[] address )
         {
             if (address == null) return new OperateResult<byte[]>( "address can not be null" );
@@ -214,6 +245,67 @@ namespace HslCommunication.Profinet.AllenBradley
             return AllenBradleyHelper.ExtractActualData( read.Content, true );
         }
 
+        /// <summary>
+        /// Read Segment Data Array form plc, use address tag name
+        /// </summary>
+        /// <param name="address">Tag name in plc</param>
+        /// <param name="startIndex">array start index</param>
+        /// <param name="length">array length</param>
+        /// <returns>Results Bytes</returns>
+        public OperateResult<byte[]> ReadSegment( string address, int startIndex, int length )
+        {
+            try
+            {
+                List<byte> bytesContent = new List<byte>( );
+                ushort alreadyFinished = 0;
+                while (alreadyFinished < length)
+                {
+                    ushort readLength = (ushort)Math.Min( length - alreadyFinished, 100 );
+                    OperateResult<byte[]> read = ReadByCips( AllenBradleyHelper.PackRequestReadSegment( address, startIndex + alreadyFinished, readLength ) );
+                    if (!read.IsSuccess) return read;
+
+                    bytesContent.AddRange( read.Content );
+                    alreadyFinished += readLength;
+                }
+
+                return OperateResult.CreateSuccessResult( bytesContent.ToArray( ) );
+            }
+            catch (Exception ex)
+            {
+                return new OperateResult<byte[]>( "Address Wrong:" + ex.Message );
+            }
+        }
+
+
+        private OperateResult<byte[]> ReadByCips( params byte[][] cips )
+        {
+            OperateResult<byte[]> read = ReadCipFromServer( cips );
+            if (!read.IsSuccess) return read;
+
+            // 提取数据 -> Extracting data
+            return AllenBradleyHelper.ExtractActualData( read.Content, true );
+        }
+
+        /// <summary>
+        /// 使用CIP报文和服务器进行核心的数据交换
+        /// </summary>
+        /// <param name="cips">Cip commands</param>
+        /// <returns>Results Bytes</returns>
+        public OperateResult<byte[]> ReadCipFromServer( params byte[][] cips )
+        {
+            byte[] commandSpecificData = AllenBradleyHelper.PackCommandSpecificData( Slot, cips );
+            byte[] command = AllenBradleyHelper.PackRequestHeader( 0x6F, SessionHandle, commandSpecificData );
+
+            // 核心交互 -> Core Interactions
+            OperateResult<byte[]> read = ReadFromCoreServer( command );
+            if (!read.IsSuccess) return read;
+
+            // 检查反馈 -> Check Feedback
+            OperateResult check = CheckResponse( read.Content );
+            if (!check.IsSuccess) return OperateResult.CreateFailedResult<byte[]>( check );
+
+            return OperateResult.CreateSuccessResult( read.Content );
+        }
 
         /// <summary>
         /// 读取单个的bool数据信息 -> Read a single BOOL data information
@@ -222,7 +314,7 @@ namespace HslCommunication.Profinet.AllenBradley
         /// <returns>带有结果对象的结果数据 -> Result data with result info </returns>
         public OperateResult<bool> ReadBool( string address )
         {
-            OperateResult<byte[]> read = Read( address, 0 );
+            OperateResult<byte[]> read = Read( address, 1 );
             if (!read.IsSuccess) return OperateResult.CreateFailedResult<bool>( read );
 
             return OperateResult.CreateSuccessResult( ByteTransform.TransBool( read.Content, 0 ) );
@@ -235,7 +327,7 @@ namespace HslCommunication.Profinet.AllenBradley
         /// <returns>带有结果对象的结果数据 -> Result data with result info </returns>
         public OperateResult<bool[]> ReadBoolArray( string address )
         {
-            OperateResult<byte[]> read = Read( address, 0 );
+            OperateResult<byte[]> read = Read( address, 1 );
             if (!read.IsSuccess) return OperateResult.CreateFailedResult<bool[]>( read );
 
             return OperateResult.CreateSuccessResult( ByteTransform.TransBool( read.Content, 0, read.Content.Length ) );
@@ -248,7 +340,7 @@ namespace HslCommunication.Profinet.AllenBradley
         /// <returns>带有结果对象的结果数据 -> Result data with result info </returns>
         public OperateResult<byte> ReadByte( string address )
         {
-            OperateResult<byte[]> read = Read( address, 0 );
+            OperateResult<byte[]> read = Read( address, 1 );
             if (!read.IsSuccess) return OperateResult.CreateFailedResult<byte>( read );
 
             return OperateResult.CreateSuccessResult( ByteTransform.TransByte( read.Content, 0 ) );
@@ -471,9 +563,9 @@ namespace HslCommunication.Profinet.AllenBradley
         /// <summary>
         /// Writes an array of float to the PLC to return whether the write was successful
         /// </summary>
-        /// <param name="address">节点的名称 -> Name of the node </param>
-        /// <param name="values">实际数据 -> Actual data </param>
-        /// <returns>是否写入成功 -> Whether to write successfully</returns>
+        /// <param name="address">Name of the node </param>
+        /// <param name="values">Actual data </param>
+        /// <returns>Whether to write successfully</returns>
         /// <example>
         /// 以下为三菱的连接对象示例，其他的设备读写情况参照下面的代码：
         /// <code lang="cs" source="HslCommunication_Net45.Test\Documentation\Samples\Core\NetworkDeviceBase.cs" region="WriteFloatArray" title="Float类型示例" />
@@ -483,6 +575,50 @@ namespace HslCommunication.Profinet.AllenBradley
             return WriteTag( address, AllenBradleyHelper.CIP_Type_Real, ByteTransform.TransByte( values ), values.Length );
         }
 
+        /// <summary>
+        /// Writes an array of long to the PLC to return whether the write was successful
+        /// </summary>
+        /// <param name="address">Name of the node </param>
+        /// <param name="values">Actual data </param>
+        /// <returns>Whether to write successfully</returns>
+        /// <example>
+        /// 以下为三菱的连接对象示例，其他的设备读写情况参照下面的代码：
+        /// <code lang="cs" source="HslCommunication_Net45.Test\Documentation\Samples\Core\NetworkDeviceBase.cs" region="WriteInt64Array" title="Int64类型示例" />
+        /// </example>
+        public override OperateResult Write( string address, long[] values )
+        {
+            return WriteTag( address, AllenBradleyHelper.CIP_Type_LInt, ByteTransform.TransByte( values ), values.Length );
+        }
+
+        /// <summary>
+        /// Writes an array of ulong to the PLC to return whether the write was successful
+        /// </summary>
+        /// <param name="address">Name of the node </param>
+        /// <param name="values">Actual data </param>
+        /// <returns>Whether to write successfully</returns>
+        /// <example>
+        /// 以下为三菱的连接对象示例，其他的设备读写情况参照下面的代码：
+        /// <code lang="cs" source="HslCommunication_Net45.Test\Documentation\Samples\Core\NetworkDeviceBase.cs" region="WriteUInt64Array" title="UInt64类型示例" />
+        /// </example>
+        public override OperateResult Write( string address, ulong[] values )
+        {
+            return WriteTag( address, AllenBradleyHelper.CIP_Type_LInt, ByteTransform.TransByte( values ), values.Length );
+        }
+
+        /// <summary>
+        /// Writes an array of double to the PLC to return whether the write was successful
+        /// </summary>
+        /// <param name="address">Name of the node </param>
+        /// <param name="values">Actual data </param>
+        /// <returns>Whether to write successfully</returns>
+        /// <example>
+        /// 以下为三菱的连接对象示例，其他的设备读写情况参照下面的代码：
+        /// <code lang="cs" source="HslCommunication_Net45.Test\Documentation\Samples\Core\NetworkDeviceBase.cs" region="WriteDoubleArray" title="Double类型示例" />
+        /// </example>
+        public override OperateResult Write( string address, double[] values )
+        {
+            return WriteTag( address, AllenBradleyHelper.CIP_Type_Double, ByteTransform.TransByte( values ), values.Length );
+        }
 
         /// <summary>
         /// 向PLC中写入string数据，返回是否写入成功，该string类型是针对PLC的DINT类型，长度自动扩充到8

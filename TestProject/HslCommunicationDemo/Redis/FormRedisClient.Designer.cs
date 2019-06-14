@@ -28,11 +28,6 @@
         /// </summary>
         private void InitializeComponent( )
         {
-            this.label20 = new System.Windows.Forms.Label();
-            this.label5 = new System.Windows.Forms.Label();
-            this.label4 = new System.Windows.Forms.Label();
-            this.linkLabel1 = new System.Windows.Forms.LinkLabel();
-            this.label2 = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
             this.button6 = new System.Windows.Forms.Button();
             this.button5 = new System.Windows.Forms.Button();
@@ -69,58 +64,10 @@
             this.label9 = new System.Windows.Forms.Label();
             this.textBox5 = new System.Windows.Forms.TextBox();
             this.label7 = new System.Windows.Forms.Label();
+            this.userControlHead1 = new HslCommunicationDemo.DemoControl.UserControlHead();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // label20
-            // 
-            this.label20.AutoSize = true;
-            this.label20.ForeColor = System.Drawing.Color.Green;
-            this.label20.Location = new System.Drawing.Point(888, 9);
-            this.label20.Name = "label20";
-            this.label20.Size = new System.Drawing.Size(108, 17);
-            this.label20.TabIndex = 12;
-            this.label20.Text = "作者：Richard Hu";
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.ForeColor = System.Drawing.Color.Red;
-            this.label5.Location = new System.Drawing.Point(541, 9);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(64, 17);
-            this.label5.TabIndex = 11;
-            this.label5.Text = "Redis协议";
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(467, 9);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(66, 17);
-            this.label4.TabIndex = 10;
-            this.label4.Text = "Protocols:";
-            // 
-            // linkLabel1
-            // 
-            this.linkLabel1.AutoSize = true;
-            this.linkLabel1.Location = new System.Drawing.Point(75, 9);
-            this.linkLabel1.Name = "linkLabel1";
-            this.linkLabel1.Size = new System.Drawing.Size(287, 17);
-            this.linkLabel1.TabIndex = 9;
-            this.linkLabel1.TabStop = true;
-            this.linkLabel1.Text = "http://www.cnblogs.com/dathlin/p/7697782.html";
-            this.linkLabel1.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel1_LinkClicked);
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(12, 9);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(53, 17);
-            this.label2.TabIndex = 8;
-            this.label2.Text = "blogs：";
             // 
             // panel1
             // 
@@ -137,7 +84,7 @@
             this.panel1.Controls.Add(this.label3);
             this.panel1.Controls.Add(this.textBox1);
             this.panel1.Controls.Add(this.label1);
-            this.panel1.Location = new System.Drawing.Point(15, 32);
+            this.panel1.Location = new System.Drawing.Point(15, 38);
             this.panel1.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(978, 83);
@@ -260,7 +207,7 @@
             this.panel2.Controls.Add(this.label9);
             this.panel2.Controls.Add(this.textBox5);
             this.panel2.Controls.Add(this.label7);
-            this.panel2.Location = new System.Drawing.Point(15, 122);
+            this.panel2.Location = new System.Drawing.Point(15, 126);
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(977, 518);
             this.panel2.TabIndex = 13;
@@ -484,17 +431,27 @@
             this.label7.TabIndex = 7;
             this.label7.Text = "key：";
             // 
+            // userControlHead1
+            // 
+            this.userControlHead1.BackColor = System.Drawing.Color.MediumPurple;
+            this.userControlHead1.Dock = System.Windows.Forms.DockStyle.Top;
+            this.userControlHead1.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.userControlHead1.HelpLink = "http://www.cnblogs.com/dathlin/p/7697782.html";
+            this.userControlHead1.Location = new System.Drawing.Point(0, 0);
+            this.userControlHead1.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.userControlHead1.MinimumSize = new System.Drawing.Size(800, 32);
+            this.userControlHead1.Name = "userControlHead1";
+            this.userControlHead1.ProtocolInfo = "Redis";
+            this.userControlHead1.Size = new System.Drawing.Size(1004, 32);
+            this.userControlHead1.TabIndex = 14;
+            // 
             // FormRedisClient
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 17F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1004, 645);
+            this.Controls.Add(this.userControlHead1);
             this.Controls.Add(this.panel2);
-            this.Controls.Add(this.label20);
-            this.Controls.Add(this.label5);
-            this.Controls.Add(this.label4);
-            this.Controls.Add(this.linkLabel1);
-            this.Controls.Add(this.label2);
             this.Controls.Add(this.panel1);
             this.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
@@ -507,17 +464,10 @@
             this.panel2.ResumeLayout(false);
             this.panel2.PerformLayout();
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
         #endregion
-
-        private System.Windows.Forms.Label label20;
-        private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.LinkLabel linkLabel1;
-        private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.TextBox textBox3;
         private System.Windows.Forms.Label label6;
@@ -554,5 +504,6 @@
         private System.Windows.Forms.Button button9;
         private System.Windows.Forms.Button button11;
         private System.Windows.Forms.Button button12;
+        private DemoControl.UserControlHead userControlHead1;
     }
 }

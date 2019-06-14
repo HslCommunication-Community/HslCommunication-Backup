@@ -1,4 +1,5 @@
-﻿using System;
+﻿using HslCommunication.Core.Address;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -80,541 +81,36 @@ namespace HslCommunication.Profinet.Melsec
         }
 
         /// <summary>
-        /// 解析数据地址
+        /// 从三菱地址，是否位读取进行创建读取的MC的核心报文
         /// </summary>
-        /// <param name="address">数据地址</param>
-        /// <returns>解析值</returns>
-        public static OperateResult<MelsecMcDataType, int> McAnalysisAddress( string address )
-        {
-            var result = new OperateResult<MelsecMcDataType, int>( );
-            try
-            {
-                switch (address[0])
-                {
-                    case 'M':
-                    case 'm':
-                        {
-                            result.Content1 = MelsecMcDataType.M;
-                            result.Content2 = Convert.ToInt32( address.Substring( 1 ), MelsecMcDataType.M.FromBase );
-                            break;
-                        }
-                    case 'X':
-                    case 'x':
-                        {
-                            result.Content1 = MelsecMcDataType.X;
-                            result.Content2 = Convert.ToInt32( address.Substring( 1 ), MelsecMcDataType.X.FromBase );
-                            break;
-                        }
-                    case 'Y':
-                    case 'y':
-                        {
-                            result.Content1 = MelsecMcDataType.Y;
-                            result.Content2 = Convert.ToInt32( address.Substring( 1 ), MelsecMcDataType.Y.FromBase );
-                            break;
-                        }
-                    case 'D':
-                    case 'd':
-                        {
-                            result.Content1 = MelsecMcDataType.D;
-                            result.Content2 = Convert.ToInt32( address.Substring( 1 ), MelsecMcDataType.D.FromBase );
-                            break;
-                        }
-                    case 'W':
-                    case 'w':
-                        {
-                            result.Content1 = MelsecMcDataType.W;
-                            result.Content2 = Convert.ToInt32( address.Substring( 1 ), MelsecMcDataType.W.FromBase );
-                            break;
-                        }
-                    case 'L':
-                    case 'l':
-                        {
-                            result.Content1 = MelsecMcDataType.L;
-                            result.Content2 = Convert.ToInt32( address.Substring( 1 ), MelsecMcDataType.L.FromBase );
-                            break;
-                        }
-                    case 'F':
-                    case 'f':
-                        {
-                            result.Content1 = MelsecMcDataType.F;
-                            result.Content2 = Convert.ToInt32( address.Substring( 1 ), MelsecMcDataType.F.FromBase );
-                            break;
-                        }
-                    case 'V':
-                    case 'v':
-                        {
-                            result.Content1 = MelsecMcDataType.V;
-                            result.Content2 = Convert.ToInt32( address.Substring( 1 ), MelsecMcDataType.V.FromBase );
-                            break;
-                        }
-                    case 'B':
-                    case 'b':
-                        {
-                            result.Content1 = MelsecMcDataType.B;
-                            result.Content2 = Convert.ToInt32( address.Substring( 1 ), MelsecMcDataType.B.FromBase );
-                            break;
-                        }
-                    case 'R':
-                    case 'r':
-                        {
-                            result.Content1 = MelsecMcDataType.R;
-                            result.Content2 = Convert.ToInt32( address.Substring( 1 ), MelsecMcDataType.R.FromBase );
-                            break;
-                        }
-                    case 'S':
-                    case 's':
-                        {
-                            if (address[1] == 'N' || address[1] == 'n')
-                            {
-                                result.Content1 = MelsecMcDataType.SN;
-                                result.Content2 = Convert.ToInt32( address.Substring( 2 ), MelsecMcDataType.SN.FromBase );
-                                break;
-                            }
-                            else if (address[1] == 'S' || address[1] == 's')
-                            {
-                                result.Content1 = MelsecMcDataType.SS;
-                                result.Content2 = Convert.ToInt32( address.Substring( 2 ), MelsecMcDataType.SS.FromBase );
-                                break;
-                            }
-                            else if (address[1] == 'C' || address[1] == 'c')
-                            {
-                                result.Content1 = MelsecMcDataType.SC;
-                                result.Content2 = Convert.ToInt32( address.Substring( 2 ), MelsecMcDataType.SC.FromBase );
-                                break;
-                            }
-                            else
-                            {
-                                result.Content1 = MelsecMcDataType.S;
-                                result.Content2 = Convert.ToInt32( address.Substring( 1 ), MelsecMcDataType.S.FromBase );
-                                break;
-                            }
-                        }
-                    case 'Z':
-                    case 'z':
-                        {
-                            if (address.StartsWith( "ZR" ) || address.StartsWith( "zr" ))
-                            {
-                                result.Content1 = MelsecMcDataType.ZR;
-                                result.Content2 = Convert.ToInt32( address.Substring( 2 ), MelsecMcDataType.ZR.FromBase );
-                                break;
-                            }
-                            else
-                            {
-                                result.Content1 = MelsecMcDataType.Z;
-                                result.Content2 = Convert.ToInt32( address.Substring( 1 ), MelsecMcDataType.Z.FromBase );
-                                break;
-                            }
-                        }
-                    case 'T':
-                    case 't':
-                        {
-                            if (address[1] == 'N' || address[1] == 'n')
-                            {
-                                result.Content1 = MelsecMcDataType.TN;
-                                result.Content2 = Convert.ToInt32( address.Substring( 2 ), MelsecMcDataType.TN.FromBase );
-                                break;
-                            }
-                            else if (address[1] == 'S' || address[1] == 's')
-                            {
-                                result.Content1 = MelsecMcDataType.TS;
-                                result.Content2 = Convert.ToInt32( address.Substring( 2 ), MelsecMcDataType.TS.FromBase );
-                                break;
-                            }
-                            else if (address[1] == 'C' || address[1] == 'c')
-                            {
-                                result.Content1 = MelsecMcDataType.TC;
-                                result.Content2 = Convert.ToInt32( address.Substring( 2 ), MelsecMcDataType.TC.FromBase );
-                                break;
-                            }
-                            else
-                            {
-                                throw new Exception( StringResources.Language.NotSupportedDataType );
-                            }
-                        }
-                    case 'C':
-                    case 'c':
-                        {
-                            if (address[1] == 'N' || address[1] == 'n')
-                            {
-                                result.Content1 = MelsecMcDataType.CN;
-                                result.Content2 = Convert.ToInt32( address.Substring( 2 ), MelsecMcDataType.CN.FromBase );
-                                break;
-                            }
-                            else if (address[1] == 'S' || address[1] == 's')
-                            {
-                                result.Content1 = MelsecMcDataType.CS;
-                                result.Content2 = Convert.ToInt32( address.Substring( 2 ), MelsecMcDataType.CS.FromBase );
-                                break;
-                            }
-                            else if (address[1] == 'C' || address[1] == 'c')
-                            {
-                                result.Content1 = MelsecMcDataType.CC;
-                                result.Content2 = Convert.ToInt32( address.Substring( 2 ), MelsecMcDataType.CC.FromBase );
-                                break;
-                            }
-                            else
-                            {
-                                throw new Exception( StringResources.Language.NotSupportedDataType );
-                            }
-                        }
-                    default: throw new Exception( StringResources.Language.NotSupportedDataType );
-                }
-            }
-            catch (Exception ex)
-            {
-                result.Message = ex.Message;
-                return result;
-            }
-
-            result.IsSuccess = true;
-            result.Message = StringResources.Language.SuccessText;
-            return result;
-        }
-
-
-        /// <summary>
-        /// 基恩士解析数据地址
-        /// </summary>
-        /// <param name="address">数据地址</param>
-        /// <returns>解析值</returns>
-        public static OperateResult<MelsecMcDataType, int> KeyenceAnalysisAddress( string address )
-        {
-            var result = new OperateResult<MelsecMcDataType, int>( );
-            try
-            {
-                switch (address[0])
-                {
-                    case 'M':
-                    case 'm':
-                        {
-                            result.Content1 = MelsecMcDataType.Keyence_M;
-                            result.Content2 = Convert.ToInt32( address.Substring( 1 ), MelsecMcDataType.Keyence_M.FromBase );
-                            break;
-                        }
-                    case 'X':
-                    case 'x':
-                        {
-                            result.Content1 = MelsecMcDataType.Keyence_X;
-                            result.Content2 = Convert.ToInt32( address.Substring( 1 ), MelsecMcDataType.Keyence_X.FromBase );
-                            break;
-                        }
-                    case 'Y':
-                    case 'y':
-                        {
-                            result.Content1 = MelsecMcDataType.Keyence_Y;
-                            result.Content2 = Convert.ToInt32( address.Substring( 1 ), MelsecMcDataType.Keyence_Y.FromBase );
-                            break;
-                        }
-                    case 'B':
-                    case 'b':
-                        {
-                            result.Content1 = MelsecMcDataType.Keyence_B;
-                            result.Content2 = Convert.ToInt32( address.Substring( 1 ), MelsecMcDataType.Keyence_B.FromBase );
-                            break;
-                        }
-                    case 'L':
-                    case 'l':
-                        {
-                            result.Content1 = MelsecMcDataType.Keyence_L;
-                            result.Content2 = Convert.ToInt32( address.Substring( 1 ), MelsecMcDataType.Keyence_L.FromBase );
-                            break;
-                        }
-                    case 'S':
-                    case 's':
-                        {
-                            if (address[1] == 'M' || address[1] == 'm')
-                            {
-                                result.Content1 = MelsecMcDataType.Keyence_SM;
-                                result.Content2 = Convert.ToInt32( address.Substring( 2 ), MelsecMcDataType.Keyence_SM.FromBase );
-                                break;
-                            }
-                            else if (address[1] == 'D' || address[1] == 'd')
-                            {
-                                result.Content1 = MelsecMcDataType.Keyence_SD;
-                                result.Content2 = Convert.ToInt32( address.Substring( 2 ), MelsecMcDataType.Keyence_SD.FromBase );
-                                break;
-                            }
-                            else
-                            {
-                                throw new Exception( StringResources.Language.NotSupportedDataType );
-                            }
-                        }
-                    case 'D':
-                    case 'd':
-                        {
-                            result.Content1 = MelsecMcDataType.Keyence_D;
-                            result.Content2 = Convert.ToInt32( address.Substring( 1 ), MelsecMcDataType.Keyence_D.FromBase );
-                            break;
-                        }
-                    case 'R':
-                    case 'r':
-                        {
-                            result.Content1 = MelsecMcDataType.Keyence_R;
-                            result.Content2 = Convert.ToInt32( address.Substring( 1 ), MelsecMcDataType.Keyence_R.FromBase );
-                            break;
-                        }
-                    case 'Z':
-                    case 'z':
-                        {
-                            if (address[1] == 'R' || address[1] == 'r')
-                            {
-                                result.Content1 = MelsecMcDataType.Keyence_ZR;
-                                result.Content2 = Convert.ToInt32( address.Substring( 2 ), MelsecMcDataType.Keyence_ZR.FromBase );
-                                break;
-                            }
-                            else
-                            {
-                                throw new Exception( StringResources.Language.NotSupportedDataType );
-                            }
-                        }
-                    case 'W':
-                    case 'w':
-                        {
-                            result.Content1 = MelsecMcDataType.Keyence_W;
-                            result.Content2 = Convert.ToInt32( address.Substring( 1 ), MelsecMcDataType.Keyence_W.FromBase );
-                            break;
-                        }
-                    case 'T':
-                    case 't':
-                        {
-                            if (address[1] == 'N' || address[1] == 'n')
-                            {
-                                result.Content1 = MelsecMcDataType.Keyence_TN;
-                                result.Content2 = Convert.ToInt32( address.Substring( 2 ), MelsecMcDataType.Keyence_TN.FromBase );
-                                break;
-                            }
-                            else if (address[1] == 'S' || address[1] == 's')
-                            {
-                                result.Content1 = MelsecMcDataType.Keyence_TS;
-                                result.Content2 = Convert.ToInt32( address.Substring( 2 ), MelsecMcDataType.Keyence_TS.FromBase );
-                                break;
-                            }
-                            else
-                            {
-                                throw new Exception( StringResources.Language.NotSupportedDataType );
-                            }
-                        }
-                    case 'C':
-                    case 'c':
-                        {
-                            if (address[1] == 'N' || address[1] == 'n')
-                            {
-                                result.Content1 = MelsecMcDataType.Keyence_CN;
-                                result.Content2 = Convert.ToInt32( address.Substring( 2 ), MelsecMcDataType.Keyence_CN.FromBase );
-                                break;
-                            }
-                            else if (address[1] == 'S' || address[1] == 's')
-                            {
-                                result.Content1 = MelsecMcDataType.Keyence_CS;
-                                result.Content2 = Convert.ToInt32( address.Substring( 2 ), MelsecMcDataType.Keyence_CS.FromBase );
-                                break;
-                            }
-                            else
-                            {
-                                throw new Exception( StringResources.Language.NotSupportedDataType );
-                            }
-                        }
-                    default: throw new Exception( StringResources.Language.NotSupportedDataType );
-                }
-            }
-            catch (Exception ex)
-            {
-                result.Message = ex.Message;
-                return result;
-            }
-
-            result.IsSuccess = true;
-            result.Message = StringResources.Language.SuccessText;
-            return result;
-        }
-
-        /// <summary>
-        /// 计算松下的MC协议的偏移地址的机制
-        /// </summary>
-        /// <param name="address">字符串形式的地址</param>
-        /// <returns>实际的偏移地址</returns>
-        public static int GetPanasonicAddress( string address )
-        {
-            if (address.IndexOf( '.' ) > 0)
-            {
-                string[] values = address.Split( '.' );
-                return Convert.ToInt32( values[0] ) * 16 + Convert.ToInt32( values[1] );
-            }
-            else
-            {
-                return Convert.ToInt32( address.Substring( 0, address.Length - 1 ) ) * 16 + Convert.ToInt32( address.Substring( address.Length - 1 ), 16 );
-            }
-        }
-
-        /// <summary>
-        /// 松下的解析数据地址
-        /// </summary>
-        /// <param name="address">数据地址</param>
-        /// <returns>解析值</returns>
-        public static OperateResult<MelsecMcDataType, int> PanasonicAnalysisAddress( string address )
-        {
-            var result = new OperateResult<MelsecMcDataType, int>( );
-            try
-            {
-                switch (address[0])
-                {
-                    case 'R':
-                    case 'r':
-                        {
-                            int add = GetPanasonicAddress( address.Substring( 1 ) );
-                            if (add < 14400)
-                            {
-                                result.Content1 = MelsecMcDataType.Panasonic_R;
-                                result.Content2 = add;
-                            }
-                            else
-                            {
-                                result.Content1 = MelsecMcDataType.Panasonic_SM;
-                                result.Content2 = add - 14400;
-                            }
-                            break;
-                        }
-                    case 'X':
-                    case 'x':
-                        {
-                            result.Content1 = MelsecMcDataType.Panasonic_X;
-                            result.Content2 = GetPanasonicAddress( address.Substring( 1 ) );
-                            break;
-                        }
-                    case 'Y':
-                    case 'y':
-                        {
-                            result.Content1 = MelsecMcDataType.Panasonic_Y;
-                            result.Content2 = GetPanasonicAddress( address.Substring( 1 ) );
-                            break;
-                        }
-                    case 'L':
-                    case 'l':
-                        {
-                            if (address[1] == 'D' || address[1] == 'd')
-                            {
-                                result.Content1 = MelsecMcDataType.Panasonic_LD;
-                                result.Content2 = Convert.ToInt32( address.Substring( 2 ) );
-                                break;
-                            }
-                            else
-                            {
-                                result.Content1 = MelsecMcDataType.Panasonic_L;
-                                result.Content2 = GetPanasonicAddress( address.Substring( 1 ) );
-                            }
-                            break;
-                        }
-                    case 'D':
-                    case 'd':
-                        {
-                            int add = Convert.ToInt32( address.Substring( 1 ) );
-                            if (add < 90000)
-                            {
-                                result.Content1 = MelsecMcDataType.Panasonic_DT;
-                                result.Content2 = Convert.ToInt32( address.Substring( 1 ) );
-                            }
-                            else
-                            {
-                                result.Content1 = MelsecMcDataType.Panasonic_SD;
-                                result.Content2 = Convert.ToInt32( address.Substring( 1 ) ) - 90000;
-                            }
-                            break;
-                        }
-                    case 'T':
-                    case 't':
-                        {
-                            if (address[1] == 'N' || address[1] == 'n')
-                            {
-                                result.Content1 = MelsecMcDataType.Panasonic_TN;
-                                result.Content2 = Convert.ToInt32( address.Substring( 2 ) );
-                                break;
-                            }
-                            else if (address[1] == 'S' || address[1] == 's')
-                            {
-                                result.Content1 = MelsecMcDataType.Panasonic_TS;
-                                result.Content2 = Convert.ToInt32( address.Substring( 2 ) );
-                                break;
-                            }
-                            else
-                            {
-                                throw new Exception( StringResources.Language.NotSupportedDataType );
-                            }
-                        }
-                    case 'C':
-                    case 'c':
-                        {
-                            if (address[1] == 'N' || address[1] == 'n')
-                            {
-                                result.Content1 = MelsecMcDataType.Panasonic_CN;
-                                result.Content2 = Convert.ToInt32( address.Substring( 2 ) );
-                                break;
-                            }
-                            else if (address[1] == 'S' || address[1] == 's')
-                            {
-                                result.Content1 = MelsecMcDataType.Panasonic_CS;
-                                result.Content2 = Convert.ToInt32( address.Substring( 2 ) );
-                                break;
-                            }
-                            else
-                            {
-                                throw new Exception( StringResources.Language.NotSupportedDataType );
-                            }
-                        }
-                    default: throw new Exception( StringResources.Language.NotSupportedDataType );
-                }
-            }
-            catch (Exception ex)
-            {
-                result.Message = ex.Message;
-                return result;
-            }
-
-            result.IsSuccess = true;
-            result.Message = StringResources.Language.SuccessText;
-            return result;
-        }
-
-        /// <summary>
-        /// 从地址，长度，是否位读取进行创建读取的MC的核心报文
-        /// </summary>
-        /// <param name="address">三菱的地址信息，具体格式参照<seealso cref="MelsecMcNet"/> 的注释说明</param>
-        /// <param name="length">读取的长度信息</param>
         /// <param name="isBit">是否进行了位读取操作</param>
-        /// <param name="analysisAddress">对地址分析的委托方法</param>
+        /// <param name="addressData">三菱Mc协议的数据地址</param>
         /// <returns>带有成功标识的报文对象</returns>
-        public static OperateResult<byte[]> BuildReadMcCoreCommand(string address, ushort length, bool isBit, Func<string, OperateResult<MelsecMcDataType, int>> analysisAddress)
+        public static byte[] BuildReadMcCoreCommand( McAddressData addressData, bool isBit)
         {
-            OperateResult<MelsecMcDataType, int> analysis = analysisAddress( address );
-            if (!analysis.IsSuccess) return OperateResult.CreateFailedResult<byte[]>( analysis );
-
             byte[] command = new byte[10];
-            command[0] = 0x01;                                               // 批量读取数据命令
+            command[0] = 0x01;                                                      // 批量读取数据命令
             command[1] = 0x04;
-            command[2] = isBit ? (byte)0x01 : (byte)0x00;                    // 以点为单位还是字为单位成批读取
+            command[2] = isBit ? (byte)0x01 : (byte)0x00;                           // 以点为单位还是字为单位成批读取
             command[3] = 0x00;
-            command[4] = BitConverter.GetBytes( analysis.Content2 )[0];      // 起始地址的地位
-            command[5] = BitConverter.GetBytes( analysis.Content2 )[1];
-            command[6] = BitConverter.GetBytes( analysis.Content2 )[2];
-            command[7] = analysis.Content1.DataCode;                         // 指明读取的数据
-            command[8] = (byte)(length % 256);                               // 软元件的长度
-            command[9] = (byte)(length / 256);
+            command[4] = BitConverter.GetBytes( addressData.AddressStart )[0];      // 起始地址的地位
+            command[5] = BitConverter.GetBytes( addressData.AddressStart )[1];
+            command[6] = BitConverter.GetBytes( addressData.AddressStart )[2];
+            command[7] = addressData.McDataType.DataCode;                           // 指明读取的数据
+            command[8] = (byte)(addressData.Length % 256);                          // 软元件的长度
+            command[9] = (byte)(addressData.Length / 256);
 
-            return OperateResult.CreateSuccessResult( command );
+            return command;
         }
 
         /// <summary>
-        /// 从地址，长度，是否位读取进行创建读取Ascii格式的MC的核心报文
+        /// 从三菱地址，是否位读取进行创建读取Ascii格式的MC的核心报文
         /// </summary>
-        /// <param name="address">三菱的地址信息，具体格式参照<seealso cref="MelsecMcNet"/> 的注释说明</param>
-        /// <param name="length">读取的长度信息</param>
+        /// <param name="addressData">三菱Mc协议的数据地址</param>
         /// <param name="isBit">是否进行了位读取操作</param>
-        /// <param name="analysisAddress">对地址分析的委托方法</param>
         /// <returns>带有成功标识的报文对象</returns>
-        public static OperateResult<byte[]> BuildAsciiReadMcCoreCommand(string address, ushort length, bool isBit, Func<string, OperateResult<MelsecMcDataType, int>> analysisAddress )
+        public static byte[] BuildAsciiReadMcCoreCommand( McAddressData addressData, bool isBit )
         {
-            OperateResult<MelsecMcDataType, int> analysis = analysisAddress( address );
-            if (!analysis.IsSuccess) return OperateResult.CreateFailedResult<byte[]>( analysis );
-
             byte[] command = new byte[20];
             command[ 0] = 0x30;                                                               // 批量读取数据命令
             command[ 1] = 0x34;
@@ -624,63 +120,55 @@ namespace HslCommunication.Profinet.Melsec
             command[ 5] = 0x30;
             command[ 6] = 0x30;
             command[ 7] = isBit ? (byte)0x31 : (byte)0x30;
-            command[ 8] = Encoding.ASCII.GetBytes( analysis.Content1.AsciiCode )[0];          // 软元件类型
-            command[ 9] = Encoding.ASCII.GetBytes( analysis.Content1.AsciiCode )[1];
-            command[10] = MelsecHelper.BuildBytesFromAddress( analysis.Content2, analysis.Content1 )[0];            // 起始地址的地位
-            command[11] = MelsecHelper.BuildBytesFromAddress( analysis.Content2, analysis.Content1 )[1];
-            command[12] = MelsecHelper.BuildBytesFromAddress( analysis.Content2, analysis.Content1 )[2];
-            command[13] = MelsecHelper.BuildBytesFromAddress( analysis.Content2, analysis.Content1 )[3];
-            command[14] = MelsecHelper.BuildBytesFromAddress( analysis.Content2, analysis.Content1 )[4];
-            command[15] = MelsecHelper.BuildBytesFromAddress( analysis.Content2, analysis.Content1 )[5];
-            command[16] = MelsecHelper.BuildBytesFromData( length )[0];                                             // 软元件点数
-            command[17] = MelsecHelper.BuildBytesFromData( length )[1];
-            command[18] = MelsecHelper.BuildBytesFromData( length )[2];
-            command[19] = MelsecHelper.BuildBytesFromData( length )[3];
+            command[ 8] = Encoding.ASCII.GetBytes( addressData.McDataType.AsciiCode )[0];          // 软元件类型
+            command[ 9] = Encoding.ASCII.GetBytes( addressData.McDataType.AsciiCode )[1];
+            command[10] = MelsecHelper.BuildBytesFromAddress( addressData.AddressStart, addressData.McDataType )[0];            // 起始地址的地位
+            command[11] = MelsecHelper.BuildBytesFromAddress( addressData.AddressStart, addressData.McDataType )[1];
+            command[12] = MelsecHelper.BuildBytesFromAddress( addressData.AddressStart, addressData.McDataType )[2];
+            command[13] = MelsecHelper.BuildBytesFromAddress( addressData.AddressStart, addressData.McDataType )[3];
+            command[14] = MelsecHelper.BuildBytesFromAddress( addressData.AddressStart, addressData.McDataType )[4];
+            command[15] = MelsecHelper.BuildBytesFromAddress( addressData.AddressStart, addressData.McDataType )[5];
+            command[16] = MelsecHelper.BuildBytesFromData( addressData.Length )[0];                                             // 软元件点数
+            command[17] = MelsecHelper.BuildBytesFromData( addressData.Length )[1];
+            command[18] = MelsecHelper.BuildBytesFromData( addressData.Length )[2];
+            command[19] = MelsecHelper.BuildBytesFromData( addressData.Length )[3];
 
-            return OperateResult.CreateSuccessResult( command );
+            return command;
         }
 
         /// <summary>
         /// 以字为单位，创建数据写入的核心报文
         /// </summary>
-        /// <param name="address">三菱的地址信息，具体格式参照<seealso cref="MelsecMcNet"/> 的注释说明</param>
+        /// <param name="addressData">三菱Mc协议的数据地址</param>
         /// <param name="value">实际的原始数据信息</param>
-        /// <param name="analysisAddress">对地址分析的委托方法</param>
         /// <returns>带有成功标识的报文对象</returns>
-        public static OperateResult<byte[]> BuildWriteWordCoreCommand(string address, byte[] value, Func<string, OperateResult<MelsecMcDataType, int>> analysisAddress )
+        public static byte[] BuildWriteWordCoreCommand( McAddressData addressData, byte[] value )
         {
-            OperateResult<MelsecMcDataType, int> analysis = analysisAddress( address );
-            if (!analysis.IsSuccess) return OperateResult.CreateFailedResult<byte[]>( analysis );
-
             if (value == null) value = new byte[0];
             byte[] command = new byte[10 + value.Length];
-            command[0] = 0x01;                                                        // 批量读取数据命令
+            command[0] = 0x01;                                                        // 批量写入数据命令
             command[1] = 0x14;
             command[2] = 0x00;                                                        // 以字为单位成批读取
             command[3] = 0x00;
-            command[4] = BitConverter.GetBytes( analysis.Content2 )[0];               // 起始地址的地位
-            command[5] = BitConverter.GetBytes( analysis.Content2 )[1];
-            command[6] = BitConverter.GetBytes( analysis.Content2 )[2];
-            command[7] = analysis.Content1.DataCode;                                  // 指明写入的数据
+            command[4] = BitConverter.GetBytes( addressData.AddressStart )[0];        // 起始地址的地位
+            command[5] = BitConverter.GetBytes( addressData.AddressStart )[1];
+            command[6] = BitConverter.GetBytes( addressData.AddressStart )[2];
+            command[7] = addressData.McDataType.DataCode;                             // 指明写入的数据
             command[8] = (byte)(value.Length / 2 % 256);                              // 软元件长度的地位
             command[9] = (byte)(value.Length / 2 / 256);
             value.CopyTo( command, 10 );
 
-            return OperateResult.CreateSuccessResult( command );
+            return command;
         }
 
         /// <summary>
         /// 以字为单位，创建ASCII数据写入的核心报文
         /// </summary>
-        /// <param name="address">三菱的地址信息，具体格式参照<seealso cref="MelsecMcNet"/> 的注释说明</param>
+        /// <param name="addressData">三菱Mc协议的数据地址</param>
         /// <param name="value">实际的原始数据信息</param>
-        /// <param name="analysisAddress">对地址分析的委托方法</param>
         /// <returns>带有成功标识的报文对象</returns>
-        public static OperateResult<byte[]> BuildAsciiWriteWordCoreCommand(string address, byte[] value, Func<string, OperateResult<MelsecMcDataType, int>> analysisAddress )
+        public static byte[] BuildAsciiWriteWordCoreCommand( McAddressData addressData, byte[] value )
         {
-            OperateResult<MelsecMcDataType, int> analysis = analysisAddress( address );
-            if (!analysis.IsSuccess) return OperateResult.CreateFailedResult<byte[]>( analysis );
-
             if (value == null) value = new byte[0];
             byte[] buffer = new byte[value.Length * 2];
             for (int i = 0; i < value.Length / 2; i++)
@@ -690,43 +178,39 @@ namespace HslCommunication.Profinet.Melsec
             value = buffer;
             
             byte[] command = new byte[20 + value.Length];
-            command[ 0] = 0x31;                                                                              // 批量写入的命令
+            command[ 0] = 0x31;                                                                                          // 批量写入的命令
             command[ 1] = 0x34;
             command[ 2] = 0x30;
             command[ 3] = 0x31;
-            command[ 4] = 0x30;                                                                              // 子命令
+            command[ 4] = 0x30;                                                                                          // 子命令
             command[ 5] = 0x30;
             command[ 6] = 0x30;
             command[ 7] = 0x30;
-            command[ 8] = Encoding.ASCII.GetBytes( analysis.Content1.AsciiCode )[0];                         // 软元件类型
-            command[ 9] = Encoding.ASCII.GetBytes( analysis.Content1.AsciiCode )[1];
-            command[10] = MelsecHelper.BuildBytesFromAddress( analysis.Content2, analysis.Content1 )[0];     // 起始地址的地位
-            command[11] = MelsecHelper.BuildBytesFromAddress( analysis.Content2, analysis.Content1 )[1];
-            command[12] = MelsecHelper.BuildBytesFromAddress( analysis.Content2, analysis.Content1 )[2];
-            command[13] = MelsecHelper.BuildBytesFromAddress( analysis.Content2, analysis.Content1 )[3];
-            command[14] = MelsecHelper.BuildBytesFromAddress( analysis.Content2, analysis.Content1 )[4];
-            command[15] = MelsecHelper.BuildBytesFromAddress( analysis.Content2, analysis.Content1 )[5];
-            command[16] = MelsecHelper.BuildBytesFromData( (ushort)(value.Length / 4) )[0];              // 软元件点数
+            command[ 8] = Encoding.ASCII.GetBytes( addressData.McDataType.AsciiCode )[0];                                // 软元件类型
+            command[ 9] = Encoding.ASCII.GetBytes( addressData.McDataType.AsciiCode )[1];
+            command[10] = MelsecHelper.BuildBytesFromAddress( addressData.AddressStart, addressData.McDataType )[0];     // 起始地址的地位
+            command[11] = MelsecHelper.BuildBytesFromAddress( addressData.AddressStart, addressData.McDataType )[1];
+            command[12] = MelsecHelper.BuildBytesFromAddress( addressData.AddressStart, addressData.McDataType )[2];
+            command[13] = MelsecHelper.BuildBytesFromAddress( addressData.AddressStart, addressData.McDataType )[3];
+            command[14] = MelsecHelper.BuildBytesFromAddress( addressData.AddressStart, addressData.McDataType )[4];
+            command[15] = MelsecHelper.BuildBytesFromAddress( addressData.AddressStart, addressData.McDataType )[5];
+            command[16] = MelsecHelper.BuildBytesFromData( (ushort)(value.Length / 4) )[0];                              // 软元件点数
             command[17] = MelsecHelper.BuildBytesFromData( (ushort)(value.Length / 4) )[1];
             command[18] = MelsecHelper.BuildBytesFromData( (ushort)(value.Length / 4) )[2];
             command[19] = MelsecHelper.BuildBytesFromData( (ushort)(value.Length / 4) )[3];
             value.CopyTo( command, 20 );
 
-            return OperateResult.CreateSuccessResult( command );
+            return command;
         }
 
         /// <summary>
         /// 以位为单位，创建数据写入的核心报文
         /// </summary>
-        /// <param name="address">三菱的地址信息，具体格式参照<seealso cref="MelsecMcNet"/> 的注释说明</param>
+        /// <param name="addressData">三菱Mc协议的数据地址</param>
         /// <param name="value">原始的bool数组数据</param>
-        /// <param name="analysisAddress">对地址分析的委托方法</param>
         /// <returns>带有成功标识的报文对象</returns>
-        public static OperateResult<byte[]> BuildWriteBitCoreCommand( string address, bool[] value, Func<string, OperateResult<MelsecMcDataType, int>> analysisAddress )
+        public static byte[] BuildWriteBitCoreCommand( McAddressData addressData, bool[] value )
         {
-            OperateResult<MelsecMcDataType, int> analysis = analysisAddress( address );
-            if (!analysis.IsSuccess) return OperateResult.CreateFailedResult<byte[]>( analysis );
-
             if (value == null) value = new bool[0];
             byte[] buffer = MelsecHelper.TransBoolArrayToByteData( value );
             byte[] command = new byte[10 + buffer.Length];
@@ -734,56 +218,52 @@ namespace HslCommunication.Profinet.Melsec
             command[1] = 0x14;
             command[2] = 0x01;                                                        // 以位为单位成批写入
             command[3] = 0x00;
-            command[4] = BitConverter.GetBytes( analysis.Content2 )[0];               // 起始地址的地位
-            command[5] = BitConverter.GetBytes( analysis.Content2 )[1];
-            command[6] = BitConverter.GetBytes( analysis.Content2 )[2];
-            command[7] = analysis.Content1.DataCode;                                  // 指明写入的数据
+            command[4] = BitConverter.GetBytes( addressData.AddressStart )[0];        // 起始地址的地位
+            command[5] = BitConverter.GetBytes( addressData.AddressStart )[1];
+            command[6] = BitConverter.GetBytes( addressData.AddressStart )[2];
+            command[7] = addressData.McDataType.DataCode;                             // 指明写入的数据
             command[8] = (byte)(value.Length % 256);                                  // 软元件长度的地位
             command[9] = (byte)(value.Length / 256);
             buffer.CopyTo( command, 10 );
 
-            return OperateResult.CreateSuccessResult( command );
+            return command;
         }
 
         /// <summary>
         /// 以位为单位，创建ASCII数据写入的核心报文
         /// </summary>
-        /// <param name="address">三菱的地址信息，具体格式参照<seealso cref="MelsecMcNet"/> 的注释说明</param>
+        /// <param name="addressData">三菱Mc协议的数据地址</param>
         /// <param name="value">原始的bool数组数据</param>
-        /// <param name="analysisAddress">对地址分析的委托方法</param>
         /// <returns>带有成功标识的报文对象</returns>
-        public static OperateResult<byte[]> BuildAsciiWriteBitCoreCommand( string address, bool[] value, Func<string, OperateResult<MelsecMcDataType, int>> analysisAddress )
+        public static byte[] BuildAsciiWriteBitCoreCommand( McAddressData addressData, bool[] value )
         {
-            OperateResult<MelsecMcDataType, int> analysis = analysisAddress( address );
-            if (!analysis.IsSuccess) return OperateResult.CreateFailedResult<byte[]>( analysis );
-
             if (value == null) value = new bool[0];
             byte[] buffer = value.Select( m => m ? (byte)0x31 : (byte)0x30 ).ToArray( );
             
             byte[] command = new byte[20 + buffer.Length];
-            command[0] = 0x31;                                                                              // 批量写入的命令
-            command[1] = 0x34;
-            command[2] = 0x30;
-            command[3] = 0x31;
-            command[4] = 0x30;                                                                              // 子命令
-            command[5] = 0x30;
-            command[6] = 0x30;
-            command[7] = 0x31;
-            command[8] = Encoding.ASCII.GetBytes( analysis.Content1.AsciiCode )[0];                         // 软元件类型
-            command[9] = Encoding.ASCII.GetBytes( analysis.Content1.AsciiCode )[1];
-            command[10] = MelsecHelper.BuildBytesFromAddress( analysis.Content2, analysis.Content1 )[0];     // 起始地址的地位
-            command[11] = MelsecHelper.BuildBytesFromAddress( analysis.Content2, analysis.Content1 )[1];
-            command[12] = MelsecHelper.BuildBytesFromAddress( analysis.Content2, analysis.Content1 )[2];
-            command[13] = MelsecHelper.BuildBytesFromAddress( analysis.Content2, analysis.Content1 )[3];
-            command[14] = MelsecHelper.BuildBytesFromAddress( analysis.Content2, analysis.Content1 )[4];
-            command[15] = MelsecHelper.BuildBytesFromAddress( analysis.Content2, analysis.Content1 )[5];
+            command[ 0] = 0x31;                                                                              // 批量写入的命令
+            command[ 1] = 0x34;
+            command[ 2] = 0x30;
+            command[ 3] = 0x31;
+            command[ 4] = 0x30;                                                                              // 子命令
+            command[ 5] = 0x30;
+            command[ 6] = 0x30;
+            command[ 7] = 0x31;
+            command[ 8] = Encoding.ASCII.GetBytes( addressData.McDataType.AsciiCode )[0];                         // 软元件类型
+            command[ 9] = Encoding.ASCII.GetBytes( addressData.McDataType.AsciiCode )[1];
+            command[10] = MelsecHelper.BuildBytesFromAddress( addressData.AddressStart, addressData.McDataType )[0];     // 起始地址的地位
+            command[11] = MelsecHelper.BuildBytesFromAddress( addressData.AddressStart, addressData.McDataType )[1];
+            command[12] = MelsecHelper.BuildBytesFromAddress( addressData.AddressStart, addressData.McDataType )[2];
+            command[13] = MelsecHelper.BuildBytesFromAddress( addressData.AddressStart, addressData.McDataType )[3];
+            command[14] = MelsecHelper.BuildBytesFromAddress( addressData.AddressStart, addressData.McDataType )[4];
+            command[15] = MelsecHelper.BuildBytesFromAddress( addressData.AddressStart, addressData.McDataType )[5];
             command[16] = MelsecHelper.BuildBytesFromData( (ushort)(value.Length) )[0];              // 软元件点数
             command[17] = MelsecHelper.BuildBytesFromData( (ushort)(value.Length) )[1];
             command[18] = MelsecHelper.BuildBytesFromData( (ushort)(value.Length) )[2];
             command[19] = MelsecHelper.BuildBytesFromData( (ushort)(value.Length) )[3];
             buffer.CopyTo( command, 20 );
 
-            return OperateResult.CreateSuccessResult( command );
+            return command;
         }
 
         #endregion

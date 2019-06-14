@@ -760,6 +760,14 @@ namespace HslCommunication
     ///             <item>西门子的SiemensS7Net类当读取PLC配置长度的DB块数据时，将提示错误信息。</item>
     ///         </list>
     ///     </revision>
+    ///     <revision date="2019-8-1" version="8.0.0" author="Richard.Hu">
+    ///         <list type="bullet">
+    ///             <item>版本从8.0.0之后不再开源，dll的使用需要授权码，否则只能运行8小时，以前版本不影响，依然免费开源。</item>
+    ///             <item>新增安川机器人通信类。</item>
+    ///             <item>新增所有PLC地址类信息，用于快速集成扩展。</item>
+    ///             <item>西门子的多地址读取的长度不再限制为19个，而是无限制个。</item>
+    ///         </list>
+    ///     </revision>
     /// </revisionHistory>
     [System.Runtime.CompilerServices.CompilerGeneratedAttribute( )]
     public class NamespaceDoc
@@ -790,4 +798,18 @@ namespace HslCommunication
 
     // bugs
     // IReadWriteNet接口可以读取数据可以，Write方法写入西门子数据不管赋值什么值写入都是0，强制转换成simenss7net 又可以正常写入
+
+
+
+
+    //git checkout A
+    //git log
+    //找出要合并的commit ID :
+    //例如
+    //0128660c08e325d410cb845616af355c0c19c6fe
+    //然后切换到B分支上
+    //git checkout B
+    //git cherry-pick  0128660c08e325d410cb845616af355c0c19c6fe
+
+    //然后就将A分支的某个commit合并到了B分支了
 }

@@ -60,6 +60,7 @@
   <ItemGroup>
     <Compile Include="Algorithms\Alarm\AlarmDegree.cs" />
     <Compile Include="Algorithms\Alarm\AlarmItem.cs" />
+    <Compile Include="Authorization.cs" />
     <Compile Include="BasicFramework\SharpList.cs" />
     <Compile Include="Algorithms\ConnectPool\ConnectPool.cs" />
     <Compile Include="Algorithms\ConnectPool\IConnector.cs" />
@@ -176,6 +177,9 @@
       <DependentUpon>UserVerticalProgress.cs</DependentUpon>
     </Compile>
     <Compile Include="Core\Address\DeviceAddressBase.cs" />
+    <Compile Include="Core\Address\DeviceAddressDataBase.cs" />
+    <Compile Include="Core\Address\MelsecMcAddressData.cs" />
+    <Compile Include="Core\Address\S7AddressData.cs" />
     <Compile Include="Core\IMessage\AlienMessage.cs" />
     <Compile Include="Core\IMessage\AllenBradleyMessage.cs" />
     <Compile Include="Core\IMessage\EFORTMessage.cs" />

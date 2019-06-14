@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using HslCommunication.Core.Address;
 using HslCommunication.Profinet.Melsec;
 
 
@@ -232,10 +233,11 @@ namespace HslCommunication.Profinet.Keyence
         /// 分析地址的方法，允许派生类里进行重写操作
         /// </summary>
         /// <param name="address">地址信息</param>
+        /// <param name="length">数据长度</param>
         /// <returns>解析后的数据信息</returns>
-        protected override OperateResult<MelsecMcDataType, int> McAnalysisAddress( string address )
+        protected override OperateResult<McAddressData> McAnalysisAddress( string address, ushort length )
         {
-            return MelsecHelper.KeyenceAnalysisAddress( address );
+            return McAddressData.ParseKeyenceFrom( address, length );
         }
 
         #endregion

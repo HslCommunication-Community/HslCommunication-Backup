@@ -27,14 +27,6 @@ namespace HslCommunicationDemo
             button2.Enabled = false;
 
             Language( Program.Language );
-
-
-            if (!Program.ShowAuthorInfomation)
-            {
-                label2.Visible = false;
-                linkLabel1.Visible = false;
-                label20.Visible = false;
-            }
         }
 
         private void Language( int language )
@@ -42,8 +34,6 @@ namespace HslCommunicationDemo
             if (language == 1)
             {
                 Text = "Redis网络客户端";
-                label2.Text = "博客地址：";
-                label4.Text = "使用协议：";
                 label1.Text = "Ip地址：";
                 label3.Text = "端口号：";
                 button1.Text = "连接";
@@ -59,14 +49,10 @@ namespace HslCommunicationDemo
                 label11.Text = "耗时：";
                 button4.Text = "读取";
                 label12.Text = "接收：";
-                label5.Text = "Redis协议";
-                label20.Text = "作者：Richard Hu";
             }
             else
             {
                 Text = "Redis Client Test";
-                label2.Text = "Blogs:";
-                label4.Text = "Protocols:";
                 label1.Text = "Ip:";
                 label3.Text = "Port:";
                 button1.Text = "Connect";
@@ -82,8 +68,6 @@ namespace HslCommunicationDemo
                 label11.Text = "Take:";
                 button4.Text = "Read";
                 label12.Text = "Receive:";
-                label5.Text = "Redis protocol";
-                label20.Text = "Author:Richard Hu";
             }
         }
 
@@ -173,18 +157,6 @@ namespace HslCommunicationDemo
         {
             // 清空
             textBox8.Clear( );
-        }
-
-        private void linkLabel1_LinkClicked( object sender, LinkLabelLinkClickedEventArgs e )
-        {
-            try
-            {
-                System.Diagnostics.Process.Start( linkLabel1.Text );
-            }
-            catch (Exception ex)
-            {
-                HslCommunication.BasicFramework.SoftBasic.ShowExceptionMessage( ex );
-            }
         }
 
         private void button4_Click_1( object sender, EventArgs e )

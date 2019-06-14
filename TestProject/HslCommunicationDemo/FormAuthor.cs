@@ -18,6 +18,7 @@ namespace HslCommunicationDemo
 
         private void FormAuthor_Load( object sender, EventArgs e )
         {
+            label1.BackColor = FormLoad.ThemeColor;
             label2.Text = "    2013年毕业于中国计量大学自动化专业，学历本科，2013年-2017年就职于中策橡胶集团有限公司，从事软件开发，开发了大量的工业现场" + 
                 "使用的上位机软件，SCADA软件，条码采集监控软件等等，实战经验丰富。离职后将所有的通信经验凝练成了一个通用库，在开源网站github上公开分享，" + 
                 "目前该组件已经在全国的使用率非常高，成功应用于数万个项目中，目前就职于杭州一家做机器人的公司，从事工业数据的采集，分析，存储，MES框架设计开发。"+ Environment.NewLine+

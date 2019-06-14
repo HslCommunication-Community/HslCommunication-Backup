@@ -38,6 +38,7 @@ namespace HslCommunication.Controls
 
         private void UserSwitch_Paint(object sender, PaintEventArgs e)
         {
+            if (!Authorization.nzugaydgwadawdibbas( )) return;
             e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighQuality;
             e.Graphics.TextRenderingHint = System.Drawing.Text.TextRenderingHint.ClearTypeGridFit;
 

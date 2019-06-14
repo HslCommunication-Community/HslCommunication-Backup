@@ -1,4 +1,5 @@
 ﻿using HslCommunication.Core;
+using HslCommunication.Core.Address;
 using HslCommunication.Serial;
 using System;
 using System.Collections.Generic;
@@ -255,12 +256,15 @@ namespace HslCommunication.Profinet.Melsec
         /// <returns>读取结果信息</returns>
         public override OperateResult<byte[]> Read( string address, ushort length )
         {
+            // 分析地址
+            OperateResult<McAddressData> addressResult = McAddressData.ParseMelsecFrom( address, length );
+            if (!addressResult.IsSuccess) return OperateResult.CreateFailedResult<byte[]>( addressResult );
+
             // 解析指令
-            OperateResult<byte[]> command = MelsecHelper.BuildAsciiReadMcCoreCommand( address, length, false, MelsecHelper.McAnalysisAddress );
-            if (!command.IsSuccess) return command;
+            byte[] command = MelsecHelper.BuildAsciiReadMcCoreCommand( addressResult.Content, false );
 
             // 核心交互
-            OperateResult<byte[]> read = ReadBase( PackCommand( command.Content, this.station ) );
+            OperateResult<byte[]> read = ReadBase( PackCommand( command, this.station ) );
             if (!read.IsSuccess) return read;
 
             // 结果验证
@@ -284,12 +288,15 @@ namespace HslCommunication.Profinet.Melsec
         /// <returns>是否写入成功</returns>
         public override OperateResult Write( string address, byte[] value )
         {
+            // 分析地址
+            OperateResult<McAddressData> addressResult = McAddressData.ParseMelsecFrom( address, 0 );
+            if (!addressResult.IsSuccess) return OperateResult.CreateFailedResult<byte[]>( addressResult );
+
             // 解析指令
-            OperateResult<byte[]> command = MelsecHelper.BuildAsciiWriteWordCoreCommand( address, value, MelsecHelper.McAnalysisAddress );
-            if (!command.IsSuccess) return command;
+            byte[] command = MelsecHelper.BuildAsciiWriteWordCoreCommand( addressResult.Content, value );
 
             // 核心交互
-            OperateResult<byte[]> read = ReadBase( PackCommand( command.Content, this.station ) );
+            OperateResult<byte[]> read = ReadBase( PackCommand( command, this.station ) );
             if (!read.IsSuccess) return read;
 
             // 结果验证
@@ -311,12 +318,15 @@ namespace HslCommunication.Profinet.Melsec
         /// <returns>读取结果信息</returns>
         public OperateResult<bool[]> ReadBool( string address, ushort length )
         {
+            // 分析地址
+            OperateResult<McAddressData> addressResult = McAddressData.ParseMelsecFrom( address, length );
+            if (!addressResult.IsSuccess) return OperateResult.CreateFailedResult<bool[]>( addressResult );
+
             // 解析指令
-            OperateResult<byte[]> command = MelsecHelper.BuildAsciiReadMcCoreCommand( address, length, true, MelsecHelper.McAnalysisAddress );
-            if (!command.IsSuccess) OperateResult.CreateFailedResult<bool[]>( command );
+            byte[] command = MelsecHelper.BuildAsciiReadMcCoreCommand( addressResult.Content, true );
 
             // 核心交互
-            OperateResult<byte[]> read = ReadBase( PackCommand( command.Content, this.station ) );
+            OperateResult<byte[]> read = ReadBase( PackCommand( command, this.station ) );
             if (!read.IsSuccess) return OperateResult.CreateFailedResult<bool[]>( read );
 
             // 结果验证
@@ -360,12 +370,15 @@ namespace HslCommunication.Profinet.Melsec
         /// <returns>是否写入成功</returns>
         public OperateResult Write( string address, bool[] value )
         {
+            // 分析地址
+            OperateResult<McAddressData> addressResult = McAddressData.ParseMelsecFrom( address, 0 );
+            if (!addressResult.IsSuccess) return OperateResult.CreateFailedResult<bool[]>( addressResult );
+
             // 解析指令
-            OperateResult<byte[]> command = MelsecHelper.BuildAsciiWriteBitCoreCommand( address, value, MelsecHelper.McAnalysisAddress );
-            if (!command.IsSuccess) return command;
+            byte[] command = MelsecHelper.BuildAsciiWriteBitCoreCommand( addressResult.Content, value );
 
             // 核心交互
-            OperateResult<byte[]> read = ReadBase( PackCommand( command.Content, this.station ) );
+            OperateResult<byte[]> read = ReadBase( PackCommand( command, this.station ) );
             if (!read.IsSuccess) return read;
 
             // 结果验证

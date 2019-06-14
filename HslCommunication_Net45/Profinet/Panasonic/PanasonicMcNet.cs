@@ -1,4 +1,5 @@
-﻿using HslCommunication.Profinet.Melsec;
+﻿using HslCommunication.Core.Address;
+using HslCommunication.Profinet.Melsec;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -132,10 +133,11 @@ namespace HslCommunication.Profinet.Panasonic
         /// 分析地址的方法，允许派生类里进行重写操作
         /// </summary>
         /// <param name="address">地址信息</param>
+        /// <param name="length">数据长度</param>
         /// <returns>解析后的数据信息</returns>
-        protected override OperateResult<MelsecMcDataType, int> McAnalysisAddress( string address )
+        protected override OperateResult<McAddressData> McAnalysisAddress( string address, ushort length )
         {
-            return MelsecHelper.PanasonicAnalysisAddress( address );
+            return McAddressData.ParsePanasonicFrom( address, length );
         }
 
         #endregion

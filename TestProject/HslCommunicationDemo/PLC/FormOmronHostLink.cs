@@ -25,17 +25,6 @@ namespace HslCommunicationDemo
 
         private OmronHostLink omronHostLink = null;
 
-        private void linkLabel1_LinkClicked( object sender, LinkLabelLinkClickedEventArgs e )
-        {
-            try
-            {
-                System.Diagnostics.Process.Start( linkLabel1.Text );
-            }
-            catch (Exception ex) 
-            {
-                MessageBox.Show( ex.Message );
-            }
-        }
 
         private void FormSiemens_Load( object sender, EventArgs e )
         {
@@ -46,14 +35,6 @@ namespace HslCommunicationDemo
             Language( Program.Language );
 
             comboBox2.SelectedIndex = 2;
-
-
-            if (!Program.ShowAuthorInfomation)
-            {
-                label2.Visible = false;
-                linkLabel1.Visible = false;
-                label20.Visible = false;
-            }
         }
 
 
@@ -62,10 +43,6 @@ namespace HslCommunicationDemo
             if (language == 2)
             {
                 Text = "Omron Read PLC Demo";
-                label2.Text = "Blogs:";
-                label4.Text = "Protocols:";
-                label20.Text = "Author:Richard Hu";
-                label5.Text = "Fins Tcp";
                 label24.Text = "Unit Num";
                 label25.Text = "Net Num";
                 label23.Text = "PC Net Num";

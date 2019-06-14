@@ -17,6 +17,7 @@ namespace HslCommunication.Language
          * 
          ************************************************************************************/
 
+        public override string AuthorizationFailed => "System authorization failed, need to use activation code authorization, thank you for your support.";
         public override string ConnectedFailed => "Connected Failed: ";
         public override string ConnectedSuccess => "Connect Success !";
         public override string UnknownError => "Unknown Error";

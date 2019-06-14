@@ -13,6 +13,8 @@ namespace HslCommunicationDemo
 {
     public partial class FormLoad : Form
     {
+        public static Color ThemeColor = Color.AliceBlue;
+
         public FormLoad( )
         {
             InitializeComponent( );
@@ -280,6 +282,7 @@ namespace HslCommunicationDemo
 
         private void FormLoad_Load( object sender, EventArgs e )
         {
+            ThemeColor = menuStrip1.BackColor;
             verisonToolStripMenuItem.Text = "Version: " + HslCommunication.BasicFramework.SoftBasic.FrameworkVersion.ToString( );
 
             if (Settings1.Default.language == 1)
@@ -302,6 +305,16 @@ namespace HslCommunicationDemo
                 HslCommunication.StringResources.SeteLanguageEnglish( );
                 Language( Program.Language );
             }
+
+            support赞助ToolStripMenuItem.Click += Support赞助ToolStripMenuItem_Click;
+        }
+
+        private void Support赞助ToolStripMenuItem_Click( object sender, EventArgs e )
+        {
+            using (HslCommunication.BasicFramework.FormSupport form = new HslCommunication.BasicFramework.FormSupport( ))
+            {
+                form.ShowDialog( );
+            }
         }
 
         private void Language( int language )
@@ -321,6 +334,7 @@ namespace HslCommunicationDemo
                 Text = "HslCommunication 测试工具";
                 免责条款ToolStripMenuItem.Text = "免责条款";
                 论坛toolStripMenuItem.Text = "论坛";
+                授权ToolStripMenuItem.Text = "授权";
             }
             else
             {
@@ -337,6 +351,7 @@ namespace HslCommunicationDemo
                 Text = "HslCommunication Test Tool";
                 论坛toolStripMenuItem.Text = "BBS";
                 免责条款ToolStripMenuItem.Text = "Disclaimer";
+                授权ToolStripMenuItem.Text = "Authorize";
             }
         }
 

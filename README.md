@@ -78,9 +78,8 @@ Install-Package HslCommunication
 * python: **Visual Studio Code**
 
 ## Contact
-* QQ Group1：[592132877](http://shang.qq.com/wpa/qunwpa?idkey=2278cb9c2e0c04fc305c43e41acff940499a34007dfca9e83a7291e726f9c4e8)(full)   Group2：948305931
 * Email: hsl200909@163.com
-* VIP Group (Reward more than 200RMB to join): [838185568](http://shang.qq.com/wpa/qunwpa?idkey=eee02ce1acde63c6316cbb380a80e033a14170ab7ca981f1cac83e0b657c8860)
+* ![reward](https://raw.githubusercontent.com/dathlin/HslCommunication/master/imgs/support.png)
 
 ## Supported Model and price [welcome to complete]
 #### Siemens
@@ -314,10 +313,6 @@ Warmly welcome suggestions for improvement of the Code of this project, you can 
 [![Picture](https://raw.githubusercontent.com/dathlin/HslCommunication/master/imgs/partner/盛意达.jpg)](http://bjsyd.cn) [![Picture](https://raw.githubusercontent.com/dathlin/HslCommunication/master/imgs/partner/PENC.jpg)](http://www.penc.com)
 ![Picture](https://raw.githubusercontent.com/dathlin/HslCommunication/master/imgs/partner/rocket_Blue.png) ![Picture](https://raw.githubusercontent.com/dathlin/HslCommunication/master/imgs/partner/翔宇自控.jpg) 
 [![Picture](https://raw.githubusercontent.com/dathlin/HslCommunication/master/imgs/partner/杭州优海.png)](http://www.eohi700.com/)
-
-## Creative is not easy, thanks for the reward
-If this library really helps you, you can support me by AliPay. Please choose the amount according to your actual ability.
-![reward](https://raw.githubusercontent.com/dathlin/HslCommunication/master/imgs/support.png)
 
 ## Controls
 This library include some controls render upside picture. u can easily use them

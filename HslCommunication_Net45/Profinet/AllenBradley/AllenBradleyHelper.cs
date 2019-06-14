@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.IO;
 
 namespace HslCommunication.Profinet.AllenBradley
 {
@@ -20,6 +21,10 @@ namespace HslCommunication.Profinet.AllenBradley
         /// CIP命令中的写数据的服务
         /// </summary>
         public const int CIP_WRITE_DATA = 0x4D;
+        /// <summary>
+        /// CIP命令中的读并写的数据服务
+        /// </summary>
+        public const int CIP_READ_WRITE_DATA = 0x4E;
         /// <summary>
         /// CIP命令中的读片段的数据服务
         /// </summary>
@@ -58,9 +63,29 @@ namespace HslCommunication.Profinet.AllenBradley
         public const ushort CIP_Type_DWord = 0xC4;
 
         /// <summary>
+        /// 特长整型，8个字节
+        /// </summary>
+        public const ushort CIP_Type_LInt = 0xC5;
+
+        /// <summary>
         /// 实数数据，四个字节长度
         /// </summary>
         public const ushort CIP_Type_Real = 0xCA;
+
+        /// <summary>
+        /// 实数数据，八个字节的长度
+        /// </summary>
+        public const ushort CIP_Type_Double = 0xCB;
+
+        /// <summary>
+        /// 结构体数据，不定长度
+        /// </summary>
+        public const ushort CIP_Type_Struct = 0xCC;
+
+        /// <summary>
+        /// 字符串数据内容
+        /// </summary>
+        public const ushort CIP_Type_String = 0xD0;
 
         /// <summary>
         /// 二进制数据内容
@@ -69,6 +94,54 @@ namespace HslCommunication.Profinet.AllenBradley
 
         #endregion
 
+        private static byte[] BuildRequestPathCommand( string address )
+        {
+            using (MemoryStream ms = new MemoryStream( ))
+            {
+                string[] tagNames = address.Split( new char[] { '.' }, StringSplitOptions.RemoveEmptyEntries );
+
+                for (int i = 0; i < tagNames.Length; i++)
+                {
+                    string strIndex = string.Empty;
+                    int indexFirst = tagNames[i].IndexOf( '[' );
+                    int indexSecond = tagNames[i].IndexOf( ']' );
+                    if (indexFirst > 0 && indexSecond > 0 && indexSecond > indexFirst)
+                    {
+                        strIndex = tagNames[i].Substring( indexFirst + 1, indexSecond - indexFirst - 1 );
+                        tagNames[i] = tagNames[i].Substring( 0, indexFirst );
+                    }
+
+                    ms.WriteByte( 0x91 );                        // 固定
+                    ms.WriteByte( (byte)tagNames[i].Length );    // 节点的长度值
+                    byte[] nameBytes = Encoding.ASCII.GetBytes( tagNames[i] );
+                    ms.Write( nameBytes, 0, nameBytes.Length );
+                    if (nameBytes.Length % 2 == 1) ms.WriteByte( 0x00 );
+
+                    if (!string.IsNullOrEmpty( strIndex ))
+                    {
+                        string[] indexs = strIndex.Split( new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries );
+                        for (int j = 0; j < indexs.Length; j++)
+                        {
+                            int index = Convert.ToInt32( indexs[j] );
+                            if (index < 256)
+                            {
+                                ms.WriteByte( 0x28 );
+                                ms.WriteByte( (byte)index );
+                            }
+                            else
+                            {
+                                ms.WriteByte( 0x29 );
+                                ms.WriteByte( 0x00 );
+                                ms.WriteByte( BitConverter.GetBytes( index )[0] );
+                                ms.WriteByte( BitConverter.GetBytes( index )[1] );
+                            }
+                        }
+                    }
+                }
+
+                return ms.ToArray( );
+            }
+        }
 
         /// <summary>
         /// 将CommandSpecificData的命令，打包成可发送的数据指令
@@ -97,24 +170,49 @@ namespace HslCommunication.Profinet.AllenBradley
         {
             byte[] buffer = new byte[1024];
             int offect = 0;
-            string[] tagNames = address.Split( new char[] { '.' }, StringSplitOptions.RemoveEmptyEntries );
             buffer[offect++] = CIP_READ_DATA;
             offect++;
 
-            for (int i = 0; i < tagNames.Length; i++)
-            {
-                buffer[offect++] = 0x91;                        // 固定
-                buffer[offect++] = (byte)tagNames[i].Length;    // 节点的长度值
-                byte[] nameBytes = Encoding.ASCII.GetBytes( tagNames[i] );
-                nameBytes.CopyTo( buffer, offect );
-                offect += nameBytes.Length;
-                if (nameBytes.Length % 2 == 1) offect++;
-            }
+            byte[] requestPath = BuildRequestPathCommand( address );
+            requestPath.CopyTo( buffer, offect );
+            offect += requestPath.Length;
 
             buffer[1] = (byte)((offect - 2) / 2);
             buffer[offect++] = BitConverter.GetBytes( length )[0];
             buffer[offect++] = BitConverter.GetBytes( length )[1];
             
+            byte[] data = new byte[offect];
+            Array.Copy( buffer, 0, data, 0, offect );
+            return data;
+        }
+
+        /// <summary>
+        /// 打包生成一个请求读取数据片段的节点信息，CIP指令信息
+        /// </summary>
+        /// <param name="address">节点的名称</param>
+        /// <param name="startIndex">起始的索引位置</param>
+        /// <param name="length">读取的数据长度，对于short来说，最大是489长度</param>
+        /// <returns>CIP的指令信息</returns>
+        public static byte[] PackRequestReadSegment(string address, int startIndex, int length )
+        {
+            byte[] buffer = new byte[1024];
+            int offect = 0;
+            buffer[offect++] = CIP_READ_FRAGMENT;
+            offect++;
+
+
+            byte[] requestPath = BuildRequestPathCommand( address + (address.EndsWith( "]" ) ? string.Empty : $"[{startIndex}]") );
+            requestPath.CopyTo( buffer, offect );
+            offect += requestPath.Length;
+
+            buffer[1] = (byte)((offect - 2) / 2);
+            buffer[offect++] = BitConverter.GetBytes( length )[0];
+            buffer[offect++] = BitConverter.GetBytes( length )[1];
+            buffer[offect++] = BitConverter.GetBytes( 0 )[0];
+            buffer[offect++] = BitConverter.GetBytes( 0 )[1];
+            buffer[offect++] = BitConverter.GetBytes( 0 )[2];
+            buffer[offect++] = BitConverter.GetBytes( 0 )[3];
+
             byte[] data = new byte[offect];
             Array.Copy( buffer, 0, data, 0, offect );
             return data;
@@ -132,19 +230,12 @@ namespace HslCommunication.Profinet.AllenBradley
         {
             byte[] buffer = new byte[1024];
             int offect = 0;
-            string[] tagNames = address.Split( new char[] { '.' }, StringSplitOptions.RemoveEmptyEntries );
             buffer[offect++] = CIP_WRITE_DATA;
             offect++;
 
-            for (int i = 0; i < tagNames.Length; i++)
-            {
-                buffer[offect++] = 0x91;                                 // 固定
-                buffer[offect++] = (byte)tagNames[i].Length;             // 节点的长度值
-                byte[] nameBytes = Encoding.ASCII.GetBytes( tagNames[i] );
-                nameBytes.CopyTo( buffer, offect );
-                offect += nameBytes.Length;
-                if (nameBytes.Length % 2 == 1) offect++;
-            }
+            byte[] requestPath = BuildRequestPathCommand( address );
+            requestPath.CopyTo( buffer, offect );
+            offect += requestPath.Length;
 
             buffer[1] = (byte)((offect - 2) / 2);
 
@@ -274,6 +365,8 @@ namespace HslCommunication.Profinet.AllenBradley
                         case 0x05: return new OperateResult<byte[]>( ) { ErrorCode = err, Message = StringResources.Language.AllenBradley05 };
                         case 0x06:
                             {
+                                // 06的错误码通常是数据长度太多了
+                                // CC是符号返回，D2是符号片段返回
                                 if (response[offect + 2] == 0xD2 || response[offect + 2] == 0xCC)
                                     return new OperateResult<byte[]>( ) { ErrorCode = err, Message = StringResources.Language.AllenBradley06 };
                                 break;

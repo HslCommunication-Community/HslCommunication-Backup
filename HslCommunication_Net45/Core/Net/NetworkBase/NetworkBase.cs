@@ -147,6 +147,8 @@ namespace HslCommunication.Core.Net
         {
             if (length == 0) return OperateResult.CreateSuccessResult( new byte[0] );
 
+            if (!Authorization.nzugaydgwadawdibbas( )) return new OperateResult<byte[]>( StringResources.Language.AuthorizationFailed );
+
             if (UseSynchronousNet)
             {
                 try
@@ -420,6 +422,8 @@ namespace HslCommunication.Core.Net
         protected OperateResult Send( Socket socket, byte[] data )
         {
             if (data == null) return OperateResult.CreateSuccessResult( );
+
+            if (!Authorization.nzugaydgwadawdibbas( )) return new OperateResult<byte[]>( StringResources.Language.AuthorizationFailed );
 
             if (UseSynchronousNet)
             {

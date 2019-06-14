@@ -19,7 +19,7 @@ namespace HslCommunicationDemo
 
         private void FormDisclaimer_Load( object sender, EventArgs e )
         {
-
+            label1.BackColor = FormLoad.ThemeColor;
         }
 
         private void FormDisclaimer_Shown( object sender, EventArgs e )

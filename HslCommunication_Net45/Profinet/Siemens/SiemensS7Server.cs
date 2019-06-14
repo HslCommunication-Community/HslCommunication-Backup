@@ -7,6 +7,7 @@ using System.Linq;
 using System.Net.Sockets;
 using System.Text;
 using HslCommunication.Core.IMessage;
+using HslCommunication.Core.Address;
 
 namespace HslCommunication.Profinet.Siemens
 {
@@ -134,15 +135,15 @@ namespace HslCommunication.Profinet.Siemens
         /// <returns>byte数组值</returns>
         public override OperateResult<byte[]> Read( string address, ushort length )
         {
-            OperateResult<byte, int, ushort> analysis = SiemensS7Net.AnalysisAddress( address );
+            OperateResult<S7AddressData> analysis = S7AddressData.ParseFrom( address, length );
             if (!analysis.IsSuccess) return OperateResult.CreateFailedResult<byte[]>( analysis );
 
-            switch (analysis.Content1)
+            switch (analysis.Content.DataCode)
             {
-                case 0x81: return OperateResult.CreateSuccessResult( inputBuffer.GetBytes( analysis.Content2 / 8, length ) );
-                case 0x82: return OperateResult.CreateSuccessResult( outputBuffer.GetBytes( analysis.Content2 / 8, length ) );
-                case 0x83: return OperateResult.CreateSuccessResult( memeryBuffer.GetBytes( analysis.Content2 / 8, length ) );
-                case 0x84: return OperateResult.CreateSuccessResult( dbBlockBuffer.GetBytes( analysis.Content2 / 8, length ) );
+                case 0x81: return OperateResult.CreateSuccessResult( inputBuffer.GetBytes( analysis.Content.AddressStart / 8, length ) );
+                case 0x82: return OperateResult.CreateSuccessResult( outputBuffer.GetBytes( analysis.Content.AddressStart / 8, length ) );
+                case 0x83: return OperateResult.CreateSuccessResult( memeryBuffer.GetBytes( analysis.Content.AddressStart / 8, length ) );
+                case 0x84: return OperateResult.CreateSuccessResult( dbBlockBuffer.GetBytes( analysis.Content.AddressStart / 8, length ) );
                 default: return new OperateResult<byte[]>( StringResources.Language.NotSupportedDataType );
             }
         }
@@ -155,15 +156,15 @@ namespace HslCommunication.Profinet.Siemens
         /// <returns>是否写入成功的结果对象</returns>
         public override OperateResult Write( string address, byte[] value )
         {
-            OperateResult<byte, int, ushort> analysis = SiemensS7Net.AnalysisAddress( address );
+            OperateResult<S7AddressData> analysis = S7AddressData.ParseFrom( address );
             if (!analysis.IsSuccess) return OperateResult.CreateFailedResult<byte[]>( analysis );
 
-            switch (analysis.Content1)
+            switch (analysis.Content.DataCode)
             {
-                case 0x81: inputBuffer.SetBytes( value, analysis.Content2 / 8 ); return OperateResult.CreateSuccessResult( );
-                case 0x82: outputBuffer.SetBytes(value, analysis.Content2 / 8 ); return OperateResult.CreateSuccessResult( );
-                case 0x83: memeryBuffer.SetBytes(value, analysis.Content2 / 8 ); return OperateResult.CreateSuccessResult( );
-                case 0x84: dbBlockBuffer.SetBytes( value, analysis.Content2 / 8 ); return OperateResult.CreateSuccessResult( );
+                case 0x81: inputBuffer.SetBytes( value, analysis.Content.AddressStart / 8 ); return OperateResult.CreateSuccessResult( );
+                case 0x82: outputBuffer.SetBytes(value, analysis.Content.AddressStart / 8 ); return OperateResult.CreateSuccessResult( );
+                case 0x83: memeryBuffer.SetBytes(value, analysis.Content.AddressStart / 8 ); return OperateResult.CreateSuccessResult( );
+                case 0x84: dbBlockBuffer.SetBytes( value, analysis.Content.AddressStart / 8 ); return OperateResult.CreateSuccessResult( );
                 default: return new OperateResult<byte[]>( StringResources.Language.NotSupportedDataType );
             }
         }
@@ -207,15 +208,15 @@ namespace HslCommunication.Profinet.Siemens
         /// <returns>带有成功标志的结果对象</returns>
         public OperateResult<bool> ReadBool(string address )
         {
-            OperateResult<byte, int, ushort> analysis = SiemensS7Net.AnalysisAddress( address );
+            OperateResult<S7AddressData> analysis = S7AddressData.ParseFrom( address );
             if (!analysis.IsSuccess) return OperateResult.CreateFailedResult<bool>( analysis );
 
-            switch (analysis.Content1)
+            switch (analysis.Content.DataCode)
             {
-                case 0x81: return OperateResult.CreateSuccessResult( inputBuffer.GetBool( analysis.Content2 ) );
-                case 0x82: return OperateResult.CreateSuccessResult( outputBuffer.GetBool( analysis.Content2 ) );
-                case 0x83: return OperateResult.CreateSuccessResult( memeryBuffer.GetBool( analysis.Content2 ) );
-                case 0x84: return OperateResult.CreateSuccessResult( dbBlockBuffer.GetBool( analysis.Content2 ) );
+                case 0x81: return OperateResult.CreateSuccessResult( inputBuffer.GetBool( analysis.Content.AddressStart ) );
+                case 0x82: return OperateResult.CreateSuccessResult( outputBuffer.GetBool( analysis.Content.AddressStart ) );
+                case 0x83: return OperateResult.CreateSuccessResult( memeryBuffer.GetBool( analysis.Content.AddressStart ) );
+                case 0x84: return OperateResult.CreateSuccessResult( dbBlockBuffer.GetBool( analysis.Content.AddressStart ) );
                 default: return new OperateResult<bool>( StringResources.Language.NotSupportedDataType );
             }
         }
@@ -228,15 +229,15 @@ namespace HslCommunication.Profinet.Siemens
         /// <returns>是否成功的结果</returns>
         public OperateResult Write(string address, bool value )
         {
-            OperateResult<byte, int, ushort> analysis = SiemensS7Net.AnalysisAddress( address );
+            OperateResult<S7AddressData> analysis = S7AddressData.ParseFrom( address );
             if (!analysis.IsSuccess) return analysis;
 
-            switch (analysis.Content1)
+            switch (analysis.Content.DataCode)
             {
-                case 0x81: inputBuffer.SetBool( value, analysis.Content2 ); return OperateResult.CreateSuccessResult( );
-                case 0x82: outputBuffer.SetBool( value, analysis.Content2 ); return OperateResult.CreateSuccessResult( );
-                case 0x83: memeryBuffer.SetBool( value, analysis.Content2 ); return OperateResult.CreateSuccessResult( );
-                case 0x84: dbBlockBuffer.SetBool( value, analysis.Content2 ); return OperateResult.CreateSuccessResult( );
+                case 0x81: inputBuffer.SetBool( value, analysis.Content.AddressStart ); return OperateResult.CreateSuccessResult( );
+                case 0x82: outputBuffer.SetBool( value, analysis.Content.AddressStart ); return OperateResult.CreateSuccessResult( );
+                case 0x83: memeryBuffer.SetBool( value, analysis.Content.AddressStart ); return OperateResult.CreateSuccessResult( );
+                case 0x84: dbBlockBuffer.SetBool( value, analysis.Content.AddressStart ); return OperateResult.CreateSuccessResult( );
                 default: return new OperateResult( StringResources.Language.NotSupportedDataType );
             }
         }

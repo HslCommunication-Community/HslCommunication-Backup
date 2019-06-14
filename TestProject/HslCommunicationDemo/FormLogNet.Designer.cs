@@ -28,10 +28,8 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.label20 = new System.Windows.Forms.Label();
-            this.linkLabel1 = new System.Windows.Forms.LinkLabel();
-            this.label2 = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.label8 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
             this.comboBox2 = new System.Windows.Forms.ComboBox();
@@ -53,41 +51,10 @@
             this.button3 = new System.Windows.Forms.Button();
             this.label5 = new System.Windows.Forms.Label();
             this.textBox3 = new System.Windows.Forms.TextBox();
-            this.checkBox1 = new System.Windows.Forms.CheckBox();
+            this.userControlHead1 = new HslCommunicationDemo.DemoControl.UserControlHead();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // label20
-            // 
-            this.label20.AutoSize = true;
-            this.label20.ForeColor = System.Drawing.Color.Green;
-            this.label20.Location = new System.Drawing.Point(888, 9);
-            this.label20.Name = "label20";
-            this.label20.Size = new System.Drawing.Size(108, 17);
-            this.label20.TabIndex = 24;
-            this.label20.Text = "作者：Richard Hu";
-            // 
-            // linkLabel1
-            // 
-            this.linkLabel1.AutoSize = true;
-            this.linkLabel1.Location = new System.Drawing.Point(75, 9);
-            this.linkLabel1.Name = "linkLabel1";
-            this.linkLabel1.Size = new System.Drawing.Size(287, 17);
-            this.linkLabel1.TabIndex = 21;
-            this.linkLabel1.TabStop = true;
-            this.linkLabel1.Text = "http://www.cnblogs.com/dathlin/p/7691693.html";
-            this.linkLabel1.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel1_LinkClicked);
-            this.linkLabel1.Click += new System.EventHandler(this.linkLabel1_Click);
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(12, 9);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(68, 17);
-            this.label2.TabIndex = 20;
-            this.label2.Text = "博客地址：";
             // 
             // panel1
             // 
@@ -112,6 +79,16 @@
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(977, 206);
             this.panel1.TabIndex = 25;
+            // 
+            // checkBox1
+            // 
+            this.checkBox1.AutoSize = true;
+            this.checkBox1.Location = new System.Drawing.Point(334, 59);
+            this.checkBox1.Name = "checkBox1";
+            this.checkBox1.Size = new System.Drawing.Size(171, 21);
+            this.checkBox1.TabIndex = 17;
+            this.checkBox1.Text = "是否取消存储，打勾则取消";
+            this.checkBox1.UseVisualStyleBackColor = true;
             // 
             // label8
             // 
@@ -313,26 +290,28 @@
             this.textBox3.Size = new System.Drawing.Size(853, 328);
             this.textBox3.TabIndex = 8;
             // 
-            // checkBox1
+            // userControlHead1
             // 
-            this.checkBox1.AutoSize = true;
-            this.checkBox1.Location = new System.Drawing.Point(334, 59);
-            this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(171, 21);
-            this.checkBox1.TabIndex = 17;
-            this.checkBox1.Text = "是否取消存储，打勾则取消";
-            this.checkBox1.UseVisualStyleBackColor = true;
+            this.userControlHead1.BackColor = System.Drawing.Color.MediumPurple;
+            this.userControlHead1.Dock = System.Windows.Forms.DockStyle.Top;
+            this.userControlHead1.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.userControlHead1.HelpLink = "http://www.cnblogs.com/dathlin/p/7691693.html";
+            this.userControlHead1.Location = new System.Drawing.Point(0, 0);
+            this.userControlHead1.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.userControlHead1.MinimumSize = new System.Drawing.Size(800, 32);
+            this.userControlHead1.Name = "userControlHead1";
+            this.userControlHead1.ProtocolInfo = "";
+            this.userControlHead1.Size = new System.Drawing.Size(1004, 32);
+            this.userControlHead1.TabIndex = 27;
             // 
             // FormLogNet
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 17F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1004, 645);
+            this.Controls.Add(this.userControlHead1);
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.panel1);
-            this.Controls.Add(this.label20);
-            this.Controls.Add(this.linkLabel1);
-            this.Controls.Add(this.label2);
             this.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.Name = "FormLogNet";
@@ -344,15 +323,10 @@
             this.panel2.ResumeLayout(false);
             this.panel2.PerformLayout();
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
         #endregion
-
-        private System.Windows.Forms.Label label20;
-        private System.Windows.Forms.LinkLabel linkLabel1;
-        private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Button button1;
@@ -376,5 +350,6 @@
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Button button8;
         private System.Windows.Forms.CheckBox checkBox1;
+        private DemoControl.UserControlHead userControlHead1;
     }
 }

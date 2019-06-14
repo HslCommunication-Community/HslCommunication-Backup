@@ -27,13 +27,6 @@ namespace HslCommunicationDemo
 
             Language( Program.Language );
 
-
-            if (!Program.ShowAuthorInfomation)
-            {
-                label2.Visible = false;
-                linkLabel1.Visible = false;
-                label20.Visible = false;
-            }
         }
 
         private void Language( int language )
@@ -41,10 +34,6 @@ namespace HslCommunicationDemo
             if (language == 1)
             {
                 Text = "TCP/IP调试助手";
-                label2.Text = "博客地址：";
-                label4.Text = "使用协议：";
-                label20.Text = "作者：Richard Hu";
-                label5.Text = "TCP/IP，无协议";
                 label1.Text = "Ip地址：";
                 label3.Text = "端口号：";
                 button1.Text = "连接";
@@ -60,10 +49,6 @@ namespace HslCommunicationDemo
             else
             {
                 Text = "TCP/IP Debug Tools";
-                label2.Text = "Blogs:";
-                label4.Text = "Protocols:";
-                label20.Text = "Author:Richard Hu";
-                label5.Text = "TCP/IP";
                 label1.Text = "Ip:";
                 label3.Text = "Port:";
                 button1.Text = "Connect";

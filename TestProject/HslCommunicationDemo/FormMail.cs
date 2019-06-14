@@ -24,13 +24,6 @@ namespace HslCommunicationDemo
             textBox3.Text = "<html><body style=\"background-color:PowderBlue;\"><h1>Look! Styles and colors</h1><p style=\"font-family:verdana;color:red\">This text is in Verdana and red</p><p style=\"font-family:times;color:green\">This text is in Times and green</p><p style=\"font-size:30px\">This text is 30 pixels high</p></body></html> ";
             Language( Program.Language );
 
-
-            if (!Program.ShowAuthorInfomation)
-            {
-                label2.Visible = false;
-                linkLabel1.Visible = false;
-                label20.Visible = false;
-            }
         }
 
         private void Language( int language )
@@ -38,9 +31,6 @@ namespace HslCommunicationDemo
             if (language == 1)
             {
                 Text = "邮件发送测试";
-                label2.Text = "博客地址：";
-                label4.Text = "使用协议：";
-                label20.Text = "作者：Richard Hu";
                 label7.Text = "发送地址：";
                 label9.Text = "主题：";
                 label1.Text = "内容：(字符串)";
@@ -56,9 +46,6 @@ namespace HslCommunicationDemo
             else
             {
                 Text = "Mail Send Test";
-                label2.Text = "Blogs:";
-                label4.Text = "Protocols:";
-                label20.Text = "Author:Richard Hu";
                 label7.Text = "Address:";
                 label9.Text = "Subject:";
                 label1.Text = "String Content:";

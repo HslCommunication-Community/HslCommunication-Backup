@@ -61,6 +61,9 @@
     <Compile Include="..\HslCommunication_Net45\Algorithms\Fourier\FFTHelper.cs">
       <Link>Algorithms\Fourier\FFTHelper.cs</Link>
     </Compile>
+    <Compile Include="..\HslCommunication_Net45\Authorization.cs">
+      <Link>Authorization.cs</Link>
+    </Compile>
     <Compile Include="..\HslCommunication_Net45\BasicFramework\FormAuthorAdvertisement.cs">
       <Link>BasicFramework\FormAuthorAdvertisement.cs</Link>
       <SubType>Form</SubType>
@@ -240,8 +243,17 @@
     <Compile Include="..\HslCommunication_Net45\Core\Address\DeviceAddressBase.cs">
       <Link>Core\Address\DeviceAddressBase.cs</Link>
     </Compile>
+    <Compile Include="..\HslCommunication_Net45\Core\Address\DeviceAddressDataBase.cs">
+      <Link>Core\Address\DeviceAddressDataBase.cs</Link>
+    </Compile>
+    <Compile Include="..\HslCommunication_Net45\Core\Address\MelsecMcAddressData.cs">
+      <Link>Core\Address\MelsecMcAddressData.cs</Link>
+    </Compile>
     <Compile Include="..\HslCommunication_Net45\Core\Address\ModbusAddress.cs">
       <Link>Core\Address\ModbusAddress.cs</Link>
+    </Compile>
+    <Compile Include="..\HslCommunication_Net45\Core\Address\S7AddressData.cs">
+      <Link>Core\Address\S7AddressData.cs</Link>
     </Compile>
     <Compile Include="..\HslCommunication_Net45\Core\IMessage\AlienMessage.cs">
       <Link>Core\IMessage\AlienMessage.cs</Link>
