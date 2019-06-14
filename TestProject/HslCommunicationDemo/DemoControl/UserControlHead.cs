@@ -30,7 +30,7 @@ namespace HslCommunicationDemo.DemoControl
 
         private void UserControlHead_Load( object sender, EventArgs e )
         {
-            if (Program.Language == 2)
+            if (Program.Language == 1)
             {
                 label2.Text = "博客地址：";
                 label4.Text = "使用协议：";

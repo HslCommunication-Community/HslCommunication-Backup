@@ -28,13 +28,14 @@ namespace HslCommunication
         internal static bool nzugaydgwadawdibbas( )
         {
             moashdawidaisaosdas++;
-            if (naihsdadaasdasdiwid == niasdhasdguawdwdad) return nuasduagsdwydbasudasd( );
-            if ((iashdagsdawbdawda( ) - niahdiahduasdbubfas).TotalHours < nuasgdawydaishdgas ) // .TotalHours < nuasgdawydaishdgas)
-            {
-                return nuasduagsdwydbasudasd( );
-            }
+            return true;
+            //if (naihsdadaasdasdiwid == niasdhasdguawdwdad) return nuasduagsdwydbasudasd( );
+            //if ((iashdagsdawbdawda( ) - niahdiahduasdbubfas).TotalHours < nuasgdawydaishdgas ) // .TotalHours < nuasgdawydaishdgas)
+            //{
+            //    return nuasduagsdwydbasudasd( );
+            //}
 
-            return asdhuasdgawydaduasdgu( );
+            //return asdhuasdgawydaduasdgu( );
         }
 
         internal static bool nuasduagsdwydbasudasd( )

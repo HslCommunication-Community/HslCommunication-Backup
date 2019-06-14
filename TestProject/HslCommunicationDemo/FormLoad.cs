@@ -305,6 +305,16 @@ namespace HslCommunicationDemo
                 HslCommunication.StringResources.SeteLanguageEnglish( );
                 Language( Program.Language );
             }
+
+            support赞助ToolStripMenuItem.Click += Support赞助ToolStripMenuItem_Click;
+        }
+
+        private void Support赞助ToolStripMenuItem_Click( object sender, EventArgs e )
+        {
+            using (HslCommunication.BasicFramework.FormSupport form = new HslCommunication.BasicFramework.FormSupport( ))
+            {
+                form.ShowDialog( );
+            }
         }
 
         private void Language( int language )

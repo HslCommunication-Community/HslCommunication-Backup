@@ -32,11 +32,11 @@
             this.label3 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
-            this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.label6 = new System.Windows.Forms.Label();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             this.SuspendLayout();
             // 
             // label1
@@ -51,20 +51,20 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(32, 484);
+            this.label3.Location = new System.Drawing.Point(32, 489);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(591, 17);
+            this.label3.Size = new System.Drawing.Size(560, 17);
             this.label3.TabIndex = 3;
-            this.label3.Text = "如果您的公司使用了本产品，那么非常感谢对本产品的信任，企业赞助或是合作请专门联系VIP群，或是作者。";
+            this.label3.Text = "如果您的公司使用了本产品，那么非常感谢对本产品的信任，企业赞助或是合作请加群后专门联系作者。";
             // 
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(340, 518);
+            this.label4.Location = new System.Drawing.Point(312, 516);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(363, 17);
+            this.label4.Size = new System.Drawing.Size(387, 17);
             this.label4.TabIndex = 4;
-            this.label4.Text = "作者：Richard.Hu 上图为支付宝和微信账户的收钱码，金额自定义";
+            this.label4.Text = "作者：Richard.Hu 上图为支付宝和微信账户的收钱码，请认准官方账户";
             // 
             // label5
             // 
@@ -72,18 +72,7 @@
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(667, 25);
             this.label5.TabIndex = 5;
-            this.label5.Text = "如果不小心点错了，需要退款，请通过支付宝或是本组件的交流群联系作者，群号：592132877(满) 948305931";
-            // 
-            // pictureBox2
-            // 
-            this.pictureBox2.Image = global::HslCommunication.Properties.Resources.mm_facetoface_collect_qrcode_1525331158525;
-            this.pictureBox2.Location = new System.Drawing.Point(375, 10);
-            this.pictureBox2.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.pictureBox2.Name = "pictureBox2";
-            this.pictureBox2.Size = new System.Drawing.Size(283, 375);
-            this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.pictureBox2.TabIndex = 6;
-            this.pictureBox2.TabStop = false;
+            this.label5.Text = "如果不小心点错了，需要退款，请通过邮箱联系作者，提供付款的截图或是其他证明即可。";
             // 
             // pictureBox1
             // 
@@ -96,15 +85,26 @@
             this.pictureBox1.TabIndex = 0;
             this.pictureBox1.TabStop = false;
             // 
+            // pictureBox2
+            // 
+            this.pictureBox2.Image = global::HslCommunication.Properties.Resources.mm_facetoface_collect_qrcode_1525331158525;
+            this.pictureBox2.Location = new System.Drawing.Point(375, 10);
+            this.pictureBox2.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.pictureBox2.Name = "pictureBox2";
+            this.pictureBox2.Size = new System.Drawing.Size(283, 375);
+            this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pictureBox2.TabIndex = 6;
+            this.pictureBox2.TabStop = false;
+            // 
             // label6
             // 
             this.label6.AutoSize = true;
             this.label6.ForeColor = System.Drawing.Color.Blue;
-            this.label6.Location = new System.Drawing.Point(32, 430);
+            this.label6.Location = new System.Drawing.Point(32, 446);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(334, 17);
+            this.label6.Size = new System.Drawing.Size(653, 34);
             this.label6.TabIndex = 7;
-            this.label6.Text = "打赏超过200 Rmb的，可以申请VIP技术支持群：838185568";
+            this.label6.Text = "技术支持及探讨学习群，需要赞助240元以上才能加入，申请入群时请提供微信或是支付宝的付款时间，方便管理员核对，\r\n谢谢支持：群号：838185568";
             // 
             // FormSupport
             // 
@@ -124,8 +124,8 @@
             this.Name = "FormSupport";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "开源不易，如果您使用了本类库，感谢赞助";
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 

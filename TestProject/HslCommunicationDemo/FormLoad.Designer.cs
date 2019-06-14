@@ -104,6 +104,7 @@
             this.日志ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.verisonToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.免责条款ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.授权ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.groupBox12 = new System.Windows.Forms.GroupBox();
             this.button43 = new System.Windows.Forms.Button();
             this.button42 = new System.Windows.Forms.Button();
@@ -117,7 +118,7 @@
             this.button59 = new System.Windows.Forms.Button();
             this.button57 = new System.Windows.Forms.Button();
             this.button55 = new System.Windows.Forms.Button();
-            this.授权ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.support赞助ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -913,7 +914,8 @@
             this.blogsToolStripMenuItem,
             this.webSideToolStripMenuItem,
             this.mesDemoToolStripMenuItem,
-            this.rToolStripMenuItem});
+            this.rToolStripMenuItem,
+            this.support赞助ToolStripMenuItem});
             this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
             this.aboutToolStripMenuItem.Size = new System.Drawing.Size(55, 21);
             this.aboutToolStripMenuItem.Text = "About";
@@ -986,6 +988,12 @@
             this.免责条款ToolStripMenuItem.Size = new System.Drawing.Size(68, 21);
             this.免责条款ToolStripMenuItem.Text = "免责条款";
             this.免责条款ToolStripMenuItem.Click += new System.EventHandler(this.免责条款ToolStripMenuItem_Click);
+            // 
+            // 授权ToolStripMenuItem
+            // 
+            this.授权ToolStripMenuItem.Name = "授权ToolStripMenuItem";
+            this.授权ToolStripMenuItem.Size = new System.Drawing.Size(44, 21);
+            this.授权ToolStripMenuItem.Text = "授权";
             // 
             // groupBox12
             // 
@@ -1139,11 +1147,11 @@
             this.button55.UseVisualStyleBackColor = true;
             this.button55.Click += new System.EventHandler(this.Button55_Click);
             // 
-            // 授权ToolStripMenuItem
+            // support赞助ToolStripMenuItem
             // 
-            this.授权ToolStripMenuItem.Name = "授权ToolStripMenuItem";
-            this.授权ToolStripMenuItem.Size = new System.Drawing.Size(44, 21);
-            this.授权ToolStripMenuItem.Text = "授权";
+            this.support赞助ToolStripMenuItem.Name = "support赞助ToolStripMenuItem";
+            this.support赞助ToolStripMenuItem.Size = new System.Drawing.Size(250, 22);
+            this.support赞助ToolStripMenuItem.Text = "Support [赞助]";
             // 
             // FormLoad
             // 
@@ -1289,6 +1297,7 @@
         private System.Windows.Forms.Button button59;
         private System.Windows.Forms.Button button60;
         private System.Windows.Forms.ToolStripMenuItem 授权ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem support赞助ToolStripMenuItem;
     }
 }
 
