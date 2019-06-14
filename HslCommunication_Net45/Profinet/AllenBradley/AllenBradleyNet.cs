@@ -64,6 +64,11 @@ namespace HslCommunication.Profinet.AllenBradley
         /// </summary>
         public byte Slot { get; set; } = 0;
 
+        /// <summary>
+        /// when read array type, this means the segment length. when data type is 8-byte data, it should set to be 50
+        /// </summary>
+        public int ArraySegment { get; set; } = 100;
+
         #endregion
 
         #region Double Mode Override
@@ -309,7 +314,7 @@ namespace HslCommunication.Profinet.AllenBradley
         /// <returns>带有结果对象的结果数据 -> Result data with result info </returns>
         public OperateResult<bool> ReadBool( string address )
         {
-            OperateResult<byte[]> read = Read( address, 0 );
+            OperateResult<byte[]> read = Read( address, 1 );
             if (!read.IsSuccess) return OperateResult.CreateFailedResult<bool>( read );
 
             return OperateResult.CreateSuccessResult( ByteTransform.TransBool( read.Content, 0 ) );
@@ -322,7 +327,7 @@ namespace HslCommunication.Profinet.AllenBradley
         /// <returns>带有结果对象的结果数据 -> Result data with result info </returns>
         public OperateResult<bool[]> ReadBoolArray( string address )
         {
-            OperateResult<byte[]> read = Read( address, 0 );
+            OperateResult<byte[]> read = Read( address, 1 );
             if (!read.IsSuccess) return OperateResult.CreateFailedResult<bool[]>( read );
 
             return OperateResult.CreateSuccessResult( ByteTransform.TransBool( read.Content, 0, read.Content.Length ) );
@@ -335,7 +340,7 @@ namespace HslCommunication.Profinet.AllenBradley
         /// <returns>带有结果对象的结果数据 -> Result data with result info </returns>
         public OperateResult<byte> ReadByte( string address )
         {
-            OperateResult<byte[]> read = Read( address, 0 );
+            OperateResult<byte[]> read = Read( address, 1 );
             if (!read.IsSuccess) return OperateResult.CreateFailedResult<byte>( read );
 
             return OperateResult.CreateSuccessResult( ByteTransform.TransByte( read.Content, 0 ) );
@@ -598,6 +603,21 @@ namespace HslCommunication.Profinet.AllenBradley
         public override OperateResult Write( string address, ulong[] values )
         {
             return WriteTag( address, AllenBradleyHelper.CIP_Type_LInt, ByteTransform.TransByte( values ), values.Length );
+        }
+
+        /// <summary>
+        /// Writes an array of double to the PLC to return whether the write was successful
+        /// </summary>
+        /// <param name="address">Name of the node </param>
+        /// <param name="values">Actual data </param>
+        /// <returns>Whether to write successfully</returns>
+        /// <example>
+        /// 以下为三菱的连接对象示例，其他的设备读写情况参照下面的代码：
+        /// <code lang="cs" source="HslCommunication_Net45.Test\Documentation\Samples\Core\NetworkDeviceBase.cs" region="WriteDoubleArray" title="Double类型示例" />
+        /// </example>
+        public override OperateResult Write( string address, double[] values )
+        {
+            return WriteTag( address, AllenBradleyHelper.CIP_Type_Double, ByteTransform.TransByte( values ), values.Length );
         }
 
         /// <summary>

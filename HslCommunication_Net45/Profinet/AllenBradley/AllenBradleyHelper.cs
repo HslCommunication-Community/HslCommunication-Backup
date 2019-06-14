@@ -73,9 +73,19 @@ namespace HslCommunication.Profinet.AllenBradley
         public const ushort CIP_Type_Real = 0xCA;
 
         /// <summary>
+        /// 实数数据，八个字节的长度
+        /// </summary>
+        public const ushort CIP_Type_Double = 0xCB;
+
+        /// <summary>
         /// 结构体数据，不定长度
         /// </summary>
         public const ushort CIP_Type_Struct = 0xCC;
+
+        /// <summary>
+        /// 字符串数据内容
+        /// </summary>
+        public const ushort CIP_Type_String = 0xD0;
 
         /// <summary>
         /// 二进制数据内容
@@ -190,17 +200,18 @@ namespace HslCommunication.Profinet.AllenBradley
             buffer[offect++] = CIP_READ_FRAGMENT;
             offect++;
 
-            byte[] requestPath = BuildRequestPathCommand( address );
+
+            byte[] requestPath = BuildRequestPathCommand( address + (address.EndsWith( "]" ) ? string.Empty : $"[{startIndex}]") );
             requestPath.CopyTo( buffer, offect );
             offect += requestPath.Length;
 
             buffer[1] = (byte)((offect - 2) / 2);
             buffer[offect++] = BitConverter.GetBytes( length )[0];
             buffer[offect++] = BitConverter.GetBytes( length )[1];
-            buffer[offect++] = BitConverter.GetBytes( startIndex )[0];
-            buffer[offect++] = BitConverter.GetBytes( startIndex )[1];
-            buffer[offect++] = BitConverter.GetBytes( startIndex )[2];
-            buffer[offect++] = BitConverter.GetBytes( startIndex )[3];
+            buffer[offect++] = BitConverter.GetBytes( 0 )[0];
+            buffer[offect++] = BitConverter.GetBytes( 0 )[1];
+            buffer[offect++] = BitConverter.GetBytes( 0 )[2];
+            buffer[offect++] = BitConverter.GetBytes( 0 )[3];
 
             byte[] data = new byte[offect];
             Array.Copy( buffer, 0, data, 0, offect );
