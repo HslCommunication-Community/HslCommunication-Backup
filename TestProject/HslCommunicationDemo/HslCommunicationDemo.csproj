@@ -180,6 +180,12 @@
     <Compile Include="Modbus\FormTrustedClient.Designer.cs">
       <DependentUpon>FormTrustedClient.cs</DependentUpon>
     </Compile>
+    <Compile Include="PLC\FormFatekPrograme.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="PLC\FormFatekPrograme.Designer.cs">
+      <DependentUpon>FormFatekPrograme.cs</DependentUpon>
+    </Compile>
     <Compile Include="PLC\FormOmronCip.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -516,6 +522,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Modbus\FormTrustedClient.resx">
       <DependentUpon>FormTrustedClient.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PLC\FormFatekPrograme.resx">
+      <DependentUpon>FormFatekPrograme.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="PLC\FormOmronCip.resx">
       <DependentUpon>FormOmronCip.cs</DependentUpon>
