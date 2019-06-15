@@ -9,7 +9,7 @@ namespace HslCommunication.Enthernet
 {
 
     /// <summary>
-    /// 同步消息处理服务器，主要用来实现接收客户端信息并进行消息反馈的操作，适用于客户端进行远程的调用，要求服务器反馈数据。
+    /// 异步消息处理服务器，主要用来实现接收客户端信息并进行消息反馈的操作，适用于客户端进行远程的调用，要求服务器反馈数据。
     /// </summary>
     /// <remarks>
     /// 详细的使用说明，请参照博客<a href="http://www.cnblogs.com/dathlin/p/7697782.html">http://www.cnblogs.com/dathlin/p/7697782.html</a>
@@ -120,7 +120,7 @@ namespace HslCommunication.Enthernet
         /// <summary>
         /// 处理请求接收连接后的方法
         /// </summary>
-        /// <param name="obj"></param>
+        /// <param name="obj">异步套接字对象</param>
         protected override void ThreadPoolLogin( object obj )
         {
             if (obj is Socket socket)
@@ -146,7 +146,7 @@ namespace HslCommunication.Enthernet
         /// <summary>
         /// 处理异常的方法
         /// </summary>
-        /// <param name="session"></param>
+        /// <param name="session">会话</param>
         /// <param name="ex">异常信息</param>
         internal override void SocketReceiveException( AppSession session, Exception ex )
         {

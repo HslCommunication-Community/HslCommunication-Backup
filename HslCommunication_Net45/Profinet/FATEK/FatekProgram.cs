@@ -116,7 +116,7 @@ namespace HslCommunication.Profinet.FATEK
     ///   </item>
     /// </list>
     /// </remarks>
-    public class FatekProgram : SerialDeviceBase<ReverseWordTransform>
+    public class FatekProgram : SerialDeviceBase<RegularByteTransform>
     {
         #region Constructor
 
@@ -159,7 +159,7 @@ namespace HslCommunication.Profinet.FATEK
 
             // 结果验证
             if (read.Content[0] != 0x02) return new OperateResult<byte[]>( read.Content[0], "Read Faild:" + BasicFramework.SoftBasic.ByteToHexString( read.Content, ' ' ) );
-            if (read.Content[5] != 0x00) return new OperateResult<byte[]>( read.Content[5], GetErrorDescriptionFromCode( read.Content[5] ) );
+            if (read.Content[5] != 0x30) return new OperateResult<byte[]>( read.Content[5], GetErrorDescriptionFromCode( (char)read.Content[5] ) );
 
             // 提取结果
             byte[] Content = new byte[length * 2];
@@ -188,8 +188,8 @@ namespace HslCommunication.Profinet.FATEK
             if (!read.IsSuccess) return read;
 
             // 结果验证
-            if (read.Content[0] != 0x06) return new OperateResult( read.Content[0], "Write Faild:" + BasicFramework.SoftBasic.ByteToHexString( read.Content, ' ' ) );
-            if (read.Content[5] != 0x00) return new OperateResult<byte[]>( read.Content[5], GetErrorDescriptionFromCode( read.Content[5] ) );
+            if (read.Content[0] != 0x02) return new OperateResult( read.Content[0], "Write Faild:" + BasicFramework.SoftBasic.ByteToHexString( read.Content, ' ' ) );
+            if (read.Content[5] != 0x30) return new OperateResult<byte[]>( read.Content[5], GetErrorDescriptionFromCode( (char)read.Content[5] ) );
 
             // 提取结果
             return OperateResult.CreateSuccessResult( );
@@ -217,7 +217,7 @@ namespace HslCommunication.Profinet.FATEK
 
             // 结果验证
             if (read.Content[0] != 0x02) return new OperateResult<bool[]>( read.Content[0], "Read Faild:" + BasicFramework.SoftBasic.ByteToHexString( read.Content, ' ' ) );
-            if (read.Content[5] != 0x00) return new OperateResult<bool[]>( read.Content[5], GetErrorDescriptionFromCode( read.Content[5] ) );
+            if (read.Content[5] != 0x30) return new OperateResult<bool[]>( read.Content[5], GetErrorDescriptionFromCode( (char)read.Content[5] ) );
 
             // 提取结果
             byte[] buffer = new byte[length];
@@ -267,7 +267,7 @@ namespace HslCommunication.Profinet.FATEK
 
             // 结果验证
             if (read.Content[0] != 0x02) return new OperateResult( read.Content[0], "Write Faild:" + BasicFramework.SoftBasic.ByteToHexString( read.Content, ' ' ) );
-            if (read.Content[5] != 0x00) return new OperateResult<bool[]>( read.Content[5], GetErrorDescriptionFromCode( read.Content[5] ) );
+            if (read.Content[5] != 0x30) return new OperateResult<bool[]>( read.Content[5], GetErrorDescriptionFromCode( (char)read.Content[5] ) );
 
             // 提取结果
             return OperateResult.CreateSuccessResult( );
@@ -512,18 +512,18 @@ namespace HslCommunication.Profinet.FATEK
         /// </summary>
         /// <param name="code">错误码</param>
         /// <returns>错误的文本描述</returns>
-        public static string GetErrorDescriptionFromCode( byte code )
+        public static string GetErrorDescriptionFromCode( char code )
         {
             switch (code)
             {
-                case 2: return StringResources.Language.FatekStatus02;
-                case 3: return StringResources.Language.FatekStatus03;
-                case 4: return StringResources.Language.FatekStatus04;
-                case 5: return StringResources.Language.FatekStatus05;
-                case 6: return StringResources.Language.FatekStatus06;
-                case 7: return StringResources.Language.FatekStatus07;
-                case 9: return StringResources.Language.FatekStatus09;
-                case 10: return StringResources.Language.FatekStatus10;
+                case '2': return StringResources.Language.FatekStatus02;
+                case '3': return StringResources.Language.FatekStatus03;
+                case '4': return StringResources.Language.FatekStatus04;
+                case '5': return StringResources.Language.FatekStatus05;
+                case '6': return StringResources.Language.FatekStatus06;
+                case '7': return StringResources.Language.FatekStatus07;
+                case '9': return StringResources.Language.FatekStatus09;
+                case 'A': return StringResources.Language.FatekStatus10;
                 default: return StringResources.Language.UnknownError;
             }
         }
