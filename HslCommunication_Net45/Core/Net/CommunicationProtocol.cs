@@ -68,8 +68,10 @@ namespace HslCommunication
         /// 发送的数据是一条异常的数据，字符串为异常消息
         /// </summary>
         internal const int ProtocolUserException = 1004;
-
-
+        /// <summary>
+        /// 说明发送的数据是字符串的数组
+        /// </summary>
+        internal const int ProtocolUserStringArray = 1005;
 
 
         /// <summary>
@@ -217,7 +219,72 @@ namespace HslCommunication
             if (data == null) return CommandBytes( ProtocolUserString, customer, token, null );
             else return CommandBytes( ProtocolUserString, customer, token, Encoding.Unicode.GetBytes( data ) );
         }
+
+        /// <summary>
+        /// 获取发送字节数据的实际数据，带指令头
+        /// </summary>
+        /// <param name="customer">用户数据</param>
+        /// <param name="token">令牌</param>
+        /// <param name="data">字符串数据信息</param>
+        /// <returns>包装后的指令信息</returns>
+        internal static byte[] CommandBytes( int customer, Guid token, string[] data )
+        {
+            return CommandBytes( ProtocolUserStringArray, customer, token, PackStringArrayToByte( data ) );
+        }
+
+        /// <summary>
+        /// 将字符串打包成字节数组内容
+        /// </summary>
+        /// <param name="data">字符串数组</param>
+        /// <returns>打包后的原始数据内容</returns>
+        internal static byte[] PackStringArrayToByte( string[] data )
+        {
+            if (data == null) data = new string[0];
+
+            List<byte> buffer = new List<byte>( );
+            buffer.AddRange( BitConverter.GetBytes( data.Length ) );
+
+            for (int i = 0; i < data.Length; i++)
+            {
+                if (!string.IsNullOrEmpty( data[i] ))
+                {
+                    byte[] tmp = Encoding.Unicode.GetBytes( data[i] );
+                    buffer.AddRange( BitConverter.GetBytes( tmp.Length ) );
+                    buffer.AddRange( tmp );
+                }
+                else
+                {
+                    buffer.AddRange( BitConverter.GetBytes( 0 ) );
+                }
+            }
+
+            return buffer.ToArray( );
+        }
+
+        /// <summary>
+        /// 将字节数组还原成真实的字符串数组
+        /// </summary>
+        /// <param name="content">原始字节数组</param>
+        /// <returns>解析后的字符串内容</returns>
+        internal static string[] UnPackStringArrayFromByte( byte[] content )
+        {
+            if (content?.Length < 4) return null;
+
+            int index = 0;
+            int count = BitConverter.ToInt32( content, index );
+            string[] result = new string[count];
+            index += 4;
+            for (int i = 0; i < count; i++)
+            {
+                int length = BitConverter.ToInt32( content, index );
+                index += 4;
+                if (length > 0) result[i] = Encoding.Unicode.GetString( content, index, length );
+                else result[i] = string.Empty;
+                index += length;
+            }
+
+            return result;
+        }
+
     }
-
-
 }

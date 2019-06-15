@@ -172,6 +172,39 @@ namespace HslCommunicationDemo
             // 清空
             textBox8.Clear( );
         }
+
+        private void Button7_Click( object sender, EventArgs e )
+        {
+            // 数据发送
+            NetHandle handle = new NetHandle( );
+            if (textBox5.Text.IndexOf( '.' ) >= 0)
+            {
+                string[] values = textBox5.Text.Split( '.' );
+                handle = new NetHandle( byte.Parse( values[0] ), byte.Parse( values[1] ), ushort.Parse( values[2] ) );
+            }
+            else
+            {
+                handle = int.Parse( textBox5.Text );
+            }
+
+
+            int count = int.Parse( textBox6.Text );
+            DateTime start = DateTime.Now;
+            for (int i = 0; i < count; i++)
+            {
+                OperateResult<NetHandle,string[]> read = simplifyClient.ReadCustomerFromServer( handle, textBox4.Text.Split(new char[] { ';' } ) );
+                if (read.IsSuccess)
+                {
+                    textBox8.Lines = read.Content2;
+                }
+                else
+                {
+                    MessageBox.Show( Program.Language == 1 ? "读取失败：" : "Read Failed:" + read.ToMessageShowString( ) );
+                }
+            }
+
+            textBox7.Text = (DateTime.Now - start).TotalMilliseconds.ToString( "F2" );
+        }
     }
 
 

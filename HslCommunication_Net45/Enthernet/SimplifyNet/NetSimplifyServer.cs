@@ -38,6 +38,12 @@ namespace HslCommunication.Enthernet
         /// 接收字符串信息的事件
         /// </summary>
         public event Action<AppSession, NetHandle, string> ReceiveStringEvent;
+
+        /// <summary>
+        /// 接收字符串数组信息的事件
+        /// </summary>
+        public event Action<AppSession, NetHandle, string[]> ReceiveStringArrayEvent;
+
         /// <summary>
         /// 接收字节信息的事件
         /// </summary>
@@ -54,10 +60,15 @@ namespace HslCommunication.Enthernet
             ReceivedBytesEvent?.Invoke( session, customer, temp );
         }
 
+        private void OnReceiveStringArrayEvent( AppSession session, int customer, string[] str )
+        {
+            ReceiveStringArrayEvent?.Invoke( session, customer, str );
+        }
+
         #endregion
 
         #region Public Method
-        
+
         /// <summary>
         /// 向指定的通信对象发送字符串数据
         /// </summary>
@@ -68,6 +79,18 @@ namespace HslCommunication.Enthernet
         {
             SendBytesAsync( session, HslProtocol.CommandBytes( customer, Token, str ) );
         }
+
+        /// <summary>
+        /// 向指定的通信对象发送字符串数组
+        /// </summary>
+        /// <param name="session">通信对象</param>
+        /// <param name="customer">用户的指令头</param>
+        /// <param name="str">实际发送的字符串数组</param>
+        public void SendMessage( AppSession session, int customer, string[] str )
+        {
+            SendBytesAsync( session, HslProtocol.CommandBytes( customer, Token, str ) );
+        }
+
         /// <summary>
         /// 向指定的通信对象发送字节数据
         /// </summary>
@@ -78,7 +101,6 @@ namespace HslCommunication.Enthernet
         {
             SendBytesAsync( session, HslProtocol.CommandBytes( customer, Token, bytes ) );
         }
-
 
         #endregion
 
@@ -169,6 +191,11 @@ namespace HslCommunication.Enthernet
             {
                 // 字符串数据
                 OnReceiveStringEvent( session, customer, Encoding.Unicode.GetString( content ) );
+            }
+            else if (protocol == HslProtocol.ProtocolUserStringArray)
+            {
+                // 字符串数组
+                OnReceiveStringArrayEvent( session, customer, HslProtocol.UnPackStringArrayFromByte( content ) );
             }
             else
             {

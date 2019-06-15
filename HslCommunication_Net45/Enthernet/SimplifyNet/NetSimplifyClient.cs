@@ -11,10 +11,8 @@ using System.Threading.Tasks;
 
 namespace HslCommunication.Enthernet
 {
-
-
     /// <summary>
-    /// 异步访问数据的客户端类，用于向服务器请求一些确定的数据信息
+    /// 同步访问数据的客户端类，用于向服务器请求一些确定的数据信息
     /// </summary>
     /// <remarks>
     /// 详细的使用说明，请参照博客<a href="http://www.cnblogs.com/dathlin/p/7697782.html">http://www.cnblogs.com/dathlin/p/7697782.html</a>
@@ -85,6 +83,20 @@ namespace HslCommunication.Enthernet
             if (!read.IsSuccess) return OperateResult.CreateFailedResult<NetHandle, string>( read );
 
             return OperateResult.CreateSuccessResult( read.Content1, Encoding.Unicode.GetString( read.Content2 ) );
+        }
+
+        /// <summary>
+        /// 客户端向服务器进行请求，请求字符串数据，并返回状态信息
+        /// </summary>
+        /// <param name="customer">用户的指令头</param>
+        /// <param name="send">发送数据</param>
+        /// <returns>带返回消息的结果对象</returns>
+        public OperateResult<NetHandle, string[]> ReadCustomerFromServer( NetHandle customer, string[] send = null )
+        {
+            var read = ReadCustomerFromServerBase( HslProtocol.CommandBytes( customer, Token, send ) );
+            if (!read.IsSuccess) return OperateResult.CreateFailedResult<NetHandle, string[]>( read );
+
+            return OperateResult.CreateSuccessResult( read.Content1, HslProtocol.UnPackStringArrayFromByte( read.Content2 ) );
         }
 
         /// <summary>

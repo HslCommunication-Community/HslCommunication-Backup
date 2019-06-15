@@ -134,7 +134,7 @@
             this.textBox15.Name = "textBox15";
             this.textBox15.Size = new System.Drawing.Size(31, 23);
             this.textBox15.TabIndex = 28;
-            this.textBox15.Text = "0";
+            this.textBox15.Text = "1";
             // 
             // label21
             // 

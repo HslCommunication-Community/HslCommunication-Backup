@@ -54,6 +54,7 @@
             this.textBox5 = new System.Windows.Forms.TextBox();
             this.label7 = new System.Windows.Forms.Label();
             this.userControlHead1 = new HslCommunicationDemo.DemoControl.UserControlHead();
+            this.button7 = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.SuspendLayout();
@@ -172,6 +173,7 @@
             // panel2
             // 
             this.panel2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel2.Controls.Add(this.button7);
             this.panel2.Controls.Add(this.textBox8);
             this.panel2.Controls.Add(this.label12);
             this.panel2.Controls.Add(this.button4);
@@ -220,7 +222,7 @@
             // 
             // textBox7
             // 
-            this.textBox7.Location = new System.Drawing.Point(456, 183);
+            this.textBox7.Location = new System.Drawing.Point(618, 183);
             this.textBox7.Name = "textBox7";
             this.textBox7.ReadOnly = true;
             this.textBox7.Size = new System.Drawing.Size(141, 23);
@@ -230,7 +232,7 @@
             // label11
             // 
             this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(402, 186);
+            this.label11.Location = new System.Drawing.Point(564, 186);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(44, 17);
             this.label11.TabIndex = 15;
@@ -238,7 +240,7 @@
             // 
             // textBox6
             // 
-            this.textBox6.Location = new System.Drawing.Point(241, 183);
+            this.textBox6.Location = new System.Drawing.Point(403, 183);
             this.textBox6.Name = "textBox6";
             this.textBox6.Size = new System.Drawing.Size(141, 23);
             this.textBox6.TabIndex = 14;
@@ -247,7 +249,7 @@
             // label10
             // 
             this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(187, 186);
+            this.label10.Location = new System.Drawing.Point(349, 186);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(44, 17);
             this.label10.TabIndex = 13;
@@ -319,6 +321,16 @@
             this.userControlHead1.Size = new System.Drawing.Size(1004, 32);
             this.userControlHead1.TabIndex = 14;
             // 
+            // button7
+            // 
+            this.button7.Location = new System.Drawing.Point(159, 180);
+            this.button7.Name = "button7";
+            this.button7.Size = new System.Drawing.Size(148, 28);
+            this.button7.TabIndex = 20;
+            this.button7.Text = "Send Array";
+            this.button7.UseVisualStyleBackColor = true;
+            this.button7.Click += new System.EventHandler(this.Button7_Click);
+            // 
             // FormSimplifyNet
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 17F);
@@ -368,5 +380,6 @@
         private System.Windows.Forms.Button button5;
         private System.Windows.Forms.Button button6;
         private DemoControl.UserControlHead userControlHead1;
+        private System.Windows.Forms.Button button7;
     }
 }

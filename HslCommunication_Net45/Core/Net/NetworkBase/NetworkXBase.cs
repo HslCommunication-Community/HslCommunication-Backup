@@ -83,7 +83,7 @@ namespace HslCommunication.Core.Net
         /// <summary>
         /// 发送回发方法
         /// </summary>
-        /// <param name="ar"></param>
+        /// <param name="ar">异步对象</param>
         internal void SendCallBack( IAsyncResult ar )
         {
             if (ar.AsyncState is AsyncStateSend stateone)
@@ -400,7 +400,17 @@ namespace HslCommunication.Core.Net
             return SendBaseAndCheckReceive( socket, HslProtocol.ProtocolUserString, customer, data );
         }
 
-
+        /// <summary>
+        /// [自校验] 直接发送字符串数组并确认对方接收完成数据，如果结果异常，则结束通讯
+        /// </summary>
+        /// <param name="socket">网络套接字</param>
+        /// <param name="customer">用户指令</param>
+        /// <param name="sends">发送的字符串数组</param>
+        /// <returns>是否发送成功</returns>
+        protected OperateResult SendStringAndCheckReceive( Socket socket, int customer, string[] sends )
+        {
+            return SendBaseAndCheckReceive( socket, HslProtocol.ProtocolUserString, customer, HslProtocol.PackStringArrayToByte( sends ) );
+        }
 
         /// <summary>
         /// [自校验] 将文件数据发送至套接字，如果结果异常，则结束通讯
@@ -594,7 +604,27 @@ namespace HslCommunication.Core.Net
             return OperateResult.CreateSuccessResult( BitConverter.ToInt32( receive.Content1, 4 ), Encoding.Unicode.GetString( receive.Content2 ) );
         }
 
+        /// <summary>
+        /// [自校验] 从网络中接收一个字符串数组，如果结果异常，则结束通讯
+        /// </summary>
+        /// <param name="socket">套接字</param>
+        /// <returns>包含是否成功的结果对象</returns>
+        protected OperateResult<int,string[]> ReceiveStringArrayContentFromSocket( Socket socket )
+        {
+            OperateResult<byte[], byte[]> receive = ReceiveAndCheckBytes( socket, 10000 );
+            if (!receive.IsSuccess) return OperateResult.CreateFailedResult<int, string[]>( receive );
 
+            // 检查是否是字符串信息
+            if (BitConverter.ToInt32( receive.Content1, 0 ) != HslProtocol.ProtocolUserStringArray)
+            {
+                LogNet?.WriteError( ToString( ), StringResources.Language.CommandHeadCodeCheckFailed );
+                socket?.Close( );
+                return new OperateResult<int, string[]>( StringResources.Language.CommandHeadCodeCheckFailed );
+            }
+
+            if (receive.Content2 == null) receive.Content2 = new byte[4];
+            return OperateResult.CreateSuccessResult( BitConverter.ToInt32( receive.Content1, 4 ), HslProtocol.UnPackStringArrayFromByte( receive.Content2 ) );
+        }
 
         /// <summary>
         /// [自校验] 从网络中接收一串字节数据，如果结果异常，则结束通讯
