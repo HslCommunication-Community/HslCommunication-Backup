@@ -291,6 +291,21 @@ namespace HslCommunication.Language
         public override string PanasonicMewStatus66 => "Address Error: Address (program address, absolute address, etc.) Data encoding form (BCD, hex, etc.), overflow, underflow, or specified range error.";
         public override string PanasonicMewStatus67 => "Missing data error: The data to be read does not exist. (reads data that is not written to the comment register.)";
 
+
+        /***********************************************************************************
+         * 
+         *   Fatek PLC 永宏PLC相关
+         * 
+         ************************************************************************************/
+        public override string FatekStatus02 => "Illegal value";
+        public override string FatekStatus03 => "Write disabled";
+        public override string FatekStatus04 => "Invalid command code";
+        public override string FatekStatus05 => "Cannot be activated (down RUN command but Ladder Checksum does not match)";
+        public override string FatekStatus06 => "Cannot be activated (down RUN command but PLC ID ≠ Ladder ID)";
+        public override string FatekStatus07 => "Cannot be activated (down RUN command but program syntax error)";
+        public override string FatekStatus09 => "Cannot be activated (down RUN command, but the ladder program command PLC cannot be executed)";
+        public override string FatekStatus10 => "Illegal address";
+
 #pragma warning restore CS1591 // 缺少对公共可见类型或成员的 XML 注释
 
     }

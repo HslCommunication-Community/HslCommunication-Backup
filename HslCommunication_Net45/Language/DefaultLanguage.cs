@@ -291,6 +291,22 @@ namespace HslCommunication.Language
         public virtual string PanasonicMewStatus67 => "丢失数据错误:要读的数据不存在。（读取没有写入注释寄存区的数据。。";
 
 
+        /***********************************************************************************
+         * 
+         *   Fatek PLC 永宏PLC相关
+         * 
+         ************************************************************************************/
+        public virtual string FatekStatus02 => "不合法数值";
+        public virtual string FatekStatus03 => "禁止写入";
+        public virtual string FatekStatus04 => "不合法的命令码";
+        public virtual string FatekStatus05 => "不能激活(下RUN命令但Ladder Checksum不合)";
+        public virtual string FatekStatus06 => "不能激活(下RUN命令但PLC ID≠ Ladder ID)";
+        public virtual string FatekStatus07 => "不能激活（下RUN命令但程序语法错误）";
+        public virtual string FatekStatus09 => "不能激活（下RUN命令，但Ladder之程序指令PLC无法执行）";
+        public virtual string FatekStatus10 => "不合法的地址";
+
+
+
 #pragma warning restore CS1591 // 缺少对公共可见类型或成员的 XML 注释
     }
 }

@@ -99,6 +99,7 @@
     <Compile Include="Enthernet\RedisClientTest.cs" />
     <Compile Include="Modbus\ModbusTcpTest.cs" />
     <Compile Include="Profinet\AllenBradley\AllenBradleyHelper.cs" />
+    <Compile Include="Profinet\FATEK\FatekProgramTest.cs" />
     <Compile Include="Profinet\Melsec\MelsecFxLinksTest.cs" />
     <Compile Include="Profinet\Melsec\MelsecFxSerialTest.cs" />
     <Compile Include="Profinet\Melsec\MelsecMcAsciiNetTest.cs" />
