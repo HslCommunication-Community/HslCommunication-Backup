@@ -45,30 +45,44 @@ namespace HslCommunication.Enthernet
         }
 
         #endregion
-        
+
         /// <summary>
         /// 客户端向服务器进行请求，请求字符串数据，忽略了自定义消息反馈
         /// </summary>
         /// <param name="customer">用户的指令头</param>
         /// <param name="send">发送数据</param>
         /// <returns>带返回消息的结果对象</returns>
-        public OperateResult<string> ReadFromServer(NetHandle customer,string send = null)
+        public OperateResult<string> ReadFromServer( NetHandle customer, string send )
         {
             var read = ReadFromServerBase( HslProtocol.CommandBytes( customer, Token, send ) );
             if (!read.IsSuccess) return OperateResult.CreateFailedResult<string>( read );
 
             return OperateResult.CreateSuccessResult( Encoding.Unicode.GetString( read.Content ) );
         }
-        
+
+        /// <summary>
+        /// 客户端向服务器进行请求，请求字符串数组，忽略了自定义消息反馈
+        /// </summary>
+        /// <param name="customer">用户的指令头</param>
+        /// <param name="send">发送数据</param>
+        /// <returns>带返回消息的结果对象</returns>
+        public OperateResult<string[]> ReadFromServer( NetHandle customer, string[] send )
+        {
+            var read = ReadFromServerBase( HslProtocol.CommandBytes( customer, Token, send ) );
+            if (!read.IsSuccess) return OperateResult.CreateFailedResult<string[]>( read );
+
+            return OperateResult.CreateSuccessResult( HslProtocol.UnPackStringArrayFromByte( read.Content ) );
+        }
+
         /// <summary>
         /// 客户端向服务器进行请求，请求字节数据
         /// </summary>
         /// <param name="customer">用户的指令头</param>
         /// <param name="send">发送的字节内容</param>
         /// <returns>带返回消息的结果对象</returns>
-        public OperateResult<byte[]> ReadFromServer(NetHandle customer,byte[] send)
+        public OperateResult<byte[]> ReadFromServer( NetHandle customer, byte[] send )
         {
-            return ReadFromServerBase( HslProtocol.CommandBytes( customer, Token, send ));
+            return ReadFromServerBase( HslProtocol.CommandBytes( customer, Token, send ) );
         }
 
         /// <summary>
@@ -77,7 +91,7 @@ namespace HslCommunication.Enthernet
         /// <param name="customer">用户的指令头</param>
         /// <param name="send">发送数据</param>
         /// <returns>带返回消息的结果对象</returns>
-        public OperateResult<NetHandle, string> ReadCustomerFromServer( NetHandle customer, string send = null )
+        public OperateResult<NetHandle, string> ReadCustomerFromServer( NetHandle customer, string send )
         {
             var read = ReadCustomerFromServerBase( HslProtocol.CommandBytes( customer, Token, send ) );
             if (!read.IsSuccess) return OperateResult.CreateFailedResult<NetHandle, string>( read );
@@ -91,7 +105,7 @@ namespace HslCommunication.Enthernet
         /// <param name="customer">用户的指令头</param>
         /// <param name="send">发送数据</param>
         /// <returns>带返回消息的结果对象</returns>
-        public OperateResult<NetHandle, string[]> ReadCustomerFromServer( NetHandle customer, string[] send = null )
+        public OperateResult<NetHandle, string[]> ReadCustomerFromServer( NetHandle customer, string[] send )
         {
             var read = ReadCustomerFromServerBase( HslProtocol.CommandBytes( customer, Token, send ) );
             if (!read.IsSuccess) return OperateResult.CreateFailedResult<NetHandle, string[]>( read );
@@ -153,7 +167,7 @@ namespace HslCommunication.Enthernet
         /// </summary>
         /// <param name="customer">用户的指令头</param>
         /// <param name="send">发送数据</param>
-        public Task<OperateResult<string>> ReadFromServerAsync( NetHandle customer, string send = null )
+        public Task<OperateResult<string>> ReadFromServerAsync( NetHandle customer, string send )
         {
             return Task.Run( ( ) => ReadFromServer( customer, send ) );
         }
@@ -169,9 +183,50 @@ namespace HslCommunication.Enthernet
             return Task.Run( ( ) => ReadFromServer( customer, send ) );
         }
 
+        /// <summary>
+        /// 客户端向服务器进行异步请求，请求字符串数据
+        /// </summary>
+        /// <param name="customer">用户的指令头</param>
+        /// <param name="sends">发送数据</param>
+        public Task<OperateResult<string[]>> ReadFromServerAsync( NetHandle customer, string[] sends )
+        {
+            return Task.Run( ( ) => ReadFromServer( customer, sends ) );
+        }
+
+        /// <summary>
+        /// 客户端向服务器进行请求，请求字符串数据，并返回状态信息
+        /// </summary>
+        /// <param name="customer">用户的指令头</param>
+        /// <param name="send">发送数据</param>
+        /// <returns>带返回消息的结果对象</returns>
+        public Task<OperateResult<NetHandle, string>> ReadCustomerFromServerAsync( NetHandle customer, string send )
+        {
+            return Task.Run( ( ) => ReadCustomerFromServer( customer, send ) );
+        }
+
+        /// <summary>
+        /// 客户端向服务器进行请求，请求字符串数据，并返回状态信息
+        /// </summary>
+        /// <param name="customer">用户的指令头</param>
+        /// <param name="send">发送数据</param>
+        /// <returns>带返回消息的结果对象</returns>
+        public Task<OperateResult<NetHandle, string[]>> ReadCustomerFromServerAsync( NetHandle customer, string[] send )
+        {
+            return Task.Run( ( ) => ReadCustomerFromServer( customer, send ) );
+        }
+
+        /// <summary>
+        /// 客户端向服务器进行请求，请求字符串数据，并返回状态信息
+        /// </summary>
+        /// <param name="customer">用户的指令头</param>
+        /// <param name="send">发送数据</param>
+        /// <returns>带返回消息的结果对象</returns>
+        public Task<OperateResult<NetHandle, byte[]>> ReadCustomerFromServerAsync( NetHandle customer, byte[] send )
+        {
+            return Task.Run( ( ) => ReadCustomerFromServer( customer, send ) );
+        }
 
 #endif
-
 
         #region Object Override
 
@@ -179,14 +234,13 @@ namespace HslCommunication.Enthernet
         /// 获取本对象的字符串表示形式
         /// </summary>
         /// <returns>字符串信息</returns>
-        public override string ToString()
+        public override string ToString( )
         {
             return $"NetSimplifyClient[{IpAddress}:{Port}]";
         }
-        
+
         #endregion
 
     }
-
 
 }
