@@ -287,6 +287,7 @@
     <Compile Include="Profinet\AllenBradley\AllenBradleyHelper.cs" />
     <Compile Include="Profinet\AllenBradley\AllenBradleyNet.cs" />
     <Compile Include="Profinet\FATEK\FatekProgram.cs" />
+    <Compile Include="Profinet\Fuji\FujiSPB.cs" />
     <Compile Include="Profinet\Keyence\KeyenceDataType.cs" />
     <Compile Include="Profinet\Keyence\KeyenceMcAsciiNet.cs" />
     <Compile Include="Profinet\Keyence\KeyenceMcNet.cs" />

@@ -1,129 +1,24 @@
-﻿using HslCommunication.Core;
+﻿using HslCommunication.BasicFramework;
+using HslCommunication.Core;
 using HslCommunication.Serial;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using HslCommunication.BasicFramework;
 
-
-namespace HslCommunication.Profinet.FATEK
+namespace HslCommunication.Profinet.Fuji
 {
     /// <summary>
-    /// 台湾永宏公司的编程口协议
+    /// 富士PLC的SPB协议
     /// </summary>
-    /// <remarks>
-    /// 其所支持的地址形式如下：
-    /// <list type="table">
-    ///   <listheader>
-    ///     <term>地址名称</term>
-    ///     <term>地址代号</term>
-    ///     <term>示例</term>
-    ///     <term>地址进制</term>
-    ///     <term>字操作</term>
-    ///     <term>位操作</term>
-    ///     <term>备注</term>
-    ///   </listheader>
-    ///   <item>
-    ///     <term>内部继电器</term>
-    ///     <term>M</term>
-    ///     <term>M100,M200</term>
-    ///     <term>10</term>
-    ///     <term>√</term>
-    ///     <term>√</term>
-    ///     <term></term>
-    ///   </item>
-    ///   <item>
-    ///     <term>输入继电器</term>
-    ///     <term>X</term>
-    ///     <term>X10,X20</term>
-    ///     <term>10</term>
-    ///     <term>√</term>
-    ///     <term>√</term>
-    ///     <term></term>
-    ///   </item>
-    ///   <item>
-    ///     <term>输出继电器</term>
-    ///     <term>Y</term>
-    ///     <term>Y10,Y20</term>
-    ///     <term>10</term>
-    ///     <term>√</term>
-    ///     <term>√</term>
-    ///     <term></term>
-    ///   </item>
-    ///   <item>
-    ///     <term>步进继电器</term>
-    ///     <term>S</term>
-    ///     <term>S100,S200</term>
-    ///     <term>10</term>
-    ///     <term>√</term>
-    ///     <term>√</term>
-    ///     <term></term>
-    ///   </item>
-    ///   <item>
-    ///     <term>定时器的触点</term>
-    ///     <term>T</term>
-    ///     <term>T100,T200</term>
-    ///     <term>10</term>
-    ///     <term>√</term>
-    ///     <term>√</term>
-    ///     <term></term>
-    ///   </item>
-    ///   <item>
-    ///     <term>定时器的当前值</term>
-    ///     <term>RT</term>
-    ///     <term>RT100,RT200</term>
-    ///     <term>10</term>
-    ///     <term>√</term>
-    ///     <term>×</term>
-    ///     <term></term>
-    ///   </item>
-    ///   <item>
-    ///     <term>计数器的触点</term>
-    ///     <term>C</term>
-    ///     <term>C100,C200</term>
-    ///     <term>10</term>
-    ///     <term>√</term>
-    ///     <term>√</term>
-    ///     <term></term>
-    ///   </item>
-    ///   <item>
-    ///     <term>计数器的当前</term>
-    ///     <term>RC</term>
-    ///     <term>RC100,RC200</term>
-    ///     <term>10</term>
-    ///     <term>√</term>
-    ///     <term>×</term>
-    ///     <term></term>
-    ///   </item>
-    ///   <item>
-    ///     <term>数据寄存器</term>
-    ///     <term>D</term>
-    ///     <term>D1000,D2000</term>
-    ///     <term>10</term>
-    ///     <term>√</term>
-    ///     <term>×</term>
-    ///     <term></term>
-    ///   </item>
-    ///   <item>
-    ///     <term>文件寄存器</term>
-    ///     <term>R</term>
-    ///     <term>R100,R200</term>
-    ///     <term>10</term>
-    ///     <term>√</term>
-    ///     <term>×</term>
-    ///     <term></term>
-    ///   </item>
-    /// </list>
-    /// </remarks>
-    public class FatekProgram : SerialDeviceBase<RegularByteTransform>
+    public class FujiSPB : SerialDeviceBase<RegularByteTransform>
     {
         #region Constructor
 
         /// <summary>
         /// 实例化默认的构造方法
         /// </summary>
-        public FatekProgram( )
+        public FujiSPB( )
         {
             WordLength = 1;
         }
@@ -341,11 +236,11 @@ namespace HslCommunication.Profinet.FATEK
                     case 'R':
                     case 'r':
                         {
-                            if(address[1] == 'T' || address[1] == 't')
+                            if (address[1] == 'T' || address[1] == 't')
                             {
                                 result.Content = "RT" + Convert.ToUInt16( address.Substring( 1 ), 10 ).ToString( "D4" );
                             }
-                            else if(address[1] == 'C' || address[1] == 'c')
+                            else if (address[1] == 'C' || address[1] == 'c')
                             {
                                 result.Content = "RC" + Convert.ToUInt16( address.Substring( 1 ), 10 ).ToString( "D4" );
                             }

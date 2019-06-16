@@ -554,6 +554,9 @@
     <Compile Include="..\HslCommunication_Net45\Profinet\FATEK\FatekProgram.cs">
       <Link>Profinet\FATEK\FatekProgram.cs</Link>
     </Compile>
+    <Compile Include="..\HslCommunication_Net45\Profinet\Fuji\FujiSPB.cs">
+      <Link>Profinet\Fuji\FujiSPB.cs</Link>
+    </Compile>
     <Compile Include="..\HslCommunication_Net45\Profinet\Keyence\KeyenceDataType.cs">
       <Link>Profinet\Keyence\KeyenceDataType.cs</Link>
     </Compile>

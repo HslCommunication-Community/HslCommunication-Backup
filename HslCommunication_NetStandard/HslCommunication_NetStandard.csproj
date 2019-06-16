@@ -211,6 +211,7 @@
     <Folder Include="ModBus\ModbusRtu\" />
     <Folder Include="ModBus\ModbusTcp\" />
     <Folder Include="ModBus\ModbusAscii\" />
+    <Folder Include="Profinet\Fuji\" />
     <Folder Include="Profinet\LSIS\" />
     <Folder Include="Profinet\Melsec\" />
     <Folder Include="Profinet\Omron\" />
@@ -218,6 +219,7 @@
     <Folder Include="Profinet\AllenBradley\" />
     <Folder Include="Profinet\Panasonic\" />
     <Folder Include="Profinet\Keyence\" />
+    <Folder Include="Profinet\FATEK\" />
     <Folder Include="Robot\EFORT\" />
     <Folder Include="Language\" />
     <Folder Include="Instrument\" />
