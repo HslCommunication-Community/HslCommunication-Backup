@@ -30,6 +30,8 @@ HslCommunication.py
 ## Official Website
 唯一官网：[http://www.hslcommunication.cn/](http://www.hslcommunication.cn/)
 
+BBS: [http://bbs.hslcommunication.cn/](http://bbs.hslcommunication.cn/)
+
 ## License
 使用请遵循LGPL-3.0协议说明。该协议允许你免费使用库文件为商业项目的一部分出售，但是禁止私自修改源代码，如果修改了源代码，必须进行开源。
 
@@ -58,16 +60,15 @@ Install-Package HslCommunication
 ```
 
 ## Environment
-* IDE: **Visual Studio 2017** 必须这个版本及以上，不然会语法报错
+* IDE: **Visual Studio 2019** 必须这个版本及以上，不然会语法报错
 * .Net Framework环境下：支持.Net 3.5及以上环境，功能最完善。
-* .Net Standard环境下：.Net 2.0以上，目前仅仅实现PLC读写，modbus tcp读写，日志记录。
+* .Net Standard环境下：.Net 2.0以上，支持.net core和xamarin。
 * java环境下：**Intellij Idea 2018.4**
 * python: **Visual Studio Code**
 
 ## Contact
-* 工业软件交流QQ群：[592132877](http://shang.qq.com/wpa/qunwpa?idkey=2278cb9c2e0c04fc305c43e41acff940499a34007dfca9e83a7291e726f9c4e8)   新群：948305931
 * 邮箱地址(Email)：hsl200909@163.com
-* 技术支持VIP群（打赏超过200RMB可加入）：[838185568](http://shang.qq.com/wpa/qunwpa?idkey=eee02ce1acde63c6316cbb380a80e033a14170ab7ca981f1cac83e0b657c8860)
+* ![reward](https://raw.githubusercontent.com/dathlin/HslCommunication/master/imgs/support.png)
 
 ## HslCommunication.dll Summary 
 完整的项目介绍地址： [http://www.cnblogs.com/dathlin/p/7703805.html](http://www.cnblogs.com/dathlin/p/7703805.html)
@@ -88,6 +89,7 @@ Install-Package HslCommunication
 * [AB PLC访问](https://www.cnblogs.com/dathlin/p/9607929.html)
 * 埃夫特机器人的数据访问
 * 库卡机器人的数据访问
+* 安川机器人的数据访问
 * [邮件功能使用](http://www.cnblogs.com/dathlin/p/8463613.html)
 * [流水号生成器](http://www.cnblogs.com/dathlin/p/7811489.html)
 * [软件注册码功能](http://www.cnblogs.com/dathlin/p/7832315.html)
@@ -127,7 +129,6 @@ Install-Package HslCommunication
 * 数据订阅推送 **NetPush**
 * Redis读写操作
 
-
 ## Second Extensions Project (内含几个Demo)
 * 基于本组件开发的一个CS架构的项目模版，该模版采用本组件进行开发，完成了账户管理，角色管理，个人文件管理，头像机制，自动升级，完善的日志等等功能。项目地址为：[https://github.com/dathlin/ClientServerProject](https://github.com/dathlin/ClientServerProject)
 * 基于本组件开发的一个局域网多人聊天的程序，支持在线客户端信息查看，服务器强制关闭客户端。[https://github.com/dathlin/NetChatRoom](https://github.com/dathlin/NetChatRoom)
@@ -143,10 +144,6 @@ Install-Package HslCommunication
 
 ## Thanks
 * 混合锁及可序列化异常类，读写锁，并发模型部分代码及思路参考《CLR Via C#》，感谢作者Jeffrey Richter
-
-## 创作不易，感谢打赏
-If this library really helps you, you can support me by AliPay. Please choose the amount according to your actual ability.
-企业用户打赏及需要发票的打赏请专门联系作者（将在官网显示出来），本开源项目的发展和完善需要大家共同的支持。
 
 ![打赏](https://raw.githubusercontent.com/dathlin/HslCommunication/master/imgs/support.png)
 
