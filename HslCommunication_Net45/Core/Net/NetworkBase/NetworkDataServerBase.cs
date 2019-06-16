@@ -145,7 +145,26 @@ namespace HslCommunication.Core.Net
         {
             OnDataReceived?.Invoke( this, receive );
         }
+        /// <summary>
+        /// Show DataSend To PLC
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="data"></param>
+        public delegate void DataSendDelegate(object sender, byte[] data);
 
+        /// <summary>
+        /// OnDataSend
+        /// </summary>
+        public event DataSendDelegate OnDataSend;
+
+        /// <summary>
+        /// RaiseDataSend
+        /// </summary>
+        /// <param name="receive"></param>
+        protected void RaiseDataSend(byte[] receive)
+        {
+            OnDataSend?.Invoke(this, receive);
+        }
         #endregion
 
         #region Protect Member
