@@ -202,7 +202,7 @@ namespace HslCommunication.Profinet.FATEK
         /// <summary>
         /// 批量读取bool类型数据，支持的类型为X,Y,M,S,T,C，具体的地址范围取决于PLC的类型
         /// </summary>
-        /// <param name="address">地址信息，比如X10，Y17，M100/param>
+        /// <param name="address">地址信息，比如X10，Y17，M100</param>
         /// <param name="length">读取的长度</param>
         /// <returns>读取结果信息</returns>
         public OperateResult<bool[]> ReadBool( string address, ushort length )
