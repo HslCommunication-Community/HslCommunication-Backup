@@ -226,6 +226,7 @@
     <Compile Include="Core\Transfer\RegularByteTransform.cs" />
     <Compile Include="Core\Transfer\ReverseBytesTransform.cs" />
     <Compile Include="Core\Transfer\ReverseWordTransform.cs" />
+    <Compile Include="Core\Types\CertificateDegree.cs" />
     <Compile Include="Core\Types\HslPieItem.cs" />
     <Compile Include="Core\Types\HslTimeOut.cs" />
     <Compile Include="Core\Types\IDataTransfer.cs" />

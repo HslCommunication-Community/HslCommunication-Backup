@@ -391,6 +391,9 @@
     <Compile Include="..\HslCommunication_Net45\Core\Transfer\ReverseWordTransform.cs">
       <Link>Core\Transfer\ReverseWordTransform.cs</Link>
     </Compile>
+    <Compile Include="..\HslCommunication_Net45\Core\Types\CertificateDegree.cs">
+      <Link>Core\Types\CertificateDegree.cs</Link>
+    </Compile>
     <Compile Include="..\HslCommunication_Net45\Core\Types\HslPieItem.cs">
       <Link>Core\Types\HslPieItem.cs</Link>
     </Compile>

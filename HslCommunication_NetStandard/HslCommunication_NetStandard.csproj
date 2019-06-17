@@ -100,6 +100,7 @@
     <Compile Include="..\HslCommunication_Net45\Core\Transfer\RegularByteTransform.cs" Link="Core\Transfer\RegularByteTransform.cs" />
     <Compile Include="..\HslCommunication_Net45\Core\Transfer\ReverseBytesTransform.cs" Link="Core\Transfer\ReverseBytesTransform.cs" />
     <Compile Include="..\HslCommunication_Net45\Core\Transfer\ReverseWordTransform.cs" Link="Core\Transfer\ReverseWordTransform.cs" />
+    <Compile Include="..\HslCommunication_Net45\Core\Types\CertificateDegree.cs" Link="Core\Types\CertificateDegree.cs" />
     <Compile Include="..\HslCommunication_Net45\Core\Types\HslPieItem.cs" Link="Core\Types\HslPieItem.cs" />
     <Compile Include="..\HslCommunication_Net45\Core\Types\HslTimeOut.cs" Link="Core\Types\HslTimeOut.cs" />
     <Compile Include="..\HslCommunication_Net45\Core\Types\IDataTransfer.cs" Link="Core\Types\IDataTransfer.cs" />
