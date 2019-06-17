@@ -306,6 +306,24 @@ namespace HslCommunication.Language
         public override string FatekStatus09 => "Cannot be activated (down RUN command, but the ladder program command PLC cannot be executed)";
         public override string FatekStatus10 => "Illegal address";
 
+
+
+        /***********************************************************************************
+         * 
+         *   Fuji PLC 富士PLC相关
+         * 
+         ************************************************************************************/
+        public override string FujiSpbStatus01 => "Write to the ROM";
+        public override string FujiSpbStatus02 => "Received undefined commands or commands that could not be processed";
+        public override string FujiSpbStatus03 => "There is a contradiction in the data part (parameter exception)";
+        public override string FujiSpbStatus04 => "Unable to process due to transfer interlocks from other programmers";
+        public override string FujiSpbStatus05 => "The module number is incorrect";
+        public override string FujiSpbStatus06 => "Search item not found";
+        public override string FujiSpbStatus07 => "An address that exceeds the module range (when writing) is specified";
+        public override string FujiSpbStatus09 => "Unable to execute due to faulty program (RUN)";
+        public override string FujiSpbStatus0C => "Inconsistent password";
+
+
 #pragma warning restore CS1591 // 缺少对公共可见类型或成员的 XML 注释
 
     }

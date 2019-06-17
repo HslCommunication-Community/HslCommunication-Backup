@@ -306,6 +306,21 @@ namespace HslCommunication.Language
         public virtual string FatekStatus10 => "不合法的地址";
 
 
+        /***********************************************************************************
+         * 
+         *   Fuji PLC 富士PLC相关
+         * 
+         ************************************************************************************/
+        public virtual string FujiSpbStatus01 => "对ROM进行了写入";
+        public virtual string FujiSpbStatus02 => "接收了未定义的命令或无法处理的命令";
+        public virtual string FujiSpbStatus03 => "数据部分有矛盾（参数异常）";
+        public virtual string FujiSpbStatus04 => "由于收到了其他编程器的传送联锁，因此无法处理";
+        public virtual string FujiSpbStatus05 => "模块序号不正确";
+        public virtual string FujiSpbStatus06 => "检索项目未找到";
+        public virtual string FujiSpbStatus07 => "指定了超出模块范围的地址（写入时）";
+        public virtual string FujiSpbStatus09 => "由于故障程序无法执行（RUN）";
+        public virtual string FujiSpbStatus0C => "密码不一致";
+
 
 #pragma warning restore CS1591 // 缺少对公共可见类型或成员的 XML 注释
     }
