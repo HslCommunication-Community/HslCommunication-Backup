@@ -7,6 +7,7 @@ using HslCommunication.Core;
 using HslCommunication.Core.IMessage;
 using HslCommunication.Core.Net;
 using HslCommunication.Core.Address;
+using System.Net.Sockets;
 
 namespace HslCommunication.ModBus
 {
@@ -89,6 +90,25 @@ namespace HslCommunication.ModBus
         private byte station = 0x01;                                // 本客户端的站号
         private SoftIncrementCount softIncrementCount;              // 自增消息的对象
         private bool isAddressStartWithZero = true;                 // 线圈值的地址值是否从零开始
+
+        #endregion
+
+        #region Override Method
+
+        /// <summary>
+        /// 重写网络连接时的初始化，如果配置了账户信息，就强制启动登录操作
+        /// </summary>
+        /// <param name="socket">套接字</param>
+        /// <returns>是否初始化成功</returns>
+        protected override OperateResult InitializationOnConnect( Socket socket )
+        {
+            if (isUseAccountCertificate)
+            {
+                return AccountCertificate( socket );
+            }
+
+            return base.InitializationOnConnect( socket );
+        }
 
         #endregion
 

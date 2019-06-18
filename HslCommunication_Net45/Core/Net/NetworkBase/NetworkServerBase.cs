@@ -48,7 +48,7 @@ namespace HslCommunication.Core.Net
         /// <summary>
         /// 异步传入的连接申请请求
         /// </summary>
-        /// <param name="iar"></param>
+        /// <param name="iar">异步对象</param>
         protected void AsyncAcceptCallback( IAsyncResult iar )
         {
             //还原传入的原始套接字

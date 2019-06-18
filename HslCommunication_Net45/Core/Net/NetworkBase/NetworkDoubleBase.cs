@@ -25,9 +25,9 @@ namespace HslCommunication.Core.Net
         /// </summary>
         public NetworkDoubleBase( )
         {
-            ByteTransform     = new TTransform( );                                           // 实例化变换类的对象
-            InteractiveLock   = new SimpleHybirdLock( );                                     // 实例化数据访问锁
-            connectionId      = BasicFramework.SoftBasic.GetUniqueStringByGuidAndRandom( );  // 设备的唯一的编号
+            ByteTransform = new TTransform( );                                           // 实例化变换类的对象
+            InteractiveLock = new SimpleHybirdLock( );                                     // 实例化数据访问锁
+            connectionId = BasicFramework.SoftBasic.GetUniqueStringByGuidAndRandom( );  // 设备的唯一的编号
         }
 
         #endregion
@@ -75,7 +75,7 @@ namespace HslCommunication.Core.Net
         /// </remarks>
         public int ConnectTimeOut
         {
-            get{return connectTimeOut;}
+            get { return connectTimeOut; }
             set { if (value >= 0) connectTimeOut = value; }
         }
 
@@ -215,7 +215,7 @@ namespace HslCommunication.Core.Net
             if (!rSocket.IsSuccess)
             {
                 IsSocketError = true;
-                rSocket.Content = null;                 
+                rSocket.Content = null;
                 result.Message = rSocket.Message;
             }
             else
@@ -299,7 +299,7 @@ namespace HslCommunication.Core.Net
             CoreSocket?.Close( );
             CoreSocket = null;
             InteractiveLock.Leave( );
-            
+
             LogNet?.WriteDebug( ToString( ), StringResources.Language.NetEngineClose );
             return result;
         }
@@ -336,7 +336,67 @@ namespace HslCommunication.Core.Net
         }
 
         #endregion
-        
+
+        #region Account Control
+
+        /************************************************************************************************
+         * 
+         *    这部分的内容是为了实现账户控制的，如果服务器按照hsl协议强制socket账户登录的话，本客户端类就需要额外指定账户密码
+         *    
+         *    The content of this part is for account control. If the server forces the socket account to log in according to the hsl protocol,
+         *    the client class needs to specify the account password.
+         *    
+         *    适用于hsl实现的modbus服务器，三菱及西门子，NetSimplify服务器类等
+         *    
+         *    Modbus server for hsl implementation, Mitsubishi and Siemens, NetSimplify server class, etc.
+         * 
+         ************************************************************************************************/
+
+        /// <summary>
+        /// 是否使用账号登录
+        /// </summary>
+        protected bool isUseAccountCertificate = false;
+        private string userName = string.Empty;
+        private string password = string.Empty;
+
+        /// <summary>
+        /// 设置当前的登录的账户名和密码信息，账户名为空时设置不生效
+        /// </summary>
+        /// <param name="userName">账户名</param>
+        /// <param name="password">密码</param>
+        public void SetLoginAccount(string userName, string password )
+        {
+            if (!string.IsNullOrEmpty( userName ))
+            {
+                isUseAccountCertificate = true;
+                this.userName = userName;
+                this.password = password;
+            }
+            else
+            {
+                isUseAccountCertificate = false;
+            }
+        }
+
+        /// <summary>
+        /// 认证账号，将使用已经设置的用户名和密码进行账号认证。
+        /// </summary>
+        /// <param name="socket">套接字</param>
+        /// <returns>认证结果</returns>
+        protected OperateResult AccountCertificate(Socket socket )
+        {
+            OperateResult send = SendStringAndCheckReceive( socket, 1, new string[] { this.userName, this.password } );
+            if (!send.IsSuccess) return send;
+
+            OperateResult<int, string[]> read = ReceiveStringArrayContentFromSocket( socket );
+            if (!read.IsSuccess) return read;
+
+            if (read.Content1 == 0) return new OperateResult( read.Content2[0] );
+            return OperateResult.CreateSuccessResult( );
+        }
+
+        #endregion
+
         #region Core Communication
 
         /***************************************************************************************
@@ -360,7 +420,7 @@ namespace HslCommunication.Core.Net
                 // 如果是异形模式
                 if (isUseSpecifiedSocket)
                 {
-                    if(IsSocketError)
+                    if (IsSocketError)
                     {
                         return new OperateResult<Socket>( StringResources.Language.ConnectionIsNotAvailable );
                     }
@@ -398,7 +458,7 @@ namespace HslCommunication.Core.Net
                 return CreateSocketAndInitialication( );
             }
         }
-        
+
         /// <summary>
         /// 连接并初始化网络套接字
         /// </summary>
@@ -424,11 +484,11 @@ namespace HslCommunication.Core.Net
         /// 指示如何创建一个新的消息对象
         /// </summary>
         /// <returns>消息对象</returns>
-        protected virtual INetMessage GetNewNetMessage()
+        protected virtual INetMessage GetNewNetMessage( )
         {
             return null;
         }
-        
+
         /// <summary>
         /// 在其他指定的套接字上，使用报文来通讯，传入需要发送的消息，返回一条完整的数据指令
         /// </summary>
@@ -530,7 +590,7 @@ namespace HslCommunication.Core.Net
             if (!isPersistentConn) resultSocket.Content?.Close( );
             return result;
         }
-        
+
         #endregion
 
         #region Object Override

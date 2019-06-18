@@ -93,6 +93,11 @@ namespace HslCommunicationDemo
                 groupBox4.Text = "Message reading test, hex string needs to be filled in";
 
                 button3.Text = "Pressure test, r/w 3,000s";
+
+                label4.Text = "Account";
+                label2.Text = "Pwd";
+                label5.Text = "When the server is a server built by hsl, login with account name and password is supported.";
+
             }
         }
 
@@ -157,6 +162,8 @@ namespace HslCommunicationDemo
             busTcpClient = new ModbusTcpNet( textBox1.Text, port, station );
             busTcpClient.AddressStartWithZero = checkBox1.Checked;
 
+            busTcpClient.SetLoginAccount( textBox14.Text, textBox12.Text );
+
             ComboBox1_SelectedIndexChanged( null, new EventArgs( ) );  // 设置数据服务
             busTcpClient.IsStringReverse = checkBox3.Checked;
 
@@ -174,7 +181,7 @@ namespace HslCommunicationDemo
                 }
                 else
                 {
-                    MessageBox.Show( HslCommunication.StringResources.Language.ConnectedFailed );
+                    MessageBox.Show( HslCommunication.StringResources.Language.ConnectedFailed + connect.Message );
                 }
             }
             catch (Exception ex)

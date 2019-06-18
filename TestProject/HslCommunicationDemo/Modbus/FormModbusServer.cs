@@ -28,8 +28,9 @@ namespace HslCommunicationDemo
             comboBox2.SelectedIndex = 0;
             comboBox2.SelectedIndexChanged += ComboBox2_SelectedIndexChanged;
             checkBox3.CheckedChanged += CheckBox3_CheckedChanged;
+            checkBox2.CheckedChanged += CheckBox2_CheckedChanged;
 
-            if(Program.Language == 2)
+            if (Program.Language == 2)
             {
                 Text = "Modbus Virtual Server[supports TCP and RTU, support coil and register reading and writing, input register read, discrete input read]";
                 label3.Text = "port:";
@@ -74,6 +75,7 @@ namespace HslCommunicationDemo
                 button10.Text = "Timed writing";
                 label1.Text = "log:";
                 checkBox1.Text = "Display received data";
+                checkBox2.Text = "Account Login";
                 label16.Text = "Client-Online:";
 
                 button3.Text = "filter-cli";
@@ -85,6 +87,14 @@ namespace HslCommunicationDemo
                 label13.Text = "value:";
                 button2.Text = "monitor";
                 label11.Text = "w-time:";
+            }
+        }
+
+        private void CheckBox2_CheckedChanged( object sender, EventArgs e )
+        {
+            if (busTcpServer != null)
+            {
+                busTcpServer.IsUseAccountCertificate = checkBox2.Checked;
             }
         }
 
@@ -162,6 +172,11 @@ namespace HslCommunicationDemo
                 busTcpServer.LogNet = new HslCommunication.LogNet.LogNetSingle( "logs.txt" );        // 配置日志信息
                 busTcpServer.LogNet.BeforeSaveToFile += LogNet_BeforeSaveToFile;
                 busTcpServer.OnDataReceived += BusTcpServer_OnDataReceived;
+
+                // add some accounts
+                busTcpServer.AddAccount( "admin", "123456" );
+                busTcpServer.AddAccount( "hsl", "test" );
+                busTcpServer.UseSynchronousNet = checkBox2.Checked;
 
                 ComboBox2_SelectedIndexChanged( null, new EventArgs( ) );
                 busTcpServer.IsStringReverse = checkBox3.Checked;

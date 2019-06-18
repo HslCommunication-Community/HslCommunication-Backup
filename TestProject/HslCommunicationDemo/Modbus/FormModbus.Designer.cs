@@ -92,6 +92,11 @@
             this.label6 = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
             this.userControlHead1 = new HslCommunicationDemo.DemoControl.UserControlHead();
+            this.textBox12 = new System.Windows.Forms.TextBox();
+            this.label2 = new System.Windows.Forms.Label();
+            this.textBox14 = new System.Windows.Forms.TextBox();
+            this.label4 = new System.Windows.Forms.Label();
+            this.label5 = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.groupBox4.SuspendLayout();
@@ -105,6 +110,11 @@
             this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel1.Controls.Add(this.label5);
+            this.panel1.Controls.Add(this.textBox12);
+            this.panel1.Controls.Add(this.label2);
+            this.panel1.Controls.Add(this.textBox14);
+            this.panel1.Controls.Add(this.label4);
             this.panel1.Controls.Add(this.button1);
             this.panel1.Controls.Add(this.comboBox1);
             this.panel1.Controls.Add(this.checkBox1);
@@ -119,7 +129,7 @@
             this.panel1.Location = new System.Drawing.Point(14, 45);
             this.panel1.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(978, 40);
+            this.panel1.Size = new System.Drawing.Size(978, 62);
             this.panel1.TabIndex = 0;
             // 
             // button1
@@ -241,10 +251,10 @@
             this.panel2.Controls.Add(this.groupBox3);
             this.panel2.Controls.Add(this.groupBox2);
             this.panel2.Controls.Add(this.groupBox1);
-            this.panel2.Location = new System.Drawing.Point(14, 95);
+            this.panel2.Location = new System.Drawing.Point(14, 115);
             this.panel2.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(978, 537);
+            this.panel2.Size = new System.Drawing.Size(978, 527);
             this.panel2.TabIndex = 1;
             // 
             // userControlCurve1
@@ -774,6 +784,47 @@
             this.userControlHead1.Size = new System.Drawing.Size(1004, 32);
             this.userControlHead1.TabIndex = 2;
             // 
+            // textBox12
+            // 
+            this.textBox12.Location = new System.Drawing.Point(204, 33);
+            this.textBox12.Name = "textBox12";
+            this.textBox12.Size = new System.Drawing.Size(103, 23);
+            this.textBox12.TabIndex = 30;
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(150, 36);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(44, 17);
+            this.label2.TabIndex = 29;
+            this.label2.Text = "密码：";
+            // 
+            // textBox14
+            // 
+            this.textBox14.Location = new System.Drawing.Point(62, 33);
+            this.textBox14.Name = "textBox14";
+            this.textBox14.Size = new System.Drawing.Size(76, 23);
+            this.textBox14.TabIndex = 28;
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(8, 36);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(56, 17);
+            this.label4.TabIndex = 27;
+            this.label4.Text = "用户名：";
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(313, 36);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(416, 17);
+            this.label5.TabIndex = 31;
+            this.label5.Text = "(当服务器是hsl构建的服务器时，支持账户名密码登录，过滤掉不安全的连接)";
+            // 
             // FormModbus
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 17F);
@@ -870,5 +921,10 @@
         private System.Windows.Forms.ComboBox comboBox1;
         private DemoControl.UserControlCurve userControlCurve1;
         private DemoControl.UserControlHead userControlHead1;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.TextBox textBox12;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.TextBox textBox14;
+        private System.Windows.Forms.Label label4;
     }
 }
