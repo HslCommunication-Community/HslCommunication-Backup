@@ -122,6 +122,9 @@
             this.button55 = new System.Windows.Forms.Button();
             this.groupBox15 = new System.Windows.Forms.GroupBox();
             this.button63 = new System.Windows.Forms.Button();
+            this.groupBox16 = new System.Windows.Forms.GroupBox();
+            this.button62 = new System.Windows.Forms.Button();
+            this.groupBox17 = new System.Windows.Forms.GroupBox();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -138,6 +141,7 @@
             this.groupBox13.SuspendLayout();
             this.groupBox14.SuspendLayout();
             this.groupBox15.SuspendLayout();
+            this.groupBox16.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupBox1
@@ -1192,12 +1196,48 @@
             this.button63.UseVisualStyleBackColor = true;
             this.button63.Click += new System.EventHandler(this.Button63_Click);
             // 
+            // groupBox16
+            // 
+            this.groupBox16.Controls.Add(this.button62);
+            this.groupBox16.Location = new System.Drawing.Point(968, 224);
+            this.groupBox16.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.groupBox16.Name = "groupBox16";
+            this.groupBox16.Padding = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.groupBox16.Size = new System.Drawing.Size(185, 140);
+            this.groupBox16.TabIndex = 32;
+            this.groupBox16.TabStop = false;
+            this.groupBox16.Text = "Fuji(富士 PLC)";
+            // 
+            // button62
+            // 
+            this.button62.Location = new System.Drawing.Point(19, 24);
+            this.button62.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.button62.Name = "button62";
+            this.button62.Size = new System.Drawing.Size(150, 32);
+            this.button62.TabIndex = 0;
+            this.button62.Text = "SPB [串口]";
+            this.button62.UseVisualStyleBackColor = true;
+            this.button62.Click += new System.EventHandler(this.Button62_Click);
+            // 
+            // groupBox17
+            // 
+            this.groupBox17.Location = new System.Drawing.Point(968, 367);
+            this.groupBox17.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.groupBox17.Name = "groupBox17";
+            this.groupBox17.Padding = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.groupBox17.Size = new System.Drawing.Size(185, 320);
+            this.groupBox17.TabIndex = 33;
+            this.groupBox17.TabStop = false;
+            this.groupBox17.Text = "Special Protocols(特殊协议)";
+            // 
             // FormLoad
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 17F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.AliceBlue;
             this.ClientSize = new System.Drawing.Size(1159, 700);
+            this.Controls.Add(this.groupBox17);
+            this.Controls.Add(this.groupBox16);
             this.Controls.Add(this.groupBox15);
             this.Controls.Add(this.groupBox14);
             this.Controls.Add(this.label2);
@@ -1241,6 +1281,7 @@
             this.groupBox13.ResumeLayout(false);
             this.groupBox14.ResumeLayout(false);
             this.groupBox15.ResumeLayout(false);
+            this.groupBox16.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1342,6 +1383,9 @@
         private System.Windows.Forms.Button button61;
         private System.Windows.Forms.GroupBox groupBox15;
         private System.Windows.Forms.Button button63;
+        private System.Windows.Forms.GroupBox groupBox16;
+        private System.Windows.Forms.Button button62;
+        private System.Windows.Forms.GroupBox groupBox17;
     }
 }
 

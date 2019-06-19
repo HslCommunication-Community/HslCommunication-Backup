@@ -180,6 +180,12 @@
     <Compile Include="Modbus\FormTrustedClient.Designer.cs">
       <DependentUpon>FormTrustedClient.cs</DependentUpon>
     </Compile>
+    <Compile Include="PLC\FormFujiSPB.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="PLC\FormFujiSPB.Designer.cs">
+      <DependentUpon>FormFujiSPB.cs</DependentUpon>
+    </Compile>
     <Compile Include="PLC\FormFatekPrograme.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -522,6 +528,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Modbus\FormTrustedClient.resx">
       <DependentUpon>FormTrustedClient.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PLC\FormFujiSPB.resx">
+      <DependentUpon>FormFujiSPB.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="PLC\FormFatekPrograme.resx">
       <DependentUpon>FormFatekPrograme.cs</DependentUpon>
