@@ -195,6 +195,7 @@
     <Compile Include="Core\IMessage\MelsecQnA3EAsciiMessage.cs" />
     <Compile Include="Core\IMessage\MelsecQnA3EBinaryMessage.cs" />
     <Compile Include="Core\IMessage\ModbusTcpMessage.cs" />
+    <Compile Include="Core\IMessage\OpenProtocolMessage.cs" />
     <Compile Include="Core\IMessage\S7Message.cs" />
     <Compile Include="Core\Net\ClassNetHandle.cs" />
     <Compile Include="Core\Net\CommunicationProtocol.cs" />
@@ -315,6 +316,7 @@
     <Compile Include="Profinet\Omron\OmronFinsNetHelper.cs" />
     <Compile Include="Profinet\Omron\OmronFinsUdp.cs" />
     <Compile Include="Profinet\Omron\OmronHostLink.cs" />
+    <Compile Include="Profinet\OpenProtocol\OpenProtocolNet.cs" />
     <Compile Include="Profinet\Panasonic\PanasonicMcNet.cs" />
     <Compile Include="Profinet\Panasonic\PanasonicMewtocol.cs" />
     <Compile Include="Profinet\Siemens\SiemensFetchWriteNet.cs" />

@@ -69,6 +69,7 @@
     <Compile Include="..\HslCommunication_Net45\Core\IMessage\MelsecQnA3EAsciiMessage.cs" Link="Core\IMessage\MelsecQnA3EAsciiMessage.cs" />
     <Compile Include="..\HslCommunication_Net45\Core\IMessage\MelsecQnA3EBinaryMessage.cs" Link="Core\IMessage\MelsecQnA3EBinaryMessage.cs" />
     <Compile Include="..\HslCommunication_Net45\Core\IMessage\ModbusTcpMessage.cs" Link="Core\IMessage\ModbusTcpMessage.cs" />
+    <Compile Include="..\HslCommunication_Net45\Core\IMessage\OpenProtocolMessage.cs" Link="Core\IMessage\OpenProtocolMessage.cs" />
     <Compile Include="..\HslCommunication_Net45\Core\IMessage\S7Message.cs" Link="Core\IMessage\S7Message.cs" />
     <Compile Include="..\HslCommunication_Net45\Core\Net\ClassNetHandle.cs" Link="Core\Net\ClassNetHandle.cs" />
     <Compile Include="..\HslCommunication_Net45\Core\Net\CommunicationProtocol.cs" Link="Core\Net\CommunicationProtocol.cs" />
@@ -164,6 +165,7 @@
     <Compile Include="..\HslCommunication_Net45\Profinet\Omron\OmronFinsNet.cs" Link="Profinet\Omron\OmronFinsNet.cs" />
     <Compile Include="..\HslCommunication_Net45\Profinet\Omron\OmronFinsNetHelper.cs" Link="Profinet\Omron\OmronFinsNetHelper.cs" />
     <Compile Include="..\HslCommunication_Net45\Profinet\Omron\OmronFinsUdp.cs" Link="Profinet\Omron\OmronFinsUdp.cs" />
+    <Compile Include="..\HslCommunication_Net45\Profinet\OpenProtocol\OpenProtocolNet.cs" Link="Profinet\OpenProtocol\OpenProtocolNet.cs" />
     <Compile Include="..\HslCommunication_Net45\Profinet\Panasonic\PanasonicMcNet.cs" Link="Profinet\Panasonic\PanasonicMcNet.cs" />
     <Compile Include="..\HslCommunication_Net45\Profinet\Siemens\SiemensFetchWriteNet.cs" Link="Profinet\Siemens\SiemensFetchWriteNet.cs" />
     <Compile Include="..\HslCommunication_Net45\Profinet\Siemens\SiemensPLCS.cs" Link="Profinet\Siemens\SiemensPLCS.cs" />
@@ -216,6 +218,7 @@
     <Folder Include="Profinet\LSIS\" />
     <Folder Include="Profinet\Melsec\" />
     <Folder Include="Profinet\Omron\" />
+    <Folder Include="Profinet\OpenProtocol\" />
     <Folder Include="Profinet\Siemens\" />
     <Folder Include="Profinet\AllenBradley\" />
     <Folder Include="Profinet\Panasonic\" />
