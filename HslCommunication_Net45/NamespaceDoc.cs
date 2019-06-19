@@ -762,10 +762,11 @@ namespace HslCommunication
     ///     </revision>
     ///     <revision date="2019-8-1" version="8.0.0" author="Richard.Hu">
     ///         <list type="bullet">
-    ///             <item>版本从8.0.0之后不再开源，dll的使用需要授权码，否则只能运行8小时，以前版本不影响，依然免费开源。</item>
     ///             <item>新增安川机器人通信类。</item>
     ///             <item>新增所有PLC地址类信息，用于快速集成扩展。</item>
     ///             <item>西门子的多地址读取的长度不再限制为19个，而是无限制个。</item>
+    ///             <item>NetworkDoubleBase: 实现IDispose接口，方便手动释放资源。</item>
+    ///             <item>SerialBase: 实现IDispose接口，方便手动释放资源。</item>
     ///         </list>
     ///     </revision>
     /// </revisionHistory>

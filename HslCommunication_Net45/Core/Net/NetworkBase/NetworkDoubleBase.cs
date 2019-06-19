@@ -14,7 +14,7 @@ namespace HslCommunication.Core.Net
     /// Universal client base class that supports long connections and short connections to two modes
     /// </summary>
     /// <example>
-    /// 无，请使用继承类实例化，然后进行数据交互。
+    /// 无，请使用继承类实例化，然后进行数据交互，当前的类并没有具体的实现。
     /// </example>
     public class NetworkDoubleBase<TNetMessage, TTransform> : NetworkBase, IDisposable where TNetMessage : INetMessage, new() where TTransform : IByteTransform, new()
     {
@@ -239,7 +239,6 @@ namespace HslCommunication.Core.Net
             return result;
         }
 
-
         /// <summary>
         /// 使用指定的套接字创建异形客户端
         /// </summary>
@@ -288,7 +287,6 @@ namespace HslCommunication.Core.Net
                 return new OperateResult( );
             }
         }
-
 
         /// <summary>
         /// 在长连接模式下，断开服务器的连接，并切换到短连接模式
@@ -609,7 +607,7 @@ namespace HslCommunication.Core.Net
         private bool disposedValue = false; // 要检测冗余调用
 
         /// <summary>
-        /// 释放当前的资源
+        /// 释放当前的资源，并自动关闭长连接，如果设置了的话
         /// </summary>
         /// <param name="disposing">是否释放托管的资源信息</param>
         protected virtual void Dispose( bool disposing )
@@ -619,6 +617,7 @@ namespace HslCommunication.Core.Net
                 if (disposing)
                 {
                     // TODO: 释放托管状态(托管对象)。
+                    ConnectClose( );
                     InteractiveLock?.Dispose( );
                 }
 
