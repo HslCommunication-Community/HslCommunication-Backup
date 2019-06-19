@@ -16,7 +16,7 @@ namespace HslCommunication.Core.Net
     /// <example>
     /// 无，请使用继承类实例化，然后进行数据交互。
     /// </example>
-    public class NetworkDoubleBase<TNetMessage, TTransform> : NetworkBase where TNetMessage : INetMessage, new() where TTransform : IByteTransform, new()
+    public class NetworkDoubleBase<TNetMessage, TTransform> : NetworkBase, IDisposable where TNetMessage : INetMessage, new() where TTransform : IByteTransform, new()
     {
         #region Constructor
 
@@ -38,12 +38,25 @@ namespace HslCommunication.Core.Net
         private string ipAddress = "127.0.0.1";          // 连接的IP地址
         private int port = 10000;                        // 端口号
         private int connectTimeOut = 10000;              // 连接超时时间设置
-        protected int receiveTimeOut = 10000;            // 数据接收的超时时间
-        protected bool isPersistentConn = false;         // 是否处于长连接的状态
-        protected SimpleHybirdLock InteractiveLock;      // 一次正常的交互的互斥锁
-        protected bool IsSocketError = false;            // 指示长连接的套接字是否处于错误的状态
-        private bool isUseSpecifiedSocket = false;       // 指示是否使用指定的网络套接字访问数据
         private string connectionId = string.Empty;      // 当前连接
+        private bool isUseSpecifiedSocket = false;       // 指示是否使用指定的网络套接字访问数据
+
+        /// <summary>
+        /// 接收数据的超时时间
+        /// </summary>
+        protected int receiveTimeOut = 10000;            // 数据接收的超时时间
+        /// <summary>
+        /// 是否是长连接的状态
+        /// </summary>
+        protected bool isPersistentConn = false;         // 是否处于长连接的状态
+        /// <summary>
+        /// 交互的混合锁
+        /// </summary>
+        protected SimpleHybirdLock InteractiveLock;      // 一次正常的交互的互斥锁
+        /// <summary>
+        /// 当前的socket是否发生了错误
+        /// </summary>
+        protected bool IsSocketError = false;            // 指示长连接的套接字是否处于错误的状态
 
         #endregion
 
@@ -162,7 +175,6 @@ namespace HslCommunication.Core.Net
             set { connectionId = value; }
         }
 
-
         /// <summary>
         /// 当前的异形连接对象，如果设置了异形连接的话
         /// </summary>
@@ -170,7 +182,6 @@ namespace HslCommunication.Core.Net
         /// 具体的使用方法请参照Demo项目中的异形modbus实现。
         /// </remarks>
         public AlienSession AlienSession { get; set; }
-
 
         #endregion
 
@@ -593,6 +604,51 @@ namespace HslCommunication.Core.Net
 
         #endregion
 
+        #region IDisposable Support
+
+        private bool disposedValue = false; // 要检测冗余调用
+
+        /// <summary>
+        /// 释放当前的资源
+        /// </summary>
+        /// <param name="disposing">是否释放托管的资源信息</param>
+        protected virtual void Dispose( bool disposing )
+        {
+            if (!disposedValue)
+            {
+                if (disposing)
+                {
+                    // TODO: 释放托管状态(托管对象)。
+                    InteractiveLock.Dispose( );
+                }
+
+                // TODO: 释放未托管的资源(未托管的对象)并在以下内容中替代终结器。
+                // TODO: 将大型字段设置为 null。
+
+                disposedValue = true;
+            }
+        }
+
+        // TODO: 仅当以上 Dispose(bool disposing) 拥有用于释放未托管资源的代码时才替代终结器。
+        // ~NetworkDoubleBase()
+        // {
+        //   // 请勿更改此代码。将清理代码放入以上 Dispose(bool disposing) 中。
+        //   Dispose(false);
+        // }
+
+        // 添加此代码以正确实现可处置模式。
+        /// <summary>
+        /// 释放当前的资源
+        /// </summary>
+        public void Dispose( )
+        {
+            // 请勿更改此代码。将清理代码放入以上 Dispose(bool disposing) 中。
+            Dispose( true );
+            // TODO: 如果在以上内容中替代了终结器，则取消注释以下行。
+            // GC.SuppressFinalize(this);
+        }
+        #endregion
+
         #region Object Override
 
         /// <summary>
@@ -603,7 +659,6 @@ namespace HslCommunication.Core.Net
         {
             return $"NetworkDoubleBase<{typeof( TNetMessage )}, {typeof( TTransform )}>";
         }
-
 
         #endregion
     }
