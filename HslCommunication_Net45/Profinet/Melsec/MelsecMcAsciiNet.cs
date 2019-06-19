@@ -287,7 +287,7 @@ namespace HslCommunication.Profinet.Melsec
         #region Read Write Override
 
         /// <summary>
-        /// 从三菱PLC中读取想要的数据，返回读取结果
+        /// 从三菱PLC中读取想要的数据，返回读取结果，读取的单位为字
         /// </summary>
         /// <param name="address">读取地址，格式为"M100","D100","W1A0"</param>
         /// <param name="length">读取的数据长度，字最大值960，位最大值7168</param>
@@ -307,8 +307,31 @@ namespace HslCommunication.Profinet.Melsec
             OperateResult<McAddressData> addressResult = McAnalysisAddress( address, length );
             if (!addressResult.IsSuccess) return OperateResult.CreateFailedResult<byte[]>( addressResult );
 
+            List<byte> bytesContent = new List<byte>( );
+            ushort alreadyFinished = 0;
+            while (alreadyFinished < length)
+            {
+                ushort readLength = (ushort)Math.Min( length - alreadyFinished, 450 );
+                addressResult.Content.Length = readLength;
+                OperateResult<byte[]> read = ReadAddressData( addressResult.Content );
+                if (!read.IsSuccess) return read;
+
+                bytesContent.AddRange( read.Content );
+                alreadyFinished += readLength;
+
+                // 字的话就是正常的偏移位置，如果是位的话，就转到位的数据
+                if (addressResult.Content.McDataType.DataType == 0)
+                    addressResult.Content.AddressStart += readLength;
+                else
+                    addressResult.Content.AddressStart += readLength * 16;
+            }
+            return OperateResult.CreateSuccessResult( bytesContent.ToArray( ) );
+        }
+
+        private OperateResult<byte[]> ReadAddressData( McAddressData addressData )
+        {
             // 地址分析
-            byte[] coreResult = MelsecHelper.BuildAsciiReadMcCoreCommand( addressResult.Content, false );
+            byte[] coreResult = MelsecHelper.BuildAsciiReadMcCoreCommand( addressData, false );
 
             // 核心交互
             var read = ReadFromCoreServer( PackMcCommand( coreResult, NetworkNumber, NetworkStationNumber ) );

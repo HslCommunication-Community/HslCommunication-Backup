@@ -334,7 +334,7 @@ namespace HslCommunication.Profinet.Melsec
                 bytesContent.AddRange( read.Content );
                 alreadyFinished += readLength;
 
-                // 字的话就是正常的便宜位置，如果是位的话，就转到位的数据
+                // 字的话就是正常的偏移位置，如果是位的话，就转到位的数据
                 if (addressResult.Content.McDataType.DataType == 0)
                     addressResult.Content.AddressStart += readLength;
                 else
