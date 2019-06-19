@@ -193,6 +193,11 @@ namespace HslCommunication.Profinet.Omron
         /// 设备的标识号
         /// </summary>
         public byte SID { get; set; } = 0x00;
+
+        /// <summary>
+        /// 如果设置为<c>True</c>，当数据读取失败的时候，会自动变更当前的SA1值，会选择自动增加，但不会和DA1一致
+        /// </summary>
+        public bool IsChangeSA1AfterReadFailed { get; set; }
         
         #endregion
         
@@ -286,6 +291,25 @@ namespace HslCommunication.Profinet.Omron
             if (read.Content.Length >= 24) DA1 = read.Content[23];
 
             return OperateResult.CreateSuccessResult( ) ;
+        }
+
+        /// <summary>
+        /// 和服务器交互完成的时候调用的方法，无论是成功或是失败，都将会调用，具体的操作需要重写实现
+        /// </summary>
+        /// <param name="read">读取结果</param>
+        protected override void ExtraAfterReadFromCoreServer( OperateResult read )
+        {
+            base.ExtraAfterReadFromCoreServer( read );
+            if (!read.IsSuccess)
+            {
+                if (IsChangeSA1AfterReadFailed)
+                {
+                    // when read failed, changed the SA1 value
+                    SA1++;
+                    if (SA1 == 0) SA1++;
+                    if (SA1 == DA1) SA1++;
+                }
+            }
         }
 
         #endregion

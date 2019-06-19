@@ -344,6 +344,15 @@ namespace HslCommunication.Core.Net
             return OperateResult.CreateSuccessResult( );
         }
 
+        /// <summary>
+        /// 和服务器交互完成的时候调用的方法，无论是成功或是失败，都将会调用，具体的操作需要重写实现
+        /// </summary>
+        /// <param name="read">读取结果</param>
+        protected virtual void ExtraAfterReadFromCoreServer( OperateResult read )
+        {
+
+        }
+
         #endregion
 
         #region Account Control
@@ -490,15 +499,6 @@ namespace HslCommunication.Core.Net
         }
 
         /// <summary>
-        /// 指示如何创建一个新的消息对象
-        /// </summary>
-        /// <returns>消息对象</returns>
-        protected virtual INetMessage GetNewNetMessage( )
-        {
-            return null;
-        }
-
-        /// <summary>
         /// 在其他指定的套接字上，使用报文来通讯，传入需要发送的消息，返回一条完整的数据指令
         /// </summary>
         /// <param name="socket">指定的套接字</param>
@@ -594,6 +594,8 @@ namespace HslCommunication.Core.Net
                 if (AlienSession != null) AlienSession.IsStatusOk = false;
                 result.CopyErrorFromOther( read );
             }
+
+            ExtraAfterReadFromCoreServer( read );
 
             InteractiveLock.Leave( );
             if (!isPersistentConn) resultSocket.Content?.Close( );
