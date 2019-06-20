@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net.Sockets;
 using System.Text;
 using HslCommunication.Core;
+using System.Net;
 
 
 
@@ -52,79 +53,77 @@ namespace HslCommunication.Enthernet
 
 
         #endregion
-        
+
         #region Server Override
 
         /// <summary>
-        /// 处理请求接收连接后的方法
+        /// 当接收到了新的请求的时候执行的操作
         /// </summary>
-        /// <param name="obj">Accpt对象</param>
-        protected override void ThreadPoolLogin( object obj )
+        /// <param name="socket">异步对象</param>
+        /// <param name="endPoint">终结点</param>
+        protected override void ThreadPoolLogin( Socket socket, IPEndPoint endPoint )
         {
-            if (obj is Socket socket)
+            // 接收一条信息，指定当前请求的数据订阅信息的关键字
+            OperateResult<int, string> receive = ReceiveStringContentFromSocket( socket );
+            if (!receive.IsSuccess) return;
+
+            // 判断当前的关键字在服务器是否有消息发布
+            //if(!IsPushGroupOnline(receive.Content2))
+            //{
+            //    SendStringAndCheckReceive( socket, 1, StringResources.Language.KeyIsNotExist );
+            //    LogNet?.WriteWarn( ToString( ), StringResources.Language.KeyIsNotExist );
+            //    socket?.Close( );
+            //    return;
+            //}
+
+            // 确认订阅的信息
+            OperateResult check = SendStringAndCheckReceive( socket, 0, "" );
+            if (!check.IsSuccess)
             {
-                // 接收一条信息，指定当前请求的数据订阅信息的关键字
-                OperateResult<int, string> receive = ReceiveStringContentFromSocket( socket );
-                if (!receive.IsSuccess) return;
+                socket?.Close( );
+                return;
+            }
 
-                // 判断当前的关键字在服务器是否有消息发布
-                //if(!IsPushGroupOnline(receive.Content2))
-                //{
-                //    SendStringAndCheckReceive( socket, 1, StringResources.Language.KeyIsNotExist );
-                //    LogNet?.WriteWarn( ToString( ), StringResources.Language.KeyIsNotExist );
-                //    socket?.Close( );
-                //    return;
-                //}
+            // 允许发布订阅信息
+            AppSession session = new AppSession
+            {
+                KeyGroup = receive.Content2,
+                WorkSocket = socket
+            };
 
-                // 确认订阅的信息
-                OperateResult check = SendStringAndCheckReceive( socket, 0, "" );
-                if (!check.IsSuccess)
+            try
+            {
+                session.IpEndPoint = (System.Net.IPEndPoint)socket.RemoteEndPoint;
+                session.IpAddress = session.IpEndPoint.Address.ToString( );
+            }
+            catch (Exception ex)
+            {
+                LogNet?.WriteException( ToString( ), StringResources.Language.GetClientIpaddressFailed, ex );
+            }
+
+            try
+            {
+                socket.BeginReceive( session.BytesHead, 0, session.BytesHead.Length, SocketFlags.None, new AsyncCallback( ReceiveCallback ), session );
+            }
+            catch (Exception ex)
+            {
+                LogNet?.WriteException( ToString( ), StringResources.Language.SocketReceiveException, ex );
+                return;
+            }
+
+            LogNet?.WriteDebug( ToString( ), string.Format( StringResources.Language.ClientOnlineInfo, session.IpEndPoint ) );
+            PushGroupClient push = GetPushGroupClient( receive.Content2 );
+            if (push != null)
+            {
+                System.Threading.Interlocked.Increment( ref onlineCount );
+                push.AddPushClient( session );
+
+                dicSendCacheLock.Enter( );
+                if (dictSendHistory.ContainsKey( receive.Content2 ))
                 {
-                    socket?.Close( );
-                    return;
+                    if (isPushCacheAfterConnect) SendString( session, dictSendHistory[receive.Content2] );
                 }
-
-                // 允许发布订阅信息
-                AppSession session = new AppSession
-                {
-                    KeyGroup = receive.Content2,
-                    WorkSocket = socket
-                };
-
-                try
-                {
-                    session.IpEndPoint = (System.Net.IPEndPoint)socket.RemoteEndPoint;
-                    session.IpAddress = session.IpEndPoint.Address.ToString( );
-                }
-                catch (Exception ex)
-                {
-                    LogNet?.WriteException( ToString( ), StringResources.Language.GetClientIpaddressFailed, ex );
-                }
-
-                try
-                {
-                    socket.BeginReceive( session.BytesHead, 0, session.BytesHead.Length, SocketFlags.None, new AsyncCallback( ReceiveCallback ), session );
-                }
-                catch(Exception ex)
-                {
-                    LogNet?.WriteException( ToString( ), StringResources.Language.SocketReceiveException, ex );
-                    return;
-                }
-
-                LogNet?.WriteDebug( ToString( ), string.Format( StringResources.Language.ClientOnlineInfo, session.IpEndPoint ) );
-                PushGroupClient push = GetPushGroupClient( receive.Content2 );
-                if (push != null)
-                {
-                    System.Threading.Interlocked.Increment( ref onlineCount );
-                    push.AddPushClient( session );
-
-                    dicSendCacheLock.Enter( );
-                    if(dictSendHistory.ContainsKey( receive.Content2 ))
-                    {
-                        if(isPushCacheAfterConnect) SendString( session, dictSendHistory[receive.Content2] );
-                    }
-                    dicSendCacheLock.Leave( );
-                }
+                dicSendCacheLock.Leave( );
             }
         }
 

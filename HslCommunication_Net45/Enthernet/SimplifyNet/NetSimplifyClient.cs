@@ -5,6 +5,7 @@ using System.Text;
 using HslCommunication.Core.Net;
 using HslCommunication.Core.IMessage;
 using HslCommunication.Core;
+using System.Net.Sockets;
 #if !NET35
 using System.Threading.Tasks;
 #endif
@@ -42,6 +43,25 @@ namespace HslCommunication.Enthernet
         public NetSimplifyClient( )
         {
 
+        }
+
+        #endregion
+
+        #region Override NetworkDoubleBase
+
+        /// <summary>
+        /// 连接上服务器后需要进行的初始化操作，无论是否允许操作都要进行验证
+        /// </summary>
+        /// <param name="socket">网络套接字</param>
+        /// <returns>是否初始化成功，依据具体的协议进行重写</returns>
+        protected override OperateResult InitializationOnConnect( Socket socket )
+        {
+            if (isUseAccountCertificate)
+            {
+                return AccountCertificate( socket );
+            }
+
+            return OperateResult.CreateSuccessResult( );
         }
 
         #endregion
@@ -154,6 +174,11 @@ namespace HslCommunication.Enthernet
 
             Array.Copy( read.Content, 0, headBytes, 0, HslProtocol.HeadByteLength );
             if (contentBytes.Length > 0) Array.Copy( read.Content, HslProtocol.HeadByteLength, contentBytes, 0, read.Content.Length - HslProtocol.HeadByteLength );
+
+            if(BitConverter.ToInt32(headBytes, 0) == HslProtocol.ProtocolErrorMsg)
+            {
+                return new OperateResult<NetHandle, byte[]>( Encoding.ASCII.GetString( contentBytes ) );
+            }
 
             int customer = BitConverter.ToInt32( headBytes, 4 );
             contentBytes = HslProtocol.CommandAnalysis( headBytes, contentBytes );

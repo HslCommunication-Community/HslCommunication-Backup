@@ -384,7 +384,7 @@ namespace HslCommunication.Core.Net
         /// <param name="password">密码</param>
         public void SetLoginAccount(string userName, string password )
         {
-            if (!string.IsNullOrEmpty( userName ))
+            if (!string.IsNullOrEmpty( userName.Trim( ) ))
             {
                 isUseAccountCertificate = true;
                 this.userName = userName;
@@ -403,7 +403,7 @@ namespace HslCommunication.Core.Net
         /// <returns>认证结果</returns>
         protected OperateResult AccountCertificate(Socket socket )
         {
-            OperateResult send = SendStringAndCheckReceive( socket, 1, new string[] { this.userName, this.password } );
+            OperateResult send = SendAccountAndCheckReceive( socket, 1, this.userName, this.password );
             if (!send.IsSuccess) return send;
 
             OperateResult<int, string[]> read = ReceiveStringArrayContentFromSocket( socket );

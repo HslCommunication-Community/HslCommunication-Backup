@@ -48,6 +48,10 @@ namespace HslCommunication
         /// 允许客户端登录到服务器
         /// </summary>
         internal const int ProtocolClientAllowLogin = 4;
+        /// <summary>
+        /// 客户端登录的暗号信息
+        /// </summary>
+        internal const int ProtocolAccountLogin = 5;
 
 
 
@@ -110,7 +114,10 @@ namespace HslCommunication
         /// 进度返回暗号
         /// </summary>
         internal const int ProtocolProgressReport = 2009;
-
+        /// <summary>
+        /// 返回的错误信息
+        /// </summary>
+        internal const int ProtocolErrorMsg = 2010;
 
 
 

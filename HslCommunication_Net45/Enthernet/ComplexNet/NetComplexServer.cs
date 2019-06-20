@@ -211,74 +211,70 @@ namespace HslCommunication.Enthernet
         #region Login Server
 
         /// <summary>
-        /// 登录后的处理方法
+        /// 当接收到了新的请求的时候执行的操作
         /// </summary>
-        /// <param name="obj">异步的接收socket对象</param>
-        protected override void ThreadPoolLogin( object obj )
+        /// <param name="socket">异步对象</param>
+        /// <param name="endPoint">终结点</param>
+        protected override void ThreadPoolLogin( Socket socket, IPEndPoint endPoint )
         {
-            if (obj is Socket socket)
+            // 判断连接数是否超出规定
+            if (appSessions.Count > ConnectMax)
             {
-                // 判断连接数是否超出规定
-                if (appSessions.Count > ConnectMax)
-                {
-                    socket?.Close( );
-                    LogNet?.WriteWarn( ToString( ), StringResources.Language.NetClientFull );
-                    return;
-                }
+                socket?.Close( );
+                LogNet?.WriteWarn( ToString( ), StringResources.Language.NetClientFull );
+                return;
+            }
 
-                // 接收用户别名并验证令牌
-                OperateResult result = new OperateResult( );
-                OperateResult<int, string> readResult = ReceiveStringContentFromSocket( socket );
-                if (!readResult.IsSuccess) return;
+            // 接收用户别名并验证令牌
+            OperateResult result = new OperateResult( );
+            OperateResult<int, string> readResult = ReceiveStringContentFromSocket( socket );
+            if (!readResult.IsSuccess) return;
 
-                // 登录成功
-                AppSession session = new AppSession( )
-                {
-                    WorkSocket = socket,
-                    LoginAlias = readResult.Content2,
-                };
+            // 登录成功
+            AppSession session = new AppSession( )
+            {
+                WorkSocket = socket,
+                LoginAlias = readResult.Content2,
+            };
 
 
-                try
-                {
-                    session.IpEndPoint = (IPEndPoint)socket.RemoteEndPoint;
-                    session.IpAddress = ((IPEndPoint)socket.RemoteEndPoint).Address.ToString( );
-                }
-                catch (Exception ex)
-                {
-                    LogNet?.WriteException( ToString( ), StringResources.Language.GetClientIpaddressFailed, ex );
-                }
+            try
+            {
+                session.IpEndPoint = (IPEndPoint)socket.RemoteEndPoint;
+                session.IpAddress = ((IPEndPoint)socket.RemoteEndPoint).Address.ToString( );
+            }
+            catch (Exception ex)
+            {
+                LogNet?.WriteException( ToString( ), StringResources.Language.GetClientIpaddressFailed, ex );
+            }
 
-                if (readResult.Content1 == 1)
-                {
-                    // 电脑端客户端
-                    session.ClientType = "Windows";
-                }
-                else if (readResult.Content1 == 2)
-                {
-                    // Android 客户端
-                    session.ClientType = "Android";
-                }
+            if (readResult.Content1 == 1)
+            {
+                // 电脑端客户端
+                session.ClientType = "Windows";
+            }
+            else if (readResult.Content1 == 2)
+            {
+                // Android 客户端
+                session.ClientType = "Android";
+            }
 
 
-                try
-                {
-                    session.WorkSocket.BeginReceive( session.BytesHead, session.AlreadyReceivedHead,
-                        session.BytesHead.Length - session.AlreadyReceivedHead, SocketFlags.None,
-                        new AsyncCallback( HeadBytesReceiveCallback ), session );
-                    TcpStateUpLine( session );
-                    Thread.Sleep( 100 );// 留下一些时间进行反应
-                }
-                catch (Exception ex)
-                {
-                    // 登录前已经出错
-                    TcpStateClose( session );
-                    LogNet?.WriteException( ToString( ), StringResources.Language.NetClientLoginFailed, ex );
-                }
+            try
+            {
+                session.WorkSocket.BeginReceive( session.BytesHead, session.AlreadyReceivedHead,
+                    session.BytesHead.Length - session.AlreadyReceivedHead, SocketFlags.None,
+                    new AsyncCallback( HeadBytesReceiveCallback ), session );
+                TcpStateUpLine( session );
+                Thread.Sleep( 100 );// 留下一些时间进行反应
+            }
+            catch (Exception ex)
+            {
+                // 登录前已经出错
+                TcpStateClose( session );
+                LogNet?.WriteException( ToString( ), StringResources.Language.NetClientLoginFailed, ex );
             }
         }
-
-
 
         #endregion
 

@@ -40,6 +40,7 @@
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.panel2 = new System.Windows.Forms.Panel();
+            this.button7 = new System.Windows.Forms.Button();
             this.textBox8 = new System.Windows.Forms.TextBox();
             this.label12 = new System.Windows.Forms.Label();
             this.button4 = new System.Windows.Forms.Button();
@@ -54,7 +55,10 @@
             this.textBox5 = new System.Windows.Forms.TextBox();
             this.label7 = new System.Windows.Forms.Label();
             this.userControlHead1 = new HslCommunicationDemo.DemoControl.UserControlHead();
-            this.button7 = new System.Windows.Forms.Button();
+            this.textBox9 = new System.Windows.Forms.TextBox();
+            this.label2 = new System.Windows.Forms.Label();
+            this.textBox10 = new System.Windows.Forms.TextBox();
+            this.label4 = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.SuspendLayout();
@@ -64,6 +68,10 @@
             this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel1.Controls.Add(this.textBox10);
+            this.panel1.Controls.Add(this.label4);
+            this.panel1.Controls.Add(this.textBox9);
+            this.panel1.Controls.Add(this.label2);
             this.panel1.Controls.Add(this.button6);
             this.panel1.Controls.Add(this.button5);
             this.panel1.Controls.Add(this.textBox3);
@@ -103,7 +111,7 @@
             // 
             this.textBox3.Location = new System.Drawing.Point(62, 41);
             this.textBox3.Name = "textBox3";
-            this.textBox3.Size = new System.Drawing.Size(384, 23);
+            this.textBox3.Size = new System.Drawing.Size(265, 23);
             this.textBox3.TabIndex = 7;
             // 
             // label6
@@ -118,7 +126,7 @@
             // button2
             // 
             this.button2.Enabled = false;
-            this.button2.Location = new System.Drawing.Point(584, 5);
+            this.button2.Location = new System.Drawing.Point(701, 5);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(91, 28);
             this.button2.TabIndex = 5;
@@ -128,7 +136,7 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(477, 5);
+            this.button1.Location = new System.Drawing.Point(604, 5);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(91, 28);
             this.button1.TabIndex = 4;
@@ -191,6 +199,16 @@
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(977, 518);
             this.panel2.TabIndex = 13;
+            // 
+            // button7
+            // 
+            this.button7.Location = new System.Drawing.Point(159, 180);
+            this.button7.Name = "button7";
+            this.button7.Size = new System.Drawing.Size(148, 28);
+            this.button7.TabIndex = 20;
+            this.button7.Text = "Send Array";
+            this.button7.UseVisualStyleBackColor = true;
+            this.button7.Click += new System.EventHandler(this.Button7_Click);
             // 
             // textBox8
             // 
@@ -321,15 +339,37 @@
             this.userControlHead1.Size = new System.Drawing.Size(1004, 32);
             this.userControlHead1.TabIndex = 14;
             // 
-            // button7
+            // textBox9
             // 
-            this.button7.Location = new System.Drawing.Point(159, 180);
-            this.button7.Name = "button7";
-            this.button7.Size = new System.Drawing.Size(148, 28);
-            this.button7.TabIndex = 20;
-            this.button7.Text = "Send Array";
-            this.button7.UseVisualStyleBackColor = true;
-            this.button7.Click += new System.EventHandler(this.Button7_Click);
+            this.textBox9.Location = new System.Drawing.Point(401, 41);
+            this.textBox9.Name = "textBox9";
+            this.textBox9.Size = new System.Drawing.Size(91, 23);
+            this.textBox9.TabIndex = 11;
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(337, 44);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(56, 17);
+            this.label2.TabIndex = 10;
+            this.label2.Text = "用户名：";
+            // 
+            // textBox10
+            // 
+            this.textBox10.Location = new System.Drawing.Point(572, 41);
+            this.textBox10.Name = "textBox10";
+            this.textBox10.Size = new System.Drawing.Size(91, 23);
+            this.textBox10.TabIndex = 13;
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(508, 44);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(44, 17);
+            this.label4.TabIndex = 12;
+            this.label4.Text = "密码：";
             // 
             // FormSimplifyNet
             // 
@@ -381,5 +421,9 @@
         private System.Windows.Forms.Button button6;
         private DemoControl.UserControlHead userControlHead1;
         private System.Windows.Forms.Button button7;
+        private System.Windows.Forms.TextBox textBox10;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.TextBox textBox9;
+        private System.Windows.Forms.Label label2;
     }
 }

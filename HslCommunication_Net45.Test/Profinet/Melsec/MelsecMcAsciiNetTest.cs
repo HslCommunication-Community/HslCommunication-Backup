@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using HslCommunication.Profinet.Melsec;
 using HslCommunication.BasicFramework;
+using HslCommunication;
 
 namespace HslCommunication_Net45.Test.Profinet.Melsec
 {
@@ -132,6 +133,16 @@ namespace HslCommunication_Net45.Test.Profinet.Melsec
             byte[] byteTmp = new byte[] { 0x4F, 0x12, 0x72, 0xA7, 0x54, 0xB8 };
             Assert.IsTrue( plc.Write( address, byteTmp ).IsSuccess );
             Assert.IsTrue( SoftBasic.IsTwoBytesEquel( plc.Read( address, 3 ).Content, byteTmp ) );
+
+            // 超长范围读取测试
+            Assert.IsTrue( plc.Write( "D1000", (short)12345 ).IsSuccess );
+            Assert.IsTrue( plc.Write( "D2000", (short)12345 ).IsSuccess );
+            Assert.IsTrue( plc.Write( "D3000", (short)12345 ).IsSuccess );
+            OperateResult<short[]> readBatchShort = plc.ReadInt16( "D1000", 2001 );
+            Assert.IsTrue( readBatchShort.IsSuccess );
+            Assert.IsTrue( readBatchShort.Content[0] == 12345 );
+            Assert.IsTrue( readBatchShort.Content[1000] == 12345 );
+            Assert.IsTrue( readBatchShort.Content[2000] == 12345 );
 
             plc.ConnectClose( );
         }

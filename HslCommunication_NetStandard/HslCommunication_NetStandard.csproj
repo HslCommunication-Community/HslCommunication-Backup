@@ -77,6 +77,7 @@
     <Compile Include="..\HslCommunication_Net45\Core\Net\IRobotNet.cs" Link="Core\Net\IRobotNet.cs" />
     <Compile Include="..\HslCommunication_Net45\Core\Net\NetSupport.cs" Link="Core\Net\NetSupport.cs" />
     <Compile Include="..\HslCommunication_Net45\Core\Net\NetworkBase\NetworkAlienClient.cs" Link="Core\Net\NetworkBase\NetworkAlienClient.cs" />
+    <Compile Include="..\HslCommunication_Net45\Core\Net\NetworkBase\NetworkAuthenticationServerBase.cs" Link="Core\Net\NetworkBase\NetworkAuthenticationServerBase.cs" />
     <Compile Include="..\HslCommunication_Net45\Core\Net\NetworkBase\NetworkBase.cs" Link="Core\Net\NetworkBase\NetworkBase.cs" />
     <Compile Include="..\HslCommunication_Net45\Core\Net\NetworkBase\NetworkDataServerBase.cs" Link="Core\Net\NetworkBase\NetworkDataServerBase.cs" />
     <Compile Include="..\HslCommunication_Net45\Core\Net\NetworkBase\NetworkDeviceBase.cs" Link="Core\Net\NetworkBase\NetworkDeviceBase.cs" />

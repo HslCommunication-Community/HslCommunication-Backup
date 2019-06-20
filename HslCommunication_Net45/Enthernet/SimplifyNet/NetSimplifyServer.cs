@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Net.Sockets;
 using System.Text;
 
@@ -18,7 +19,7 @@ namespace HslCommunication.Enthernet
     /// 此处贴上了Demo项目的服务器配置的示例代码
     /// <code lang="cs" source="TestProject\SimplifyNetTest\FormServer.cs" region="Simplify Net" title="NetSimplifyServer示例" />
     /// </example>
-    public class NetSimplifyServer : NetworkServerBase
+    public class NetSimplifyServer : NetworkAuthenticationServerBase
     {
         #region Constructor
 
@@ -31,7 +32,7 @@ namespace HslCommunication.Enthernet
         }
 
         #endregion
-        
+
         #region Event Handle
 
         /// <summary>
@@ -118,29 +119,28 @@ namespace HslCommunication.Enthernet
 
 
         /// <summary>
-        /// 处理请求接收连接后的方法
+        /// 当接收到了新的请求的时候执行的操作
         /// </summary>
-        /// <param name="obj">异步套接字对象</param>
-        protected override void ThreadPoolLogin( object obj )
+        /// <param name="socket">异步对象</param>
+        /// <param name="endPoint">终结点</param>
+        protected override void ThreadPoolLogin( Socket socket, IPEndPoint endPoint )
         {
-            if (obj is Socket socket)
-            {
-                AppSession session = new AppSession( );
-                session.WorkSocket = socket;
-                try
-                {
-                    session.IpEndPoint = (System.Net.IPEndPoint)socket.RemoteEndPoint;
-                    session.IpAddress = session.IpEndPoint.Address.ToString( );
-                }
-                catch(Exception ex)
-                {
-                    LogNet?.WriteException( ToString( ), StringResources.Language.GetClientIpaddressFailed, ex );
-                }
+            AppSession session = new AppSession( );
 
-                LogNet?.WriteDebug( ToString( ), string.Format( StringResources.Language.ClientOnlineInfo, session.IpEndPoint ) );
-                System.Threading.Interlocked.Increment( ref clientCount );
-                ReBeginReceiveHead( session, false );
+            session.WorkSocket = socket;
+            try
+            {
+                session.IpEndPoint = (System.Net.IPEndPoint)socket.RemoteEndPoint;
+                session.IpAddress = session.IpEndPoint.Address.ToString( );
             }
+            catch (Exception ex)
+            {
+                LogNet?.WriteException( ToString( ), StringResources.Language.GetClientIpaddressFailed, ex );
+            }
+
+            LogNet?.WriteDebug( ToString( ), string.Format( StringResources.Language.ClientOnlineInfo, session.IpEndPoint ) );
+            System.Threading.Interlocked.Increment( ref clientCount );
+            ReBeginReceiveHead( session, false );
         }
 
         /// <summary>
@@ -200,7 +200,7 @@ namespace HslCommunication.Enthernet
             else
             {
                 // 数据异常
-                session?.WorkSocket?.Close( );
+                AppSessionRemoteClose( session );
             }
         }
 

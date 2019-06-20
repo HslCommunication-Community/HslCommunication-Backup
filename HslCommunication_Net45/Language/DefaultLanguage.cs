@@ -111,6 +111,7 @@ namespace HslCommunication.Language
         public virtual string CommandHeadCodeCheckFailed => "命令头校验失败";
         public virtual string CommandLengthCheckFailed => "命令长度检查失败";
         public virtual string NetClientAliasFailed => "客户端的别名接收失败：";
+        public virtual string NetClientAccountTimeout => "等待账户验证超时：";
         public virtual string NetEngineStart => "启动引擎";
         public virtual string NetEngineClose => "关闭引擎";
         public virtual string NetClientOnline => "上线";

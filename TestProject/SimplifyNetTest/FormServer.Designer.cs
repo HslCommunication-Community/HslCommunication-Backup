@@ -40,6 +40,7 @@
             this.label7 = new System.Windows.Forms.Label();
             this.userButton2 = new HslCommunication.Controls.UserButton();
             this.userButton1 = new HslCommunication.Controls.UserButton();
+            this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // textBox1
@@ -155,7 +156,7 @@
             this.userButton1.CustomerInformation = "";
             this.userButton1.EnableColor = System.Drawing.Color.FromArgb(((int)(((byte)(190)))), ((int)(((byte)(190)))), ((int)(((byte)(190)))));
             this.userButton1.Font = new System.Drawing.Font("微软雅黑", 9F);
-            this.userButton1.Location = new System.Drawing.Point(258, 13);
+            this.userButton1.Location = new System.Drawing.Point(450, 13);
             this.userButton1.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.userButton1.Name = "userButton1";
             this.userButton1.Size = new System.Drawing.Size(118, 39);
@@ -163,11 +164,22 @@
             this.userButton1.UIText = "启动服务";
             this.userButton1.Click += new System.EventHandler(this.userButton1_Click);
             // 
+            // checkBox1
+            // 
+            this.checkBox1.AutoSize = true;
+            this.checkBox1.Location = new System.Drawing.Point(227, 24);
+            this.checkBox1.Name = "checkBox1";
+            this.checkBox1.Size = new System.Drawing.Size(171, 21);
+            this.checkBox1.TabIndex = 19;
+            this.checkBox1.Text = "是否启用过用户名密码登录";
+            this.checkBox1.UseVisualStyleBackColor = true;
+            // 
             // FormServer
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 17F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(995, 641);
+            this.Controls.Add(this.checkBox1);
             this.Controls.Add(this.userButton2);
             this.Controls.Add(this.label6);
             this.Controls.Add(this.label7);
@@ -204,6 +216,7 @@
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Label label7;
         private HslCommunication.Controls.UserButton userButton2;
+        private System.Windows.Forms.CheckBox checkBox1;
     }
 }
 

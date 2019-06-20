@@ -93,36 +93,33 @@ namespace HslCommunication.Enthernet
         #endregion
 
         /// <summary>
-        /// 登录后的处理方法
+        /// 当接收到了新的请求的时候执行的操作
         /// </summary>
-        /// <param name="obj"></param>
-        protected override void ThreadPoolLogin(object obj)
+        /// <param name="socket">异步对象</param>
+        /// <param name="endPoint">终结点</param>
+        protected override void ThreadPoolLogin( Socket socket, IPEndPoint endPoint )
         {
-            if (obj is Socket socket)
+            // 登录成功
+            DeviceState stateone = new DeviceState( )
             {
+                WorkSocket = socket,
+                DeviceEndPoint = (IPEndPoint)socket.RemoteEndPoint,
+                IpAddress = ((IPEndPoint)socket.RemoteEndPoint).Address.ToString( ),
+                ConnectTime = DateTime.Now,
+            };
 
-                // 登录成功
-                DeviceState stateone = new DeviceState( )
-                {
-                    WorkSocket = socket,
-                    DeviceEndPoint = (IPEndPoint)socket.RemoteEndPoint,
-                    IpAddress = ((IPEndPoint)socket.RemoteEndPoint).Address.ToString( ),
-                    ConnectTime = DateTime.Now,
-                };
-                
-                AddClient( stateone );
+            AddClient( stateone );
 
-                try
-                {
-                    stateone.WorkSocket.BeginReceive( stateone.Buffer, 0, stateone.Buffer.Length, SocketFlags.None,
-                        new AsyncCallback( ContentReceiveCallBack ), stateone );
-                }
-                catch (Exception ex)
-                {
-                    //登录前已经出错
-                    RemoveClient( stateone );
-                    LogNet?.WriteException( ToString(), StringResources.Language.NetClientLoginFailed, ex );
-                }
+            try
+            {
+                stateone.WorkSocket.BeginReceive( stateone.Buffer, 0, stateone.Buffer.Length, SocketFlags.None,
+                    new AsyncCallback( ContentReceiveCallBack ), stateone );
+            }
+            catch (Exception ex)
+            {
+                //登录前已经出错
+                RemoveClient( stateone );
+                LogNet?.WriteException( ToString( ), StringResources.Language.NetClientLoginFailed, ex );
             }
         }
         

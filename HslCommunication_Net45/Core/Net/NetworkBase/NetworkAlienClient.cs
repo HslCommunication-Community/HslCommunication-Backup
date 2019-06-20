@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
@@ -35,94 +36,92 @@ namespace HslCommunication.Core.Net
         #region NetworkServerBase Override
 
         /// <summary>
-        /// 登录的回调方法
+        /// 当接收到了新的请求的时候执行的操作
         /// </summary>
-        /// <param name="obj">传入的异步对象</param>
-        protected override void ThreadPoolLogin( object obj )
+        /// <param name="socket">异步对象</param>
+        /// <param name="endPoint">终结点</param>
+        protected override void ThreadPoolLogin( Socket socket, IPEndPoint endPoint )
         {
-            if (obj is Socket socket)
+            // 注册包
+            // 0x48 0x73 0x6E 0x00 0x17 0x31 0x32 0x33 0x34 0x35 0x36 0x37 0x38 0x39 0x30 0x31 0x00 0x00 0x00 0x00 0x00 0x00 0xC0 0xA8 0x00 0x01 0x17 0x10
+            // +------------+ +--+ +--+ +----------------------------------------------------+ +---------------------------+ +-----------------+ +-------+
+            // + 固定消息头  +备用 长度           DTU码 12345678901 (唯一标识)                  登录密码(不受信的排除)     Ip:192.168.0.1    端口10000
+            // +------------+ +--+ +--+ +----------------------------------------------------+ +---------------------------+ +-----------------+
+
+            // 返回
+            // 0x48 0x73 0x6E 0x00 0x01 0x00
+            // +------------+ +--+ +--+ +--+
+            //   固定消息头  备用 长度 结果代码
+
+            // 结果代码 
+            // 0x00: 登录成功 
+            // 0x01: DTU重复登录 
+            // 0x02: DTU禁止登录
+            // 0x03: 密码验证失败 
+
+            OperateResult<byte[]> check = ReceiveByMessage( socket, 5000, new AlienMessage( ) );
+            if (!check.IsSuccess) return;
+
+            if (check.Content[4] != 0x17 || check.Content.Length != 0x1C)
             {
-                // 注册包
-                // 0x48 0x73 0x6E 0x00 0x17 0x31 0x32 0x33 0x34 0x35 0x36 0x37 0x38 0x39 0x30 0x31 0x00 0x00 0x00 0x00 0x00 0x00 0xC0 0xA8 0x00 0x01 0x17 0x10
-                // +------------+ +--+ +--+ +----------------------------------------------------+ +---------------------------+ +-----------------+ +-------+
-                // + 固定消息头  +备用 长度           DTU码 12345678901 (唯一标识)                  登录密码(不受信的排除)     Ip:192.168.0.1    端口10000
-                // +------------+ +--+ +--+ +----------------------------------------------------+ +---------------------------+ +-----------------+
-
-                // 返回
-                // 0x48 0x73 0x6E 0x00 0x01 0x00
-                // +------------+ +--+ +--+ +--+
-                //   固定消息头  备用 长度 结果代码
-
-                // 结果代码 
-                // 0x00: 登录成功 
-                // 0x01: DTU重复登录 
-                // 0x02: DTU禁止登录
-                // 0x03: 密码验证失败 
-
-                OperateResult<byte[]> check = ReceiveByMessage( socket, 5000, new AlienMessage( ) );
-                if (!check.IsSuccess) return;
-
-                if (check.Content[4] != 0x17 || check.Content.Length != 0x1C)
-                {
-                    socket?.Close( );
-                    LogNet?.WriteWarn( ToString( ), "Length Check Failed" );
-                    return;
-                }
-
-                // 密码验证
-                bool isPasswrodRight = true;
-                for (int i = 0; i < password.Length; i++)
-                {
-                    if (check.Content[16 + i] != password[i])
-                    {
-                        isPasswrodRight = false;
-                        break;
-                    }
-                }
-
-                string dtu = Encoding.ASCII.GetString( check.Content, 5, 11 ).Trim( );
-
-                // 密码失败的情况
-                if (!isPasswrodRight)
-                {
-                    OperateResult send = Send( socket, GetResponse( StatusPasswodWrong ) );
-                    if (send.IsSuccess) socket?.Close( );
-                    LogNet?.WriteWarn( ToString( ), "Login Password Wrong, Id:" + dtu );
-                    return;
-                }
-
-                AlienSession session = new AlienSession( )
-                {
-                    DTU = dtu,
-                    Socket = socket,
-                };
-
-                // 检测是否禁止登录
-                if (!IsClientPermission( session ))
-                {
-                    OperateResult send = Send( socket, GetResponse( StatusLoginForbidden ) );
-                    if (send.IsSuccess) socket?.Close( );
-                    LogNet?.WriteWarn( ToString( ), "Login Forbidden, Id:" + session.DTU );
-                    return;
-                }
-
-                // 检测是否重复登录，不重复的话，也就是意味着登录成功了
-                if (IsClientOnline( session ))
-                {
-                    OperateResult send = Send( socket, GetResponse( StatusLoginRepeat ) );
-                    if (send.IsSuccess) socket?.Close( );
-                    LogNet?.WriteWarn( ToString( ), "Login Repeat, Id:" + session.DTU );
-                    return;
-                }
-                else
-                {
-                    OperateResult send = Send( socket, GetResponse( StatusOk ) );
-                    if (!send.IsSuccess) return;
-                }
-
-                // 触发上线消息
-                OnClientConnected?.Invoke( this, session );
+                socket?.Close( );
+                LogNet?.WriteWarn( ToString( ), "Length Check Failed" );
+                return;
             }
+
+            // 密码验证
+            bool isPasswrodRight = true;
+            for (int i = 0; i < password.Length; i++)
+            {
+                if (check.Content[16 + i] != password[i])
+                {
+                    isPasswrodRight = false;
+                    break;
+                }
+            }
+
+            string dtu = Encoding.ASCII.GetString( check.Content, 5, 11 ).Trim( );
+
+            // 密码失败的情况
+            if (!isPasswrodRight)
+            {
+                OperateResult send = Send( socket, GetResponse( StatusPasswodWrong ) );
+                if (send.IsSuccess) socket?.Close( );
+                LogNet?.WriteWarn( ToString( ), "Login Password Wrong, Id:" + dtu );
+                return;
+            }
+
+            AlienSession session = new AlienSession( )
+            {
+                DTU = dtu,
+                Socket = socket,
+            };
+
+            // 检测是否禁止登录
+            if (!IsClientPermission( session ))
+            {
+                OperateResult send = Send( socket, GetResponse( StatusLoginForbidden ) );
+                if (send.IsSuccess) socket?.Close( );
+                LogNet?.WriteWarn( ToString( ), "Login Forbidden, Id:" + session.DTU );
+                return;
+            }
+
+            // 检测是否重复登录，不重复的话，也就是意味着登录成功了
+            if (IsClientOnline( session ))
+            {
+                OperateResult send = Send( socket, GetResponse( StatusLoginRepeat ) );
+                if (send.IsSuccess) socket?.Close( );
+                LogNet?.WriteWarn( ToString( ), "Login Repeat, Id:" + session.DTU );
+                return;
+            }
+            else
+            {
+                OperateResult send = Send( socket, GetResponse( StatusOk ) );
+                if (!send.IsSuccess) return;
+            }
+
+            // 触发上线消息
+            OnClientConnected?.Invoke( this, session );
         }
 
 

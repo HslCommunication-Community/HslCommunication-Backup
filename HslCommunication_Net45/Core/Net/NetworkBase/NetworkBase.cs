@@ -1039,6 +1039,18 @@ namespace HslCommunication.Core.Net
             return SendBaseAndCheckReceive( socket, HslProtocol.ProtocolUserStringArray, customer, HslProtocol.PackStringArrayToByte( sends ) );
         }
 
+        /// <summary>
+        /// [自校验] 直接发送字符串数组并确认对方接收完成数据，如果结果异常，则结束通讯
+        /// </summary>
+        /// <param name="socket">网络套接字</param>
+        /// <param name="customer">用户指令</param>
+        /// <param name="name">用户名</param>
+        /// <param name="pwd">密码</param>
+        /// <returns>是否发送成功</returns>
+        protected OperateResult SendAccountAndCheckReceive( Socket socket, int customer, string name, string pwd )
+        {
+            return SendBaseAndCheckReceive( socket, HslProtocol.ProtocolAccountLogin, customer, HslProtocol.PackStringArrayToByte( new string[] { name, pwd } ) );
+        }
 
         /// <summary>
         /// [自校验] 接收一条完整的同步数据，包含头子节和内容字节，基础的数据，如果结果异常，则结束通讯

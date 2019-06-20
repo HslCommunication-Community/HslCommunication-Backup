@@ -322,6 +322,9 @@
     <Compile Include="..\HslCommunication_Net45\Core\Net\NetworkBase\NetworkAlienClient.cs">
       <Link>Core\Net\NetworkBase\NetworkAlienClient.cs</Link>
     </Compile>
+    <Compile Include="..\HslCommunication_Net45\Core\Net\NetworkBase\NetworkAuthenticationServerBase.cs">
+      <Link>Core\Net\NetworkBase\NetworkAuthenticationServerBase.cs</Link>
+    </Compile>
     <Compile Include="..\HslCommunication_Net45\Core\Net\NetworkBase\NetworkBase.cs">
       <Link>Core\Net\NetworkBase\NetworkBase.cs</Link>
     </Compile>

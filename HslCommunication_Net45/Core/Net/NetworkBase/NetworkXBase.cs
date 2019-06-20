@@ -629,7 +629,7 @@ namespace HslCommunication.Core.Net
         /// <summary>
         /// 当远端的客户端关闭连接时触发
         /// </summary>
-        /// <param name="session"></param>
+        /// <param name="session">会话信息</param>
         internal virtual void AppSessionRemoteClose( AppSession session )
         {
 

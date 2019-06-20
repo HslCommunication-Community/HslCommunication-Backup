@@ -5,13 +5,14 @@ using System.Linq;
 using System.Net.Sockets;
 using System.Text;
 using HslCommunication.Core.Types;
+using System.Net;
 
 namespace HslCommunication.Core.Net
 {
     /// <summary>
     /// 所有虚拟的数据服务器的基类
     /// </summary>
-    public class NetworkDataServerBase : NetworkServerBase, IDisposable
+    public class NetworkDataServerBase : NetworkAuthenticationServerBase, IDisposable
     {
         #region Constructor
         
@@ -189,58 +190,31 @@ namespace HslCommunication.Core.Net
         {
 
         }
-        
+
         /// <summary>
         /// 当接收到了新的请求的时候执行的操作
         /// </summary>
-        /// <param name="obj">异步对象</param>
-        protected override void ThreadPoolLogin( object obj )
+        /// <param name="socket">异步对象</param>
+        /// <param name="endPoint">终结点</param>
+        protected override void ThreadPoolLogin( Socket socket, IPEndPoint endPoint )
         {
             // 为了提高系统的响应能力，采用异步来实现，即时有数万台设备接入也能应付
-            if (obj is Socket socket)
+            string ipAddress = endPoint.Address.ToString( );
+
+            if (IsTrustedClientsOnly)
             {
-                System.Net.IPEndPoint endPoint = (System.Net.IPEndPoint)socket.RemoteEndPoint;
-                string ipAddress = endPoint.Address.ToString( );
-
-                if (IsTrustedClientsOnly)
+                // 检查受信任的情况
+                if (!CheckIpAddressTrusted( ipAddress ))
                 {
-                    // 检查受信任的情况
-                    if (!CheckIpAddressTrusted( ipAddress ))
-                    {
-                        // 客户端不被信任，退出
-                        LogNet?.WriteDebug( ToString( ), string.Format( StringResources.Language.ClientDisableLogin, endPoint ) );
-                        socket.Close( );
-                        return;
-                    }
+                    // 客户端不被信任，退出
+                    LogNet?.WriteDebug( ToString( ), string.Format( StringResources.Language.ClientDisableLogin, endPoint ) );
+                    socket.Close( );
+                    return;
                 }
-
-                if (IsUseAccountCertificate)
-                {
-                    OperateResult<int, string[]> read = ReceiveStringArrayContentFromSocket( socket );
-                    if (!read.IsSuccess)
-                    {
-                        LogNet?.WriteDebug( ToString( ), string.Format( "Client login failed[{0}]", endPoint ) );
-                        return;
-                    }
-                    string ret = CheckAccountLegal( read.Content2 );
-                    SendStringAndCheckReceive( socket, ret == "success" ? 1 : 0, new string[] { ret } );
-
-                    if(ret != "success")
-                    {
-                        LogNet?.WriteDebug( ToString( ), string.Format( "Client login failed[{0}]:{1}", endPoint, ret ) );
-                        return;
-                    }
-
-                    LogNet?.WriteDebug( ToString( ), string.Format( StringResources.Language.ClientOnlineInfo + " Account:{1}", endPoint, read.Content2[0] ) );
-                }
-                else
-                {
-                    LogNet?.WriteDebug( ToString( ), string.Format( StringResources.Language.ClientOnlineInfo, endPoint ) );
-                }
-
-
-                ThreadPoolLoginAfterClientCheck( socket, endPoint );
             }
+
+            if(!IsUseAccountCertificate) LogNet?.WriteDebug( ToString( ), string.Format( StringResources.Language.ClientOnlineInfo, endPoint ) );
+            ThreadPoolLoginAfterClientCheck( socket, endPoint );
         }
 
 
@@ -316,78 +290,6 @@ namespace HslCommunication.Core.Net
             return result;
         }
 
-
-        #endregion
-
-        #region Account Certification
-
-        /// <summary>
-        /// 获取或设置是否对客户端启动账号认证
-        /// </summary>
-        public bool IsUseAccountCertificate { get; set; }
-
-        private Dictionary<string, string> accounts = new Dictionary<string, string>( );
-        private SimpleHybirdLock lockLoginAccount = new SimpleHybirdLock( );
-
-        /// <summary>
-        /// 新增账户，如果想要启动账户登录，比如将<see cref="IsUseAccountCertificate"/>设置为<c>True</c>。
-        /// </summary>
-        /// <param name="userName">账户名称</param>
-        /// <param name="password">账户名称</param>
-        public void AddAccount(string userName, string password )
-        {
-            if (!string.IsNullOrEmpty( userName ))
-            {
-                lockLoginAccount.Enter( );
-                if (accounts.ContainsKey( userName ))
-                {
-                    accounts[userName] = password;
-                }
-                else
-                {
-                    accounts.Add( userName, password );
-                }
-                lockLoginAccount.Leave( );
-            }
-        }
-
-        /// <summary>
-        /// 删除一个账户的信息
-        /// </summary>
-        /// <param name="userName">账户名称</param>
-        public void DeleteAccount(string userName )
-        {
-            lockLoginAccount.Enter( );
-            if (accounts.ContainsKey( userName ))
-            {
-                accounts.Remove( userName );
-            }
-            lockLoginAccount.Leave( );
-        }
-
-        private string CheckAccountLegal( string[] infos )
-        {
-            if (infos?.Length < 2) return "User Name input wrong";
-            string ret = "";
-            lockLoginAccount.Enter( );
-            if (!accounts.ContainsKey( infos[0] ))
-            {
-                ret = "User Name input wrong";
-            }
-            else
-            {
-                if (accounts[infos[0]] != infos[1])
-                {
-                    ret = "Password is not corrent";
-                }
-                else
-                {
-                    ret = "success";
-                }
-            }
-            lockLoginAccount.Leave( );
-            return ret;
-        }
 
         #endregion
 

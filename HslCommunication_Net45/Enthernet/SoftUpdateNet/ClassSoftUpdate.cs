@@ -49,14 +49,13 @@ namespace HslCommunication.Enthernet
         }
 
 
-     
         /// <summary>
-        /// 系统的登录方法
+        /// 当接收到了新的请求的时候执行的操作
         /// </summary>
-        /// <param name="obj">接收的socket对象</param>
-        protected override void ThreadPoolLogin(object obj)
+        /// <param name="socket">异步对象</param>
+        /// <param name="endPoint">终结点</param>
+        protected override void ThreadPoolLogin( Socket socket, IPEndPoint endPoint )
         {
-            Socket socket = obj as Socket;
             try
             {
                 OperateResult<byte[]> receive = Receive( socket, 4 );

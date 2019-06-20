@@ -103,15 +103,48 @@ namespace HslCommunication.Core.Net
         /// 用于登录的回调方法
         /// </summary>
         /// <param name="obj">socket对象</param>
-        protected virtual void ThreadPoolLogin( object obj )
+        private void ThreadPoolLogin( object obj )
         {
-            Socket socket = obj as Socket;
+            if (obj is Socket socket)
+            {
+                IPEndPoint endPoint = (IPEndPoint)socket.RemoteEndPoint;
+                OperateResult check = SocketAcceptExtraCheck( socket, endPoint );
+                if (!check.IsSuccess)
+                {
+                    LogNet?.WriteDebug( ToString( ), check.Message );
+                    socket?.Close( );
+                }
+                else
+                {
+                    ThreadPoolLogin( socket, endPoint );
+                }
+            }
+        }
+
+        /// <summary>
+        /// 用于登录的回调方法
+        /// </summary>
+        /// <param name="socket">socket对象</param>
+        /// <param name="endPoint">远程的终结点</param>
+        protected virtual void ThreadPoolLogin( Socket socket, IPEndPoint endPoint )
+        {
             socket?.Close( );
         }
 
         #endregion
 
         #region Start And Close
+
+        /// <summary>
+        /// 当客户端的socket登录的时候额外检查的信息
+        /// </summary>
+        /// <param name="socket">套接字</param>
+        /// <param name="endPoint">终结点</param>
+        /// <returns>验证的结果</returns>
+        protected virtual OperateResult SocketAcceptExtraCheck( Socket socket, IPEndPoint endPoint )
+        {
+            return OperateResult.CreateSuccessResult( );
+        }
 
         /// <summary>
         /// 服务器启动时额外的初始化信息

@@ -168,151 +168,147 @@ namespace HslCommunication.Enthernet
         #region Protect Override
 
         /// <summary>
-        /// 处理数据
+        /// 当接收到了新的请求的时候执行的操作
         /// </summary>
-        /// <param name="obj">异步对象</param>
-        protected override void ThreadPoolLogin( object obj )
+        /// <param name="socket">异步对象</param>
+        /// <param name="endPoint">终结点</param>
+        protected override void ThreadPoolLogin( Socket socket, IPEndPoint endPoint )
         {
-            if (obj is Socket socket)
+            OperateResult result = new OperateResult( );
+
+            // 获取ip地址
+            string IpAddress = ((IPEndPoint)(socket.RemoteEndPoint)).Address.ToString( );
+
+            // 接收操作信息
+            if (!ReceiveInformationHead(
+                socket,
+                out int customer,
+                out string fileName,
+                out string Factory,
+                out string Group,
+                out string Identify ).IsSuccess)
             {
+                return;
+            }
 
-                OperateResult result = new OperateResult( );
+            string relativeName = ReturnRelativeFileName( Factory, Group, Identify, fileName );
 
-                // 获取ip地址
-                string IpAddress = ((IPEndPoint)(socket.RemoteEndPoint)).Address.ToString( );
-
-                // 接收操作信息
-                if (!ReceiveInformationHead(
-                    socket,
-                    out int customer,
-                    out string fileName,
-                    out string Factory,
-                    out string Group,
-                    out string Identify).IsSuccess)
+            if (customer == HslProtocol.ProtocolFileDownload)
+            {
+                // 先获取文件的真实名称
+                string guidName = TransformFactFileName( Factory, Group, Identify, fileName );
+                // 获取文件操作锁
+                FileMarkId fileMarkId = GetFileMarksFromDictionaryWithFileName( guidName );
+                fileMarkId.EnterReadOperator( );
+                // 发送文件数据
+                OperateResult send = SendFileAndCheckReceive( socket, ReturnAbsoluteFileName( Factory, Group, Identify, guidName ), fileName, "", "", null );
+                if (!send.IsSuccess)
                 {
-                    return;
-                }
-
-                string relativeName = ReturnRelativeFileName( Factory, Group, Identify, fileName );
-
-                if (customer == HslProtocol.ProtocolFileDownload)
-                {
-                    // 先获取文件的真实名称
-                    string guidName = TransformFactFileName( Factory, Group, Identify, fileName );
-                    // 获取文件操作锁
-                    FileMarkId fileMarkId = GetFileMarksFromDictionaryWithFileName( guidName );
-                    fileMarkId.EnterReadOperator( );
-                    // 发送文件数据
-                    OperateResult send = SendFileAndCheckReceive( socket, ReturnAbsoluteFileName( Factory, Group, Identify, guidName ), fileName, "", "", null );
-                    if (!send.IsSuccess)
-                    {
-                        fileMarkId.LeaveReadOperator( );
-                        LogNet?.WriteError( ToString( ), $"{StringResources.Language.FileDownloadFailed} : {send.Message} :{relativeName} ip:{IpAddress}" );
-                        return;
-                    }
-                    else
-                    {
-                        LogNet?.WriteInfo( ToString( ), StringResources.Language.FileDownloadSuccess + ":" + relativeName );
-                    }
-
                     fileMarkId.LeaveReadOperator( );
-                    // 关闭连接
-                    socket?.Close( );
-                }
-                else if (customer == HslProtocol.ProtocolFileUpload)
-                {
-                    string fullFileName = ReturnAbsoluteFileName( Factory, Group, Identify, fileName );
-                    // 上传文件
-                    CheckFolderAndCreate( );
-                    FileInfo info = new FileInfo( fullFileName );
-
-                    try
-                    {
-                        if (!Directory.Exists( info.DirectoryName ))
-                        {
-                            Directory.CreateDirectory( info.DirectoryName );
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        LogNet?.WriteException( ToString( ), StringResources.Language.FilePathCreateFailed + fullFileName, ex );
-                        socket?.Close( );
-                        return;
-                    }
-
-                    // 接收文件并回发消息
-                    if (ReceiveFileFromSocketAndUpdateGroup(
-                        socket,                    // 网络套接字
-                        fullFileName ).IsSuccess)
-                    {
-                        socket?.Close( );
-                        LogNet?.WriteInfo( ToString( ), StringResources.Language.FileUploadSuccess + ":" + relativeName );
-                    }
-                    else
-                    {
-                        LogNet?.WriteInfo( ToString( ), StringResources.Language.FileUploadFailed + ":" + relativeName );
-                    }
-                }
-                else if (customer == HslProtocol.ProtocolFileDelete)
-                {
-                    string fullFileName = ReturnAbsoluteFileName( Factory, Group, Identify, fileName );
-
-                    FileInfo info = new FileInfo( fullFileName );
-                    GroupFileContainer fileManagment = GetGroupFromFilePath( info.DirectoryName );
-
-                    // 新增删除的任务
-                    DeleteExsistingFile( info.DirectoryName, fileManagment.DeleteFile( info.Name ) );
-
-                    // 回发消息
-                    if (SendStringAndCheckReceive(
-                        socket,                                                                // 网络套接字
-                        1,                                                                     // 没啥含义
-                        "success"                                                              // 没啥含意
-                        ).IsSuccess)
-                    {
-                        socket?.Close( );
-                    }
-
-                    LogNet?.WriteInfo( ToString( ), StringResources.Language.FileDeleteSuccess + ":" + relativeName );
-                }
-                else if (customer == HslProtocol.ProtocolFileDirectoryFiles)
-                {
-                    GroupFileContainer fileManagment = GetGroupFromFilePath( ReturnAbsoluteFilePath( Factory, Group, Identify ) );
-
-                    if (SendStringAndCheckReceive(
-                        socket,
-                        HslProtocol.ProtocolFileDirectoryFiles,
-                        fileManagment.JsonArrayContent ).IsSuccess)
-                    {
-                        socket?.Close( );
-                    }
-                }
-                else if (customer == HslProtocol.ProtocolFileDirectories)
-                {
-                    List<string> folders = new List<string>( );
-                    foreach (var m in GetDirectories( Factory, Group, Identify ))
-                    {
-                        DirectoryInfo directory = new DirectoryInfo( m );
-                        folders.Add( directory.Name );
-                    }
-
-                    Newtonsoft.Json.Linq.JArray jArray = Newtonsoft.Json.Linq.JArray.FromObject( folders.ToArray( ) );
-                    if (SendStringAndCheckReceive(
-                        socket,
-                        HslProtocol.ProtocolFileDirectoryFiles,
-                        jArray.ToString( ) ).IsSuccess)
-                    {
-                        socket?.Close( );
-                    }
+                    LogNet?.WriteError( ToString( ), $"{StringResources.Language.FileDownloadFailed} : {send.Message} :{relativeName} ip:{IpAddress}" );
+                    return;
                 }
                 else
                 {
-                    // close not supported client
+                    LogNet?.WriteInfo( ToString( ), StringResources.Language.FileDownloadSuccess + ":" + relativeName );
+                }
+
+                fileMarkId.LeaveReadOperator( );
+                // 关闭连接
+                socket?.Close( );
+            }
+            else if (customer == HslProtocol.ProtocolFileUpload)
+            {
+                string fullFileName = ReturnAbsoluteFileName( Factory, Group, Identify, fileName );
+                // 上传文件
+                CheckFolderAndCreate( );
+                FileInfo info = new FileInfo( fullFileName );
+
+                try
+                {
+                    if (!Directory.Exists( info.DirectoryName ))
+                    {
+                        Directory.CreateDirectory( info.DirectoryName );
+                    }
+                }
+                catch (Exception ex)
+                {
+                    LogNet?.WriteException( ToString( ), StringResources.Language.FilePathCreateFailed + fullFileName, ex );
+                    socket?.Close( );
+                    return;
+                }
+
+                // 接收文件并回发消息
+                if (ReceiveFileFromSocketAndUpdateGroup(
+                    socket,                    // 网络套接字
+                    fullFileName ).IsSuccess)
+                {
+                    socket?.Close( );
+                    LogNet?.WriteInfo( ToString( ), StringResources.Language.FileUploadSuccess + ":" + relativeName );
+                }
+                else
+                {
+                    LogNet?.WriteInfo( ToString( ), StringResources.Language.FileUploadFailed + ":" + relativeName );
+                }
+            }
+            else if (customer == HslProtocol.ProtocolFileDelete)
+            {
+                string fullFileName = ReturnAbsoluteFileName( Factory, Group, Identify, fileName );
+
+                FileInfo info = new FileInfo( fullFileName );
+                GroupFileContainer fileManagment = GetGroupFromFilePath( info.DirectoryName );
+
+                // 新增删除的任务
+                DeleteExsistingFile( info.DirectoryName, fileManagment.DeleteFile( info.Name ) );
+
+                // 回发消息
+                if (SendStringAndCheckReceive(
+                    socket,                                                                // 网络套接字
+                    1,                                                                     // 没啥含义
+                    "success"                                                              // 没啥含意
+                    ).IsSuccess)
+                {
+                    socket?.Close( );
+                }
+
+                LogNet?.WriteInfo( ToString( ), StringResources.Language.FileDeleteSuccess + ":" + relativeName );
+            }
+            else if (customer == HslProtocol.ProtocolFileDirectoryFiles)
+            {
+                GroupFileContainer fileManagment = GetGroupFromFilePath( ReturnAbsoluteFilePath( Factory, Group, Identify ) );
+
+                if (SendStringAndCheckReceive(
+                    socket,
+                    HslProtocol.ProtocolFileDirectoryFiles,
+                    fileManagment.JsonArrayContent ).IsSuccess)
+                {
                     socket?.Close( );
                 }
             }
-        }
+            else if (customer == HslProtocol.ProtocolFileDirectories)
+            {
+                List<string> folders = new List<string>( );
+                foreach (var m in GetDirectories( Factory, Group, Identify ))
+                {
+                    DirectoryInfo directory = new DirectoryInfo( m );
+                    folders.Add( directory.Name );
+                }
 
+                Newtonsoft.Json.Linq.JArray jArray = Newtonsoft.Json.Linq.JArray.FromObject( folders.ToArray( ) );
+                if (SendStringAndCheckReceive(
+                    socket,
+                    HslProtocol.ProtocolFileDirectoryFiles,
+                    jArray.ToString( ) ).IsSuccess)
+                {
+                    socket?.Close( );
+                }
+            }
+            else
+            {
+                // close not supported client
+                socket?.Close( );
+            }
+        }
 
         #endregion
 

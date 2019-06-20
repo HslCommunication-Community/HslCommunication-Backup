@@ -67,6 +67,7 @@ namespace HslCommunication.Language
         public override string SocketSendException => "Synchronous Data Send exception: ";
         public override string SocketHeadReceiveException => "Command header receive exception: ";
         public override string SocketContentReceiveException => "Content Data Receive exception: ";
+        public override string NetClientAccountTimeout => "Wait for account check timeout：";
         public override string SocketContentRemoteReceiveException => "Recipient content Data Receive exception: ";
         public override string SocketAcceptCallbackException => "Asynchronously accepts an incoming connection attempt: ";
         public override string SocketReAcceptCallbackException => "To re-accept incoming connection attempts asynchronously";

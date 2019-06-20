@@ -81,6 +81,7 @@ namespace HslCommunicationDemo
             simplifyClient.IpAddress = textBox1.Text;
             simplifyClient.Port = int.Parse( textBox2.Text );
             simplifyClient.Token = new Guid( textBox3.Text );
+            simplifyClient.SetLoginAccount( textBox9.Text, textBox10.Text );
             OperateResult connect = simplifyClient.ConnectServer( );
 
             if(connect.IsSuccess)
