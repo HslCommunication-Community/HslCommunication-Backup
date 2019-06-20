@@ -774,6 +774,21 @@ namespace HslCommunication.BasicFramework
             return Encoding.ASCII.GetBytes( value.ToString( "X4" ) );
         }
 
+        /// <summary>
+        /// 从字节数组构建一个ASCII格式的数据内容
+        /// </summary>
+        /// <param name="value">字节信息</param>
+        /// <returns>ASCII格式的地址</returns>
+        public static byte[] BuildAsciiBytesFrom( byte[] value )
+        {
+            byte[] buffer = new byte[value.Length * 2];
+            for (int i = 0; i < value.Length; i++)
+            {
+                SoftBasic.BuildAsciiBytesFrom( value[i] ).CopyTo( buffer, 2 * i );
+            }
+            return buffer;
+        }
+
         #endregion
 
         #region Bool[] and byte[] transform

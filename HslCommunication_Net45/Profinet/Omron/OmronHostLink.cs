@@ -1,4 +1,5 @@
-﻿using HslCommunication.Core;
+﻿using HslCommunication.BasicFramework;
+using HslCommunication.Core;
 using HslCommunication.Serial;
 using System;
 using System.Collections.Generic;
@@ -269,7 +270,20 @@ namespace HslCommunication.Profinet.Omron
             // 成功
             return OperateResult.CreateSuccessResult( );
         }
-        
+
+        #endregion
+
+        #region Object Override
+
+        /// <summary>
+        /// 返回表示当前对象的字符串
+        /// </summary>
+        /// <returns>字符串信息</returns>
+        public override string ToString( )
+        {
+            return $"OmronHostLink[{PortName}:{BaudRate}]";
+        }
+
         #endregion
 
         #region Build Command
@@ -286,19 +300,19 @@ namespace HslCommunication.Profinet.Omron
             byte[] buffer = new byte[18 + cmd.Length];
 
             buffer[ 0] = (byte)'@';
-            buffer[ 1] = Melsec.MelsecHelper.BuildBytesFromData( this.UnitNumber )[0];
-            buffer[ 2] = Melsec.MelsecHelper.BuildBytesFromData( this.UnitNumber )[1];
+            buffer[ 1] = SoftBasic.BuildAsciiBytesFrom( this.UnitNumber )[0];
+            buffer[ 2] = SoftBasic.BuildAsciiBytesFrom( this.UnitNumber )[1];
             buffer[ 3] = (byte)'F';
             buffer[ 4] = (byte)'A';
             buffer[ 5] = ResponseWaitTime;
-            buffer[ 6] = Melsec.MelsecHelper.BuildBytesFromData( this.ICF )[0];
-            buffer[ 7] = Melsec.MelsecHelper.BuildBytesFromData( this.ICF )[1];
-            buffer[ 8] = Melsec.MelsecHelper.BuildBytesFromData( this.DA2 )[0];
-            buffer[ 9] = Melsec.MelsecHelper.BuildBytesFromData( this.DA2 )[1];
-            buffer[10] = Melsec.MelsecHelper.BuildBytesFromData( this.SA2 )[0];
-            buffer[11] = Melsec.MelsecHelper.BuildBytesFromData( this.SA2 )[1];
-            buffer[12] = Melsec.MelsecHelper.BuildBytesFromData( this.SID )[0];
-            buffer[13] = Melsec.MelsecHelper.BuildBytesFromData( this.SID )[1];
+            buffer[ 6] = SoftBasic.BuildAsciiBytesFrom( this.ICF )[0];
+            buffer[ 7] = SoftBasic.BuildAsciiBytesFrom( this.ICF )[1];
+            buffer[ 8] = SoftBasic.BuildAsciiBytesFrom( this.DA2 )[0];
+            buffer[ 9] = SoftBasic.BuildAsciiBytesFrom( this.DA2 )[1];
+            buffer[10] = SoftBasic.BuildAsciiBytesFrom( this.SA2 )[0];
+            buffer[11] = SoftBasic.BuildAsciiBytesFrom( this.SA2 )[1];
+            buffer[12] = SoftBasic.BuildAsciiBytesFrom( this.SID )[0];
+            buffer[13] = SoftBasic.BuildAsciiBytesFrom( this.SID )[1];
             buffer[buffer.Length - 2] = (byte)'*';
             buffer[buffer.Length - 1] = 0x0D;
             cmd.CopyTo( buffer, 14 );
@@ -308,8 +322,8 @@ namespace HslCommunication.Profinet.Omron
             {
                 tmp = (tmp ^ buffer[i]);
             }
-            buffer[buffer.Length - 4] = Melsec.MelsecHelper.BuildBytesFromData( (byte)tmp )[0];
-            buffer[buffer.Length - 3] = Melsec.MelsecHelper.BuildBytesFromData( (byte)tmp )[1];
+            buffer[buffer.Length - 4] = SoftBasic.BuildAsciiBytesFrom( (byte)tmp )[0];
+            buffer[buffer.Length - 3] = SoftBasic.BuildAsciiBytesFrom( (byte)tmp )[1];
             string output = Encoding.ASCII.GetString( buffer );
             Console.WriteLine( output );
             return buffer;

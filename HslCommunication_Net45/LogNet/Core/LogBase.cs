@@ -78,7 +78,6 @@ namespace HslCommunication.LogNet
         /// </summary>
         public int LogSaveMode { get; protected set; }
 
-        
         #endregion
 
         #region Log Method
@@ -594,10 +593,6 @@ namespace HslCommunication.LogNet
 
                 // TODO: 释放未托管的资源(未托管的对象)并在以下内容中替代终结器。
                 // TODO: 将大型字段设置为 null。
-
-                m_simpleHybirdLock = null;
-                m_WaitForSave = null;
-                m_fileSaveLock = null;
                 disposedValue = true;
             }
         }

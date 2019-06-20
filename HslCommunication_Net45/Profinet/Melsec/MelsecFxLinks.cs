@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using HslCommunication.BasicFramework;
 
 namespace HslCommunication.Profinet.Melsec
 {
@@ -657,7 +658,7 @@ namespace HslCommunication.Profinet.Melsec
             byte[] buffer = new byte[value.Length * 2];
             for (int i = 0; i < value.Length / 2; i++)
             {
-                MelsecHelper.BuildBytesFromData( BitConverter.ToUInt16( value, i * 2 ) ).CopyTo( buffer, 4 * i );
+                SoftBasic.BuildAsciiBytesFrom( BitConverter.ToUInt16( value, i * 2 ) ).CopyTo( buffer, 4 * i );
             }
             stringBuilder.Append( Encoding.ASCII.GetString( buffer ) );
 

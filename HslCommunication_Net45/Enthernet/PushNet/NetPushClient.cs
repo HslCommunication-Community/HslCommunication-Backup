@@ -174,7 +174,7 @@ namespace HslCommunication.Enthernet
         /// <returns>字符串</returns>
         public override string ToString( )
         {
-            return $"NetPushClient[{endPoint.ToString()}]";
+            return $"NetPushClient[{endPoint}]";
         }
 
         #endregion

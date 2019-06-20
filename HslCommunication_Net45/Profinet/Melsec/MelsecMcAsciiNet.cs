@@ -1,4 +1,5 @@
-﻿using HslCommunication.Core;
+﻿using HslCommunication.BasicFramework;
+using HslCommunication.Core;
 using HslCommunication.Core.Address;
 using HslCommunication.Core.IMessage;
 using HslCommunication.Core.Net;
@@ -567,20 +568,20 @@ namespace HslCommunication.Profinet.Melsec
             plcCommand[ 1] = 0x30;
             plcCommand[ 2] = 0x30;
             plcCommand[ 3] = 0x30;
-            plcCommand[ 4] = MelsecHelper.BuildBytesFromData( networkNumber )[0];                         // 网络号
-            plcCommand[ 5] = MelsecHelper.BuildBytesFromData( networkNumber )[1];
+            plcCommand[ 4] = SoftBasic.BuildAsciiBytesFrom( networkNumber )[0];                         // 网络号
+            plcCommand[ 5] = SoftBasic.BuildAsciiBytesFrom( networkNumber )[1];
             plcCommand[ 6] = 0x46;                                                                        // PLC编号
             plcCommand[ 7] = 0x46;
             plcCommand[ 8] = 0x30;                                                                        // 目标模块IO编号
             plcCommand[ 9] = 0x33;
             plcCommand[10] = 0x46;
             plcCommand[11] = 0x46;
-            plcCommand[12] = MelsecHelper.BuildBytesFromData( networkStationNumber )[0];                  // 目标模块站号
-            plcCommand[13] = MelsecHelper.BuildBytesFromData( networkStationNumber )[1];
-            plcCommand[14] = MelsecHelper.BuildBytesFromData( (ushort)(plcCommand.Length - 18) )[0];     // 请求数据长度
-            plcCommand[15] = MelsecHelper.BuildBytesFromData( (ushort)(plcCommand.Length - 18) )[1];
-            plcCommand[16] = MelsecHelper.BuildBytesFromData( (ushort)(plcCommand.Length - 18) )[2];
-            plcCommand[17] = MelsecHelper.BuildBytesFromData( (ushort)(plcCommand.Length - 18) )[3];
+            plcCommand[12] = SoftBasic.BuildAsciiBytesFrom( networkStationNumber )[0];                  // 目标模块站号
+            plcCommand[13] = SoftBasic.BuildAsciiBytesFrom( networkStationNumber )[1];
+            plcCommand[14] = SoftBasic.BuildAsciiBytesFrom( (ushort)(plcCommand.Length - 18) )[0];     // 请求数据长度
+            plcCommand[15] = SoftBasic.BuildAsciiBytesFrom( (ushort)(plcCommand.Length - 18) )[1];
+            plcCommand[16] = SoftBasic.BuildAsciiBytesFrom( (ushort)(plcCommand.Length - 18) )[2];
+            plcCommand[17] = SoftBasic.BuildAsciiBytesFrom( (ushort)(plcCommand.Length - 18) )[3];
             plcCommand[18] = 0x30;                                                                        // CPU监视定时器
             plcCommand[19] = 0x30;
             plcCommand[20] = 0x31;

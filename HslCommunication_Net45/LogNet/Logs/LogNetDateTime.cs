@@ -23,8 +23,7 @@ namespace HslCommunication.LogNet
     /// </remarks>
     public class LogNetDateTime : LogNetBase, ILogNet
     {
-
-        #region 构造方法
+        #region Contructor
 
         /// <summary>
         /// 实例化一个根据时间存储的日志组件
@@ -34,33 +33,16 @@ namespace HslCommunication.LogNet
         public LogNetDateTime(string filePath, GenerateMode generateMode = GenerateMode.ByEveryYear)
         {
             m_filePath = filePath;
-            m_generateMode = generateMode;
+            this.generateMode = generateMode;
 
             LogSaveMode = LogNetManagment.LogSaveModeByDateTime;
 
             m_filePath = CheckPathEndWithSprit(m_filePath);
         }
 
-
         #endregion
 
-
-
-        /// <summary>
-        /// 当前正在存储的文件名称
-        /// </summary>
-        private string m_fileName = string.Empty;
-
-        /// <summary>
-        /// 文件的路径
-        /// </summary>
-        private string m_filePath = string.Empty;
-
-        /// <summary>
-        /// 文件的存储模式，默认按照年份来存储
-        /// </summary>
-        private GenerateMode m_generateMode = GenerateMode.ByEveryYear;
-
+        #region LogNetBase Override
 
         /// <summary>
         /// 获取需要保存的日志文件
@@ -70,7 +52,7 @@ namespace HslCommunication.LogNet
         {
             if (string.IsNullOrEmpty(m_filePath)) return string.Empty;
 
-            switch(m_generateMode)
+            switch(generateMode)
             {
                 case GenerateMode.ByEveryHour:
                     {
@@ -102,7 +84,9 @@ namespace HslCommunication.LogNet
             }
         }
 
+        #endregion
 
+        #region Public Method
 
         /// <summary>
         /// 获取所有的文件夹中的日志文件
@@ -119,5 +103,28 @@ namespace HslCommunication.LogNet
                 return new string[] { };
             }
         }
+
+        #endregion
+
+        #region Private Member
+
+        private string m_fileName = string.Empty;                                   // 当前正在存储的文件名称
+        private string m_filePath = string.Empty;                                   // 文件的路径
+        private GenerateMode generateMode = GenerateMode.ByEveryYear;               // 文件的存储模式，默认按照年份来存储
+
+        #endregion
+
+        #region Object Override
+
+        /// <summary>
+        /// 返回表示当前对象的字符串
+        /// </summary>
+        /// <returns>字符串</returns>
+        public override string ToString( )
+        {
+            return $"LogNetDateTime[{generateMode}]";
+        }
+
+        #endregion
     }
 }

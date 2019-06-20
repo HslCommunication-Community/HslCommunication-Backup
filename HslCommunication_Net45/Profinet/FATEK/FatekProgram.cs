@@ -275,6 +275,19 @@ namespace HslCommunication.Profinet.FATEK
 
         #endregion
 
+        #region Object Override
+
+        /// <summary>
+        /// 返回表示当前对象的字符串
+        /// </summary>
+        /// <returns>字符串</returns>
+        public override string ToString( )
+        {
+            return $"FatekProgram[{PortName}:{BaudRate}]";
+        }
+
+        #endregion
+
         #region Private Member
 
         private byte station = 0x01;                 // PLC的站号信息

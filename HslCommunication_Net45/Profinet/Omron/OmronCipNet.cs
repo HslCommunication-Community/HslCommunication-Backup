@@ -32,5 +32,17 @@ namespace HslCommunication.Profinet.Omron
 
         #endregion
 
+        #region Object Override
+
+        /// <summary>
+        /// 返回表示当前对象的字符串
+        /// </summary>
+        /// <returns>字符串数据</returns>
+        public override string ToString( )
+        {
+            return $"OmronCipNet[{IpAddress}:{Port}]";
+        }
+
+        #endregion
     }
 }

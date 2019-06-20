@@ -677,6 +677,5 @@ namespace HslCommunication.ModBus
         }
 
         #endregion
-        
     }
 }

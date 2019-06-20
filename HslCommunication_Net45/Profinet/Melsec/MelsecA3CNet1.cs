@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using HslCommunication.BasicFramework;
 
 namespace HslCommunication.Profinet.Melsec
 {
@@ -478,8 +479,8 @@ namespace HslCommunication.Profinet.Melsec
             command[0] = 0x05;
             command[1] = 0x46;
             command[2] = 0x39;
-            command[3] = MelsecHelper.BuildBytesFromData( station )[0];
-            command[4] = MelsecHelper.BuildBytesFromData( station )[1];
+            command[3] = SoftBasic.BuildAsciiBytesFrom( station )[0];
+            command[4] = SoftBasic.BuildAsciiBytesFrom( station )[1];
             command[5] = 0x30;
             command[6] = 0x30;
             command[7] = 0x46;
@@ -494,8 +495,8 @@ namespace HslCommunication.Profinet.Melsec
             {
                 sum += command[i];
             }
-            command[command.Length - 2] = MelsecHelper.BuildBytesFromData( (byte)sum )[0];
-            command[command.Length - 1] = MelsecHelper.BuildBytesFromData( (byte)sum )[1];
+            command[command.Length - 2] = SoftBasic.BuildAsciiBytesFrom( (byte)sum )[0];
+            command[command.Length - 1] = SoftBasic.BuildAsciiBytesFrom( (byte)sum )[1];
 
             return command;
         }

@@ -78,6 +78,18 @@ namespace HslCommunication.Profinet.OpenProtocol
             return OperateResult.CreateSuccessResult( Encoding.ASCII.GetString( read.Content ) );
         }
 
+        #region Object Override
+
+        /// <summary>
+        /// 返回表示当前对象的字符串
+        /// </summary>
+        /// <returns>字符串信息</returns>
+        public override string ToString( )
+        {
+            return $"OpenProtocolNet[{IpAddress}:{Port}]";
+        }
+
+        #endregion
 
         /// <summary>
         /// 构建一个读取的初始报文

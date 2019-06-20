@@ -134,7 +134,7 @@ namespace HslCommunication.Profinet.AllenBradley
 
                 return OperateResult.CreateSuccessResult( AllenBradleyHelper.PackRequestHeader( 0x6F, SessionHandle, commandSpecificData ) );
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return new OperateResult<byte[]>( "Address Wrong:" + ex.Message );
             }
@@ -147,7 +147,7 @@ namespace HslCommunication.Profinet.AllenBradley
         /// <returns>Message information that contains the result object </returns>
         public OperateResult<byte[]> BuildReadCommand( string[] address )
         {
-            if (address == null ) return new OperateResult<byte[]>( "address or length is null" );
+            if (address == null) return new OperateResult<byte[]>( "address or length is null" );
 
             int[] length = new int[address.Length];
             for (int i = 0; i < address.Length; i++)
@@ -486,13 +486,13 @@ namespace HslCommunication.Profinet.AllenBradley
         {
             OperateResult<byte[]> command = BuildWriteCommand( address, typeCode, value, length );
             if (!command.IsSuccess) return command;
-            
+
             OperateResult<byte[]> read = ReadFromCoreServer( command.Content );
             if (!read.IsSuccess) return read;
-            
+
             OperateResult check = CheckResponse( read.Content );
             if (!check.IsSuccess) return OperateResult.CreateFailedResult<byte[]>( check );
-            
+
             return AllenBradleyHelper.ExtractActualData( read.Content, false );
         }
 
@@ -677,7 +677,7 @@ namespace HslCommunication.Profinet.AllenBradley
         {
             return AllenBradleyHelper.PackRequestHeader( 0x66, SessionHandle, new byte[0] );
         }
-        
+
         private OperateResult CheckResponse( byte[] response )
         {
             try
@@ -688,21 +688,34 @@ namespace HslCommunication.Profinet.AllenBradley
                 string msg = string.Empty;
                 switch (status)
                 {
-                    case 0x01: msg = StringResources.Language.AllenBradleySessionStatus01;break;
-                    case 0x02: msg = StringResources.Language.AllenBradleySessionStatus02;break;
-                    case 0x03: msg = StringResources.Language.AllenBradleySessionStatus03;break;
-                    case 0x64: msg = StringResources.Language.AllenBradleySessionStatus64;break;
-                    case 0x65: msg = StringResources.Language.AllenBradleySessionStatus65;break;
-                    case 0x69: msg = StringResources.Language.AllenBradleySessionStatus69;break;
-                    default: msg = StringResources.Language.UnknownError;break;
+                    case 0x01: msg = StringResources.Language.AllenBradleySessionStatus01; break;
+                    case 0x02: msg = StringResources.Language.AllenBradleySessionStatus02; break;
+                    case 0x03: msg = StringResources.Language.AllenBradleySessionStatus03; break;
+                    case 0x64: msg = StringResources.Language.AllenBradleySessionStatus64; break;
+                    case 0x65: msg = StringResources.Language.AllenBradleySessionStatus65; break;
+                    case 0x69: msg = StringResources.Language.AllenBradleySessionStatus69; break;
+                    default: msg = StringResources.Language.UnknownError; break;
                 }
 
                 return new OperateResult( status, msg );
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return new OperateResult( ex.Message );
             }
+        }
+
+        #endregion
+
+        #region Object Override
+
+        /// <summary>
+        /// 返回表示当前对象的字符串
+        /// </summary>
+        /// <returns>字符串信息</returns>
+        public override string ToString( )
+        {
+            return $"AllenBradleyNet[{IpAddress}:{Port}]";
         }
 
         #endregion

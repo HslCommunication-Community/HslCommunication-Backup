@@ -386,10 +386,10 @@ namespace HslCommunication.Profinet.Melsec
             byte[] _PLCCommand = new byte[9];
             _PLCCommand[0] = 0x02;                                                       // STX
             _PLCCommand[1] = value ? (byte)0x37 : (byte)0x38;                            // Read
-            _PLCCommand[2] = MelsecHelper.BuildBytesFromData( startAddress )[2];         // 偏移地址
-            _PLCCommand[3] = MelsecHelper.BuildBytesFromData( startAddress )[3];
-            _PLCCommand[4] = MelsecHelper.BuildBytesFromData( startAddress )[0];
-            _PLCCommand[5] = MelsecHelper.BuildBytesFromData( startAddress )[1];
+            _PLCCommand[2] = SoftBasic.BuildAsciiBytesFrom( startAddress )[2];         // 偏移地址
+            _PLCCommand[3] = SoftBasic.BuildAsciiBytesFrom( startAddress )[3];
+            _PLCCommand[4] = SoftBasic.BuildAsciiBytesFrom( startAddress )[0];
+            _PLCCommand[5] = SoftBasic.BuildAsciiBytesFrom( startAddress )[1];
             _PLCCommand[6] = 0x03;                                                       // ETX
             MelsecHelper.FxCalculateCRC( _PLCCommand ).CopyTo( _PLCCommand, 7 );         // CRC
 
@@ -413,12 +413,12 @@ namespace HslCommunication.Profinet.Melsec
             byte[] _PLCCommand = new byte[11];
             _PLCCommand[0] = 0x02;                                                    // STX
             _PLCCommand[1] = 0x30;                                                    // Read
-            _PLCCommand[2] = MelsecHelper.BuildBytesFromData( startAddress )[0];      // 偏移地址
-            _PLCCommand[3] = MelsecHelper.BuildBytesFromData( startAddress )[1];
-            _PLCCommand[4] = MelsecHelper.BuildBytesFromData( startAddress )[2];
-            _PLCCommand[5] = MelsecHelper.BuildBytesFromData( startAddress )[3];
-            _PLCCommand[6] = MelsecHelper.BuildBytesFromData( (byte)length )[0];      // 读取长度
-            _PLCCommand[7] = MelsecHelper.BuildBytesFromData( (byte)length )[1];
+            _PLCCommand[2] = SoftBasic.BuildAsciiBytesFrom( startAddress )[0];      // 偏移地址
+            _PLCCommand[3] = SoftBasic.BuildAsciiBytesFrom( startAddress )[1];
+            _PLCCommand[4] = SoftBasic.BuildAsciiBytesFrom( startAddress )[2];
+            _PLCCommand[5] = SoftBasic.BuildAsciiBytesFrom( startAddress )[3];
+            _PLCCommand[6] = SoftBasic.BuildAsciiBytesFrom( (byte)length )[0];      // 读取长度
+            _PLCCommand[7] = SoftBasic.BuildAsciiBytesFrom( (byte)length )[1];
             _PLCCommand[8] = 0x03;                                                    // ETX
             MelsecHelper.FxCalculateCRC( _PLCCommand ).CopyTo( _PLCCommand, 9 );      // CRC
 
@@ -443,12 +443,12 @@ namespace HslCommunication.Profinet.Melsec
             byte[] _PLCCommand = new byte[11];
             _PLCCommand[0] = 0x02;                                                    // STX
             _PLCCommand[1] = 0x30;                                                    // Read
-            _PLCCommand[2] = MelsecHelper.BuildBytesFromData( startAddress )[0];      // 偏移地址
-            _PLCCommand[3] = MelsecHelper.BuildBytesFromData( startAddress )[1];
-            _PLCCommand[4] = MelsecHelper.BuildBytesFromData( startAddress )[2];
-            _PLCCommand[5] = MelsecHelper.BuildBytesFromData( startAddress )[3];
-            _PLCCommand[6] = MelsecHelper.BuildBytesFromData( (byte)length2 )[0];     // 读取长度
-            _PLCCommand[7] = MelsecHelper.BuildBytesFromData( (byte)length2 )[1];
+            _PLCCommand[2] = SoftBasic.BuildAsciiBytesFrom( startAddress )[0];      // 偏移地址
+            _PLCCommand[3] = SoftBasic.BuildAsciiBytesFrom( startAddress )[1];
+            _PLCCommand[4] = SoftBasic.BuildAsciiBytesFrom( startAddress )[2];
+            _PLCCommand[5] = SoftBasic.BuildAsciiBytesFrom( startAddress )[3];
+            _PLCCommand[6] = SoftBasic.BuildAsciiBytesFrom( (byte)length2 )[0];     // 读取长度
+            _PLCCommand[7] = SoftBasic.BuildAsciiBytesFrom( (byte)length2 )[1];
             _PLCCommand[8] = 0x03;                                                    // ETX
             MelsecHelper.FxCalculateCRC( _PLCCommand ).CopyTo( _PLCCommand, 9 );      // CRC
 
@@ -467,18 +467,18 @@ namespace HslCommunication.Profinet.Melsec
             if (!addressResult.IsSuccess) return OperateResult.CreateFailedResult<byte[]>( addressResult );
 
             // 字节数据转换成ASCII格式
-            if (value != null) value = MelsecHelper.BuildBytesFromData( value );
+            if (value != null) value = SoftBasic.BuildAsciiBytesFrom( value );
 
             ushort startAddress = addressResult.Content;
             byte[] _PLCCommand = new byte[11 + value.Length];
             _PLCCommand[0] = 0x02;                                                                    // STX
             _PLCCommand[1] = 0x31;                                                                    // Read
-            _PLCCommand[2] = MelsecHelper.BuildBytesFromData( startAddress )[0];                      // Offect Address
-            _PLCCommand[3] = MelsecHelper.BuildBytesFromData( startAddress )[1];
-            _PLCCommand[4] = MelsecHelper.BuildBytesFromData( startAddress )[2];
-            _PLCCommand[5] = MelsecHelper.BuildBytesFromData( startAddress )[3];
-            _PLCCommand[6] = MelsecHelper.BuildBytesFromData( (byte)(value.Length / 2) )[0];          // Read Length
-            _PLCCommand[7] = MelsecHelper.BuildBytesFromData( (byte)(value.Length / 2) )[1];
+            _PLCCommand[2] = SoftBasic.BuildAsciiBytesFrom( startAddress )[0];                      // Offect Address
+            _PLCCommand[3] = SoftBasic.BuildAsciiBytesFrom( startAddress )[1];
+            _PLCCommand[4] = SoftBasic.BuildAsciiBytesFrom( startAddress )[2];
+            _PLCCommand[5] = SoftBasic.BuildAsciiBytesFrom( startAddress )[3];
+            _PLCCommand[6] = SoftBasic.BuildAsciiBytesFrom( (byte)(value.Length / 2) )[0];          // Read Length
+            _PLCCommand[7] = SoftBasic.BuildAsciiBytesFrom( (byte)(value.Length / 2) )[1];
             Array.Copy( value, 0, _PLCCommand, 8, value.Length );
             _PLCCommand[_PLCCommand.Length - 3] = 0x03;                                               // ETX
             MelsecHelper.FxCalculateCRC( _PLCCommand ).CopyTo( _PLCCommand, _PLCCommand.Length - 2 ); // CRC

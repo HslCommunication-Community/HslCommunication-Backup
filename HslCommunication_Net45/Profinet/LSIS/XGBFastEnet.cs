@@ -13,6 +13,10 @@ namespace HslCommunication.Profinet.LSIS
     /// <summary>
     /// XGB Fast Enet I/F module supports open Ethernet. It provides network configuration that is to connect LSIS and other company PLC, PC on network
     /// </summary>
+    /// <remarks>
+    /// Address example likes the follow
+    /// [welcome to finish]
+    /// </remarks>
     public class XGBFastEnet : NetworkDeviceBase<LsisFastEnetMessage, RegularByteTransform>
     {
         #region Constractor
@@ -527,7 +531,7 @@ namespace HslCommunication.Profinet.LSIS
         /// <returns>字符串</returns>
         public override string ToString()
         {
-            return base.ToString();
+            return $"XGBFastEnet[{IpAddress}:{Port}]";
         }
 
         #endregion

@@ -67,6 +67,8 @@ namespace HslCommunication.Serial
             SP_ReadData.DataBits     = dataBits;    // 数据位
             SP_ReadData.StopBits     = stopBits;    // 停止位
             SP_ReadData.Parity       = parity;      // 奇偶校验
+            PortName                 = SP_ReadData.PortName;
+            BaudRate                 = SP_ReadData.BaudRate;
         }
 
         /// <summary>
@@ -79,13 +81,16 @@ namespace HslCommunication.Serial
             {
                 return;
             }
-            SP_ReadData.PortName = "COM5";
-            SP_ReadData.BaudRate = 9600;
-            SP_ReadData.DataBits = 8;
-            SP_ReadData.StopBits = StopBits.One;
-            SP_ReadData.Parity = Parity.None;
+            SP_ReadData.PortName      = "COM5";
+            SP_ReadData.BaudRate      = 9600;
+            SP_ReadData.DataBits      = 8;
+            SP_ReadData.StopBits      = StopBits.One;
+            SP_ReadData.Parity        = Parity.None;
 
             initi.Invoke( SP_ReadData );
+
+            PortName                  = SP_ReadData.PortName;
+            BaudRate                  = SP_ReadData.BaudRate;
         }
 
         /// <summary>
@@ -330,6 +335,16 @@ namespace HslCommunication.Serial
             get { return isClearCacheBeforeRead; }
             set { isClearCacheBeforeRead = value; }
         }
+
+        /// <summary>
+        /// 本连接对象的端口号名称
+        /// </summary>
+        public string PortName { get; private set; }
+
+        /// <summary>
+        /// 本连接对象的波特率
+        /// </summary>
+        public int BaudRate { get; private set; }
 
         #endregion
 

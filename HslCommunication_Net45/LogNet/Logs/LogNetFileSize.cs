@@ -26,34 +26,13 @@ namespace HslCommunication.LogNet
         {
             m_filePath = filePath;
             m_fileMaxSize = fileMaxSize;
-
-
             LogSaveMode = LogNetManagment.LogSaveModeByFileSize;
-
             m_filePath = CheckPathEndWithSprit(m_filePath);
         }
 
-
-
-
         #endregion
 
-
-
-
-
-
-        /// <summary>
-        /// 当前正在存储的文件名称
-        /// </summary>
-        private string m_fileName = string.Empty;
-
-        private string m_filePath = string.Empty;
-
-        private int m_fileMaxSize = 2 * 1024 * 1024; //2M
-
-        private int m_CurrentFileSize = 0;
-
+        #region LogNetBase Override
 
         /// <summary>
         /// 获取需要保存的日志文件
@@ -84,39 +63,9 @@ namespace HslCommunication.LogNet
             return m_fileName;
         }
 
+        #endregion
 
-
-        /// <summary>
-        /// 获取之前保存的日志文件
-        /// </summary>
-        /// <returns></returns>
-        private string GetLastAccessFileName()
-        {
-            foreach (var m in GetExistLogFileNames())
-            {
-                FileInfo fileInfo = new FileInfo(m);
-                if (fileInfo.Length < m_fileMaxSize)
-                {
-                    m_CurrentFileSize = (int)fileInfo.Length;
-                    return m;
-                }
-            }
-
-            //返回一个新的默认当前时间的日志名称
-            return GetDefaultFileName();
-        }
-
-
-        /// <summary>
-        /// 获取一个新的默认的文件名称
-        /// </summary>
-        /// <returns></returns>
-        private string GetDefaultFileName()
-        {
-            //返回一个新的默认当前时间的日志名称
-            return m_filePath + LogNetManagment.LogFileHeadString + DateTime.Now.ToString("yyyyMMddHHmmss") + ".txt";
-        }
-
+        #region Public Method
 
         /// <summary>
         /// 返回所有的日志文件
@@ -133,5 +82,63 @@ namespace HslCommunication.LogNet
                 return new string[] { };
             }
         }
+
+        #endregion
+
+        #region Private Method
+
+        /// <summary>
+        /// 获取之前保存的日志文件
+        /// </summary>
+        /// <returns></returns>
+        private string GetLastAccessFileName( )
+        {
+            foreach (var m in GetExistLogFileNames( ))
+            {
+                FileInfo fileInfo = new FileInfo( m );
+                if (fileInfo.Length < m_fileMaxSize)
+                {
+                    m_CurrentFileSize = (int)fileInfo.Length;
+                    return m;
+                }
+            }
+
+            //返回一个新的默认当前时间的日志名称
+            return GetDefaultFileName( );
+        }
+
+        /// <summary>
+        /// 获取一个新的默认的文件名称
+        /// </summary>
+        /// <returns></returns>
+        private string GetDefaultFileName( )
+        {
+            //返回一个新的默认当前时间的日志名称
+            return m_filePath + LogNetManagment.LogFileHeadString + DateTime.Now.ToString( "yyyyMMddHHmmss" ) + ".txt";
+        }
+
+        #endregion
+
+        #region Private Member
+
+        private string m_fileName = string.Empty;                    // 当前正在存储的文件名
+        private string m_filePath = string.Empty;                    // 存储文件的路径
+        private int m_fileMaxSize = 2 * 1024 * 1024; //2M
+        private int m_CurrentFileSize = 0;
+
+        #endregion
+
+        #region Object Override
+
+        /// <summary>
+        /// 返回表示当前对象的字符串
+        /// </summary>
+        /// <returns>字符串数据</returns>
+        public override string ToString( )
+        {
+            return $"LogNetFileSize[{m_fileMaxSize}]";
+        }
+
+        #endregion
     }
 }

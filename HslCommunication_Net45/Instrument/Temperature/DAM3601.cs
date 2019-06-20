@@ -105,7 +105,7 @@ namespace HslCommunication.Instrument.Temperature
         /// <returns>字符串</returns>
         public override string ToString( )
         {
-            return "DAM3601";
+            return $"DAM3601[{PortName}:{BaudRate}]";
         }
 
         #endregion

@@ -98,6 +98,19 @@ namespace HslCommunication.Profinet.Fuji
 
         #endregion
 
+        #region Object Override
+
+        /// <summary>
+        /// 返回表示当前对象的字符串
+        /// </summary>
+        /// <returns>字符串</returns>
+        public override string ToString( )
+        {
+            return $"FujiSPB[{PortName}:{BaudRate}]";
+        }
+
+        #endregion
+
         #region Static Helper
 
         private static string AnalysisIntegerAddress( int address )

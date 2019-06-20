@@ -33,6 +33,7 @@ namespace HslCommunication.Profinet.Siemens
 
         #endregion
 
+        #region Public Properties
 
         /// <summary>
         /// 西门子PLC的站号信息
@@ -51,6 +52,9 @@ namespace HslCommunication.Profinet.Siemens
             }
         }
 
+        #endregion
+
+        #region Read Write Override
 
         /// <summary>
         /// 从西门子的PLC中读取数据信息，地址为"M100","AI100","I0","Q0","V100","S100"等，详细请参照API文档
@@ -116,13 +120,14 @@ namespace HslCommunication.Profinet.Siemens
             if (read2.Content.Length < 21) return new OperateResult<bool[]>( read2.ErrorCode, "Failed: " + BasicFramework.SoftBasic.ByteToHexString( read2.Content, ' ' ) );
             if (read2.Content[17] != 0x00 || read2.Content[18] != 0x00) return new OperateResult<bool[]>( read2.Content[19], GetMsgFromStatus( read2.Content[18], read2.Content[19] ) );
             if (read2.Content[21] != 0xFF) return new OperateResult<bool[]>( read2.Content[21], GetMsgFromStatus( read2.Content[21] ) );
-            // 数据提取
 
+            // 数据提取
             byte[] buffer = new byte[read2.Content.Length - 27];
             if (read2.Content[21] == 0xFF && read2.Content[22] == 0x03)
             {
                 Array.Copy( read2.Content, 25, buffer, 0, buffer.Length );
             }
+
             return OperateResult.CreateSuccessResult( BasicFramework.SoftBasic.ByteToBoolArray( buffer, length ) );
         }
 
@@ -213,6 +218,8 @@ namespace HslCommunication.Profinet.Siemens
             return Write( address, new bool[] { value } );
         }
 
+        #endregion
+
         #region Byte Read Write
 
         /// <summary>
@@ -294,6 +301,19 @@ namespace HslCommunication.Profinet.Siemens
 
         private byte station = 0x02;            // PLC的站号信息
         private byte[] executeConfirm = new byte[] { 0x10, 0x02, 0x00, 0x5C, 0x5E, 0x16 };
+
+        #endregion
+
+        #region Object Override
+
+        /// <summary>
+        /// 返回表示当前对象的字符串
+        /// </summary>
+        /// <returns>字符串信息</returns>
+        public override string ToString( )
+        {
+            return $"SiemensPPI[{PortName}:{BaudRate}]";
+        }
 
         #endregion
 

@@ -27,8 +27,6 @@ namespace HslCommunication.Serial
 
         #region Virtual Method
 
-
-
         /**************************************************************************************************
          * 
          *    说明：子类中需要重写基础的读取和写入方法，来支持不同的数据访问规则
@@ -36,7 +34,6 @@ namespace HslCommunication.Serial
          *    此处没有将读写位纳入进来，因为各种设备的支持不尽相同，比较麻烦
          * 
          **************************************************************************************************/
-
 
         /// <summary>
         /// 从设备读取原始数据
@@ -50,7 +47,6 @@ namespace HslCommunication.Serial
             return new OperateResult<byte[]>( );
         }
 
-
         /// <summary>
         /// 将原始数据写入设备
         /// </summary>
@@ -62,7 +58,6 @@ namespace HslCommunication.Serial
         {
             return new OperateResult( );
         }
-
 
         #endregion
 
@@ -102,7 +97,6 @@ namespace HslCommunication.Serial
             get { return connectionId; }
             set { connectionId = value; }
         }
-
 
         #endregion
 
@@ -150,7 +144,6 @@ namespace HslCommunication.Serial
         {
             return Write( address, data.ToSource( ) );
         }
-
 
         #endregion
 
@@ -613,10 +606,8 @@ namespace HslCommunication.Serial
 
         #region Private Member
 
-
         private TTransform byteTransform;                // 数据变换的接口
         private string connectionId = string.Empty;      // 当前连接
-
 
         #endregion
 

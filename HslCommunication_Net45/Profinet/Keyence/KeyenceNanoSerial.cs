@@ -434,6 +434,19 @@ namespace HslCommunication.Profinet.Keyence
 
         #endregion
 
+        #region Object Override
+
+        /// <summary>
+        /// 返回表示当前对象的字符串
+        /// </summary>
+        /// <returns>字符串信息</returns>
+        public override string ToString( )
+        {
+            return $"KeyenceNanoSerial[{PortName}:{BaudRate}]";
+        }
+
+        #endregion
+
         #region Static Method Helper
 
         /// <summary>

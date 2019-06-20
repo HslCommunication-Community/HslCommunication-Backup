@@ -787,7 +787,7 @@ namespace HslCommunication.Profinet.Siemens
         /// <returns>字符串信息 -> String information</returns>
         public override string ToString()
         {
-            return $"SiemensS7Net[{IpAddress}:{Port}]";
+            return $"SiemensS7Net {CurrentPlc}[{IpAddress}:{Port}]";
         }
 
         #endregion

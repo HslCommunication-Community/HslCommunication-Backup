@@ -247,11 +247,19 @@ namespace HslCommunication.Robot.YASKAWA
 
         #region Public Method
 
+        /// <summary>
+        /// 读取机器人的报警信息
+        /// </summary>
+        /// <returns>原始的报警信息</returns>
         public OperateResult<string> ReadRALARM( )
         {
             return ReadByCommand( "RALARM", null );
         }
 
+        /// <summary>
+        /// 读取机器人的坐标数据信息
+        /// </summary>
+        /// <returns>原始的报警信息</returns>
         public OperateResult<string> ReadRPOSJ( )
         {
             return ReadByCommand( "RPOSJ", null );
@@ -268,7 +276,7 @@ namespace HslCommunication.Robot.YASKAWA
         /// <returns>字符串信息</returns>
         public override string ToString( )
         {
-            return base.ToString( );
+            return $"YRC1000TcpNet Robot[{IpAddress}:{Port}]";
         }
 
         #endregion

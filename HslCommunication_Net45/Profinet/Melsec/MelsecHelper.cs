@@ -1,4 +1,5 @@
-﻿using HslCommunication.Core.Address;
+﻿using HslCommunication.BasicFramework;
+using HslCommunication.Core.Address;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -128,10 +129,10 @@ namespace HslCommunication.Profinet.Melsec
             command[13] = MelsecHelper.BuildBytesFromAddress( addressData.AddressStart, addressData.McDataType )[3];
             command[14] = MelsecHelper.BuildBytesFromAddress( addressData.AddressStart, addressData.McDataType )[4];
             command[15] = MelsecHelper.BuildBytesFromAddress( addressData.AddressStart, addressData.McDataType )[5];
-            command[16] = MelsecHelper.BuildBytesFromData( addressData.Length )[0];                                             // 软元件点数
-            command[17] = MelsecHelper.BuildBytesFromData( addressData.Length )[1];
-            command[18] = MelsecHelper.BuildBytesFromData( addressData.Length )[2];
-            command[19] = MelsecHelper.BuildBytesFromData( addressData.Length )[3];
+            command[16] = SoftBasic.BuildAsciiBytesFrom( addressData.Length )[0];                                             // 软元件点数
+            command[17] = SoftBasic.BuildAsciiBytesFrom( addressData.Length )[1];
+            command[18] = SoftBasic.BuildAsciiBytesFrom( addressData.Length )[2];
+            command[19] = SoftBasic.BuildAsciiBytesFrom( addressData.Length )[3];
 
             return command;
         }
@@ -173,7 +174,7 @@ namespace HslCommunication.Profinet.Melsec
             byte[] buffer = new byte[value.Length * 2];
             for (int i = 0; i < value.Length / 2; i++)
             {
-                MelsecHelper.BuildBytesFromData( BitConverter.ToUInt16( value, i * 2 ) ).CopyTo( buffer, 4 * i );
+                SoftBasic.BuildAsciiBytesFrom( BitConverter.ToUInt16( value, i * 2 ) ).CopyTo( buffer, 4 * i );
             }
             value = buffer;
             
@@ -194,10 +195,10 @@ namespace HslCommunication.Profinet.Melsec
             command[13] = MelsecHelper.BuildBytesFromAddress( addressData.AddressStart, addressData.McDataType )[3];
             command[14] = MelsecHelper.BuildBytesFromAddress( addressData.AddressStart, addressData.McDataType )[4];
             command[15] = MelsecHelper.BuildBytesFromAddress( addressData.AddressStart, addressData.McDataType )[5];
-            command[16] = MelsecHelper.BuildBytesFromData( (ushort)(value.Length / 4) )[0];                              // 软元件点数
-            command[17] = MelsecHelper.BuildBytesFromData( (ushort)(value.Length / 4) )[1];
-            command[18] = MelsecHelper.BuildBytesFromData( (ushort)(value.Length / 4) )[2];
-            command[19] = MelsecHelper.BuildBytesFromData( (ushort)(value.Length / 4) )[3];
+            command[16] = SoftBasic.BuildAsciiBytesFrom( (ushort)(value.Length / 4) )[0];                              // 软元件点数
+            command[17] = SoftBasic.BuildAsciiBytesFrom( (ushort)(value.Length / 4) )[1];
+            command[18] = SoftBasic.BuildAsciiBytesFrom( (ushort)(value.Length / 4) )[2];
+            command[19] = SoftBasic.BuildAsciiBytesFrom( (ushort)(value.Length / 4) )[3];
             value.CopyTo( command, 20 );
 
             return command;
@@ -257,10 +258,10 @@ namespace HslCommunication.Profinet.Melsec
             command[13] = MelsecHelper.BuildBytesFromAddress( addressData.AddressStart, addressData.McDataType )[3];
             command[14] = MelsecHelper.BuildBytesFromAddress( addressData.AddressStart, addressData.McDataType )[4];
             command[15] = MelsecHelper.BuildBytesFromAddress( addressData.AddressStart, addressData.McDataType )[5];
-            command[16] = MelsecHelper.BuildBytesFromData( (ushort)(value.Length) )[0];              // 软元件点数
-            command[17] = MelsecHelper.BuildBytesFromData( (ushort)(value.Length) )[1];
-            command[18] = MelsecHelper.BuildBytesFromData( (ushort)(value.Length) )[2];
-            command[19] = MelsecHelper.BuildBytesFromData( (ushort)(value.Length) )[3];
+            command[16] = SoftBasic.BuildAsciiBytesFrom( (ushort)(value.Length) )[0];              // 软元件点数
+            command[17] = SoftBasic.BuildAsciiBytesFrom( (ushort)(value.Length) )[1];
+            command[18] = SoftBasic.BuildAsciiBytesFrom( (ushort)(value.Length) )[2];
+            command[19] = SoftBasic.BuildAsciiBytesFrom( (ushort)(value.Length) )[3];
             buffer.CopyTo( command, 20 );
 
             return command;
@@ -271,36 +272,6 @@ namespace HslCommunication.Profinet.Melsec
         #region Common Logic
 
         /// <summary>
-        /// 从字节构建一个ASCII格式的地址字节
-        /// </summary>
-        /// <param name="value">字节信息</param>
-        /// <returns>ASCII格式的地址</returns>
-        internal static byte[] BuildBytesFromData( byte value )
-        {
-            return Encoding.ASCII.GetBytes( value.ToString( "X2" ) );
-        }
-
-        /// <summary>
-        /// 从short数据构建一个ASCII格式地址字节
-        /// </summary>
-        /// <param name="value">short值</param>
-        /// <returns>ASCII格式的地址</returns>
-        internal static byte[] BuildBytesFromData( short value )
-        {
-            return Encoding.ASCII.GetBytes( value.ToString( "X4" ) );
-        }
-
-        /// <summary>
-        /// 从ushort数据构建一个ASCII格式地址字节
-        /// </summary>
-        /// <param name="value">ushort值</param>
-        /// <returns>ASCII格式的地址</returns>
-        internal static byte[] BuildBytesFromData( ushort value )
-        {
-            return Encoding.ASCII.GetBytes( value.ToString( "X4" ) );
-        }
-
-        /// <summary>
         /// 从三菱的地址中构建MC协议的6字节的ASCII格式的地址
         /// </summary>
         /// <param name="address">三菱地址</param>
@@ -309,22 +280,6 @@ namespace HslCommunication.Profinet.Melsec
         internal static byte[] BuildBytesFromAddress( int address, MelsecMcDataType type )
         {
             return Encoding.ASCII.GetBytes( address.ToString( type.FromBase == 10 ? "D6" : "X6" ) );
-        }
-
-
-        /// <summary>
-        /// 从字节数组构建一个ASCII格式的地址字节
-        /// </summary>
-        /// <param name="value">字节信息</param>
-        /// <returns>ASCII格式的地址</returns>
-        internal static byte[] BuildBytesFromData( byte[] value )
-        {
-            byte[] buffer = new byte[value.Length * 2];
-            for (int i = 0; i < value.Length; i++)
-            {
-                BuildBytesFromData( value[i] ).CopyTo( buffer, 2 * i );
-            }
-            return buffer;
         }
 
         /// <summary>
@@ -387,7 +342,7 @@ namespace HslCommunication.Profinet.Melsec
             {
                 sum += data[i];
             }
-            return BuildBytesFromData( (byte)sum );
+            return SoftBasic.BuildAsciiBytesFrom( (byte)sum );
         }
 
         /// <summary>

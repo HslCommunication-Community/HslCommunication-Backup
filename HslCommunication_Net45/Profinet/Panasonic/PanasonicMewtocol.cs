@@ -291,6 +291,19 @@ namespace HslCommunication.Profinet.Panasonic
 
         #endregion
 
+        #region Object Override
+
+        /// <summary>
+        /// 返回表示当前对象的字符串
+        /// </summary>
+        /// <returns>字符串信息</returns>
+        public override string ToString( )
+        {
+            return $"Panasonic Mewtocol[{PortName}:{BaudRate}]";
+        }
+
+        #endregion
+
         #region Bulid Read Command
 
         private static string CalculateCrc(StringBuilder sb )
@@ -639,6 +652,5 @@ namespace HslCommunication.Profinet.Panasonic
         
 
         #endregion
-
     }
 }
