@@ -964,6 +964,31 @@ namespace HslCommunication.ModBus
 
         #endregion
 
+        #region IDisposable Support
+
+        /// <summary>
+        /// 释放当前的对象
+        /// </summary>
+        /// <param name="disposing">是否托管对象</param>
+        protected override void Dispose( bool disposing )
+        {
+            if (disposing)
+            {
+                subcriptionHybirdLock?.Dispose( );
+                subscriptions?.Clear( );
+                coilBuffer?.Dispose( );
+                inputBuffer?.Dispose( );
+                registerBuffer?.Dispose( );
+                inputRegisterBuffer?.Dispose( );
+#if !NETSTANDARD2_0
+                serialPort?.Dispose( );
+#endif
+            }
+            base.Dispose( disposing );
+        }
+
+        #endregion
+
         #region Private Member
 
         private SoftBuffer coilBuffer;                // 线圈的数据池

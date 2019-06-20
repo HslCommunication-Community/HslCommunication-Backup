@@ -498,6 +498,27 @@ namespace HslCommunication.Profinet.Melsec
 
         #endregion
 
+        #region IDisposable Support
+
+        /// <summary>
+        /// 释放当前的对象
+        /// </summary>
+        /// <param name="disposing">是否托管对象</param>
+        protected override void Dispose( bool disposing )
+        {
+            if (disposing)
+            {
+                xBuffer?.Dispose( );
+                yBuffer?.Dispose( );
+                mBuffer?.Dispose( );
+                dBuffer?.Dispose( );
+                wBuffer?.Dispose( );
+            }
+            base.Dispose( disposing );
+        }
+
+        #endregion
+
         #region Private Member
 
         private SoftBuffer xBuffer;                    // x寄存器的数据池

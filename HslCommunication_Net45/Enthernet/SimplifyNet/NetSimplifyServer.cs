@@ -130,7 +130,7 @@ namespace HslCommunication.Enthernet
             session.WorkSocket = socket;
             try
             {
-                session.IpEndPoint = (System.Net.IPEndPoint)socket.RemoteEndPoint;
+                session.IpEndPoint = endPoint;
                 session.IpAddress = session.IpEndPoint.Address.ToString( );
             }
             catch (Exception ex)

@@ -487,6 +487,26 @@ namespace HslCommunication.Profinet.Siemens
 
         #endregion
 
+        #region IDisposable Support
+
+        /// <summary>
+        /// 释放当前的对象
+        /// </summary>
+        /// <param name="disposing">是否托管对象</param>
+        protected override void Dispose( bool disposing )
+        {
+            if (disposing)
+            {
+                inputBuffer?.Dispose( );
+                outputBuffer?.Dispose( );
+                memeryBuffer?.Dispose( );
+                dbBlockBuffer?.Dispose( );
+            }
+            base.Dispose( disposing );
+        }
+
+        #endregion
+
         #region Private Member
 
         private SoftBuffer inputBuffer;                // 输入寄存器的数据池

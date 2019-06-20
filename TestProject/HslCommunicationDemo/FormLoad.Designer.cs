@@ -1221,11 +1221,11 @@
             // 
             // groupBox17
             // 
-            this.groupBox17.Location = new System.Drawing.Point(968, 367);
+            this.groupBox17.Location = new System.Drawing.Point(968, 372);
             this.groupBox17.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.groupBox17.Name = "groupBox17";
             this.groupBox17.Padding = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.groupBox17.Size = new System.Drawing.Size(185, 320);
+            this.groupBox17.Size = new System.Drawing.Size(185, 315);
             this.groupBox17.TabIndex = 33;
             this.groupBox17.TabStop = false;
             this.groupBox17.Text = "Special Protocols(特殊协议)";
