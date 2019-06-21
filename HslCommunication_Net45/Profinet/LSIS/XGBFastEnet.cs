@@ -232,6 +232,7 @@ namespace HslCommunication.Profinet.LSIS
                 sb.Append("%");
                 char[] types = new char[] { 'P', 'M', 'L', 'K', 'F', 'T', 'C', 'D', 'S', 'Q', 'I', 'N', 'U', 'Z', 'R' };
                 bool exsist = false;
+              
                 if (isRead)
                 {
                     for (int i = 0; i < types.Length; i++)
@@ -240,6 +241,7 @@ namespace HslCommunication.Profinet.LSIS
                         {
                             sb.Append(types[i]);
                             sb.Append("B");
+                            
                             if (address[1] == 'B')
                             {
                                 sb.Append(int.Parse(address.Substring(2)));
@@ -251,6 +253,10 @@ namespace HslCommunication.Profinet.LSIS
                             else if (address[1] == 'D')
                             {
                                 sb.Append(int.Parse(address.Substring(2)) * 4);
+                            }
+                            else if (address[1] == 'L')
+                            {
+                                sb.Append(int.Parse(address.Substring(2)) * 8);
                             }
                             else
                             {
@@ -412,12 +418,13 @@ namespace HslCommunication.Profinet.LSIS
             switch (DataTypeResult.Content)
             {
                 case "Bit":
+                    command[2] = 0x00; break;
                 case "Byte":
                     command[2] = 0x01; break;
                 case "Word":
                     command[2] = 0x02; break;
-                case "DWord": command[2] = 0x04; break;
-                case "LWord": command[2] = 0x08; break;
+                case "DWord": command[2] = 0x03; break;
+                case "LWord": command[2] = 0x04; break;
                 case "Continuous": command[2] = 0x14; break;
                 default: break;
             }
