@@ -232,6 +232,7 @@ namespace HslCommunication.Profinet.LSIS
                 sb.Append("%");
                 char[] types = new char[] { 'P', 'M', 'L', 'K', 'F', 'T', 'C', 'D', 'S', 'Q', 'I', 'N', 'U', 'Z', 'R' };
                 bool exsist = false;
+                int baseAddress;
                 if (isRead)
                 {
                     for (int i = 0; i < types.Length; i++)
@@ -240,7 +241,12 @@ namespace HslCommunication.Profinet.LSIS
                         {
                             sb.Append(types[i]);
                             sb.Append("B");
-                            if (address[1] == 'B')
+                            if (address[1] == 'X')
+                            {
+                                baseAddress = ((int.Parse(address.Substring(2)) >= 16) ? (int.Parse(address.Substring(2)) / 16) : 0) * 2;
+                                sb.Append(baseAddress);
+                            }
+                            else if (address[1] == 'B')
                             {
                                 sb.Append(int.Parse(address.Substring(2)));
                             }
@@ -251,6 +257,10 @@ namespace HslCommunication.Profinet.LSIS
                             else if (address[1] == 'D')
                             {
                                 sb.Append(int.Parse(address.Substring(2)) * 4);
+                            }
+                            else if (address[1] == 'L')
+                            {
+                                sb.Append(int.Parse(address.Substring(2)) * 8);
                             }
                             else
                             {
