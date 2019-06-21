@@ -165,17 +165,17 @@ namespace HslCommunication.Profinet.LSIS
         /// <returns></returns>
         public OperateResult WriteCoil(string address, bool value)
         {
-           
-            return Write(address, new byte[] { (byte)(value==true ? 0x01 : 0x00), 0x00 });
+
+            return Write(address, new byte[] { (byte)(value == true ? 0x01 : 0x00), 0x00 });
         }
         #endregion
 
         #region Private Member
 
-        private byte[] PackCommand( byte[] coreCommand )
+        private byte[] PackCommand(byte[] coreCommand)
         {
             byte[] command = new byte[coreCommand.Length + 20];
-            Encoding.ASCII.GetBytes( CompanyID1 ).CopyTo( command, 0 );
+            Encoding.ASCII.GetBytes(CompanyID1).CopyTo(command, 0);
             switch (cpuInfo)
             {
                 case LSCpuInfo.XGK: command[12] = 0xA0; break;
@@ -186,7 +186,7 @@ namespace HslCommunication.Profinet.LSIS
                 default: break;
             }
             command[13] = 0x33;
-            BitConverter.GetBytes( (short)coreCommand.Length ).CopyTo( command, 16 );
+            BitConverter.GetBytes((short)coreCommand.Length).CopyTo(command, 16);
             command[18] = (byte)(baseNo * 16 + slotNo);
 
             int count = 0;
@@ -196,9 +196,9 @@ namespace HslCommunication.Profinet.LSIS
             }
             command[19] = (byte)count;
 
-            coreCommand.CopyTo( command, 20 );
+            coreCommand.CopyTo(command, 20);
 
-            string hex = SoftBasic.ByteToHexString( command, ' ' );
+            string hex = SoftBasic.ByteToHexString(command, ' ');
             return command;
         }
 
@@ -215,7 +215,7 @@ namespace HslCommunication.Profinet.LSIS
         #endregion
 
         #region Static Helper
-         
+
         /// <summary>
         /// AnalysisAddress
         /// </summary>
@@ -235,6 +235,7 @@ namespace HslCommunication.Profinet.LSIS
                 int baseAddress;
                 int LsBaseNumber = 0;
                 int LsSlotNumber = 0;
+                string fullAddress = address;
                 if (isRead)
                 {
                     for (int i = 0; i < types.Length; i++)
@@ -261,7 +262,7 @@ namespace HslCommunication.Profinet.LSIS
                             else if (address[1] == 'B')
                             {
 
-                              
+
                                 if (address.IndexOf(".") > 0)
                                 {
                                     string[] list = address.Split('.');
@@ -270,7 +271,7 @@ namespace HslCommunication.Profinet.LSIS
 
                                     for (int y = 0; y < list.Length; y++)
                                     {
-                                        if(list[y][0] == 'I'|| list[y][0] == 'Q' || list[y][0] == 'U')
+                                        if (list[y][0] == 'I' || list[y][0] == 'Q' || list[y][0] == 'U')
                                         {
                                             baseAddress = ((int.Parse($"{list[3]}") >= 2) ? (int.Parse($"{list[3]}") / 2) : 0) * 2;
                                             sb.Append(baseAddress);
@@ -278,15 +279,15 @@ namespace HslCommunication.Profinet.LSIS
                                         }
                                         else
                                         {
-                                           
+
                                             sb.Append(int.Parse($"{list[1]}"));
                                             break;
                                         }
                                     }
 
-                                  
+
                                 }
-                                else 
+                                else
                                 {
                                     sb.Append(int.Parse($"{address[2]}"));
                                 }
@@ -322,7 +323,7 @@ namespace HslCommunication.Profinet.LSIS
                                 {
                                     sb.Append(int.Parse($"{address[2]}") * 2);
                                 }
-                                 
+
                             }
                             else if (address[1] == 'D')
                             {
@@ -359,7 +360,7 @@ namespace HslCommunication.Profinet.LSIS
                                         string text3 = address.Substring(0, 1);
                                         address.Substring(1, 1);
                                         string text4 = address.Remove(0, 2);
-                                      
+
                                         switch (text3)
                                         {
                                             case "I":
@@ -370,7 +371,7 @@ namespace HslCommunication.Profinet.LSIS
                                                     {
                 '.'
                                                     }, 4);
-                                                    address =  text3 + "B" + array4[0] + "." + array4[1] + ".";
+                                                    fullAddress = text3 + "B" + array4[0] + "." + array4[1] + ".";
                                                     LsBaseNumber = int.Parse(array4[2]);
                                                     LsSlotNumber = int.Parse(array4[3]);
                                                     break;
@@ -381,20 +382,20 @@ namespace HslCommunication.Profinet.LSIS
                                                     {
                 '.'
                                                     }, 2);
-                                                    address =  text3 + "B";
+                                                    fullAddress = text3 + "B";
                                                     LsBaseNumber = int.Parse(array3[0]);
                                                     LsSlotNumber = int.Parse(array3[1]);
                                                     break;
                                                 }
                                         }
-                                        address = $"{address}{(LsBaseNumber * 8 + LsSlotNumber) / 8}.{LsSlotNumber % 8}";
-                                        sb.Append(address);
+                                        fullAddress = $"{fullAddress}{(LsBaseNumber * 8 + LsSlotNumber) / 8}.{LsSlotNumber % 8}";
+                                        sb.Append(fullAddress);
                                     }
                                     else
                                     {
-                                      sb.Append(address);
+                                        sb.Append(address);
                                     }
-                                        
+
                                     exsist = true;
                                     break;
                                 }
@@ -406,8 +407,8 @@ namespace HslCommunication.Profinet.LSIS
                                         string text = address.Substring(0, 1);
                                         address.Substring(1, 1);
                                         string text2 = address.Remove(0, 2);
-                                        
-                                       
+
+
                                         switch (text)
                                         {
                                             case "I":
@@ -418,7 +419,7 @@ namespace HslCommunication.Profinet.LSIS
                                                     {
                 '.'
                                                     }, 4);
-                                                    address = "%" + text + "B" + array2[0] + "." + array2[1] + ".";
+                                                    fullAddress = "%" + text + "B" + array2[0] + "." + array2[1] + ".";
                                                     LsBaseNumber = int.Parse(array2[2]);
                                                     LsSlotNumber = int.Parse(array2[3]);
                                                     break;
@@ -429,19 +430,19 @@ namespace HslCommunication.Profinet.LSIS
                                                     {
                 '.'
                                                     }, 2);
-                                                    address = "%" + text + "B";
+                                                    fullAddress = "%" + text + "B";
                                                     LsBaseNumber = int.Parse(array[0]);
                                                     LsSlotNumber = int.Parse(array[1]);
                                                     break;
                                                 }
                                         }
-                                        address = $"{address}{(LsBaseNumber * 16 + LsSlotNumber) / 8}.{LsSlotNumber % 8}";
+                                        fullAddress = $"{fullAddress}{(LsBaseNumber * 16 + LsSlotNumber) / 8}.{LsSlotNumber % 8}";
                                     }
                                     else
                                     {
-                                  sb.Append(address);
+                                        sb.Append(fullAddress);
                                     }
-                                       
+
                                     exsist = true;
                                     break;
                                 }
@@ -466,7 +467,7 @@ namespace HslCommunication.Profinet.LSIS
                             }
                         }
                     }
-                   
+
                 }
                 if (!exsist) throw new Exception(StringResources.Language.NotSupportedDataType);
             }
@@ -488,13 +489,13 @@ namespace HslCommunication.Profinet.LSIS
         /// </summary>
         /// <param name="address"></param>
         /// <returns></returns>
-        public  static OperateResult<string> GetDataTypeToAddress(string address)
+        public static OperateResult<string> GetDataTypeToAddress(string address)
         {
             string lSDataType = string.Empty; ;
             try
             {
 
-                char[] types = new char[] { 'P', 'M', 'L', 'K', 'F', 'T', 'C', 'D', 'S', 'Q', 'I','R' };
+                char[] types = new char[] { 'P', 'M', 'L', 'K', 'F', 'T', 'C', 'D', 'S', 'Q', 'I', 'R' };
                 bool exsist = false;
 
                 for (int i = 0; i < types.Length; i++)
