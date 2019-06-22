@@ -245,10 +245,10 @@ namespace HslCommunication.Profinet.LSIS
                             sb.Append(types[i]);
                             sb.Append("B");
 
-                            if (address[1] == 'X')
+                            if (address[1] == 'X')//Bit
                             {
 
-                                if (address.IndexOf(".") > 1)
+                                if (address.IndexOf(".") > 1) //MX0.0
                                 {
                                     string[] list = address.Split('.');
                                     baseAddress = ((int.Parse($"{list[2]}") >= 16) ? (int.Parse($"{list[2]}") / 16) : 0) * 2;
@@ -259,19 +259,16 @@ namespace HslCommunication.Profinet.LSIS
                                     sb.Append(int.Parse($"{address[2]}"));
                                 }
                             }
-                            else if (address[1] == 'B')
+                            else if (address[1] == 'B')//BitOnByte
                             {
 
 
                                 if (address.IndexOf(".") > 0)
                                 {
                                     string[] list = address.Split('.');
-
-
-
                                     for (int y = 0; y < list.Length; y++)
                                     {
-                                        if (list[y][0] == 'I' || list[y][0] == 'Q' || list[y][0] == 'U')
+                                        if (list[y][0] == 'I' || list[y][0] == 'Q' || list[y][0] == 'U') //IB0.0.0.1
                                         {
                                             baseAddress = ((int.Parse($"{list[3]}") >= 2) ? (int.Parse($"{list[3]}") / 2) : 0) * 2;
                                             sb.Append(baseAddress);
@@ -280,7 +277,7 @@ namespace HslCommunication.Profinet.LSIS
                                         else
                                         {
 
-                                            sb.Append(int.Parse($"{list[1]}"));
+                                            sb.Append(int.Parse($"{list[1]}")); //MB0.0
                                             break;
                                         }
                                     }
@@ -295,15 +292,12 @@ namespace HslCommunication.Profinet.LSIS
                             }
                             else if (address[1] == 'W')
                             {
-                                if (address.IndexOf(".") > 0)
+                                if (address.IndexOf(".") > 0)//BitOnWord
                                 {
                                     string[] list = address.Split('.');
-
-
-
                                     for (int y = 0; y < list.Length; y++)
                                     {
-                                        if (list[y][0] == 'I' || list[y][0] == 'Q' || list[y][0] == 'U')
+                                        if (list[y][0] == 'I' || list[y][0] == 'Q' || list[y][0] == 'U')//IW0.0.0.1
                                         {
                                             baseAddress = ((int.Parse($"{list[3]}") >= 2) ? (int.Parse($"{list[3]}") / 2) : 0) * 2;
                                             sb.Append(baseAddress);
@@ -312,7 +306,7 @@ namespace HslCommunication.Profinet.LSIS
                                         else
                                         {
 
-                                            sb.Append(int.Parse($"{list[1]}") * 2);
+                                            sb.Append(int.Parse($"{list[1]}") * 2);//MW0.0
                                             break;
                                         }
                                     }
@@ -321,7 +315,7 @@ namespace HslCommunication.Profinet.LSIS
                                 }
                                 else
                                 {
-                                    sb.Append(int.Parse($"{address[2]}") * 2);
+                                    sb.Append(int.Parse($"{address[2]}") * 2);//MW0
                                 }
 
                             }
@@ -355,7 +349,7 @@ namespace HslCommunication.Profinet.LSIS
 
                                 if (address[1] == 'B')
                                 {
-                                    if (address.IndexOf(".") > 0)
+                                    if (address.IndexOf(".") > 0)//BitOnByte
                                     {
                                         string text3 = address.Substring(0, 1);
                                         address.Substring(1, 1);
@@ -401,7 +395,7 @@ namespace HslCommunication.Profinet.LSIS
                                 }
                                 else if (address[1] == 'W')
                                 {
-                                    if (address.IndexOf(".") > 0)
+                                    if (address.IndexOf(".") > 0)//BitOnWord
                                     {
 
                                         string text = address.Substring(0, 1);
@@ -419,7 +413,7 @@ namespace HslCommunication.Profinet.LSIS
                                                     {
                 '.'
                                                     }, 4);
-                                                    fullAddress = "%" + text + "B" + array2[0] + "." + array2[1] + ".";
+                                                    fullAddress = text + "B" + array2[0] + "." + array2[1] + ".";
                                                     LsBaseNumber = int.Parse(array2[2]);
                                                     LsSlotNumber = int.Parse(array2[3]);
                                                     break;
@@ -430,7 +424,7 @@ namespace HslCommunication.Profinet.LSIS
                                                     {
                 '.'
                                                     }, 2);
-                                                    fullAddress = "%" + text + "B";
+                                                    fullAddress = text + "B";
                                                     LsBaseNumber = int.Parse(array[0]);
                                                     LsSlotNumber = int.Parse(array[1]);
                                                     break;
