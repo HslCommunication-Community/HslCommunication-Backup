@@ -125,6 +125,7 @@
             this.groupBox16 = new System.Windows.Forms.GroupBox();
             this.button62 = new System.Windows.Forms.Button();
             this.groupBox17 = new System.Windows.Forms.GroupBox();
+            this.button64 = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -142,6 +143,7 @@
             this.groupBox14.SuspendLayout();
             this.groupBox15.SuspendLayout();
             this.groupBox16.SuspendLayout();
+            this.groupBox17.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupBox1
@@ -1221,6 +1223,7 @@
             // 
             // groupBox17
             // 
+            this.groupBox17.Controls.Add(this.button64);
             this.groupBox17.Location = new System.Drawing.Point(968, 372);
             this.groupBox17.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.groupBox17.Name = "groupBox17";
@@ -1229,6 +1232,17 @@
             this.groupBox17.TabIndex = 33;
             this.groupBox17.TabStop = false;
             this.groupBox17.Text = "Special Protocols(特殊协议)";
+            // 
+            // button64
+            // 
+            this.button64.Location = new System.Drawing.Point(19, 24);
+            this.button64.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.button64.Name = "button64";
+            this.button64.Size = new System.Drawing.Size(150, 32);
+            this.button64.TabIndex = 1;
+            this.button64.Text = "Open Protocol";
+            this.button64.UseVisualStyleBackColor = true;
+            this.button64.Click += new System.EventHandler(this.Button64_Click);
             // 
             // FormLoad
             // 
@@ -1282,6 +1296,7 @@
             this.groupBox14.ResumeLayout(false);
             this.groupBox15.ResumeLayout(false);
             this.groupBox16.ResumeLayout(false);
+            this.groupBox17.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1386,6 +1401,7 @@
         private System.Windows.Forms.GroupBox groupBox16;
         private System.Windows.Forms.Button button62;
         private System.Windows.Forms.GroupBox groupBox17;
+        private System.Windows.Forms.Button button64;
     }
 }
 

@@ -760,13 +760,24 @@ namespace HslCommunication
     ///             <item>西门子的SiemensS7Net类当读取PLC配置长度的DB块数据时，将提示错误信息。</item>
     ///         </list>
     ///     </revision>
-    ///     <revision date="2019-8-1" version="8.0.0" author="Richard.Hu">
+    ///     <revision date="2019-6-22 " version="7.0.0" author="Richard.Hu">
     ///         <list type="bullet">
-    ///             <item>新增安川机器人通信类。</item>
-    ///             <item>新增所有PLC地址类信息，用于快速集成扩展。</item>
+    ///             <item>新增安川机器人通信类，未测试。</item>
     ///             <item>西门子的多地址读取的长度不再限制为19个，而是无限制个。</item>
     ///             <item>NetworkDoubleBase: 实现IDispose接口，方便手动释放资源。</item>
     ///             <item>SerialBase: 实现IDispose接口，方便手动释放资源。</item>
+    ///             <item>NetSimplifyClient:新增一个async...await方法。</item>
+    ///             <item>NetSimplifyClient:新增读取字符串数组。</item>
+    ///             <item>ModbusServer:新增支持账户密码登录，用于构建安全的服务器，仅支持hsl组件的modbus安全访问。</item>
+    ///             <item>NetSimplifyServer:新增支持账户密码登录。</item>
+    ///             <item>新增永宏PLC的编程口协议。</item>
+    ///             <item>新增富士PLC的串口通信，未测试。</item>
+    ///             <item>新增欧姆龙PLC的CIP协议通讯。</item>
+    ///             <item>初步添加OpenProtocol协议，还未完成，为测试。</item>
+    ///             <item>MelsecMcNet:字单位的批量读取长度突破960长度的限制，支持读取任意长度。</item>
+    ///             <item>MelsecMcAsciiNet:字单位的批量读取长度突破480长度的限制，支持读取任意长度。</item>
+    ///             <item>AllenBradleyNet:读取地址优化，支持读取数组任意起始位置，任意长度，支持结构体嵌套读取。</item>
+    ///             <item>其他大量的代码细节优化。</item>
     ///         </list>
     ///     </revision>
     /// </revisionHistory>

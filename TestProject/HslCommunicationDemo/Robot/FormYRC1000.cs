@@ -120,7 +120,6 @@ namespace HslCommunicationDemo
             
             YRC1000Tcp?.ConnectClose( );
             YRC1000Tcp = new YRC1000TcpNet( textBox1.Text, port );
-            YRC1000Tcp.ConnectClose( );
 
             try
             {
