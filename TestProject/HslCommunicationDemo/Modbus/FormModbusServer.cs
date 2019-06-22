@@ -623,7 +623,7 @@ namespace HslCommunicationDemo
 
 
         private string timerAddress = string.Empty;
-        private ushort timerValue = 0;
+        private long timerValue = 0;
         private System.Windows.Forms.Timer timerWrite = null;
         private void button10_Click( object sender, EventArgs e )
         {
@@ -638,7 +638,8 @@ namespace HslCommunicationDemo
 
         private void TimerWrite_Tick( object sender, EventArgs e )
         {
-            busTcpServer.Write( timerAddress, timerValue );
+            ushort value = (ushort)(Math.Sin( 2 * Math.PI * timerValue / 100 ) * 100 + 100);
+            busTcpServer.Write( timerAddress, value );
             timerValue++;
         }
 

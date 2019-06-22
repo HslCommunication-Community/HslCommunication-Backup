@@ -479,7 +479,7 @@ namespace HslCommunicationDemo
 
         private Random random = new Random( );
         private string timerAddress = string.Empty;
-        private short timerValue = 100;
+        private long timerValue = 0;
         private System.Windows.Forms.Timer timerWrite = null;
         private void button10_Click( object sender, EventArgs e )
         {
@@ -494,10 +494,9 @@ namespace HslCommunicationDemo
 
         private void TimerWrite_Tick( object sender, EventArgs e )
         {
-            mcNetServer.Write( timerAddress, timerValue );
-            timerValue = (short)(timerValue + random.Next( 11 ) - 5);
-            if (timerValue < 10) timerValue = 100;
-            if (timerValue > 200) timerValue = 100;
+            ushort value = (ushort)(Math.Sin( 2 * Math.PI * timerValue / 100 ) * 100 + 100);
+            mcNetServer.Write( timerAddress, value );
+            timerValue++;
         }
 
     }

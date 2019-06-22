@@ -37,6 +37,7 @@ namespace HslCommunicationDemo
                 button4.Text = "Connecting Alien client";
                 groupBox1.Text = "Single Data Read test";
                 label6.Text = "Adderss:";
+                label14.Text = "Com:";
                 label7.Text = "Result";
                 button_read_bool.Text = "Read Bit";
                 button6.Text = "r-byte";
@@ -66,6 +67,7 @@ namespace HslCommunicationDemo
                 button15.Text = "w-double";
                 button14.Text = "w-string";
 
+                button5.Text = "start com";
                 button8.Text = "Load";
                 button9.Text = "Save";
                 button10.Text = "Timed writing";
