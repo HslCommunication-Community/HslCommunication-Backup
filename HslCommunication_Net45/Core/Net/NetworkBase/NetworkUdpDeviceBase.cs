@@ -137,6 +137,33 @@ namespace HslCommunication.Core.Net
 
         #endregion
 
+        #region Reflection Read
+
+        /// <summary>
+        /// 从设备里读取支持Hsl特性的数据内容，该特性为<see cref="HslAddressAttribute"/>，详细参考论坛的操作说明。
+        /// </summary>
+        /// <typeparam name="T">自定义的数据类型对象</typeparam>
+        /// <returns>包含是否成功的结果对象</returns>
+        public OperateResult<T> Read<T>( ) where T : class, new()
+        {
+            return HslReflectionHelper.Read<T>( this );
+        }
+
+        /// <summary>
+        /// 从设备里读取支持Hsl特性的数据内容，该特性为<see cref="HslAddressAttribute"/>，详细参考论坛的操作说明。
+        /// </summary>
+        /// <typeparam name="T">自定义的数据类型对象</typeparam>
+        /// <returns>包含是否成功的结果对象</returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        public OperateResult Write<T>( T data ) where T : class, new()
+        {
+            if (data == null) throw new ArgumentNullException( nameof( data ) );
+
+            return HslReflectionHelper.Write<T>( data, this );
+        }
+
+        #endregion
+
         #region Read Support
 
         /// <summary>

@@ -170,6 +170,22 @@ namespace HslCommunication_Net45.Test.Profinet.Siemens
                 Assert.IsTrue( shortValues[i] == shortTmp1 );
             }
 
+            // 自定义类的测试
+            DataTest test = new DataTest( )
+            {
+                Data1 = 425,
+                Data2 = 123.53f,
+                Data3 = new byte[] { 2, 4, 6, 8, 100, 123 }
+            };
+            Assert.IsTrue( plc.Write( test ).IsSuccess );
+            Assert.IsTrue( plc.ReadInt16( "M100" ).Content == 425 );
+            Assert.IsTrue( plc.ReadFloat( "M200" ).Content == 123.53f );
+            Assert.IsTrue( SoftBasic.IsTwoBytesEquel( plc.Read( "M300", 6 ).Content, test.Data3 ) );
+            DataTest test1 = plc.Read<DataTest>( ).Content;
+            Assert.IsTrue( test1.Data1 == test.Data1 );
+            Assert.IsTrue( test1.Data2 == test.Data2 );
+            Assert.IsTrue( SoftBasic.IsTwoBytesEquel( test1.Data3, test.Data3 ) );
+
             // 大数据写入测试
             Assert.IsTrue( plc.Write( "M100", (short)12345 ).IsSuccess );
             Assert.IsTrue( plc.Write( "M500", (short)12345 ).IsSuccess );
@@ -183,5 +199,16 @@ namespace HslCommunication_Net45.Test.Profinet.Siemens
             plc.ConnectClose( );
         }
 
+        private class DataTest
+        {
+            [HslAddress( "M100" )]
+            public short Data1 { get; set; }
+
+            [HslAddress( "M200" )]
+            public float Data2 { get; set; }
+
+            [HslAddress( "M300", 6 )]
+            public byte[] Data3 { get; set; }
+        }
     }
 }

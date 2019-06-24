@@ -180,7 +180,6 @@ namespace HslCommunicationDemo
 
         #region 单数据读取测试
 
-
         private void button_read_bool_Click( object sender, EventArgs e )
         {
             // 读取bool变量

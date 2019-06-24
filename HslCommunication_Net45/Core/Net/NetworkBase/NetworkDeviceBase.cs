@@ -16,7 +16,7 @@ namespace HslCommunication.Core.Net
     /// <typeparam name="TNetMessage">指定了消息的解析规则</typeparam>
     /// <typeparam name="TTransform">指定了数据转换的规则</typeparam>
     /// <remarks>需要继承实现采用使用。</remarks>
-    public class NetworkDeviceBase<TNetMessage, TTransform> : NetworkDoubleBase<TNetMessage, TTransform> , IReadWriteNet where TNetMessage : INetMessage, new() where TTransform : IByteTransform, new()
+    public class NetworkDeviceBase<TNetMessage, TTransform> : NetworkDoubleBase<TNetMessage, TTransform>, IReadWriteNet where TNetMessage : INetMessage, new() where TTransform : IByteTransform, new()
     {
         #region Virtual Method
 
@@ -129,6 +129,33 @@ namespace HslCommunication.Core.Net
 
         #endregion
 
+        #region Reflection Read
+
+        /// <summary>
+        /// 从设备里读取支持Hsl特性的数据内容，该特性为<see cref="HslAddressAttribute"/>，详细参考论坛的操作说明。
+        /// </summary>
+        /// <typeparam name="T">自定义的数据类型对象</typeparam>
+        /// <returns>包含是否成功的结果对象</returns>
+        public OperateResult<T> Read<T>( ) where T : class, new()
+        {
+            return HslReflectionHelper.Read<T>( this );
+        }
+
+        /// <summary>
+        /// 从设备里读取支持Hsl特性的数据内容，该特性为<see cref="HslAddressAttribute"/>，详细参考论坛的操作说明。
+        /// </summary>
+        /// <typeparam name="T">自定义的数据类型对象</typeparam>
+        /// <returns>包含是否成功的结果对象</returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        public OperateResult Write<T>( T data ) where T : class, new()
+        {
+            if (data == null) throw new ArgumentNullException( nameof( data ) );
+
+            return HslReflectionHelper.Write<T>( data, this );
+        }
+
+        #endregion
+
         #region Read Support
 
         /// <summary>
@@ -205,7 +232,7 @@ namespace HslCommunication.Core.Net
         {
             return ByteTransformHelper.GetResultFromArray( ReadInt32( address, 1 ) );
         }
-        
+
         /// <summary>
         /// 读取设备的int类型的数组
         /// </summary>
@@ -220,7 +247,7 @@ namespace HslCommunication.Core.Net
         {
             return ByteTransformHelper.GetResultFromBytes( Read( address, (ushort)(length * WordLength * 2) ), m => ByteTransform.TransInt32( m, 0, length ) );
         }
-        
+
         /// <summary>
         /// 读取设备的uint类型的数据
         /// </summary>
@@ -234,7 +261,7 @@ namespace HslCommunication.Core.Net
         {
             return ByteTransformHelper.GetResultFromArray( ReadUInt32( address, 1 ) );
         }
-        
+
         /// <summary>
         /// 读取设备的uint类型的数组
         /// </summary>
@@ -337,7 +364,7 @@ namespace HslCommunication.Core.Net
         {
             return ByteTransformHelper.GetResultFromBytes( Read( address, (ushort)(length * WordLength * 4) ), m => ByteTransform.TransUInt64( m, 0, length ) );
         }
-        
+
         /// <summary>
         /// 读取设备的double类型的数据
         /// </summary>
@@ -1450,7 +1477,7 @@ namespace HslCommunication.Core.Net
         /// <returns>字符串数据</returns>
         public override string ToString( )
         {
-            return $"NetworkDeviceBase<{typeof(TNetMessage)}, {typeof(TTransform)}>[{IpAddress}:{Port}]";
+            return $"NetworkDeviceBase<{typeof( TNetMessage )}, {typeof( TTransform )}>[{IpAddress}:{Port}]";
         }
 
         #endregion

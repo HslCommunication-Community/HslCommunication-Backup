@@ -370,6 +370,12 @@
     <Compile Include="..\HslCommunication_Net45\Core\Net\StateOne\StateOneBase.cs">
       <Link>Core\Net\StateOne\StateOneBase.cs</Link>
     </Compile>
+    <Compile Include="..\HslCommunication_Net45\Core\Reflection\HslAddressAttribute.cs">
+      <Link>Core\Reflection\HslAddressAttribute.cs</Link>
+    </Compile>
+    <Compile Include="..\HslCommunication_Net45\Core\Reflection\HslReflectionHelper.cs">
+      <Link>Core\Reflection\HslReflectionHelper.cs</Link>
+    </Compile>
     <Compile Include="..\HslCommunication_Net45\Core\Security\Security.cs">
       <Link>Core\Security\Security.cs</Link>
     </Compile>

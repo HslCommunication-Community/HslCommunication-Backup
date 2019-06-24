@@ -93,6 +93,8 @@
     <Compile Include="..\HslCommunication_Net45\Core\Net\StateOne\FileStateObject.cs" Link="Core\Net\StateOne\FileStateObject.cs" />
     <Compile Include="..\HslCommunication_Net45\Core\Net\StateOne\StateObject.cs" Link="Core\Net\StateOne\StateObject.cs" />
     <Compile Include="..\HslCommunication_Net45\Core\Net\StateOne\StateOneBase.cs" Link="Core\Net\StateOne\StateOneBase.cs" />
+    <Compile Include="..\HslCommunication_Net45\Core\Reflection\HslAddressAttribute.cs" Link="Core\Reflection\HslAddressAttribute.cs" />
+    <Compile Include="..\HslCommunication_Net45\Core\Reflection\HslReflectionHelper.cs" Link="Core\Reflection\HslReflectionHelper.cs" />
     <Compile Include="..\HslCommunication_Net45\Core\Security\Security.cs" Link="Core\Security\Security.cs" />
     <Compile Include="..\HslCommunication_Net45\Core\Thread\ThreadLock.cs" Link="Core\Thread\ThreadLock.cs" />
     <Compile Include="..\HslCommunication_Net45\Core\Transfer\ByteTransformBase.cs" Link="Core\Transfer\ByteTransformBase.cs" />
@@ -197,6 +199,7 @@
     <Folder Include="Core\IMessage\" />
     <Folder Include="Core\Net\NetworkBase\" />
     <Folder Include="Core\Net\StateOne\" />
+    <Folder Include="Core\Reflection\" />
     <Folder Include="Core\Security\" />
     <Folder Include="Core\Thread\" />
     <Folder Include="Core\Transfer\" />

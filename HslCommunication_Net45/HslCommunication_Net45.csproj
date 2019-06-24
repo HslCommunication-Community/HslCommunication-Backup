@@ -219,6 +219,8 @@
     <Compile Include="Core\Net\StateOne\FileStateObject.cs" />
     <Compile Include="Core\Net\StateOne\StateObject.cs" />
     <Compile Include="Core\Net\StateOne\StateOneBase.cs" />
+    <Compile Include="Core\Reflection\HslAddressAttribute.cs" />
+    <Compile Include="Core\Reflection\HslReflectionHelper.cs" />
     <Compile Include="Core\Security\Security.cs" />
     <Compile Include="Core\Thread\ThreadLock.cs" />
     <Compile Include="Core\Transfer\ByteTransformBase.cs" />
