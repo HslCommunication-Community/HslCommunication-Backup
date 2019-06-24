@@ -163,11 +163,17 @@ namespace HslCommunication.Core
         /// <returns>带有成功标识的自定义类型数据</returns>
         OperateResult<T> ReadCustomer<T>( string address ) where T : IDataTransfer, new();
 
+        /// <summary>
+        /// 从设备里读取支持Hsl特性的数据内容，该特性为<see cref="HslAddressAttribute"/>，详细参考论坛的操作说明。
+        /// </summary>
+        /// <typeparam name="T">自定义的数据类型对象</typeparam>
+        /// <returns>包含是否成功的结果对象</returns>
+        OperateResult<T> Read<T>( ) where T : class, new();
 
         #endregion
 
-        #region Write Support
-        
+            #region Write Support
+
         /// <summary>
         /// 写入byte数组数据
         /// </summary>
@@ -185,12 +191,28 @@ namespace HslCommunication.Core
         OperateResult Write( string address, short value );
 
         /// <summary>
-        /// 写入short数据
+        /// 写入short数组
         /// </summary>
         /// <param name="address">起始地址</param>
         /// <param name="values">写入值</param>
         /// <returns>带有成功标识的结果类对象</returns>
         OperateResult Write( string address, short[] values );
+
+        /// <summary>
+        /// 写入ushort数据
+        /// </summary>
+        /// <param name="address">起始地址</param>
+        /// <param name="value">写入值</param>
+        /// <returns>带有成功标识的结果类对象</returns>
+        OperateResult Write( string address, ushort value );
+
+        /// <summary>
+        /// 写入ushort数组
+        /// </summary>
+        /// <param name="address">起始地址</param>
+        /// <param name="values">写入值</param>
+        /// <returns>带有成功标识的结果类对象</returns>
+        OperateResult Write( string address, ushort[] values );
 
         /// <summary>
         /// 写入int数据
@@ -209,6 +231,22 @@ namespace HslCommunication.Core
         OperateResult Write( string address, int[] values );
 
         /// <summary>
+        /// 写入uint数据
+        /// </summary>
+        /// <param name="address">起始地址</param>
+        /// <param name="value">写入值</param>
+        /// <returns>带有成功标识的结果类对象</returns>
+        OperateResult Write( string address, uint value );
+
+        /// <summary>
+        /// 写入uint[]数组
+        /// </summary>
+        /// <param name="address">起始地址</param>
+        /// <param name="values">写入值</param>
+        /// <returns>带有成功标识的结果类对象</returns>
+        OperateResult Write( string address, uint[] values );
+
+        /// <summary>
         /// 写入long数据
         /// </summary>
         /// <param name="address">起始地址</param>
@@ -223,6 +261,22 @@ namespace HslCommunication.Core
         /// <param name="values">写入值</param>
         /// <returns>带有成功标识的结果类对象</returns>
         OperateResult Write( string address, long[] values );
+
+        /// <summary>
+        /// 写入ulong数据
+        /// </summary>
+        /// <param name="address">起始地址</param>
+        /// <param name="value">写入值</param>
+        /// <returns>带有成功标识的结果类对象</returns>
+        OperateResult Write( string address, ulong value );
+
+        /// <summary>
+        /// 写入ulong数组
+        /// </summary>
+        /// <param name="address">起始地址</param>
+        /// <param name="values">写入值</param>
+        /// <returns>带有成功标识的结果类对象</returns>
+        OperateResult Write( string address, ulong[] values );
 
         /// <summary>
         /// 写入float数据
@@ -281,6 +335,14 @@ namespace HslCommunication.Core
         /// <param name="value">写入值</param>
         /// <returns>带有成功标识的结果类对象</returns>
         OperateResult WriteCustomer<T>( string address, T value ) where T : IDataTransfer, new();
+
+        /// <summary>
+        /// 从设备里读取支持Hsl特性的数据内容，该特性为<see cref="HslAddressAttribute"/>，详细参考论坛的操作说明。
+        /// </summary>
+        /// <typeparam name="T">自定义的数据类型对象</typeparam>
+        /// <returns>包含是否成功的结果对象</returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        OperateResult Write<T>( T data ) where T : class, new();
 
         #endregion
     }
