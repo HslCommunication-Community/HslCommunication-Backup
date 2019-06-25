@@ -51,16 +51,49 @@ namespace HslCommunication.Profinet.LSIS
         /// <returns>byte数组值</returns>
         public override OperateResult<byte[]> Read(string address, ushort length)
         {
+            int startIndex = 0;
+            string[] fullAddressSplit = null;
+            string Dmain = string.Empty;
+            string AddressSplit = string.Empty;
             OperateResult<string> analysis = XGBFastEnet.AnalysisAddress(address, true);
             if (!analysis.IsSuccess) return OperateResult.CreateFailedResult<byte[]>(analysis);
+            if (address.IndexOf(".") > 0)//BitOnByte and BitOnWord
+            {
+                Dmain = address.Substring(0, 1);
+                AddressSplit = address.Remove(0, 2);
+                switch (Dmain)
+                {
+                    case "I":
+                    case "Q":
+                    case "U":
+                        {
+                            fullAddressSplit = AddressSplit.Split(new char[1] { '.' }, 4);
+                            startIndex = CheckAddress(fullAddressSplit[3]);
+                            break;
+                        }
+                    default:// MB---DB-----
+                        {
+                            fullAddressSplit = AddressSplit.Split(new char[1] { '.' }, 2);
+                            startIndex = CheckAddress(fullAddressSplit[0].Substring(2));
+                            break;
+                        }
+                }
 
-            int startIndex = CheckAddress(analysis.Content.Substring(3));
+            }
+            else
+            {
+                startIndex = CheckAddress(analysis.Content.Substring(3));
+            }
+
             switch (analysis.Content[1])
             {
-                case 'P': return OperateResult.CreateSuccessResult(pBuffer.GetBytes(startIndex, length));
-                case 'Q': return OperateResult.CreateSuccessResult(qBuffer.GetBytes(startIndex, length));
-                case 'M': return OperateResult.CreateSuccessResult(SoftBasic.BoolArrayToByte(mBuffer.GetBool(startIndex , length *= 8)));
-                case 'D': return OperateResult.CreateSuccessResult(dBuffer.GetBytes(startIndex==0 ? startIndex : startIndex*=2, length));
+                case 'I':
+                case 'Q':
+                case 'U':
+                case 'P':
+                    return OperateResult.CreateSuccessResult(SoftBasic.BoolArrayToByte(pBuffer.GetBool(startIndex, length *= 8)));
+                case 'M': return OperateResult.CreateSuccessResult(SoftBasic.BoolArrayToByte(mBuffer.GetBool(startIndex, length *= 8)));
+                case 'D': return OperateResult.CreateSuccessResult(dBuffer.GetBytes(startIndex == 0 ? startIndex : startIndex *= 2, length));
                 default: return new OperateResult<byte[]>(StringResources.Language.NotSupportedDataType);
             }
         }
@@ -73,15 +106,50 @@ namespace HslCommunication.Profinet.LSIS
         /// <returns>是否写入成功的结果对象</returns>
         public override OperateResult Write(string address, byte[] value)
         {
+            int startIndex = 0;
+            string[] fullAddressSplit = null;
+            string Dmain = string.Empty;
+            string AddressSplit = string.Empty;
             OperateResult<string> analysis = XGBFastEnet.AnalysisAddress(address, false);
             if (!analysis.IsSuccess) return OperateResult.CreateFailedResult<byte[]>(analysis);
+            if (address.IndexOf(".") > 0)//BitOnByte and BitOnWord
+            {
+                Dmain = address.Substring(0, 1);
+                AddressSplit = address.Remove(0, 2);
+                switch (Dmain)
+                {
+                    case "I":
+                    case "Q":
+                    case "U":
+                        {
+                            fullAddressSplit = AddressSplit.Split(new char[1] { '.' }, 4);
+                            startIndex = CheckAddress(fullAddressSplit[3]);
+                            break;
+                        }
+                    default:// MB---DB-----
+                        {
+                            fullAddressSplit = AddressSplit.Split(new char[1] { '.' }, 2);
+                            startIndex = CheckAddress(fullAddressSplit[0]);
+                            break;
+                        }
+                }
 
-            int startIndex = CheckAddress(analysis.Content.Substring(3));
+            }
+            else
+            {
+                startIndex = CheckAddress(analysis.Content.Substring(3));
+            }
+
+
             switch (analysis.Content[1])
             {
-                case 'P': pBuffer.SetBytes(value, startIndex); return OperateResult.CreateSuccessResult();
-                case 'Q': qBuffer.SetBytes(value, startIndex); return OperateResult.CreateSuccessResult();
-                case 'M': mBuffer.SetBool(value[0]==1 ? true:false, startIndex); return OperateResult.CreateSuccessResult();
+                case 'I':
+                case 'Q':
+                case 'U':
+                case 'P':
+                    pBuffer.SetBytes(value, startIndex); return OperateResult.CreateSuccessResult();
+              
+                case 'M': mBuffer.SetBool(value[0] == 1 ? true : false, startIndex); return OperateResult.CreateSuccessResult();
                 case 'D': dBuffer.SetBytes(value, startIndex == 0 ? startIndex : startIndex *= 2); return OperateResult.CreateSuccessResult();
                 default: return new OperateResult<byte[]>(StringResources.Language.NotSupportedDataType);
             }
@@ -213,14 +281,14 @@ namespace HslCommunication.Profinet.LSIS
                     if (receive[20] == 0x54)
                     {
                         // 读数据
-                         SendData = ReadByMessage(receive);
+                        SendData = ReadByMessage(receive);
                         RaiseDataReceived(SendData);
                         session.WorkSocket.Send(SendData);
-                       
+
                     }
                     else if (receive[20] == 0x58)
                     {
-                         SendData = WriteByMessage(receive);
+                        SendData = WriteByMessage(receive);
                         RaiseDataReceived(SendData);
                         session.WorkSocket.Send(SendData);
                     }
@@ -433,7 +501,7 @@ namespace HslCommunication.Profinet.LSIS
                 serialPort.Close();
             }
         }
-       
+
         /// <summary>
         /// 接收到串口数据的时候触发
         /// </summary>
@@ -441,8 +509,8 @@ namespace HslCommunication.Profinet.LSIS
         /// <param name="e">消息</param>
         private void SerialPort_DataReceived(object sender, SerialDataReceivedEventArgs e)
         {
-           
-              var sp = (SerialPort)sender;
+
+            var sp = (SerialPort)sender;
 
             int rCount = 0;
             byte[] buffer = new byte[1024];
@@ -450,7 +518,7 @@ namespace HslCommunication.Profinet.LSIS
 
             while (true)
             {
-                System.Threading.Thread.Sleep(20);           
+                System.Threading.Thread.Sleep(20);
                 int count = sp.Read(buffer, rCount, sp.BytesToRead);
                 rCount += count;
                 if (count == 0) break;
@@ -476,15 +544,15 @@ namespace HslCommunication.Profinet.LSIS
                 SendData = WriteSerialByMessage(modbusCore);
                 RaiseDataReceived(SendData);
                 serialPort.Write(SendData, 0, SendData.Length);
-                
+
             }
             else
             {
                 serialPort.Close();
             }
-           
+
             if (IsStarted) RaiseDataSend(receive);
-            
+
         }
         public byte[] HexToBytes(string hex)
         {
@@ -512,13 +580,13 @@ namespace HslCommunication.Profinet.LSIS
             result.Add(0x53);    // command type: SB
             result.Add(0x42);
             result.AddRange(Encoding.ASCII.GetBytes("01"));
-           
 
-            int NameLength =int.Parse(Encoding.ASCII.GetString(command, 6, 2));
-            int RequestCount = Convert.ToInt32(Encoding.ASCII.GetString(command, 8 + NameLength, 2),16);
+
+            int NameLength = int.Parse(Encoding.ASCII.GetString(command, 6, 2));
+            int RequestCount = Convert.ToInt32(Encoding.ASCII.GetString(command, 8 + NameLength, 2), 16);
 
             string DeviceAddress = Encoding.ASCII.GetString(command, 9, NameLength - 1);
-            byte[] data = Read(DeviceAddress,(ushort) RequestCount).Content;
+            byte[] data = Read(DeviceAddress, (ushort)RequestCount).Content;
 
             result.AddRange(SoftBasic.BuildAsciiBytesFrom((byte)data.Length));
             result.AddRange(SoftBasic.BytesToAsciiBytes(data));
@@ -555,17 +623,17 @@ namespace HslCommunication.Profinet.LSIS
             else
             {
                 NameLength = Encoding.ASCII.GetString(packCommand, 6, 2);
-                DeviceAddress = Encoding.ASCII.GetString(packCommand,9, int.Parse(NameLength)-1);
-                
-                int RequestCount = int.Parse( Encoding.ASCII.GetString(packCommand, 8 + int.Parse(NameLength), 2));
-                string Value = Encoding.ASCII.GetString(packCommand, 8 + int.Parse(NameLength) +  RequestCount, RequestCount * 2);
+                DeviceAddress = Encoding.ASCII.GetString(packCommand, 9, int.Parse(NameLength) - 1);
+
+                int RequestCount = int.Parse(Encoding.ASCII.GetString(packCommand, 8 + int.Parse(NameLength), 2));
+                string Value = Encoding.ASCII.GetString(packCommand, 8 + int.Parse(NameLength) + RequestCount, RequestCount * 2);
                 var wdArys = HexToBytes(Value);
                 Write(DeviceAddress, wdArys);
-             }
+            }
 
 
-          
-            
+
+
             return result.ToArray();
         }
 
