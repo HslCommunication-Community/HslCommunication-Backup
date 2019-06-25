@@ -69,7 +69,7 @@ namespace HslCommunication.Profinet.LSIS
         {
             get => baseNo;
             set => baseNo = value;
-        }
+            }
 
         /// <summary>
         /// FEnet I/F module’s Slot No.
@@ -78,23 +78,23 @@ namespace HslCommunication.Profinet.LSIS
         {
             get => slotNo;
             set => slotNo = value;
-        }
+            }
 
         #endregion
 
-        #region Read Write
+            #region Read Write
 
-        /// <summary>
-        /// Read Bytes from plc, you should specify address
-        /// </summary>
-        /// <param name="address">Start Address, for example: M100</param>
-        /// <param name="length">Array of data Lengths</param>
-        /// <returns>Whether to read the successful result object</returns>
-        /// <exception cref="NullReferenceException"></exception>
-        /// <remarks>
-        /// </remarks>
-        /// <example>
-        /// </example>
+            /// <summary>
+            /// Read Bytes from plc, you should specify address
+            /// </summary>
+            /// <param name="address">Start Address, for example: M100</param>
+            /// <param name="length">Array of data Lengths</param>
+            /// <returns>Whether to read the successful result object</returns>
+            /// <exception cref="NullReferenceException"></exception>
+            /// <remarks>
+            /// </remarks>
+            /// <example>
+            /// </example>
         public override OperateResult<byte[]> Read(string address, ushort length)
         {
             // build read command
@@ -244,92 +244,81 @@ namespace HslCommunication.Profinet.LSIS
                         {
                             sb.Append(types[i]);
                             sb.Append("B");
-
-                            if (address[1] == 'X')//Bit
+                            switch (address[1])
                             {
-
-                                if (address.IndexOf(".") > 1) //MX0.0
-                                {
-                                    string[] list = address.Split('.');
-                                    baseAddress = ((int.Parse($"{list[2]}") >= 16) ? (int.Parse($"{list[2]}") / 16) : 0) * 2;
-                                    sb.Append(baseAddress);
-                                }
-                                else
-                                {
-                                    sb.Append(int.Parse($"{address[2]}"));
-                                }
-                            }
-                            else if (address[1] == 'B')//BitOnByte
-                            {
-
-
-                                if (address.IndexOf(".") > 0)
-                                {
-                                    string[] list = address.Split('.');
-                                    for (int y = 0; y < list.Length; y++)
+                                case 'X'://Bit
+                                    if (address.IndexOf(".") > 1) //MX0.0
                                     {
-                                        if (list[y][0] == 'I' || list[y][0] == 'Q' || list[y][0] == 'U') //IB0.0.0.1
+                                        string[] list = address.Split('.');
+                                        baseAddress = ((int.Parse($"{list[2]}") >= 16) ? (int.Parse($"{list[2]}") / 16) : 0) * 2;
+                                        sb.Append(baseAddress);
+                                    }
+                                    else
+                                    {
+                                        sb.Append(int.Parse($"{address[2]}"));//MX0
+                                    }
+                                    break;
+                                case 'B':
+                                    if (address.IndexOf(".") > 0)//BitOnByte
+                                    {
+                                        string[] list = address.Split('.');
+                                        for (int y = 0; y < list.Length; y++)
                                         {
-                                            baseAddress = ((int.Parse($"{list[3]}") >= 2) ? (int.Parse($"{list[3]}") / 2) : 0) * 2;
-                                            sb.Append(baseAddress);
-                                            break;
-                                        }
-                                        else
-                                        {
+                                            if (list[y][0] == 'I' || list[y][0] == 'Q' || list[y][0] == 'U') //IB0.0.0.1
+                                            {
+                                                baseAddress = ((int.Parse($"{list[3]}") >= 2) ? (int.Parse($"{list[3]}") / 2) : 0) * 2;
+                                                sb.Append(baseAddress);
+                                                break;
+                                            }
+                                            else
+                                            {
 
-                                            sb.Append(int.Parse($"{list[1]}")); //MB0.0
-                                            break;
+                                                sb.Append(int.Parse($"{list[1]}")); //MB0.0
+                                                break;
+                                            }
                                         }
                                     }
-
-
-                                }
-                                else
-                                {
-                                    sb.Append(int.Parse($"{address[2]}"));
-                                }
-
-                            }
-                            else if (address[1] == 'W')
-                            {
-                                if (address.IndexOf(".") > 0)//BitOnWord
-                                {
-                                    string[] list = address.Split('.');
-                                    for (int y = 0; y < list.Length; y++)
+                                    else
                                     {
-                                        if (list[y][0] == 'I' || list[y][0] == 'Q' || list[y][0] == 'U')//IW0.0.0.1
-                                        {
-                                            baseAddress = ((int.Parse($"{list[3]}") >= 2) ? (int.Parse($"{list[3]}") / 2) : 0) * 2;
-                                            sb.Append(baseAddress);
-                                            break;
-                                        }
-                                        else
-                                        {
-
-                                            sb.Append(int.Parse($"{list[1]}") * 2);//MW0.0
-                                            break;
-                                        }
+                                        sb.Append(int.Parse($"{address[2]}"));
                                     }
+                                    break;
+                                case 'W':
+                                    if (address.IndexOf(".") > 0)//BitOnWord
+                                    {
+                                        string[] list = address.Split('.');
+                                        for (int y = 0; y < list.Length; y++)
+                                        {
+                                            if (list[y][0] == 'I' || list[y][0] == 'Q' || list[y][0] == 'U')//IW0.0.0.1
+                                            {
+                                                baseAddress = ((int.Parse($"{list[3]}") >= 2) ? (int.Parse($"{list[3]}") / 2) : 0) * 2;
+                                                sb.Append(baseAddress);
+                                                break;
+                                            }
+                                            else
+                                            {
+
+                                                sb.Append(int.Parse($"{list[1]}") * 2);//MW0.0
+                                                break;
+                                            }
+                                        }
 
 
-                                }
-                                else
-                                {
-                                    sb.Append(int.Parse($"{address[2]}") * 2);//MW0
-                                }
-
-                            }
-                            else if (address[1] == 'D')
-                            {
-                                sb.Append(int.Parse($"{address[2]}") * 4);
-                            }
-                            else if (address[1] == 'L')
-                            {
-                                sb.Append(int.Parse($"{address[2]}") * 8);
-                            }
-                            else
-                            {
-                                sb.Append(int.Parse($"{address[1]}"));
+                                    }
+                                    else
+                                    {
+                                        sb.Append(int.Parse($"{address[2]}") * 2);//MW0
+                                    }
+                                    break;
+                                case 'D':
+                                    sb.Append(int.Parse($"{address[2]}") * 4);
+                                    break;
+                                case 'L':
+                                    sb.Append(int.Parse($"{address[2]}") * 8);
+                                    break;
+                                default:
+                                    sb.Append(int.Parse($"{address[1]}"));
+                                    break;
                             }
 
                             exsist = true;
@@ -471,10 +460,6 @@ namespace HslCommunication.Profinet.LSIS
             }
 
             return OperateResult.CreateSuccessResult(sb.ToString());
-
-
-
-
 
         }
 
