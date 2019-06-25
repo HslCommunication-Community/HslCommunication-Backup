@@ -132,7 +132,7 @@ namespace HslCommunication.Core.Net
         #region Reflection Read
 
         /// <summary>
-        /// 从设备里读取支持Hsl特性的数据内容，该特性为<see cref="HslAddressAttribute"/>，详细参考论坛的操作说明。
+        /// 从设备里读取支持Hsl特性的数据内容，该特性为<see cref="HslDeviceAddressAttribute"/>，详细参考论坛的操作说明。
         /// </summary>
         /// <typeparam name="T">自定义的数据类型对象</typeparam>
         /// <returns>包含是否成功的结果对象</returns>
@@ -142,7 +142,7 @@ namespace HslCommunication.Core.Net
         }
 
         /// <summary>
-        /// 从设备里读取支持Hsl特性的数据内容，该特性为<see cref="HslAddressAttribute"/>，详细参考论坛的操作说明。
+        /// 从设备里读取支持Hsl特性的数据内容，该特性为<see cref="HslDeviceAddressAttribute"/>，详细参考论坛的操作说明。
         /// </summary>
         /// <typeparam name="T">自定义的数据类型对象</typeparam>
         /// <returns>包含是否成功的结果对象</returns>
@@ -1187,7 +1187,7 @@ namespace HslCommunication.Core.Net
 
 
         /// <summary>
-        /// 异步从设备里读取支持Hsl特性的数据内容，该特性为<see cref="HslAddressAttribute"/>，详细参考论坛的操作说明。
+        /// 异步从设备里读取支持Hsl特性的数据内容，该特性为<see cref="HslDeviceAddressAttribute"/>，详细参考论坛的操作说明。
         /// </summary>
         /// <typeparam name="T">自定义的数据类型对象</typeparam>
         /// <returns>包含是否成功的结果对象</returns>
@@ -1197,7 +1197,7 @@ namespace HslCommunication.Core.Net
         }
 
         /// <summary>
-        /// 异步从设备里读取支持Hsl特性的数据内容，该特性为<see cref="HslAddressAttribute"/>，详细参考论坛的操作说明。
+        /// 异步从设备里读取支持Hsl特性的数据内容，该特性为<see cref="HslDeviceAddressAttribute"/>，详细参考论坛的操作说明。
         /// </summary>
         /// <typeparam name="T">自定义的数据类型对象</typeparam>
         /// <returns>包含是否成功的结果对象</returns>

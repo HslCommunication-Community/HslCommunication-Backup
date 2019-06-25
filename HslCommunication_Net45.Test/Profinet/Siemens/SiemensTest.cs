@@ -201,13 +201,13 @@ namespace HslCommunication_Net45.Test.Profinet.Siemens
 
         private class DataTest
         {
-            [HslAddress( "M100" )]
+            [HslDeviceAddress( "M100" )]
             public short Data1 { get; set; }
 
-            [HslAddress( "M200" )]
+            [HslDeviceAddress( "M200" )]
             public float Data2 { get; set; }
 
-            [HslAddress( "M300", 6 )]
+            [HslDeviceAddress( "M300", 6 )]
             public byte[] Data3 { get; set; }
         }
     }

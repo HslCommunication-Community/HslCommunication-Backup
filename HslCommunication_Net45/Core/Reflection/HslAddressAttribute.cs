@@ -9,7 +9,7 @@ namespace HslCommunication
     /// 应用于Hsl组件库读取的动态地址解析
     /// </summary>
     [AttributeUsage(AttributeTargets.Property, AllowMultiple = true)]
-    public class HslAddressAttribute : Attribute
+    public class HslDeviceAddressAttribute : Attribute
     {
         /// <summary>
         /// 设备的类似，这将决定是否使用当前的PLC地址
@@ -30,7 +30,7 @@ namespace HslCommunication
         /// 实例化一个地址特性，指定地址信息
         /// </summary>
         /// <param name="address">真实的地址信息</param>
-        public HslAddressAttribute(string address )
+        public HslDeviceAddressAttribute(string address )
         {
             this.address = address;
             this.length = -1;
@@ -42,7 +42,7 @@ namespace HslCommunication
         /// </summary>
         /// <param name="address">真实的地址信息</param>
         /// <param name="deviceType">设备的地址信息</param>
-        public HslAddressAttribute( string address, Type deviceType )
+        public HslDeviceAddressAttribute( string address, Type deviceType )
         {
             this.address = address;
             this.length = -1;
@@ -54,7 +54,7 @@ namespace HslCommunication
         /// </summary>
         /// <param name="address">真实的地址信息</param>
         /// <param name="length">读取的数据长度</param>
-        public HslAddressAttribute(string address, int length )
+        public HslDeviceAddressAttribute(string address, int length )
         {
             this.address = address;
             this.length = length;
@@ -67,7 +67,7 @@ namespace HslCommunication
         /// <param name="address">真实的地址信息</param>
         /// <param name="length">读取的数据长度</param>
         /// <param name="deviceType">设备类型</param>
-        public HslAddressAttribute( string address, int length, Type deviceType )
+        public HslDeviceAddressAttribute( string address, int length, Type deviceType )
         {
             this.address = address;
             this.length = length;

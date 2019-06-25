@@ -12,7 +12,7 @@ namespace HslCommunication.Core
     {
 
         /// <summary>
-        /// 从设备里读取支持Hsl特性的数据内容，该特性为<see cref="HslAddressAttribute"/>，详细参考论坛的操作说明。
+        /// 从设备里读取支持Hsl特性的数据内容，该特性为<see cref="HslDeviceAddressAttribute"/>，详细参考论坛的操作说明。
         /// </summary>
         /// <typeparam name="T">自定义的数据类型对象</typeparam>
         /// <param name="readWrite">读写接口的实现</param>
@@ -26,13 +26,13 @@ namespace HslCommunication.Core
             var properties = type.GetProperties( System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public );
             foreach (var property in properties)
             {
-                var attribute = property.GetCustomAttributes( typeof( HslAddressAttribute ), false );
+                var attribute = property.GetCustomAttributes( typeof( HslDeviceAddressAttribute ), false );
                 if (attribute == null) continue;
 
-                HslAddressAttribute hslAttribute = null;
+                HslDeviceAddressAttribute hslAttribute = null;
                 for (int i = 0; i < attribute.Length; i++)
                 {
-                    HslAddressAttribute tmp = (HslAddressAttribute)attribute[i];
+                    HslDeviceAddressAttribute tmp = (HslDeviceAddressAttribute)attribute[i];
                     if (tmp.deviceType != null && tmp.deviceType == readWrite.GetType( ))
                     {
                         hslAttribute = tmp;
@@ -44,7 +44,7 @@ namespace HslCommunication.Core
                 {
                     for (int i = 0; i < attribute.Length; i++)
                     {
-                        HslAddressAttribute tmp = (HslAddressAttribute)attribute[i];
+                        HslDeviceAddressAttribute tmp = (HslDeviceAddressAttribute)attribute[i];
                         if (tmp.deviceType == null)
                         {
                             hslAttribute = tmp;
@@ -202,7 +202,7 @@ namespace HslCommunication.Core
 
 
         /// <summary>
-        /// 从设备里读取支持Hsl特性的数据内容，该特性为<see cref="HslAddressAttribute"/>，详细参考论坛的操作说明。
+        /// 从设备里读取支持Hsl特性的数据内容，该特性为<see cref="HslDeviceAddressAttribute"/>，详细参考论坛的操作说明。
         /// </summary>
         /// <typeparam name="T">自定义的数据类型对象</typeparam>
         /// <param name="data">自定义的数据对象</param>
@@ -219,13 +219,13 @@ namespace HslCommunication.Core
             var properties = type.GetProperties( System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public );
             foreach (var property in properties)
             {
-                var attribute = property.GetCustomAttributes( typeof( HslAddressAttribute ), false );
+                var attribute = property.GetCustomAttributes( typeof( HslDeviceAddressAttribute ), false );
                 if (attribute == null) continue;
 
-                HslAddressAttribute hslAttribute = null;
+                HslDeviceAddressAttribute hslAttribute = null;
                 for (int i = 0; i < attribute.Length; i++)
                 {
-                    HslAddressAttribute tmp = (HslAddressAttribute)attribute[i];
+                    HslDeviceAddressAttribute tmp = (HslDeviceAddressAttribute)attribute[i];
                     if (tmp.deviceType != null && tmp.deviceType == readWrite.GetType( ))
                     {
                         hslAttribute = tmp;
@@ -237,7 +237,7 @@ namespace HslCommunication.Core
                 {
                     for (int i = 0; i < attribute.Length; i++)
                     {
-                        HslAddressAttribute tmp = (HslAddressAttribute)attribute[i];
+                        HslDeviceAddressAttribute tmp = (HslDeviceAddressAttribute)attribute[i];
                         if (tmp.deviceType == null)
                         {
                             hslAttribute = tmp;

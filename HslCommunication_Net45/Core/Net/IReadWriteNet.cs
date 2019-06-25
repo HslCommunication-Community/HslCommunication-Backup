@@ -164,7 +164,7 @@ namespace HslCommunication.Core
         OperateResult<T> ReadCustomer<T>( string address ) where T : IDataTransfer, new();
 
         /// <summary>
-        /// 从设备里读取支持Hsl特性的数据内容，该特性为<see cref="HslAddressAttribute"/>，详细参考论坛的操作说明。
+        /// 从设备里读取支持Hsl特性的数据内容，该特性为<see cref="HslDeviceAddressAttribute"/>，详细参考论坛的操作说明。
         /// </summary>
         /// <typeparam name="T">自定义的数据类型对象</typeparam>
         /// <returns>包含是否成功的结果对象</returns>
@@ -337,7 +337,7 @@ namespace HslCommunication.Core
         OperateResult WriteCustomer<T>( string address, T value ) where T : IDataTransfer, new();
 
         /// <summary>
-        /// 从设备里读取支持Hsl特性的数据内容，该特性为<see cref="HslAddressAttribute"/>，详细参考论坛的操作说明。
+        /// 从设备里读取支持Hsl特性的数据内容，该特性为<see cref="HslDeviceAddressAttribute"/>，详细参考论坛的操作说明。
         /// </summary>
         /// <typeparam name="T">自定义的数据类型对象</typeparam>
         /// <returns>包含是否成功的结果对象</returns>
