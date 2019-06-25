@@ -413,7 +413,7 @@ namespace HslCommunication.Profinet.Melsec
         /// <example>
         /// <code lang="cs" source="HslCommunication_Net45.Test\Documentation\Samples\Profinet\melsecTest.cs" region="ReadBool" title="Bool类型示例" />
         /// </example>
-        public OperateResult<bool[]> ReadBool( string address, ushort length )
+        public override OperateResult<bool[]> ReadBool( string address, ushort length )
         {
             // 分析地址
             OperateResult<McAddressData> addressResult = McAnalysisAddress( address, length );
@@ -438,35 +438,6 @@ namespace HslCommunication.Profinet.Melsec
             return OperateResult.CreateSuccessResult( extract.Content.Select( m => m == 0x01 ).Take( length ).ToArray( ) );
         }
 
-
-        /// <summary>
-        /// 从三菱PLC中批量读取位软元件，返回读取结果
-        /// </summary>
-        /// <param name="address">起始地址</param>
-        /// <returns>带成功标志的结果数据对象</returns>
-        /// <example>参照 <see cref="ReadBool(string, ushort)"/> 方法 </example>
-        public OperateResult<bool> ReadBool( string address )
-        {
-            OperateResult<bool[]> read = ReadBool( address, 1 );
-            if (!read.IsSuccess) return OperateResult.CreateFailedResult<bool>( read );
-
-            return OperateResult.CreateSuccessResult<bool>( read.Content[0] );
-        }
-        
-        /// <summary>
-        /// 向PLC中位软元件写入bool数组，返回值说明，比如你写入M100,values[0]对应M100
-        /// </summary>
-        /// <param name="address">要写入的数据地址</param>
-        /// <param name="value">要写入的实际数据，长度为8的倍数</param>
-        /// <example>
-        /// 详细请查看<see cref="Write(string, bool[])"/>方法的示例
-        /// </example>
-        /// <returns>返回写入结果</returns>
-        public OperateResult Write( string address, bool value )
-        {
-            return Write( address, new bool[] { value} );
-        }
-
         /// <summary>
         /// 向PLC中位软元件写入bool数组，返回值说明，比如你写入M100,values[0]对应M100
         /// </summary>
@@ -476,7 +447,7 @@ namespace HslCommunication.Profinet.Melsec
         /// <code lang="cs" source="HslCommunication_Net45.Test\Documentation\Samples\Profinet\melsecTest.cs" region="WriteBool" title="Write示例" />
         /// </example>
         /// <returns>返回写入结果</returns>
-        public OperateResult Write( string address, bool[] values )
+        public override OperateResult Write( string address, bool[] values )
         {
             // 分析地址
             OperateResult<McAddressData> addressResult = McAnalysisAddress( address, 0 );

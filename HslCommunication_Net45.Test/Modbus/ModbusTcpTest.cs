@@ -38,6 +38,13 @@ namespace HslCommunication_Net45.Test.Modbus
                 Assert.IsTrue( readBool[i] == boolTmp[i] );
             }
 
+            // bool[]类型
+            readBool = modbus.ReadBool( address, (ushort)boolTmp.Length ).Content;
+            for (int i = 0; i < boolTmp.Length; i++)
+            {
+                Assert.IsTrue( readBool[i] == boolTmp[i] );
+            }
+
             address = "300";
             // short类型
             Assert.IsTrue( modbus.Write( address, (short)12345 ).IsSuccess );
@@ -166,6 +173,7 @@ namespace HslCommunication_Net45.Test.Modbus
             {
                 Assert.IsTrue( readBool[i] == boolTmp[i] );
             }
+
 
             address = "300";
             // short类型

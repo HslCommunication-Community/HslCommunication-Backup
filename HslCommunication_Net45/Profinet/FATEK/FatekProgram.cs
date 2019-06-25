@@ -205,7 +205,7 @@ namespace HslCommunication.Profinet.FATEK
         /// <param name="address">地址信息，比如X10，Y17，M100</param>
         /// <param name="length">读取的长度</param>
         /// <returns>读取结果信息</returns>
-        public OperateResult<bool[]> ReadBool( string address, ushort length )
+        public override OperateResult<bool[]> ReadBool( string address, ushort length )
         {
             // 解析指令
             OperateResult<byte[]> command = BuildReadCommand( this.station, address, length, true );
@@ -226,36 +226,12 @@ namespace HslCommunication.Profinet.FATEK
         }
 
         /// <summary>
-        /// 批量读取bool类型数据，支持的类型为X,Y,M,S,T,C，具体的地址范围取决于PLC的类型
-        /// </summary>
-        /// <param name="address">地址信息，比如X10，Y17，M100</param>
-        /// <returns>读取结果信息</returns>
-        public OperateResult<bool> ReadBool( string address )
-        {
-            OperateResult<bool[]> read = ReadBool( address, 1 );
-            if (!read.IsSuccess) return OperateResult.CreateFailedResult<bool>( read );
-
-            return OperateResult.CreateSuccessResult( read.Content[0] );
-        }
-
-        /// <summary>
-        /// 批量写入bool类型的数值，支持的类型为X,Y,M,S,T,C，具体的地址范围取决于PLC的类型
-        /// </summary>
-        /// <param name="address">PLC的地址信息</param>
-        /// <param name="value">数据信息</param>
-        /// <returns>是否写入成功</returns>
-        public OperateResult Write( string address, bool value )
-        {
-            return Write( address, new bool[] { value } );
-        }
-
-        /// <summary>
         /// 批量写入bool类型的数组，支持的类型为X,Y,M,S,T,C，具体的地址范围取决于PLC的类型
         /// </summary>
         /// <param name="address">PLC的地址信息</param>
         /// <param name="value">数据信息</param>
         /// <returns>是否写入成功</returns>
-        public OperateResult Write( string address, bool[] value )
+        public override OperateResult Write( string address, bool[] value )
         {
             // 解析指令
             OperateResult<byte[]> command = BuildWriteBoolCommand( this.station, address, value );

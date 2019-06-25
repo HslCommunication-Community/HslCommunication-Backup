@@ -214,9 +214,6 @@ namespace HslCommunication.ModBus
             return OperateResult.CreateSuccessResult( buffer );
         }
 
-
-
-
         /// <summary>
         /// 生成一个读取寄存器的指令头
         /// </summary>
@@ -237,7 +234,6 @@ namespace HslCommunication.ModBus
             return OperateResult.CreateSuccessResult( buffer );
         }
 
-
         /// <summary>
         /// 生成一个读取寄存器的指令头
         /// </summary>
@@ -253,7 +249,6 @@ namespace HslCommunication.ModBus
             byte[] buffer = ModbusInfo.PackCommandToTcp( address.CreateReadRegister( station, length ), messageId );
             return OperateResult.CreateSuccessResult( buffer );
         }
-
 
         /// <summary>
         /// 生成一个写入单线圈的指令头
@@ -275,9 +270,6 @@ namespace HslCommunication.ModBus
             return OperateResult.CreateSuccessResult( buffer );
         }
 
-
-
-
         /// <summary>
         /// 生成一个写入单个寄存器的报文
         /// </summary>
@@ -297,7 +289,6 @@ namespace HslCommunication.ModBus
             byte[] buffer = ModbusInfo.PackCommandToTcp( analysis.Content.CreateWriteOneRegister( station, values ), messageId );
             return OperateResult.CreateSuccessResult( buffer );
         }
-
 
         /// <summary>
         /// 生成批量写入单个线圈的报文信息
@@ -338,8 +329,6 @@ namespace HslCommunication.ModBus
             byte[] buffer = ModbusInfo.PackCommandToTcp( analysis.Content.CreateWriteRegister( station, values ), messageId );
             return OperateResult.CreateSuccessResult( buffer );
         }
-
-
 
         #endregion
 
@@ -416,7 +405,6 @@ namespace HslCommunication.ModBus
             return resultBytes;
         }
 
-
         /// <summary>
         /// 读取服务器的数据，需要指定不同的功能码
         /// </summary>
@@ -454,7 +442,6 @@ namespace HslCommunication.ModBus
 
             return OperateResult.CreateSuccessResult( read.Content[0] );
         }
-        
 
         /// <summary>
         /// 批量的读取线圈，需要指定起始地址，读取长度
@@ -470,9 +457,6 @@ namespace HslCommunication.ModBus
             return OperateResult.CreateSuccessResult( SoftBasic.ByteToBoolArray( read.Content, length ) );
         }
 
-
-
-
         /// <summary>
         /// 读取输入线圈，需要指定起始地址
         /// </summary>
@@ -485,11 +469,6 @@ namespace HslCommunication.ModBus
 
             return OperateResult.CreateSuccessResult( read.Content[0] );
         }
-
-
-
-
-
 
         /// <summary>
         /// 批量的读取输入点，需要指定起始地址，读取长度
@@ -504,9 +483,6 @@ namespace HslCommunication.ModBus
 
             return OperateResult.CreateSuccessResult( SoftBasic.ByteToBoolArray( read.Content, length ) );
         }
-
-
-
 
         /// <summary>
         /// 从Modbus服务器批量读取寄存器的信息，需要指定起始地址，读取长度
@@ -646,22 +622,37 @@ namespace HslCommunication.ModBus
             return CheckModbusTcpResponse( command.Content );
         }
 
-
         #endregion
 
-        #region Write bool[]
+        #region Bool Support
 
         /// <summary>
-        /// 向寄存器中写入bool数组，返回值说明，比如你写入M100,那么data[0]对应M100.0
+        /// 批量读取线圈或是离散的数据信息，需要指定地址和长度，具体的结果取决于实现
+        /// </summary>
+        /// <param name="address">数据地址</param>
+        /// <param name="length">数据长度</param>
+        /// <returns>带有成功标识的bool[]数组</returns>
+        public override OperateResult<bool[]> ReadBool( string address, ushort length )
+        {
+            OperateResult<ModbusAddress> analysis = ModbusInfo.AnalysisAddress( address, isAddressStartWithZero, ModbusInfo.ReadCoil );
+            if (!analysis.IsSuccess) return OperateResult.CreateFailedResult<bool[]>( analysis );
+
+            var read = ReadModBusBase( (byte)analysis.Content.Function, address, length );
+            if (!read.IsSuccess) return OperateResult.CreateFailedResult<bool[]>( read );
+
+            return OperateResult.CreateSuccessResult( SoftBasic.ByteToBoolArray( read.Content, length ) );
+        }
+
+        /// <summary>
+        /// 向线圈中写入bool数组，返回是否写入成功
         /// </summary>
         /// <param name="address">要写入的数据地址</param>
         /// <param name="values">要写入的实际数据，长度为8的倍数</param>
         /// <returns>返回写入结果</returns>
-        public OperateResult Write( string address, bool[] values )
+        public override OperateResult Write( string address, bool[] values )
         {
-            return Write( address, SoftBasic.BoolArrayToByte( values ) );
+            return WriteCoil( address, values );
         }
-
 
         #endregion
 

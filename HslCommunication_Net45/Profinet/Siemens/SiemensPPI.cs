@@ -99,7 +99,7 @@ namespace HslCommunication.Profinet.Siemens
         /// <param name="address">西门子的地址数据信息</param>
         /// <param name="length">数据长度</param>
         /// <returns>带返回结果的结果对象</returns>
-        public OperateResult<bool[]> ReadBool( string address, ushort length )
+        public override OperateResult<bool[]> ReadBool( string address, ushort length )
         {
             // 解析指令
             OperateResult<byte[]> command = BuildReadCommand( station, address, length, true );
@@ -130,20 +130,6 @@ namespace HslCommunication.Profinet.Siemens
 
             return OperateResult.CreateSuccessResult( BasicFramework.SoftBasic.ByteToBoolArray( buffer, length ) );
         }
-
-        /// <summary>
-        /// 从西门子的PLC中读取bool数据信息，地址为"M100.0","AI100.1","I0.3","Q0.6","V100.4","S100"等，详细请参照API文档
-        /// </summary>
-        /// <param name="address">西门子的地址数据信息</param>
-        /// <returns>带返回结果的结果对象</returns>
-        public OperateResult<bool> ReadBool( string address )
-        {
-            OperateResult<bool[]> read = ReadBool( address, 1 );
-            if (!read.IsSuccess) return OperateResult.CreateFailedResult<bool>( read );
-
-            return OperateResult.CreateSuccessResult( read.Content[0] );
-        }
-
 
         /// <summary>
         /// 将字节数据写入到西门子PLC中，地址为"M100.0","AI100.1","I0.3","Q0.6","V100.4","S100"等，详细请参照API文档
@@ -182,7 +168,7 @@ namespace HslCommunication.Profinet.Siemens
         /// <param name="address">西门子的地址数据信息</param>
         /// <param name="value">数据长度</param>
         /// <returns>带返回结果的结果对象</returns>
-        public OperateResult Write(string address, bool[] value )
+        public override OperateResult Write(string address, bool[] value )
         {
             // 解析指令
             OperateResult<byte[]> command = BuildWriteCommand( station, address, value );
@@ -205,17 +191,6 @@ namespace HslCommunication.Profinet.Siemens
             if (read2.Content[21] != 0xFF) return new OperateResult( read2.Content[21], GetMsgFromStatus( read2.Content[21] ) );
             // 数据提取
             return OperateResult.CreateSuccessResult( );
-        }
-
-        /// <summary>
-        /// 将bool数据写入到西门子PLC中，地址为"M100.0","AI100.1","I0.3","Q0.6","V100.4","S100"等，详细请参照API文档
-        /// </summary>
-        /// <param name="address">西门子的地址数据信息</param>
-        /// <param name="value">数据长度</param>
-        /// <returns>带返回结果的结果对象</returns>
-        public OperateResult Write( string address, bool value )
-        {
-            return Write( address, new bool[] { value } );
         }
 
         #endregion

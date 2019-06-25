@@ -208,7 +208,7 @@ namespace HslCommunication.Profinet.Melsec
         /// <example>
         ///  <code lang="cs" source="HslCommunication_Net45.Test\Documentation\Samples\Profinet\MelsecFxSerial.cs" region="ReadBool" title="Bool类型示例" />
         /// </example>
-        public OperateResult<bool[]> ReadBool( string address, ushort length )
+        public override OperateResult<bool[]> ReadBool( string address, ushort length )
         {
             //获取指令
             OperateResult<byte[], int> command = BuildReadBoolCommand( address, length );
@@ -226,20 +226,6 @@ namespace HslCommunication.Profinet.Melsec
             return ExtractActualBoolData( read.Content, command.Content2, length );
         }
         
-        /// <summary>
-        /// 从三菱PLC中批量读取位软元件，返回读取结果
-        /// </summary>
-        /// <param name="address">起始地址</param>
-        /// <returns>带成功标志的结果数据对象</returns>
-        /// <example>参照 <see cref="ReadBool(string, ushort)"/> 方法 </example>
-        public OperateResult<bool> ReadBool( string address )
-        {
-            OperateResult<bool[]> read = ReadBool( address, 1 );
-            if (!read.IsSuccess) return OperateResult.CreateFailedResult<bool>( read );
-
-            return OperateResult.CreateSuccessResult<bool>( read.Content[0] );
-        }
-
         #endregion
 
         #region Write Override
@@ -283,7 +269,7 @@ namespace HslCommunication.Profinet.Melsec
         /// <param name="address">地址信息</param>
         /// <param name="value">是否为通</param>
         /// <returns>是否写入成功的结果对象</returns>
-        public OperateResult Write( string address, bool value )
+        public override OperateResult Write( string address, bool value )
         {
             // 先获取指令
             OperateResult<byte[]> command = BuildWriteBoolPacket( address, value );

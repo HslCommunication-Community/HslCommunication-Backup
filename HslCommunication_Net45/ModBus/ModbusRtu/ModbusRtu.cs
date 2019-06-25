@@ -572,24 +572,41 @@ namespace HslCommunication.ModBus
             // 核心交互
             return CheckModbusTcpResponse( command.Content );
         }
-        
+
         #endregion
 
-        #region Write bool[]
+        #region Bool Support
 
         /// <summary>
-        /// 向寄存器中写入bool数组，返回值说明，比如你写入M100,那么data[0]对应M100.0
+        /// 批量读取线圈或是离散的数据信息，需要指定地址和长度，具体的结果取决于实现
+        /// </summary>
+        /// <param name="address">数据地址</param>
+        /// <param name="length">数据长度</param>
+        /// <returns>带有成功标识的bool[]数组</returns>
+        public override OperateResult<bool[]> ReadBool( string address, ushort length )
+        {
+            OperateResult<ModbusAddress> analysis = ModbusInfo.AnalysisAddress( address, isAddressStartWithZero, ModbusInfo.ReadCoil );
+            if (!analysis.IsSuccess) return OperateResult.CreateFailedResult<bool[]>( analysis );
+
+            var read = ReadModBusBase( (byte)analysis.Content.Function, address, length );
+            if (!read.IsSuccess) return OperateResult.CreateFailedResult<bool[]>( read );
+
+            return OperateResult.CreateSuccessResult( SoftBasic.ByteToBoolArray( read.Content, length ) );
+        }
+
+        /// <summary>
+        /// 向线圈中写入bool数组，返回是否写入成功
         /// </summary>
         /// <param name="address">要写入的数据地址</param>
         /// <param name="values">要写入的实际数据，长度为8的倍数</param>
         /// <returns>返回写入结果</returns>
-        public OperateResult Write( string address, bool[] values )
+        public override OperateResult Write( string address, bool[] values )
         {
-            return Write( address, BasicFramework.SoftBasic.BoolArrayToByte( values ) );
+            return WriteCoil( address, values );
         }
-        
+
         #endregion
-        
+
         #region Object Override
 
         /// <summary>

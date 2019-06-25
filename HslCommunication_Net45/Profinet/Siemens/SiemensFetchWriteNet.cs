@@ -227,7 +227,7 @@ namespace HslCommunication.Profinet.Siemens
         /// There is a risk in bulk writing to a bool array, because it is possible to write arrays of multiples of length 8 in bulk, otherwise it will affect the data of other bits, please use sparingly.
         /// </note>
         /// </remarks>
-        public OperateResult Write(string address, bool[] values)
+        public override OperateResult Write(string address, bool[] values)
         {
             return Write( address, BasicFramework.SoftBasic.BoolArrayToByte( values ) );
         }

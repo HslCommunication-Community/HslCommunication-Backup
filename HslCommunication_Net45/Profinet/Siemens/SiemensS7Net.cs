@@ -500,7 +500,7 @@ namespace HslCommunication.Profinet.Siemens
         /// 假设读取M100.0的位是否通断
         /// <code lang="cs" source="HslCommunication_Net45.Test\Documentation\Samples\Profinet\SiemensS7Net.cs" region="ReadBool" title="ReadBool示例" />
         /// </example>
-        public OperateResult<bool> ReadBool( string address )
+        public override OperateResult<bool> ReadBool( string address )
         {
             return ByteTransformHelper.GetResultFromBytes( ReadBitFromPLC( address ), m => m[0] != 0x00 );
         }
@@ -594,7 +594,7 @@ namespace HslCommunication.Profinet.Siemens
         /// 假设写入M100.0的位是否通断
         /// <code lang="cs" source="HslCommunication_Net45.Test\Documentation\Samples\Profinet\SiemensS7Net.cs" region="WriteBool" title="WriteBool示例" />
         /// </example>
-        public OperateResult Write( string address, bool value )
+        public override OperateResult Write( string address, bool value )
         {
             // 生成指令 -> Build Command
             OperateResult<byte[]> command = BuildWriteBitCommand( address, value );
@@ -615,11 +615,10 @@ namespace HslCommunication.Profinet.Siemens
         /// 批量写入bool数组存在一定的风险，原因是只能批量写入长度为8的倍数的数组，否则会影响其他的位的数据，请谨慎使用。
         /// </note>
         /// </remarks>
-        public OperateResult Write(string address, bool[] values)
+        public override OperateResult Write(string address, bool[] values)
         {
             return Write( address, SoftBasic.BoolArrayToByte( values ) );
         }
-
 
         #endregion
 

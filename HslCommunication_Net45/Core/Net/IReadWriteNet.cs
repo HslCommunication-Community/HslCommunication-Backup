@@ -172,7 +172,7 @@ namespace HslCommunication.Core
 
         #endregion
 
-            #region Write Support
+        #region Write Support
 
         /// <summary>
         /// 写入byte数组数据
@@ -343,6 +343,43 @@ namespace HslCommunication.Core
         /// <returns>包含是否成功的结果对象</returns>
         /// <exception cref="ArgumentNullException"></exception>
         OperateResult Write<T>( T data ) where T : class, new();
+
+        #endregion
+
+        #region Bool Support
+
+        // Bool类型的读写，不一定所有的设备都实现，比如西门子，就没有实现bool[]的读写，Siemens的fetch/write没有实现bool操作
+
+        /// <summary>
+        /// 批量读取底层的数据信息，需要指定地址和长度，具体的结果取决于实现
+        /// </summary>
+        /// <param name="address">数据地址</param>
+        /// <param name="length">数据长度</param>
+        /// <returns>带有成功标识的byte[]数组</returns>
+        OperateResult<bool[]> ReadBool( string address, ushort length );
+
+        /// <summary>
+        /// 读取底层的bool数据信息，具体的结果取决于实现
+        /// </summary>
+        /// <param name="address">数据地址</param>
+        /// <returns>带有成功标识的byte[]数组</returns>
+        OperateResult<bool> ReadBool( string address );
+
+        /// <summary>
+        /// 写入bool数组数据
+        /// </summary>
+        /// <param name="address">起始地址</param>
+        /// <param name="value">写入值</param>
+        /// <returns>带有成功标识的结果类对象</returns>
+        OperateResult Write( string address, bool[] value );
+
+        /// <summary>
+        /// 写入bool数据
+        /// </summary>
+        /// <param name="address">起始地址</param>
+        /// <param name="value">写入值</param>
+        /// <returns>带有成功标识的结果类对象</returns>
+        OperateResult Write( string address, bool value );
 
         #endregion
     }

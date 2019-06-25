@@ -276,7 +276,7 @@ namespace HslCommunication.Profinet.Omron
         /// <example>
         /// <code lang="cs" source="HslCommunication_Net45.Test\Documentation\Samples\Profinet\OmronFinsNet.cs" region="ReadBool" title="ReadBool示例" />
         /// </example>
-        public OperateResult<bool[]> ReadBool( string address, ushort length )
+        public override OperateResult<bool[]> ReadBool( string address, ushort length )
         {
             // 获取指令
             var command = BuildReadCommand( address, length, true );
@@ -292,25 +292,6 @@ namespace HslCommunication.Profinet.Omron
 
             // 返回正确的数据信息
             return OperateResult.CreateSuccessResult( valid.Content.Select( m => m != 0x00 ? true : false ).ToArray( ) );
-        }
-        
-        /// <summary>
-        /// 从欧姆龙PLC中批量读取位软元件，返回读取结果
-        /// </summary>
-        /// <param name="address">读取地址，格式为"D100.0","C100.15","W100.7","H100.4","A100.9"</param>
-        /// <returns>带成功标志的结果数据对象</returns>
-        /// <remarks>
-        /// 地址的格式请参照<see cref="ReadBool(string, ushort)"/>方法
-        /// </remarks>
-        /// <example>
-        /// <code lang="cs" source="HslCommunication_Net45.Test\Documentation\Samples\Profinet\OmronFinsNet.cs" region="ReadBool" title="ReadBool示例" />
-        /// </example>
-        public OperateResult<bool> ReadBool( string address )
-        {
-            OperateResult<bool[]> read = ReadBool( address, 1 );
-            if (!read.IsSuccess) return OperateResult.CreateFailedResult<bool>( read );
-
-            return OperateResult.CreateSuccessResult( read.Content[0] );
         }
         
         #endregion
@@ -356,27 +337,12 @@ namespace HslCommunication.Profinet.Omron
         /// 向PLC中位软元件写入bool数组，返回值说明，比如你写入D100,values[0]对应D100.0
         /// </summary>
         /// <param name="address">要写入的数据地址</param>
-        /// <param name="value">要写入的实际数据，长度为8的倍数</param>
-        /// <returns>返回写入结果</returns>
-        /// <example>
-        /// <code lang="cs" source="HslCommunication_Net45.Test\Documentation\Samples\Profinet\OmronFinsNet.cs" region="WriteBool" title="WriteBool示例" />
-        /// </example>
-        public OperateResult Write( string address, bool value )
-        {
-            return Write( address, new bool[] { value } );
-        }
-
-
-        /// <summary>
-        /// 向PLC中位软元件写入bool数组，返回值说明，比如你写入D100,values[0]对应D100.0
-        /// </summary>
-        /// <param name="address">要写入的数据地址</param>
         /// <param name="values">要写入的实际数据，可以指定任意的长度</param>
         /// <returns>返回写入结果</returns>
         /// <example>
         /// <code lang="cs" source="HslCommunication_Net45.Test\Documentation\Samples\Profinet\OmronFinsNet.cs" region="WriteBool" title="WriteBool示例" />
         /// </example>
-        public OperateResult Write( string address, bool[] values )
+        public override OperateResult Write( string address, bool[] values )
         {
             // 获取指令
             var command = BuildWriteCommand( address, values.Select( m => m ? (byte)0x01 : (byte)0x00 ).ToArray( ), true );
@@ -393,7 +359,6 @@ namespace HslCommunication.Profinet.Omron
             // 写入成功
             return OperateResult.CreateSuccessResult( );
         }
-
 
         #endregion
         

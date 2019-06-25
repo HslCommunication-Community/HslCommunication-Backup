@@ -312,7 +312,7 @@ namespace HslCommunication.Profinet.AllenBradley
         /// </summary>
         /// <param name="address">节点的名称 -> Name of the node </param>
         /// <returns>带有结果对象的结果数据 -> Result data with result info </returns>
-        public OperateResult<bool> ReadBool( string address )
+        public override OperateResult<bool> ReadBool( string address )
         {
             OperateResult<byte[]> read = Read( address, 1 );
             if (!read.IsSuccess) return OperateResult.CreateFailedResult<bool>( read );
@@ -637,7 +637,7 @@ namespace HslCommunication.Profinet.AllenBradley
         /// <param name="address">节点的名称 -> Name of the node </param>
         /// <param name="value">实际数据 -> Actual data </param>
         /// <returns>是否写入成功 -> Whether to write successfully</returns>
-        public OperateResult Write( string address, bool value )
+        public override OperateResult Write( string address, bool value )
         {
             return WriteTag( address, AllenBradleyHelper.CIP_Type_Bool, value ? new byte[] { 0xFF, 0xFF } : new byte[] { 0x00, 0x00 } );
         }

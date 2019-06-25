@@ -181,6 +181,20 @@ namespace HslCommunication.Core
 
                     property.SetValue( obj, valueResult.Content, null );
                 }
+                else if (propertyType == typeof( bool ))
+                {
+                    OperateResult<bool> valueResult = readWrite.ReadBool( hslAttribute.address );
+                    if (!valueResult.IsSuccess) return OperateResult.CreateFailedResult<T>( valueResult );
+
+                    property.SetValue( obj, valueResult.Content, null );
+                }
+                else if (propertyType == typeof( bool[] ))
+                {
+                    OperateResult<bool[]> valueResult = readWrite.ReadBool( hslAttribute.address, (ushort)(hslAttribute.length > 0 ? hslAttribute.length : 1) );
+                    if (!valueResult.IsSuccess) return OperateResult.CreateFailedResult<T>( valueResult );
+
+                    property.SetValue( obj, valueResult.Content, null );
+                }
             }
 
             return OperateResult.CreateSuccessResult( (T)obj );
@@ -358,6 +372,20 @@ namespace HslCommunication.Core
                 else if (propertyType == typeof( byte[] ))
                 {
                     byte[] value = (byte[])property.GetValue( obj, null );
+
+                    OperateResult writeResult = readWrite.Write( hslAttribute.address, value );
+                    if (!writeResult.IsSuccess) return writeResult;
+                }
+                else if (propertyType == typeof( bool ))
+                {
+                    bool value = (bool)property.GetValue( obj, null );
+
+                    OperateResult writeResult = readWrite.Write( hslAttribute.address, value );
+                    if (!writeResult.IsSuccess) return writeResult;
+                }
+                else if (propertyType == typeof( bool[] ))
+                {
+                    bool[] value = (bool[])property.GetValue( obj, null );
 
                     OperateResult writeResult = readWrite.Write( hslAttribute.address, value );
                     if (!writeResult.IsSuccess) return writeResult;
