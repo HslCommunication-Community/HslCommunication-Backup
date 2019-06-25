@@ -92,6 +92,7 @@
             this.label6 = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
             this.userControlHead1 = new HslCommunicationDemo.DemoControl.UserControlHead();
+            this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.groupBox4.SuspendLayout();
@@ -105,6 +106,7 @@
             this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel1.Controls.Add(this.checkBox1);
             this.panel1.Controls.Add(this.comboBox1);
             this.panel1.Controls.Add(this.textBox16);
             this.panel1.Controls.Add(this.label24);
@@ -135,7 +137,7 @@
             // 
             // textBox16
             // 
-            this.textBox16.Location = new System.Drawing.Point(389, 14);
+            this.textBox16.Location = new System.Drawing.Point(387, 2);
             this.textBox16.Name = "textBox16";
             this.textBox16.Size = new System.Drawing.Size(56, 23);
             this.textBox16.TabIndex = 11;
@@ -144,7 +146,7 @@
             // label24
             // 
             this.label24.AutoSize = true;
-            this.label24.Location = new System.Drawing.Point(313, 17);
+            this.label24.Location = new System.Drawing.Point(311, 5);
             this.label24.Name = "label24";
             this.label24.Size = new System.Drawing.Size(77, 17);
             this.label24.TabIndex = 10;
@@ -152,7 +154,7 @@
             // 
             // textBox15
             // 
-            this.textBox15.Location = new System.Drawing.Point(527, 14);
+            this.textBox15.Location = new System.Drawing.Point(525, 2);
             this.textBox15.Name = "textBox15";
             this.textBox15.Size = new System.Drawing.Size(56, 23);
             this.textBox15.TabIndex = 9;
@@ -161,7 +163,7 @@
             // label23
             // 
             this.label23.AutoSize = true;
-            this.label23.Location = new System.Drawing.Point(451, 17);
+            this.label23.Location = new System.Drawing.Point(449, 5);
             this.label23.Name = "label23";
             this.label23.Size = new System.Drawing.Size(80, 17);
             this.label23.TabIndex = 8;
@@ -207,7 +209,7 @@
             // 
             // textBox2
             // 
-            this.textBox2.Location = new System.Drawing.Point(238, 14);
+            this.textBox2.Location = new System.Drawing.Point(236, 14);
             this.textBox2.Name = "textBox2";
             this.textBox2.Size = new System.Drawing.Size(69, 23);
             this.textBox2.TabIndex = 3;
@@ -216,7 +218,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(184, 17);
+            this.label3.Location = new System.Drawing.Point(182, 17);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(56, 17);
             this.label3.TabIndex = 2;
@@ -760,6 +762,16 @@
             this.userControlHead1.Size = new System.Drawing.Size(1004, 32);
             this.userControlHead1.TabIndex = 2;
             // 
+            // checkBox1
+            // 
+            this.checkBox1.AutoSize = true;
+            this.checkBox1.Location = new System.Drawing.Point(314, 28);
+            this.checkBox1.Name = "checkBox1";
+            this.checkBox1.Size = new System.Drawing.Size(157, 21);
+            this.checkBox1.TabIndex = 15;
+            this.checkBox1.Text = "断线后是否更换SA1的值";
+            this.checkBox1.UseVisualStyleBackColor = true;
+            // 
             // FormOmron
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 17F);
@@ -856,5 +868,6 @@
         private System.Windows.Forms.ComboBox comboBox1;
         private DemoControl.UserControlCurve userControlCurve1;
         private DemoControl.UserControlHead userControlHead1;
+        private System.Windows.Forms.CheckBox checkBox1;
     }
 }

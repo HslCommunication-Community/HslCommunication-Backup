@@ -61,34 +61,82 @@ namespace HslCommunication.Profinet.Omron
                             result.Content1 = OmronFinsDataType.AR;
                             break;
                         }
+                    case 'E':
+                    case 'e':
+                        {
+                            // E区，比较复杂，需要专门的计算
+                            string[] splits = address.Split( new char[] { '.' }, StringSplitOptions.RemoveEmptyEntries );
+                            int block = Convert.ToInt32( splits[0].Substring( 1 ), 16 );
+                            if (block < 16)
+                            {
+                                result.Content1 = new OmronFinsDataType( (byte)(0x20 + block), (byte)(0xA0 + block) );
+                            }
+                            else
+                            {
+                                result.Content1 = new OmronFinsDataType( (byte)(0xE0 + block - 16), (byte)(0x60 + block - 16) );
+                            }
+                            break;
+                        }
                     default: throw new Exception( StringResources.Language.NotSupportedDataType );
                 }
 
-                if (isBit)
+                if (address[0] == 'E' || address[0] == 'e')
                 {
-                    // 位操作
-                    string[] splits = address.Substring( 1 ).Split( new char[] { '.' }, StringSplitOptions.RemoveEmptyEntries );
-                    ushort addr = ushort.Parse( splits[0] );
-                    result.Content2 = new byte[3];
-                    result.Content2[0] = BitConverter.GetBytes( addr )[1];
-                    result.Content2[1] = BitConverter.GetBytes( addr )[0];
-
-                    if (splits.Length > 1)
+                    string[] splits = address.Split( new char[] { '.' }, StringSplitOptions.RemoveEmptyEntries );
+                    if (isBit)
                     {
-                        result.Content2[2] = byte.Parse( splits[1] );
-                        if (result.Content2[2] > 15)
+                        // 位操作
+                        ushort addr = ushort.Parse( splits[1] );
+                        result.Content2 = new byte[3];
+                        result.Content2[0] = BitConverter.GetBytes( addr )[1];
+                        result.Content2[1] = BitConverter.GetBytes( addr )[0];
+
+                        if (splits.Length > 2)
                         {
-                            throw new Exception( StringResources.Language.OmronAddressMustBeZeroToFiveteen );
+                            result.Content2[2] = byte.Parse( splits[2] );
+                            if (result.Content2[2] > 15)
+                            {
+                                throw new Exception( StringResources.Language.OmronAddressMustBeZeroToFiveteen );
+                            }
                         }
+                    }
+                    else
+                    {
+                        // 字操作
+                        ushort addr = ushort.Parse( splits[1] );
+                        result.Content2 = new byte[3];
+                        result.Content2[0] = BitConverter.GetBytes( addr )[1];
+                        result.Content2[1] = BitConverter.GetBytes( addr )[0];
                     }
                 }
                 else
                 {
-                    // 字操作
-                    ushort addr = ushort.Parse( address.Substring( 1 ) );
-                    result.Content2 = new byte[3];
-                    result.Content2[0] = BitConverter.GetBytes( addr )[1];
-                    result.Content2[1] = BitConverter.GetBytes( addr )[0];
+                    if (isBit)
+                    {
+                        // 位操作
+                        string[] splits = address.Substring( 1 ).Split( new char[] { '.' }, StringSplitOptions.RemoveEmptyEntries );
+                        ushort addr = ushort.Parse( splits[0] );
+                        result.Content2 = new byte[3];
+                        result.Content2[0] = BitConverter.GetBytes( addr )[1];
+                        result.Content2[1] = BitConverter.GetBytes( addr )[0];
+
+                        if (splits.Length > 1)
+                        {
+                            result.Content2[2] = byte.Parse( splits[1] );
+                            if (result.Content2[2] > 15)
+                            {
+                                throw new Exception( StringResources.Language.OmronAddressMustBeZeroToFiveteen );
+                            }
+                        }
+                    }
+                    else
+                    {
+                        // 字操作
+                        ushort addr = ushort.Parse( address.Substring( 1 ) );
+                        result.Content2 = new byte[3];
+                        result.Content2[0] = BitConverter.GetBytes( addr )[1];
+                        result.Content2[1] = BitConverter.GetBytes( addr )[0];
+                    }
                 }
             }
             catch (Exception ex)

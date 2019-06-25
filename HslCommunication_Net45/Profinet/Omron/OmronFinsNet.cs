@@ -73,6 +73,15 @@ namespace HslCommunication.Profinet.Omron
     ///     <term>√</term>
     ///     <term></term>
     ///   </item>
+    ///   <item>
+    ///     <term>EM Area</term>
+    ///     <term>E</term>
+    ///     <term>E0.0,A200</term>
+    ///     <term>10</term>
+    ///     <term>√</term>
+    ///     <term>√</term>
+    ///     <term></term>
+    ///   </item>
     /// </list>
     /// </remarks>
     /// <example>

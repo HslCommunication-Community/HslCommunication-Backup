@@ -85,6 +85,7 @@ namespace HslCommunicationDemo
                 button16.Text = "w-float";
                 button15.Text = "w-double";
                 button14.Text = "w-string";
+                checkBox1.Text = "change SA1 value after read failed";
 
                 groupBox1.Text = "Single Data Read test";
                 groupBox2.Text = "Single Data Write test";
@@ -136,6 +137,7 @@ namespace HslCommunicationDemo
             omronFinsNet.SA1 = SA1;
             omronFinsNet.DA2 = DA2;
             omronFinsNet.ByteTransform.DataFormat = (HslCommunication.Core.DataFormat)comboBox1.SelectedItem;
+            omronFinsNet.IsChangeSA1AfterReadFailed = checkBox1.Checked;
 
             // OperateResult connect = OperateResult.CreateSuccessResult( ); 
             OperateResult connect = omronFinsNet.ConnectServer( );
