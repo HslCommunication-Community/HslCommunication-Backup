@@ -148,6 +148,148 @@ namespace HslCommunication_Net45.Test.Documentation.Samples.Core
             #endregion
         }
 
+        #region ObjectDefineExample
+
+        // 假设你要读取几个数据的情况，我们把需要读取的数据定义成一个个的数量，本示例既适合单个读取，也适合批量读取，以下就是混搭的情况。
+        // 我们假设，我们要读取的PLC是西门子PLC，地址数据的假设如下
+        // 我们假设 设备是否启动是 M0.0
+        // 产量是 M10 开始的2个地址数据
+        // 温度信息是 DB1.0开始的4个地址数据
+        // 报警的IO信息是 M200 开始，5个字节，共计40个IO点信息
+        // 那么我们可以做如下的定义
+
+        public class DataExample
+        {
+            /// <summary>
+            /// 设备是否启动
+            /// </summary>
+            [HslDeviceAddress( "M0.0" )]
+            public bool Enable { get; set; }
+
+            /// <summary>
+            /// 产量信息
+            /// </summary>
+            [HslDeviceAddress( "M10" )]
+            public short Production { get; set; }
+
+            /// <summary>
+            /// 温度信息
+            /// </summary>
+            [HslDeviceAddress( "DB1.0" )]
+            public float Temperature { get; set; }
+
+            /// <summary>
+            /// 连续的位报警信息
+            /// </summary>
+            [HslDeviceAddress( "M200", 5 )]
+            public byte[] AlarmStatus { get; set; }
+        }
+
+        #endregion
+
+        public void ReadObjectExample( )
+        {
+            #region ReadObjectExample
+
+            SiemensS7Net plc = new SiemensS7Net( SiemensPLCS.S1200, "192.168.0.100" );
+
+            // 此处需要注意的是，凡是带有 HslDeviceAddress 特性的属性都会被读取出来
+            OperateResult<DataExample> read = plc.Read<DataExample>( );
+            if (read.IsSuccess)
+            {
+                // success
+                DataExample data = read.Content;
+            }
+            else
+            {
+                // failed
+                Console.WriteLine( "读取失败：" + read.Message );
+            }
+
+            #endregion
+        }
+
+        public async void ReadObjectAsyncExample( )
+        {
+            #region ReadObjectAsyncExample
+
+            SiemensS7Net plc = new SiemensS7Net( SiemensPLCS.S1200, "192.168.0.100" );
+
+            // 此处需要注意的是，凡是带有 HslDeviceAddress 特性的属性都会被读取出来
+            OperateResult<DataExample> read = await plc.ReadAsync<DataExample>( );
+            if (read.IsSuccess)
+            {
+                // success
+                DataExample data = read.Content;
+            }
+            else
+            {
+                // failed
+                Console.WriteLine( "读取失败：" + read.Message );
+            }
+
+            #endregion
+        }
+
+        public void WriteObjectExample( )
+        {
+            #region WriteObjectExample
+
+            SiemensS7Net plc = new SiemensS7Net( SiemensPLCS.S1200, "192.168.0.100" );
+
+            // 此处需要注意的是，凡是带有 HslDeviceAddress 特性的属性都会被写入进去
+            DataExample data = new DataExample( )
+            {
+                Enable = true,
+                Production = 123,
+                Temperature = 123.4f,
+                AlarmStatus = new byte[] { 0x01, 0x02, 0x03, 0x04, 0x05 }
+            };
+
+            OperateResult write = plc.Write( data );
+            if (write.IsSuccess)
+            {
+                // success
+                Console.WriteLine( "写入成功！" );
+            }
+            else
+            {
+                // failed
+                Console.WriteLine( "写入失败：" + write.Message );
+            }
+
+            #endregion
+        }
+
+        public async void WriteObjectAsyncExample( )
+        {
+            #region WriteObjectAsyncExample
+
+            SiemensS7Net plc = new SiemensS7Net( SiemensPLCS.S1200, "192.168.0.100" );
+
+            // 此处需要注意的是，凡是带有 HslDeviceAddress 特性的属性都会被写入进去
+            DataExample data = new DataExample( )
+            {
+                Enable = true,
+                Production = 123,
+                Temperature = 123.4f,
+                AlarmStatus = new byte[] { 0x01, 0x02, 0x03, 0x04, 0x05 }
+            };
+
+            OperateResult write = await plc.WriteAsync( data );
+            if (write.IsSuccess)
+            {
+                // success
+                Console.WriteLine( "写入成功！" );
+            }
+            else
+            {
+                // failed
+                Console.WriteLine( "写入失败：" + write.Message );
+            }
+            #endregion
+        }
+
         public void ReadInt16( )
         {
             #region ReadInt16

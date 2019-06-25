@@ -780,6 +780,15 @@ namespace HslCommunication
     ///             <item>其他大量的代码细节优化。</item>
     ///         </list>
     ///     </revision>
+    ///     <revision date="2019-6-25" version="7.0.1" author="Richard.Hu">
+    ///         <list type="bullet">
+    ///             <item>IReadWriteNet完善几个忘记添加的Write不同类型参数的重载方法。</item>
+    ///             <item>IReadWriteNet新增ReadBool方法，Write(string address, bool value)方法，是否支持操作需要看plc是否支持，不支持返回操作不支持的错误。</item>
+    ///             <item>OmronFinsNet:新增一个属性，IsChangeSA1AfterReadFailed，当设置为True时，通信失败后，就会自动修改SA1的值，这样就能快速链接上PLC了。</item>
+    ///             <item>OmronFinsNet:新增读写E区的能力，地址示例E0.0，EF.100，E12.200。</item>
+    ///             <item>新增HslDeviceAddress特性类，现在支持直接基于对象的读写操作，提供了一种更加便捷的读写数据的机制，详细的关注后续的论坛。</item>
+    ///         </list>
+    ///     </revision>
     /// </revisionHistory>
     [System.Runtime.CompilerServices.CompilerGeneratedAttribute( )]
     public class NamespaceDoc

@@ -136,6 +136,12 @@ namespace HslCommunication.Core.Net
         /// </summary>
         /// <typeparam name="T">自定义的数据类型对象</typeparam>
         /// <returns>包含是否成功的结果对象</returns>
+        /// <example>
+        /// 此处演示西门子的读取示例，先定义一个类，重点是将需要读取的数据，写入到属性的特性中去。
+        /// <code lang="cs" source="HslCommunication_Net45.Test\Documentation\Samples\Core\NetworkDeviceBase.cs" region="ObjectDefineExample" title="特性实现示例" />
+        /// 接下来就可以实现数据的读取了
+        /// <code lang="cs" source="HslCommunication_Net45.Test\Documentation\Samples\Core\NetworkDeviceBase.cs" region="ReadObjectExample" title="ReadObject示例" />
+        /// </example>
         public OperateResult<T> Read<T>( ) where T : class, new()
         {
             return HslReflectionHelper.Read<T>( this );
@@ -146,6 +152,12 @@ namespace HslCommunication.Core.Net
         /// </summary>
         /// <typeparam name="T">自定义的数据类型对象</typeparam>
         /// <returns>包含是否成功的结果对象</returns>
+        /// <example>
+        /// 此处演示西门子的读取示例，先定义一个类，重点是将需要读取的数据，写入到属性的特性中去。
+        /// <code lang="cs" source="HslCommunication_Net45.Test\Documentation\Samples\Core\NetworkDeviceBase.cs" region="ObjectDefineExample" title="特性实现示例" />
+        /// 接下来就可以实现数据的写入了
+        /// <code lang="cs" source="HslCommunication_Net45.Test\Documentation\Samples\Core\NetworkDeviceBase.cs" region="WriteObjectExample" title="WriteObject示例" />
+        /// </example>
         /// <exception cref="ArgumentNullException"></exception>
         public OperateResult Write<T>( T data ) where T : class, new()
         {
@@ -1185,12 +1197,17 @@ namespace HslCommunication.Core.Net
             return Task.Run( ( ) => WriteCustomer( address, data ) );
         }
 
-
         /// <summary>
         /// 异步从设备里读取支持Hsl特性的数据内容，该特性为<see cref="HslDeviceAddressAttribute"/>，详细参考论坛的操作说明。
         /// </summary>
         /// <typeparam name="T">自定义的数据类型对象</typeparam>
         /// <returns>包含是否成功的结果对象</returns>
+        /// <example>
+        /// 此处演示西门子的读取示例，先定义一个类，重点是将需要读取的数据，写入到属性的特性中去。
+        /// <code lang="cs" source="HslCommunication_Net45.Test\Documentation\Samples\Core\NetworkDeviceBase.cs" region="ObjectDefineExample" title="特性实现示例" />
+        /// 接下来就可以实现数据的读取了
+        /// <code lang="cs" source="HslCommunication_Net45.Test\Documentation\Samples\Core\NetworkDeviceBase.cs" region="ReadObjectAsyncExample" title="ReadObjectAsync示例" />
+        /// </example>
         public Task<OperateResult<T>> ReadAsync<T>( ) where T : class, new()
         {
             return Task.Run( ( ) => HslReflectionHelper.Read<T>( this ) );
@@ -1201,6 +1218,12 @@ namespace HslCommunication.Core.Net
         /// </summary>
         /// <typeparam name="T">自定义的数据类型对象</typeparam>
         /// <returns>包含是否成功的结果对象</returns>
+        /// <example>
+        /// 此处演示西门子的读取示例，先定义一个类，重点是将需要读取的数据，写入到属性的特性中去。
+        /// <code lang="cs" source="HslCommunication_Net45.Test\Documentation\Samples\Core\NetworkDeviceBase.cs" region="ObjectDefineExample" title="特性实现示例" />
+        /// 接下来就可以实现数据的写入了
+        /// <code lang="cs" source="HslCommunication_Net45.Test\Documentation\Samples\Core\NetworkDeviceBase.cs" region="WriteObjectAsyncExample" title="WriteObjectAsync示例" />
+        /// </example>
         /// <exception cref="ArgumentNullException"></exception>
         public Task<OperateResult> WriteAsync<T>( T data ) where T : class, new()
         {
