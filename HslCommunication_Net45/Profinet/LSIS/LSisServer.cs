@@ -52,39 +52,10 @@ namespace HslCommunication.Profinet.LSIS
         public override OperateResult<byte[]> Read(string address, ushort length)
         {
             int startIndex = 0;
-            string[] fullAddressSplit = null;
-            string Dmain = string.Empty;
-            string AddressSplit = string.Empty;
-            OperateResult<string> analysis = XGBFastEnet.AnalysisAddress(address, true);
+           
+            OperateResult<string> analysis = XGBFastEnet.AnalysisAddress(address);
             if (!analysis.IsSuccess) return OperateResult.CreateFailedResult<byte[]>(analysis);
-            if (address.IndexOf(".") > 0)//BitOnByte and BitOnWord
-            {
-                Dmain = address.Substring(0, 1);
-                AddressSplit = address.Remove(0, 2);
-                switch (Dmain)
-                {
-                    case "I":
-                    case "Q":
-                    case "U":
-                        {
-                            fullAddressSplit = AddressSplit.Split(new char[1] { '.' }, 4);
-                            startIndex = CheckAddress(fullAddressSplit[3]);
-                            break;
-                        }
-                    default:// MB---DB-----
-                        {
-                            fullAddressSplit = AddressSplit.Split(new char[1] { '.' }, 2);
-                            startIndex = CheckAddress(fullAddressSplit[0].Substring(2));
-                            break;
-                        }
-                }
-
-            }
-            else
-            {
-                startIndex = CheckAddress(analysis.Content.Substring(3));
-            }
-
+            startIndex = CheckAddress(analysis.Content.Substring(3));
             switch (analysis.Content[1])
             {
                 case 'I':
@@ -107,38 +78,11 @@ namespace HslCommunication.Profinet.LSIS
         public override OperateResult Write(string address, byte[] value)
         {
             int startIndex = 0;
-            string[] fullAddressSplit = null;
-            string Dmain = string.Empty;
-            string AddressSplit = string.Empty;
-            OperateResult<string> analysis = XGBFastEnet.AnalysisAddress(address, false);
+            
+            OperateResult<string> analysis = XGBFastEnet.AnalysisAddress(address);
             if (!analysis.IsSuccess) return OperateResult.CreateFailedResult<byte[]>(analysis);
-            if (address.IndexOf(".") > 0)//BitOnByte and BitOnWord
-            {
-                Dmain = address.Substring(0, 1);
-                AddressSplit = address.Remove(0, 2);
-                switch (Dmain)
-                {
-                    case "I":
-                    case "Q":
-                    case "U":
-                        {
-                            fullAddressSplit = AddressSplit.Split(new char[1] { '.' }, 4);
-                            startIndex = CheckAddress(fullAddressSplit[3]);
-                            break;
-                        }
-                    default:// MB---DB-----
-                        {
-                            fullAddressSplit = AddressSplit.Split(new char[1] { '.' }, 2);
-                            startIndex = CheckAddress(fullAddressSplit[0]);
-                            break;
-                        }
-                }
-
-            }
-            else
-            {
+             
                 startIndex = CheckAddress(analysis.Content.Substring(3));
-            }
 
 
             switch (analysis.Content[1])
@@ -194,7 +138,7 @@ namespace HslCommunication.Profinet.LSIS
         /// <returns>带有成功标志的结果对象</returns>
         public OperateResult<bool> ReadBool(string address)
         {
-            OperateResult<string> analysis = XGBFastEnet.AnalysisAddress(address, true);
+            OperateResult<string> analysis = XGBFastEnet.AnalysisAddress(address);
             if (!analysis.IsSuccess) return OperateResult.CreateFailedResult<bool>(analysis);
 
             // to do, this is not right
@@ -217,7 +161,7 @@ namespace HslCommunication.Profinet.LSIS
         /// <returns>是否成功的结果</returns>
         public OperateResult Write(string address, bool value)
         {
-            OperateResult<string> analysis = XGBFastEnet.AnalysisAddress(address, false);
+            OperateResult<string> analysis = XGBFastEnet.AnalysisAddress(address);
             if (!analysis.IsSuccess) return analysis;
 
             // to do, this is not right
