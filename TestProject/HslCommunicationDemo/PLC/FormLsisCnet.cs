@@ -61,7 +61,6 @@ namespace HslCommunicationDemo
                 label6.Text = "address:";
                 label7.Text = "result:";
 
-                button_read_byte.Text = "r-byte";
                 button_read_short.Text = "r-short";
                 button_read_ushort.Text = "r-ushort";
                 button_read_int.Text = "r-int";
@@ -83,8 +82,6 @@ namespace HslCommunicationDemo
                 label10.Text = "Address:";
                 label9.Text = "Value:";
                 label19.Text = "Note: The value of the string needs to be converted";
-                button24.Text = "w-bit";
-                button3.Text = "w-byte";
                 button22.Text = "w-short";
                 button21.Text = "w-ushort";
                 button20.Text = "w-int";
@@ -413,12 +410,6 @@ namespace HslCommunicationDemo
             {
                 MessageBox.Show(ex.Message);
             }
-        }
-
-        private void Button3_Click( object sender, EventArgs e )
-        {
-            // byte
-            DemoUtils.WriteResultRender( xGBCnet.Write( textBox8.Text, byte.Parse( textBox7.Text ) ), textBox8.Text );
         }
     }
 }
