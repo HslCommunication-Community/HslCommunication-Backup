@@ -95,6 +95,7 @@
             this.label6 = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
             this.userControlHead1 = new HslCommunicationDemo.DemoControl.UserControlHead();
+            this.button3 = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.groupBox4.SuspendLayout();
@@ -429,6 +430,7 @@
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.button3);
             this.groupBox2.Controls.Add(this.button24);
             this.groupBox2.Controls.Add(this.label17);
             this.groupBox2.Controls.Add(this.label19);
@@ -458,7 +460,7 @@
             this.button24.Name = "button24";
             this.button24.Size = new System.Drawing.Size(82, 28);
             this.button24.TabIndex = 21;
-            this.button24.Text = "w-Bit";
+            this.button24.Text = "Bit写入";
             this.button24.UseVisualStyleBackColor = true;
             this.button24.Click += new System.EventHandler(this.Button24_Click);
             // 
@@ -632,7 +634,7 @@
             // 
             // button_read_byte
             // 
-            this.button_read_byte.Location = new System.Drawing.Point(317, 22);
+            this.button_read_byte.Location = new System.Drawing.Point(315, 22);
             this.button_read_byte.Name = "button_read_byte";
             this.button_read_byte.Size = new System.Drawing.Size(82, 28);
             this.button_read_byte.TabIndex = 19;
@@ -795,6 +797,16 @@
             this.userControlHead1.Size = new System.Drawing.Size(1004, 32);
             this.userControlHead1.TabIndex = 2;
             // 
+            // button3
+            // 
+            this.button3.Location = new System.Drawing.Point(326, 22);
+            this.button3.Name = "button3";
+            this.button3.Size = new System.Drawing.Size(82, 28);
+            this.button3.TabIndex = 22;
+            this.button3.Text = "Byte写入";
+            this.button3.UseVisualStyleBackColor = true;
+            this.button3.Click += new System.EventHandler(this.Button3_Click);
+            // 
             // FormLsisCnet
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 17F);
@@ -894,5 +906,6 @@
         private System.Windows.Forms.Label label17;
         private System.Windows.Forms.Button button24;
         private DemoControl.UserControlHead userControlHead1;
+        private System.Windows.Forms.Button button3;
     }
 }
