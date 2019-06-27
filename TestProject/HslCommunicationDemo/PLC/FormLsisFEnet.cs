@@ -417,7 +417,7 @@ namespace HslCommunicationDemo
            // Bit
             try
             {
-                DemoUtils.WriteResultRender(fastEnet.WriteCoil(textBox8.Text, bool.Parse(textBox7.Text)), textBox8.Text);
+                DemoUtils.WriteResultRender(fastEnet.Write(textBox8.Text, bool.Parse(textBox7.Text)), textBox8.Text);
             }
             catch (Exception ex)
             {

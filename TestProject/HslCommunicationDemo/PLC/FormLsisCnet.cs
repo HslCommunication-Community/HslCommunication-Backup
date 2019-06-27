@@ -24,17 +24,6 @@ namespace HslCommunicationDemo
 
         private XGBCnet xGBCnet = null;
 
-        private void linkLabel1_LinkClicked( object sender, LinkLabelLinkClickedEventArgs e )
-        {
-            try
-            {
-                System.Diagnostics.Process.Start( linkLabel1.Text );
-            }
-            catch (Exception ex) 
-            {
-                MessageBox.Show( ex.Message );
-            }
-        }
 
         private void FormSiemens_Load( object sender, EventArgs e )
         {
@@ -52,13 +41,6 @@ namespace HslCommunicationDemo
             }
 
             Language( Program.Language );
-
-            if (!Program.ShowAuthorInfomation)
-            {
-                label2.Visible = false;
-                linkLabel1.Visible = false;
-                label20.Visible = false;
-            }
         }
 
 
@@ -67,10 +49,6 @@ namespace HslCommunicationDemo
             if (language == 2)
             {
                 Text = "Lsis Cnet Read Demo";
-                label2.Text = "Blogs:";
-                label4.Text = "Protocols:";
-                label20.Text = "Author:Richard Hu";
-                label5.Text = "XGB Cnet";
 
                 label1.Text = "Com:";
                 label3.Text = "baudRate:";
@@ -84,6 +62,7 @@ namespace HslCommunicationDemo
                 label6.Text = "address:";
                 label7.Text = "result:";
 
+                button_read_byte.Text = "r-byte";
                 button_read_short.Text = "r-short";
                 button_read_ushort.Text = "r-ushort";
                 button_read_int.Text = "r-int";
@@ -105,6 +84,8 @@ namespace HslCommunicationDemo
                 label10.Text = "Address:";
                 label9.Text = "Value:";
                 label19.Text = "Note: The value of the string needs to be converted";
+                button3.Text = "w-bit";
+                button4.Text = "w-byte";
                 button22.Text = "w-short";
                 button21.Text = "w-ushort";
                 button20.Text = "w-int";
@@ -422,16 +403,27 @@ namespace HslCommunicationDemo
 
         }
 
-        private void Button24_Click(object sender, EventArgs e)
+        private void Button3_Click( object sender, EventArgs e )
         {
-            // Bit
             try
             {
-                DemoUtils.WriteResultRender(xGBCnet.WriteCoil(textBox8.Text, bool.Parse(textBox7.Text)), textBox8.Text);
+                DemoUtils.WriteResultRender( xGBCnet.WriteCoil( textBox8.Text, bool.Parse( textBox7.Text ) ), textBox8.Text );
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                MessageBox.Show( ex.Message );
+            }
+        }
+
+        private void Button4_Click( object sender, EventArgs e )
+        {
+            try
+            {
+                DemoUtils.WriteResultRender( xGBCnet.Write( textBox8.Text, byte.Parse( textBox7.Text ) ), textBox8.Text );
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show( ex.Message );
             }
         }
     }

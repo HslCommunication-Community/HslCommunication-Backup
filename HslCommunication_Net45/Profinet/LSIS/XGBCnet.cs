@@ -34,6 +34,7 @@ namespace HslCommunication.Profinet.LSIS
         public byte Station { get; set; } = 0x05;
 
         #endregion
+
         #region Read Write Byte
 
         /// <summary>
@@ -67,7 +68,6 @@ namespace HslCommunication.Profinet.LSIS
         /// <returns></returns>
         public OperateResult WriteCoil(string address, bool value)
         {
-
             return Write(address, new byte[] { (byte)(value ? 0x01 : 0x00), 0x00 });
         }
         #endregion
