@@ -24,4 +24,21 @@ namespace HslCommunication.Profinet.LSIS
         ERROR,
         DEBUG
     }
+    /// <summary>
+    /// using FlagBit in Marker for Byte
+    /// M0.0=1;M0.1=2;M0.2=4;M0.3=8;==========================>M0.7=128
+    /// </summary>
+    public enum FlagBit
+    {
+        Flag1 = 1,
+        Flag2 = 2,
+        Flag4 = 4,
+        Flag8 = 8,
+        Flag16 = 16,
+        Flag32 = 32,
+        Flag64 = 64,
+        Flag128 = 128,
+        Flag256 = 256,
+     
+    }
 }
