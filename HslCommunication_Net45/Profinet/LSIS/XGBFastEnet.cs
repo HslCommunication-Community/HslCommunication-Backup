@@ -157,17 +157,7 @@ namespace HslCommunication.Profinet.LSIS
         {
             return Write(address, new byte[] { value });
         }
-        /// <summary>
-        /// WriteCoil
-        /// </summary>
-        /// <param name="address"></param>
-        /// <param name="value"></param>
-        /// <returns></returns>
-        public OperateResult WriteCoil(string address, bool value)
-        {
-
-            return Write(address, new byte[] { (byte)(value == true ? 0x01 : 0x00), 0x00 });
-        }
+        
         #endregion
 
         #region Private Member
@@ -215,59 +205,13 @@ namespace HslCommunication.Profinet.LSIS
         #endregion
 
         #region Static Helper
-       /// <summary>
-       /// 
-       /// </summary>
-       /// <param name="address"></param>
-       /// <param name="BitOn"></param>
-       /// <returns></returns>
-        public static String CalculateAddressStarted(string address,int BitOn=8)
-        {
-            string[] fullAddressSplit = null;
-            string Dmain = string.Empty;
-            string AddressSplit = string.Empty;
-            int LsBaseNumber = 0;
-            int LsSlotNumber = 0;
-            
-            string fullAddress = address;
-            
-                if (address.IndexOf(".") > 0)
-                {
-                    Dmain = address.Substring(0, 1);
-                    AddressSplit = address.Remove(0, 2);
-                    switch (Dmain)
-                    {
-                        case "I":
-                        case "Q":
-                        case "U":
-                            {
-                                fullAddressSplit = AddressSplit.Split(new char[1] { '.' }, 4);
-                                fullAddress = Dmain + "B" + fullAddressSplit[0] + "." + fullAddressSplit[1] + ".";
-                                LsBaseNumber = int.Parse(fullAddressSplit[2]);
-                                LsSlotNumber = int.Parse(fullAddressSplit[3]);
-                                break;
-                            }
-                        default:// MB---DB-----
-                            {
-                                fullAddressSplit = AddressSplit.Split(new char[1] { '.' }, 2);
-                                fullAddress = Dmain + "B";
-                                LsBaseNumber = int.Parse(fullAddressSplit[0]);
-                                LsSlotNumber = int.Parse(fullAddressSplit[1]);
-                                break;
-                            }
-                    }
-                    fullAddress = $"{fullAddress}{(LsBaseNumber * BitOn + LsSlotNumber) / 8}.{LsSlotNumber % 8}";
-                    
-                }
-            return fullAddress;
-        }
+
         /// <summary>
         /// AnalysisAddress
         /// </summary>
         /// <param name="address"></param>
-        /// <param name="isRead"></param>
         /// <returns></returns>
-        public static OperateResult<string> AnalysisAddress(string address, bool isRead)
+        public static OperateResult<string> AnalysisAddress(string address)
         {
             // P,M,L,K,F,T
             // P,M,L,K,F,T,C,D,S
@@ -277,203 +221,34 @@ namespace HslCommunication.Profinet.LSIS
                 sb.Append("%");
                 char[] types = new char[] { 'P', 'M', 'L', 'K', 'F', 'T', 'C', 'D', 'S', 'Q', 'I', 'N', 'U', 'Z', 'R' };
                 bool exsist = false;
-                int baseAddress;
-                string Dmain = string.Empty;
-                string AddressSplit = string.Empty;
-                string fullAddress = address;
-                if (isRead)
-                {
-                    for (int i = 0; i < types.Length; i++)
-                    {
-                        if (types[i] == address[0])
-                        {
-                            sb.Append(types[i]);
-                            sb.Append("B");
-                            switch (address[1])
-                            {
-                                case 'X'://Bit
-
-                                    if (address.IndexOf(".") > 1) //IX0.0.1
-                                    {
-                                        string[] list = address.Split('.');
-                                        if (address[0] == 'I' || address[0] == 'Q' || address[0] == 'U') //IX0.0.1
-                                        {
-                                            baseAddress = ((int.Parse(list[2]) >= 16) ? (int.Parse(list[2]) / 16) : 0) * 2;
-                                            sb.Append(baseAddress);
-                                            break;
-                                        }
-                                    }
-                                    else
-                                    {
-                                        sb.Append(int.Parse(address.Substring(2)));//MX0
-                                    }
-                                    break;
-                                case 'B':
-                                    if (address.IndexOf(".") > 0)//BitOnByte
-                                    {
-                                        string[] list = address.Split('.');
-
-                                        if (address[0] == 'I' || address[0] == 'Q' || address[0] == 'U') //IB0.0.0.1
-                                        {
-                                            baseAddress = ((int.Parse(list[2]) >= 2) ? (int.Parse(list[2]) / 2) : 0) * 2;
-                                        }
-                                        else
-                                        {
-                                            baseAddress = ((int.Parse(list[0].Substring(2)) >= 2) ? (int.Parse(list[0].Substring(2)) / 2) : 0) * 2;//MB0.0
-                                        }
-                                        sb.Append(baseAddress);
-                                    }
-                                    else
-                                    {
-                                        sb.Append(int.Parse(address.Substring(2)));
-                                    }
-                                    break;
-                                case 'W':
-                                    if (address.IndexOf(".") > 0)//BitOnWord
-                                    {
-                                        string[] list = address.Split('.');
-                                        if (address[0] == 'I' || address[0] == 'Q' || address[0] == 'U') //IW0.0.0.1
-                                        {
-                                            baseAddress = int.Parse(list[2]) * 2;
-                                        }
-                                        else
-                                        {
-                                            baseAddress = int.Parse(list[0].Substring(2)) * 2;//MW0.0   
-                                        }
-                                        sb.Append(baseAddress);
-                                    }
-                                    else
-                                    {
-                                        sb.Append(int.Parse(address.Substring(2)) * 2);//MW0
-                                    }
-                                    break;
-                                case 'D':
-                                    sb.Append(int.Parse(address.Substring(2)) * 4);
-                                    break;
-                                case 'L':
-                                    sb.Append(int.Parse(address.Substring(2)) * 8);
-                                    break;
-                                default:
-                                    sb.Append(int.Parse(address.Substring(1)));
-                                    break;
-                            }
-                            exsist = true;
-                            break;
-                        }
-                    }
-                }
-                else
-                {
-                    for (int i = 0; i < types.Length; i++)
-                    {
-                        if (types[i] == address[0])
-                        {
-                            if (address[1] == 'B')
-                            {
-                                if (address.IndexOf(".") > 0)//BitOnByte
-                                {
-                                    fullAddress = CalculateAddressStarted(address, 8);
-                                    sb.Append(fullAddress);
-                                }
-                                else
-                                {
-                                    sb.Append(address);
-                                }
-
-                                exsist = true;
-                                break;
-                            }
-                            else if (address[1] == 'W')
-                            {
-                                if (address.IndexOf(".") > 0)//BitOnWord
-                                {
-                                    fullAddress = CalculateAddressStarted(address, 16);
-                                    sb.Append(fullAddress);
-                                }
-                                else
-                                {
-                                    sb.Append(address);
-                                }
-
-                                exsist = true;
-                                break;
-                            }
-                            else if (address[1] == 'D')
-                            {
-                                sb.Append(address);
-                                exsist = true;
-                                break;
-                            }
-                            else if (address[1] == 'X')
-                            {
-                                sb.Append(address);
-                                exsist = true;
-                                break;
-                            }
-                            else
-                            {
-                                exsist = false;
-                                break;
-                            }
-
-                        }
-                    }
-                }
-                if (!exsist) throw new Exception(StringResources.Language.NotSupportedDataType);
-            }
-            catch (Exception ex)
-            {
-                return new OperateResult<string>(ex.Message);
-            }
-
-            return OperateResult.CreateSuccessResult(sb.ToString());
-
-        }
-
-        /// <summary>
-        /// Get DataType to Address
-        /// </summary>
-        /// <param name="address"></param>
-        /// <returns></returns>
-        public static OperateResult<string> GetDataTypeToAddress(string address)
-        {
-            string lSDataType = string.Empty; ;
-            try
-            {
-
-                char[] types = new char[] { 'P', 'M', 'L', 'K', 'F', 'T', 'C', 'D', 'S', 'Q', 'I', 'R' };
-                bool exsist = false;
 
                 for (int i = 0; i < types.Length; i++)
                 {
                     if (types[i] == address[0])
                     {
-
-                        if (address[1] == 'W')
+                        sb.Append(types[i]);
+                        sb.Append("B");
+                        if (address[1] == 'B')
                         {
-                            lSDataType = "Word";
+                            sb.Append(int.Parse(address.Substring(2)));
+                        }
+                        else if (address[1] == 'W')
+                        {
+                            sb.Append(int.Parse(address.Substring(2)) * 2);
                         }
                         else if (address[1] == 'D')
                         {
-                            lSDataType = "DWord";
+                            sb.Append(int.Parse(address.Substring(2)) * 4);
                         }
                         else if (address[1] == 'L')
                         {
-                            lSDataType = "LWord";
-                        }
-                        else if (address[1] == 'B')
-                        {
-                            lSDataType = "Byte";
-                        }
-                        else if (address[1] == 'X')
-                        {
-                            lSDataType = "Bit";
+                            sb.Append(int.Parse(address.Substring(2)) * 8);
                         }
                         else
                         {
-                            exsist = false;
-                            break;
+                            sb.Append(int.Parse(address.Substring(1)));
                         }
+
                         exsist = true;
                         break;
                     }
@@ -486,13 +261,13 @@ namespace HslCommunication.Profinet.LSIS
                 return new OperateResult<string>(ex.Message);
             }
 
-            return OperateResult.CreateSuccessResult(lSDataType);
-
-
+            return OperateResult.CreateSuccessResult(sb.ToString());
         }
+
+
         private static OperateResult<byte[]> BuildReadByteCommand(string address, ushort length)
         {
-            var analysisResult = AnalysisAddress(address, true);
+            var analysisResult = AnalysisAddress(address);
             if (!analysisResult.IsSuccess) return OperateResult.CreateFailedResult<byte[]>(analysisResult);
 
             byte[] command = new byte[12 + analysisResult.Content.Length];
@@ -515,29 +290,15 @@ namespace HslCommunication.Profinet.LSIS
 
         private static OperateResult<byte[]> BuildWriteByteCommand(string address, byte[] data)
         {
-            var analysisResult = AnalysisAddress(address, false);
+            var analysisResult = AnalysisAddress(address);
             if (!analysisResult.IsSuccess) return OperateResult.CreateFailedResult<byte[]>(analysisResult);
-            var DataTypeResult = GetDataTypeToAddress(address);
-            if (!DataTypeResult.IsSuccess) return OperateResult.CreateFailedResult<byte[]>(DataTypeResult);
 
             byte[] command = new byte[12 + analysisResult.Content.Length + data.Length];
 
-            switch (DataTypeResult.Content)
-            {
-                case "Bit":
-                    command[2] = 0x00; break;
-                case "Byte":
-                    command[2] = 0x01; break;
-                case "Word":
-                    command[2] = 0x02; break;
-                case "DWord": command[2] = 0x03; break;
-                case "LWord": command[2] = 0x04; break;
-                case "Continuous": command[2] = 0x14; break;
-                default: break;
-            }
+
             command[0] = 0x58;    // write
             command[1] = 0x00;
-            //command[2] = 0x14;    // continuous reading
+            command[2] = 0x14;    // continuous Writeing
             command[3] = 0x00;
             command[4] = 0x00;    // Reserved
             command[5] = 0x00;
@@ -645,7 +406,7 @@ namespace HslCommunication.Profinet.LSIS
         /// <returns>字符串</returns>
         public override string ToString()
         {
-            return $"XGBFastEnet[{IpAddress}:{Port}]";
+            return base.ToString();
         }
 
         #endregion
