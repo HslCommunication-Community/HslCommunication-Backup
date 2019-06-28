@@ -1912,7 +1912,7 @@ class NetworkBase:
 	def Send(self,socket,data):
 		'''发送消息给套接字，直到完成的时候返回'''
 		try:
-			socket.send(data)
+			socket.sendall(data)
 			return OperateResult.CreateSuccessResult()
 		except Exception as e:
 			return OperateResult( msg = str(e))

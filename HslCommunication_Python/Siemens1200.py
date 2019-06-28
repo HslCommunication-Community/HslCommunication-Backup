@@ -35,7 +35,7 @@ import unittest
 class MelsecTest(unittest.TestCase):
     def testAll(self):
         # 下面是单元测试
-        plc = SiemensS7Net(SiemensPLCS.S1200, "192.168.8.12")
+        plc = SiemensS7Net(SiemensPLCS.S1200, "127.0.0.1")
         if plc.ConnectServer( ).IsSuccess == False:
             print( "无法连接PLC，将跳过单元测试。等待网络正常时，再进行测试" )
             return
@@ -141,7 +141,7 @@ def printWriteResult(result):
         print("falied  " + result.Message)
 
 if __name__ == "__main__":
-    siemens = SiemensS7Net(SiemensPLCS.S1200, "192.168.8.12")
+    siemens = SiemensS7Net(SiemensPLCS.S1200, "127.0.0.1")
     if siemens.ConnectServer().IsSuccess == False:
         print("connect falied")
     else:
