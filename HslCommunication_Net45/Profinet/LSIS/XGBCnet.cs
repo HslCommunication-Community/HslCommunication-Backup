@@ -60,6 +60,7 @@ namespace HslCommunication.Profinet.LSIS
         {
             return Write(address, new byte[] { value });
         }
+
         /// <summary>
         /// WriteCoil
         /// </summary>
@@ -68,9 +69,12 @@ namespace HslCommunication.Profinet.LSIS
         /// <returns></returns>
         public OperateResult WriteCoil(string address, bool value)
         {
-            return Write(address, new byte[] { (byte)(value ? 0x01 : 0x00), 0x00 });
+
+            return Write(address, new byte[] { (byte)(value ? 0x01 : 0x00) });
         }
+
         #endregion
+
         #region Read Write Support
 
         /// <summary>
@@ -191,33 +195,7 @@ namespace HslCommunication.Profinet.LSIS
             return OperateResult.CreateSuccessResult(command.ToArray());
         }
 
-        private static OperateResult<byte[]> BuildWriteOneCommand(byte station, string address, byte[] value)
-        {
-            var analysisResult = XGBFastEnet.AnalysisAddress(address);
-            if (!analysisResult.IsSuccess) return OperateResult.CreateFailedResult<byte[]>(analysisResult);
 
-            List<byte> command = new List<byte>();
-            command.Add(0x05);    // ENQ
-            command.AddRange(SoftBasic.BuildAsciiBytesFrom(station));
-            command.Add(0x77);    // command w
-            command.Add(0x53);    // command type: SS
-            command.Add(0x53);
-            command.Add(0x01);    // Number of blocks
-            command.Add(0x00);
-            command.AddRange(SoftBasic.BuildAsciiBytesFrom((byte)analysisResult.Content.Length));
-            command.AddRange(Encoding.ASCII.GetBytes(analysisResult.Content));
-            command.AddRange(SoftBasic.BytesToAsciiBytes(value));
-            command.Add(0x04);    // EOT
-
-            int sum = 0;
-            for (int i = 0; i < command.Count; i++)
-            {
-                sum += command[i];
-            }
-            command.AddRange(SoftBasic.BuildAsciiBytesFrom((byte)sum));
-
-            return OperateResult.CreateSuccessResult(command.ToArray());
-        }
 
         /// <summary>
         /// write data to address  Type of ReadByte
@@ -230,19 +208,37 @@ namespace HslCommunication.Profinet.LSIS
         {
             var analysisResult = XGBFastEnet.AnalysisAddress(address);
             if (!analysisResult.IsSuccess) return OperateResult.CreateFailedResult<byte[]>(analysisResult);
+            var DataTypeResult = XGBFastEnet.GetDataTypeToAddress(address);
+            if (!DataTypeResult.IsSuccess) return OperateResult.CreateFailedResult<byte[]>(DataTypeResult);
 
             List<byte> command = new List<byte>();
             command.Add(0x05);    // ENQ
             command.AddRange(SoftBasic.BuildAsciiBytesFrom(station));
             command.Add(0x77);    // command w
-            command.Add(0x53);    // command type: SB
-            command.Add(0x42);
-            command.AddRange(SoftBasic.BuildAsciiBytesFrom((byte)analysisResult.Content.Length));
-            command.AddRange(Encoding.ASCII.GetBytes(analysisResult.Content));
-            command.AddRange(SoftBasic.BuildAsciiBytesFrom((byte)value.Length));
+            command.Add(0x53);    // command type: S
+            switch (DataTypeResult.Content)
+            {
+                case "Bit":
+                    command.Add(0x53);     // command type: SS
+                    command.Add(0x30);    // Number of blocks
+                    command.Add(0x31);
+                    command.AddRange(SoftBasic.BuildAsciiBytesFrom((byte)analysisResult.Content.Length));
+                    command.AddRange(Encoding.ASCII.GetBytes(analysisResult.Content));
+                    break;
+                case "Byte":
+                case "Word":
+                case "DWord":
+                case "LWord":
+                case "Continuous":
+                    command.Add(0x42);       // command type: SB
+                    command.AddRange(SoftBasic.BuildAsciiBytesFrom((byte)analysisResult.Content.Length));
+                    command.AddRange(Encoding.ASCII.GetBytes(analysisResult.Content));
+                    command.AddRange(SoftBasic.BuildAsciiBytesFrom((byte)value.Length));
+                    break;
+                default: break;
+            }
             command.AddRange(SoftBasic.BytesToAsciiBytes(value));
             command.Add(0x04);    // EOT
-
             int sum = 0;
             for (int i = 0; i < command.Count; i++)
             {

@@ -39,6 +39,6 @@ namespace HslCommunication.Profinet.LSIS
         Flag64 = 64,
         Flag128 = 128,
         Flag256 = 256,
-     
+
     }
 }
