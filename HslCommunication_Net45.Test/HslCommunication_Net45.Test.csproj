@@ -61,6 +61,7 @@
     <Compile Include="BasicFramework\SoftBufferTest.cs" />
     <Compile Include="BasicFramework\SoftSecurityTest.cs" />
     <Compile Include="BasicFramework\SoftZippedTest.cs" />
+    <Compile Include="Core\Reflection\HslReflectionHelperTest.cs" />
     <Compile Include="Core\Transfer\ReverseWordTransformTest4.cs" />
     <Compile Include="Core\Transfer\ReverseWordTransformTest3.cs" />
     <Compile Include="Documentation\Samples\Algorithms\ConnectPool.cs" />
