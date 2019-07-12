@@ -16,7 +16,7 @@ namespace HslCommunication.Profinet.Omron
     /// <remarks>
     /// <note type="important">实例化之后，使用之前，需要初始化三个参数信息，具体见三个参数的说明：<see cref="SA1"/>，<see cref="DA1"/>，<see cref="DA2"/></note>
     /// <note type="important">第二个需要注意的是，当网络异常掉线时，无法立即连接上PLC，PLC对于当前的节点进行拒绝，如果想要支持在断线后的快速连接，就需要将
-    /// <seealso cref="IsChangeSA1AfterReadFailed"/>设置为<c>True</c>，详细的可以参考 <seealso cref="IsChangeSA1AfterReadFailed"/></note>
+    /// <see cref="IsChangeSA1AfterReadFailed"/>设置为<c>True</c>，详细的可以参考 <see cref="IsChangeSA1AfterReadFailed"/></note>
     /// <br />
     /// <note type="warning">如果在测试的时候报错误码64，经网友 上海-Lex 指点，是因为PLC中产生了报警，如伺服报警，模块错误等产生的，但是数据还是能正常读到的，屏蔽64报警或清除plc错误可解决</note>
     /// 地址支持的列表如下：
