@@ -195,7 +195,7 @@ namespace DemoUpdateServer
 
         private void button2_Click( object sender, EventArgs e )
         {
-            MessageBox.Show( GetAddressByIp( "47.92.5.140" ) );
+            MessageBox.Show( GetAddressByIp( "117.44.142.89" ) );
         }
 
         private string GetAddressByIp(string ip )
@@ -211,7 +211,7 @@ namespace DemoUpdateServer
                 webClient.Headers.Add( "Content-Type", "text/html" );
                 webClient.Headers.Add( "Content-Type", "image/jpeg" );
                 //webClient.Headers.Add("Connection", "Keep-Alive");
-                webClient.Headers.Add( "Accept-Encoding", "gzip,deflate" );
+                //webClient.Headers.Add( "Accept-Encoding", "gzip,deflate" );
 
                 byte[] data = webClient.DownloadData( "http://www.ip138.com/ips138.asp?ip=" + ip + "&action=2" );
                 webClient.Dispose( );
