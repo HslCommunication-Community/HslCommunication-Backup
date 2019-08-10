@@ -412,12 +412,12 @@ namespace HslCommunicationDemo
 
         #endregion
 
-        private void Button24_Click(object sender, EventArgs e)
-        {
-           // Bit
+       
+        private void button3_Click(object sender, EventArgs e)
+        {// Bit
             try
             {
-                DemoUtils.WriteResultRender(fastEnet.Write(textBox8.Text, bool.Parse(textBox7.Text)), textBox8.Text);
+                DemoUtils.WriteResultRender(fastEnet.WriteCoil(textBox8.Text, bool.Parse(textBox7.Text)), textBox8.Text);
             }
             catch (Exception ex)
             {
