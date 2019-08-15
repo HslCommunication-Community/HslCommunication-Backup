@@ -356,13 +356,29 @@ namespace HslCommunication.Profinet.LSIS
         }
         private static OperateResult<byte[]> BuildReadByteCommand(string address, ushort length)
         {
-            var analysisResult = AnalysisAddress(address,true);
+            var analysisResult = AnalysisAddress(address, true);
             if (!analysisResult.IsSuccess) return OperateResult.CreateFailedResult<byte[]>(analysisResult);
-
+            var DataTypeResult = GetDataTypeToAddress(analysisResult.Content);
+            if (!DataTypeResult.IsSuccess) return OperateResult.CreateFailedResult<byte[]>(DataTypeResult);
             byte[] command = new byte[12 + analysisResult.Content.Length];
+
+            switch (DataTypeResult.Content)
+            {
+                case "Bit":
+                    command[2] = 0x00; break;
+                case "Byte":
+                    command[2] = 0x01; break;
+                case "Word":
+                    command[2] = 0x02; break;
+                case "DWord": command[2] = 0x03; break;
+                case "LWord": command[2] = 0x04; break;
+                case "Continuous": command[2] = 0x14; break;
+                default: break;
+            }
+
             command[0] = 0x54;    // read
             command[1] = 0x00;
-            command[2] = 0x14;    // continuous reading
+            //  command[2] = 0x14;    // continuous reading
             command[3] = 0x00;
             command[4] = 0x00;    // Reserved
             command[5] = 0x00;
