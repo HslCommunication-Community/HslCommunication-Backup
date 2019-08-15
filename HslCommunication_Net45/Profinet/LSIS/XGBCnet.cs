@@ -138,7 +138,7 @@ namespace HslCommunication.Profinet.LSIS
         /// <returns>command bytes</returns>
         private static OperateResult<byte[]> BuildReadByteCommand(byte station, string address, ushort length)
         {
-            var analysisResult = XGBFastEnet.AnalysisAddress(address);
+            var analysisResult = XGBFastEnet.AnalysisAddress(address,true);
             if (!analysisResult.IsSuccess) return OperateResult.CreateFailedResult<byte[]>(analysisResult);
 
             List<byte> command = new List<byte>();
@@ -170,7 +170,7 @@ namespace HslCommunication.Profinet.LSIS
         /// <returns></returns>
         private static OperateResult<byte[]> BuildReadOneCommand(byte station, string address, ushort length)
         {
-            var analysisResult = XGBFastEnet.AnalysisAddress(address);
+            var analysisResult = XGBFastEnet.AnalysisAddress(address,true);
             if (!analysisResult.IsSuccess) return OperateResult.CreateFailedResult<byte[]>(analysisResult);
 
             List<byte> command = new List<byte>();
@@ -206,7 +206,7 @@ namespace HslCommunication.Profinet.LSIS
         /// <returns>command bytes</returns>
         private static OperateResult<byte[]> BuildWriteByteCommand(byte station, string address, byte[] value)
         {
-            var analysisResult = XGBFastEnet.AnalysisAddress(address);
+            var analysisResult = XGBFastEnet.AnalysisAddress(address,false);
             if (!analysisResult.IsSuccess) return OperateResult.CreateFailedResult<byte[]>(analysisResult);
             var DataTypeResult = XGBFastEnet.GetDataTypeToAddress(address);
             if (!DataTypeResult.IsSuccess) return OperateResult.CreateFailedResult<byte[]>(DataTypeResult);
