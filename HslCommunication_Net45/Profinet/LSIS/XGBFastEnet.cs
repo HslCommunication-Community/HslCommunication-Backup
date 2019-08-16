@@ -220,6 +220,7 @@ namespace HslCommunication.Profinet.LSIS
         /// AnalysisAddress
         /// </summary>
         /// <param name="address"></param>
+        /// <param name="isRead"></param>
         /// <returns></returns>
         public static OperateResult<string> AnalysisAddress(string address, bool isRead)
         {
@@ -237,48 +238,34 @@ namespace HslCommunication.Profinet.LSIS
                     {
                         if (types[i] == address[0])
                         {
-
                             sb.Append(types[i]);
-                            if (address[1] == 'X')
-                            {
-                                sb.Append("X");
-                                sb.Append(int.Parse(address.Substring(2)));
-                                break;
-                            }
+                            sb.Append("B");
                             if (address[1] == 'B')
                             {
-                                sb.Append("B");
                                 sb.Append(int.Parse(address.Substring(2)) * 2);
-                                break;
                             }
                             else if (address[1] == 'W')
                             {
-                                sb.Append("W");
                                 sb.Append(int.Parse(address.Substring(2)) * 2);
-                                break;
                             }
                             else if (address[1] == 'D')
                             {
-                                sb.Append("D");
                                 sb.Append(int.Parse(address.Substring(2)) * 4);
-                                break;
                             }
                             else if (address[1] == 'L')
                             {
-                                sb.Append("L");
                                 sb.Append(int.Parse(address.Substring(2)) * 8);
-                                break;
                             }
                             else
                             {
-                                sb.Append("B");
                                 sb.Append(int.Parse(address.Substring(1)));
-                                break;
                             }
-                           
+
+                            exsist = true;
+                            break;
                         }
                     }
-                    exsist = true;
+                   
                 }
                 else
                 {
@@ -317,27 +304,11 @@ namespace HslCommunication.Profinet.LSIS
                     if (types[i] == address[1])
                     {
 
-                        if (address[2] == 'W')
-                        {
-                            lSDataType = "Word";
-
-                        }
-                        else if (address[2] == 'D')
-                        {
-                            lSDataType = "DWord";
-                        }
-                        else if (address[2] == 'L')
-                        {
-                            lSDataType = "LWord";
-                        }
-                        else if (address[2] == 'B')
-                        {
-                            lSDataType = "Continuous";
-                        }
-                        else if (address[2] == 'X')
-                        {
-                            lSDataType = "Bit";
-                        }
+                        if (address[2] == 'W') lSDataType = "Word";
+                        else if (address[2] == 'D') lSDataType = "DWord";
+                        else if (address[2] == 'L')lSDataType = "LWord";
+                        else if (address[2] == 'B')lSDataType = "Continuous";
+                        else if (address[2] == 'X')lSDataType = "Bit";
 
                         exsist = true;
                         break;
@@ -358,27 +329,11 @@ namespace HslCommunication.Profinet.LSIS
         {
             var analysisResult = AnalysisAddress(address, true);
             if (!analysisResult.IsSuccess) return OperateResult.CreateFailedResult<byte[]>(analysisResult);
-            var DataTypeResult = GetDataTypeToAddress(analysisResult.Content);
-            if (!DataTypeResult.IsSuccess) return OperateResult.CreateFailedResult<byte[]>(DataTypeResult);
             byte[] command = new byte[12 + analysisResult.Content.Length];
-
-            switch (DataTypeResult.Content)
-            {
-                case "Bit":
-                    command[2] = 0x00; break;
-                case "Byte":
-                    command[2] = 0x01; break;
-                case "Word":
-                    command[2] = 0x02; break;
-                case "DWord": command[2] = 0x03; break;
-                case "LWord": command[2] = 0x04; break;
-                case "Continuous": command[2] = 0x14; break;
-                default: break;
-            }
 
             command[0] = 0x54;    // read
             command[1] = 0x00;
-            //  command[2] = 0x14;    // continuous reading
+            command[2] = 0x14;    // continuous reading
             command[3] = 0x00;
             command[4] = 0x00;    // Reserved
             command[5] = 0x00;
@@ -417,7 +372,6 @@ namespace HslCommunication.Profinet.LSIS
             }
             command[0] = 0x58;    // write
             command[1] = 0x00;
-            //command[2] = 0x14;    // continuous reading
             command[3] = 0x00;
             command[4] = 0x00;    // Reserved
             command[5] = 0x00;
